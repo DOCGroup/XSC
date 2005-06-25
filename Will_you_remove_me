@@ -1,0 +1,6 @@
+Will, please zap this file.  I only added it for testing purposes
+and so that my default "checkout -P" didn't remove the empty XSC
+directory upon completion of the checkout.
+
+Thanks!
+-Ossama
