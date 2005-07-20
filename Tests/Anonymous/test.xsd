@@ -1,0 +1,86 @@
+<?xml version="1.0" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.w3.org/2001/XMLSchema XMLSchema.xsd"
+	    xmlns:test="http://www.example.org/test"
+            targetNamespace="http://www.example.org/test"
+	    >
+
+<!--
+
+  Various weird anonymous type combinations.
+
+-->
+  
+  <xsd:element name="tasks">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="test:periodicTask"/>
+        <xsd:element ref="test:braindamageTask"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+
+  <xsd:element name="periodicTask">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="test:tasks"/>	      	
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>	
+
+  <xsd:element name="braindamageTask">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="test:tasks"/>	      	
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>	
+  
+  <xsd:complexType name="PropertySeq">
+    <xsd:sequence>
+      <xsd:element name="propery">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="name" type="xsd:string"/>
+            <xsd:element name="value">
+	      <xsd:complexType>
+	        <xsd:sequence>
+		  <xsd:element name="typecode">
+                    <xsd:simpleType>
+                      <xsd:restriction base="xsd:NCName">
+                        <xsd:enumeration value="string"/>
+                        <xsd:enumeration value="integer"/>
+                      </xsd:restriction>
+                    </xsd:simpleType>		  
+		  </xsd:element>
+	          <xsd:element name="content" type="xsd:string"/>
+		</xsd:sequence>  
+              </xsd:complexType>
+	    </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>  
+    </xsd:sequence>
+  </xsd:complexType>
+  
+
+  <xsd:element name="periods">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="period" type="xsd:string"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  
+
+  <xsd:element name="typecode">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:NCName">
+        <xsd:enumeration value="string"/>
+        <xsd:enumeration value="integer"/>
+      </xsd:restriction>
+    </xsd:simpleType>		  
+  </xsd:element>
+
+</xsd:schema>

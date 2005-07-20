@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.w3.org/2001/XMLSchema XMLSchema.xsd"
+	    xmlns:Test="http://www.example.com/Test"
+            targetNamespace="http://www.example.com/Test">
+
+  <!-- <xsd:element name="foo" type="xsd:string"/> -->
+
+  <xsd:include schemaLocation="includee.xsd"/>  
+  
+  <xsd:element name="root" type="Test:Root"/>
+
+</xsd:schema>

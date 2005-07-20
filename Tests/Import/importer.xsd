@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.w3.org/2001/XMLSchema XMLSchema.xsd"
+	    xmlns:Test="http://www.example.com/Test"
+	    xmlns:Impl="http://www.example.com/Test/Impl"
+            targetNamespace="http://www.example.com/Test/Impl">
+
+  <!-- <xsd::element name="foo" type="xsd:string"/> -->
+
+  <xsd:import namespace="http://www.example.com/Test" schemaLocation="importee.xsd"/>  
+  
+  <xsd:element name="root" type="Test:Root"/>
+
+</xsd:schema>

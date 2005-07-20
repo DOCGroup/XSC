@@ -1,0 +1,85 @@
+<?xml version="1.0" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.w3.org/2001/XMLSchema XMLSchema.xsd"
+	    xmlns:test="http://www.example.org/test"
+            targetNamespace="http://www.example.org/test"
+	    >
+
+<!--
+
+  Various invalid construct for which mapping is not supported.
+
+-->
+
+  <!-- case 1: forward-inheritance -->  
+    
+  <xsd:complexType name="Type1A">
+    <xsd:complexContent>
+      <xsd:extension base="test:Type1B">
+        <xsd:sequence>
+          <xsd:element name="bar" type="xsd:string"/>
+        </xsd:sequence>
+      </xsd:extension>
+    </xsd:complexContent>  
+  </xsd:complexType>
+  
+  <xsd:complexType name="Type1B">
+    <xsd:sequence>
+      <xsd:element name="foo" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+ 
+  <!-- case 2: twisted forward-inheritance -->
+ 
+  <xsd:element name="e2a">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element ref="test:e2b"/>
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  
+  
+  <xsd:complexType name="Type2">
+    <xsd:sequence>
+      <xsd:element name="foo" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:element name="e2b">
+    <xsd:complexType>
+      <xsd:complexContent>
+        <xsd:extension base="test:Type2">
+          <xsd:sequence>
+            <xsd:element name="bar" type="xsd:string"/>
+          </xsd:sequence>
+        </xsd:extension>
+      </xsd:complexContent>  
+    </xsd:complexType>  
+  </xsd:element>
+  
+ 
+ <!-- case 3: anyType & anySimpleType -->
+ 
+ <xsd:element name="e3a"/>
+ 
+ <!--@@ <xsd:attribute name="a3"/> -->
+ 
+ <xsd:complexType name="Type3">
+    <xsd:sequence>
+      <xsd:element name="foo"/>
+    </xsd:sequence>
+    <xsd:attribute name="bar"/>
+ </xsd:complexType>
+ 
+ <xsd:element name="e3b">
+   <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="foo"/>
+      </xsd:sequence>
+      <xsd:attribute name="bar"/>
+   </xsd:complexType>
+ </xsd:element>
+  
+</xsd:schema>
