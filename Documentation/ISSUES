@@ -1,0 +1,30 @@
+@@ xsd::NCName allows '-' in names which makes them invalid c++ ids.
+
+@@ Clean #include "/< usage.
+
+@@ Throw exceptions in else blocks (and other places).
+
+@@ Support more fundamental types.
+
+@@ Traversal channels.
+
+%% Schema inclusion/importing
+
+   - How am I to distinguish between chameleon and proper inclusion
+     when both schemas don't define namespace? Resolution: proper
+     inclusion is preferred.
+
+@! Element/attribute id/ref'erencing.
+
+   - Done for elements.
+
+@@ Can I do something interesting with annotations? Like reproduce them
+   as comments in generated code?
+
+@@ Namespace translation: add support for custom namespace mapping.
+
+@@ Proper diagnostic.
+
+   - Is it possible to derive file/line info from DOM?
+
+@@ maybe just have two accessors for sequence? (what about container logic?)

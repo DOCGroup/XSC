@@ -1,0 +1,12 @@
+This is a set of notes to myself regarding possible future enhancements.
+
+*  In the xsd:choice mapping:  perhaps we should have an enum with the various possibilities
+   so that users don't have to perform a linear search to determine which type
+   is contained in the choice.
+
+*  Enable capability to use ACE macros to define other basic types besides char.
+
+*  It would appear that we can support Borland 5.5.  Most of the problems appear to boil
+   down to broken auto_ptr assignment semantics.  if you make all assignments do
+   ptr.reset (new_ptr), it should solve most of the problems.  I am loath to add this unless
+   there is significant request, as it makes the code look dirty.

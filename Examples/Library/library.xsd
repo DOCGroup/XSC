@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.w3.org/2001/XMLSchema XMLSchema.xsd"
+            xmlns:lib="http://www.example.com/Lib"
+            targetNamespace="http://www.example.com/Lib">
+
+  <xsd:simpleType name="ISBN">
+    <xsd:restriction base="xsd:unsignedLong"/>
+  </xsd:simpleType>
+
+
+  <xsd:complexType name="Title">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string"> 
+        <xsd:attribute name="lang" type="xsd:string"/>
+      </xsd:extension>
+    </xsd:simpleContent>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Author">
+    <xsd:sequence>
+      <xsd:element name="name" type="xsd:string"/>
+      <xsd:element name="born" type="xsd:string"/>
+      <xsd:element name="dead" type="xsd:string"/>
+    </xsd:sequence>
+    <xsd:attribute name="recommends" type="xsd:IDREF"/> <!-- Book -->
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Character">
+    <xsd:sequence>
+      <xsd:element name="name" type="xsd:string"/>
+      <xsd:element name="qualification" type="xsd:string"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:simpleType name="Genre">
+    <xsd:restriction base="xsd:NCName">
+      <xsd:enumeration value="romance"/>
+      <xsd:enumeration value="fiction"/>
+      <xsd:enumeration value="horror"/>
+      <xsd:enumeration value="history"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+  <xsd:complexType name="Book">
+    <xsd:sequence>
+      <xsd:element name="isbn" type="lib:ISBN"/>
+      <xsd:element name="title" type="lib:Title"/>
+      <xsd:element name="genre" type="lib:Genre"/>
+      <xsd:element name="author" type="lib:Author" maxOccurs="unbounded"/>
+      <xsd:element name="character" type="lib:Character" minOccurs="0" maxOccurs="unbounded"/>
+    </xsd:sequence>
+    <xsd:attribute name="available" type="xsd:boolean" use="required"/>
+    <xsd:attribute name="id" type="xsd:ID" use="required"/>
+  </xsd:complexType>
+
+
+  <xsd:complexType name="Library">
+    <xsd:sequence>
+      <xsd:element name="book" type="lib:Book" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:element name="library" type="lib:Library"/>
+
+</xsd:schema>

@@ -1,0 +1,290 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<!--
+
+file      : Documentation/index.html
+author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
+cvs-id    : $Id$
+-->
+
+<html>
+
+<head>
+
+  <title>XML Schema Compiler</title>
+
+  <meta name="author" content="Boris Kolpackov"/>
+  <meta name="keywords" content="xml,schema,language,binding,mapping,c++,idl"/>
+  <meta name="description" content="XML Schema Compiler"/>
+  <meta http-equiv="Content-Language" content="en"/>
+
+  <style type="text/css">
+  body {
+    font-family      : sans-serif;
+
+    color            : black;
+    background       : white;
+
+    max-width        : 40em;
+    padding          : 2em 2em 2em 3em;
+    margin           : 0 0 0 0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family      : sans-serif;
+    font-weight      : 500;
+  }
+
+  h1 { font-size     : 170%; }
+  h2 { font-size     : 125%; }
+
+  ul li {
+    padding-top      : 0.4em;
+    padding-bottom   : 0.4em;
+  }
+
+  ol li {
+    padding-top      : 0.4em;
+    padding-bottom   : 0.4em;
+  }
+
+  ul.menu {
+    list-style-type  : none;
+  }
+
+
+
+
+  </style>
+
+</head>
+
+<body>
+
+<p>XML Schema Compiler (XSC) generates vocabulary-specific C++ mapping
+from XML Schema. The following parts are available for download:</p>
+
+<ul class="menu">
+
+  <li><a href="binary/">XSC binaries</a> - precompiled binaries for various
+  platforms</li>
+
+  <li><a href="src/">XSCRT</a> - run-time support library</li>
+
+  <li><a href="src/">Examples</a> - collection of examples that illustrate
+  XSC usage (requires XSC binary and XSCRT).</li>
+
+</ul>
+
+<h1>Examples Cheat Sheet</h1>
+
+<ol>
+
+  <li>Download
+  <a href="binary/"><code>xsc-X.Y.Z</code></a>,
+  <a href="src/"><code>XSCRT-X.Y.Z</code></a> and
+  <a href="src/"><code>Examples-X.Y.Z</code></a>.</li>
+
+  <li>Unpack what you've downloaded in the same directory.</li>
+
+  <li>Run <code>make</code> in <code>Examples-X.Y.Z/Library/Reader</code>
+  and <code>Examples-X.Y.Z/Library/Writer</code></li>
+
+  <li>Run <code>./driver ../library.xml</code> in
+  <code>Examples-X.Y.Z/Library/Reader</code> and
+  <code>Examples-X.Y.Z/Library/Writer</code></li>
+
+</ol>
+
+<h1>News</h1>
+
+<h2>0.0.5</h2>
+
+<ul>
+
+  <li>New <code>--cxx-generate-writer-types</code> option triggers
+  generation of code for un-parsing in-memory representation back to DOM
+  which, in turn, can be saved to a file. See
+  <code>Examples/Library/Writer</code> for a usage example. Anonymous types
+  are not yet supported.</li>
+
+  <li>Support for constant traversal.</li>
+
+  <li>New <code>--cxx-banner-file</code>,
+  <code>--cxx-header-banner-file</code>, <code>--cxx-inline-banner-file</code>
+  and <code>--cxx-source-banner-file</code> options allow to specify banner
+  files which are copied at the beginning of generated files.</li>
+
+  <li>Generated code is known to compile with the following compilers:
+
+    <ul class="menu">
+      <li>GCC g++ 3.3.4</li>
+      <li>GCC g++ 3.4.1</li>
+      <li>Intel C++ 8.0</li>
+      <li>VC++ 6 (except mapping for anonymous types and writer types)</li>
+      <li>VC++ 7.1</li>
+    </ul>
+
+  </li>
+
+</ul>
+
+<h2>0.0.4</h2>
+
+<ul>
+
+  <li>New <code>--cxx-char-type type-name</code> option allows to select
+  character type for C++ mapping. <code>char</code> and <code>wchar_t</code>
+  are supported out of the box. Other types may require runtime
+  specialization.</li>
+
+
+  <li>
+  <p>New <code>--cxx-namespace-regex /pattern/replacement/</code> option
+  allows to specify custom XML Schema namespace to C++ namespace mapping.</p>
+
+  <p>All regular expressions are pushed into a stack with the last specified
+  expression considered first. The first match that succeeds is used. The
+  regex is applied to a string of the form </p>
+
+  <pre>file-name namespace</pre>
+
+  <p>For example</p>
+
+  <pre>XMLSchema.xsd http://www.w3.org/2001/XMLSchema</pre>
+
+  <p>The <code>file-name</code> for the current translation unit is
+  empty e.g., if you have file <code>foo.xsd</code> with the namespace
+  <code>http://foo.com/schema</code> and you run <code>xsc</code> on this
+  file, then the string in question would be</p>
+
+  <pre> http://foo.com/schema</pre>
+
+  <p>(note the preceding space).</p>
+
+  <p>The following three steps are performed for each regex until match is
+  found:</p>
+
+  <ol>
+    <li>The regex is applied and if the result is empty the next regex is
+    considered.</li>
+
+    <li>All `/' are replaced with `::'.</li>
+
+    <li>The result is checked to be a valid C++ scope name (e.g.,
+    <code>foo::bar</code>). If this test succeeds the result is used as
+    a C++ namespace.</li>
+  </ol>
+  </li>
+
+
+  <li>Generated code is known to compile with the following compilers:
+
+    <ul class="menu">
+      <li>GCC g++ 3.3.4</li>
+      <li>GCC g++ 3.4.1</li>
+      <li>Intel C++ 8.0</li>
+      <li>VC++ 6 (except mapping for anonymous types)</li>
+      <li>VC++ 7.1</li>
+    </ul>
+
+  </li>
+
+</ul>
+
+<h2>0.0.3</h2>
+
+<ul>
+
+  <li>Support for <code>group</code>.</li>
+
+  <li>Support for nested namespaces. XML Schema namespaces of form
+  <code>http://www.example.com/foo/bar/baz</code> are translated into
+  nested C++ namespaces of form <code>foo::bar::baz</code>.</li>
+
+  <li>Diagnostic for forward-inheritance.</li>
+
+  <li>Diagnostic for elements of type <code>anyType</code> and
+  attributes of type <code>anySimpleType</code>.</li>
+
+  <li>Container relationship management is removed from public
+  interface.</li>
+
+  <li>Valid C++ code for schemas without target namespace.</li>
+
+  <li>Generated code is known to compile with the following compilers:
+
+    <ul class="menu">
+      <li>GCC g++ 3.3.4</li>
+      <li>GCC g++ 3.4.1</li>
+      <li>Intel C++ 8.0</li>
+      <li>VC++ 6 (except mapping for anonymous types)</li>
+      <li>VC++ 7.1</li>
+    </ul>
+
+  </li>
+
+</ul>
+
+<h2>0.0.2</h2>
+
+<ul>
+
+  <li>Schema inclusion/importing. Three distinct models are supported:
+  importing - translates to <code>#include</code>, proper inclusion
+  (i.e., inclusion with the same target namespace) - translates to
+  <code>#include</code>, and chameleon inclusion (i.e., inclusion without
+  target namespace) - translates into physical sourcing with code
+  generated in hosted namespace.</li>
+
+  <li>Mapping for anonymous types (does not and will not work with VC++ 6).
+  </li>
+
+  <li>Element <code>ref</code>'erencing.</li>
+
+  <li>Generated code is known to compile with the following compilers:
+
+    <ul class="menu">
+      <li>GCC g++ 3.3.4</li>
+      <li>GCC g++ 3.4.1</li>
+      <li>Intel C++ 8.0</li>
+      <li>VC++ 6 (except mapping for anonymous types)</li>
+      <li>VC++ 7.1</li>
+    </ul>
+
+  </li>
+
+</ul>
+
+<h2>0.0.1</h2>
+
+<ul>
+
+  <li>New <code>--cxx-generate-extended-rtti</code> option which triggers
+  generation of extended run-time type information (inheritance graph
+  at the moment).</li>
+
+  <li>New <code>--cxx-generate-traversal-types</code> option which triggers
+  generation of traversal mechanism. It is usually useful for performing
+  operations on complex recursive and/or dynamically-typed
+  (<code>ID</code>/<code>IDREF</code>) graphs. See
+  <code>Examples/Library</code> for introduction to traversal.</li>
+
+  <li>Generated code is known to compile with the following compilers:
+
+    <ul class="menu">
+      <li>GCC g++ 3.3.3</li>
+      <li>GCC g++ 3.4.0</li>
+      <li>Intel C++ 8.0</li>
+      <li>VC++ 6</li>
+      <li>VC++ 7.1</li>
+    </ul>
+
+  </li>
+
+</ul>
+
+
+</body>
+</html>

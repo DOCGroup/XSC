@@ -1,0 +1,75 @@
+// file      : XMLSchema/NarrowTypes.idl
+// author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
+// cvs-id    : $Id$
+
+#ifndef XML_SCHEMA_NARROW_TYPES_IDL
+#define XML_SCHEMA_NARROW_TYPES_IDL
+
+// @@ Use typedef in simple cases of inheritance from base types
+//    (this will have to be recursive).
+//
+// @@ Use wrapping valuetypes when inheriting from basic type.
+//
+//
+
+module XMLSchema
+{
+  abstract valuetype object_
+  {
+  };
+  
+  typedef octet byte;
+  typedef byte unsignedByte;
+
+  typedef short short_;
+  typedef unsigned short unsignedShort;
+
+  typedef long int_;
+  valuetype int_value : object_
+  {
+    public int_ value;
+  };
+  
+  typedef unsigned long unsignedInt;
+
+  typedef long long long_;
+  typedef unsigned long long unsignedLong;
+
+  //@@ It would be nice to use some arbitrary-length integer class.
+  //
+  typedef long_ decimal;
+  typedef decimal integer;
+  typedef integer nonPositiveInteger;
+  typedef integer nonNegativeInteger;
+  typedef nonNegativeInteger positiveInteger;
+  typedef nonPositiveInteger negativeInteger;
+
+
+  typedef boolean boolean_;
+
+  typedef float float_;
+  typedef double double_;
+
+  typedef string string_;
+  typedef string_ normalizedString;
+  typedef normalizedString token;
+  typedef token NMTOKEN;
+  typedef token Name;
+  typedef Name NCName;
+
+  //@@ for now.
+  //
+  typedef NCName ID;
+  typedef NCName IDREF;
+ 
+
+
+  
+  valuetype foo
+  {
+    boolean bar_p ();
+    public int_ bar;
+  };
+};
+
+#endif  // XML_SCHEMA_NARROW_TYPES_HPP

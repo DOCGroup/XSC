@@ -1,0 +1,20 @@
+//$Id$
+
+project(libIDL) {
+  requires += exceptions
+  sharedname =
+  staticname = IDL
+  includes += .. $(CIAO_ROOT)/CCF
+  libout = .
+  Source_Files {
+	.
+  }
+  
+  specific(vc71) {
+    libs += boost_regex_debug boost_filesystem_debug
+  }
+
+  verbatim(gnuace, top) {
+    include $(CIAO_ROOT)/CCF/Config.rules
+  }
+}

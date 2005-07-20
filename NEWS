@@ -1,0 +1,21 @@
+USER VISIBLE CHANGES ADDED TO XSC
+=================================
+
+. Automatic generation of encoding and decoding operations from an XML schema.
+  More often than not, Xqueries are executed by a client/peer on a server/peer.
+  The results of these operations are subset of the XML schema elements. To 
+  enable this, we have been adding support for generation of automatic 
+  insertion and extraction operators to convert XML data to CDR representation.
+  Common Data Representation (CDR) is used by CORBA as the encoding format
+  for communication. To use these options on your schema please use the 
+  following command line options: --cxx-generate-cdr-reader-types (for 
+  operations that extracts a XML type from a CDR Output stream) and 
+  --cxx-generate-cdr-writer-types (for operations that inserts a XML type
+  from a CDR Input stream). 
+
+  Requirements:
+  ============
+  . This feature requires that the generated code be linked with the ACE
+    framework toolkit, which is an open-source framework for building 
+    distributed applications. ACE can be downloaded from the following 
+    URL: http://www.cs.wustl.edu/~schmidt/ACE.html

@@ -1,0 +1,22 @@
+//$Id$
+
+project(libXSC): xerces {
+  requires += exceptions
+  sharedname =
+  staticname = XSC
+  includes += .. $(CIAO_ROOT)/CCF
+  libout = .
+  Source_Files {
+	.
+	./SemanticGraph
+	./Traversal
+  }
+  
+  specific(vc71) {
+    libs += boost_regex_debug boost_filesystem_debug
+  }
+
+  verbatim(gnuace, top) {
+    include $(CIAO_ROOT)/CCF/Config.rules
+  }
+}

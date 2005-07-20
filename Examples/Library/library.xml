@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<l:library xmlns:l="http://www.example.com/Lib"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xsi:schemaLocation="http://www.example.com/Lib library.xsd">
+
+  <book id="WP" available="true" >
+    <isbn>0140444173</isbn>
+    <title>War and Peace</title>
+    <genre>history</genre>
+
+    <author recommends="MM">
+      <name>Lev Tolstoy</name>
+      <born>1922-11-26</born>
+      <dead>2000-02-12</dead>
+    </author>
+
+    <character>
+      <name>Natasha Rostova</name>
+      <qualification>a woman of convivial and amorous habits</qualification>
+    </character>
+    <character>
+      <name>Pierre Bezukhov</name>
+      <qualification>a man of convivial and amorous habits</qualification>
+    </character>
+    <character>
+      <name>Napoleon</name>
+      <qualification>french guy</qualification>
+    </character>
+  </book>
+
+  <book id="MM" available="false">
+    <isbn>0802130119</isbn>
+    <title>The Master and Margarita</title>
+    <genre>fiction</genre>
+
+    <author recommends="WP">
+      <name>Mikhail Bulgakov</name>
+      <born>1922-11-26</born>
+      <dead>2000-02-12</dead>
+    </author>
+
+    <character>
+      <name>Master</name>
+      <qualification></qualification>
+    </character>
+    <character>
+      <name>Margarita</name>
+      <qualification></qualification>
+    </character>
+    <character>
+      <name>Behemot</name>
+      <qualification>funky cat</qualification>
+    </character>
+    <character>
+      <name>Voland</name>
+      <qualification></qualification>
+    </character>
+  </book>
+
+</l:library>

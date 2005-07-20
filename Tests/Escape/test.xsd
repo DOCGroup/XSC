@@ -1,0 +1,27 @@
+<?xml version="1.0" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.w3.org/2001/XMLSchema XMLSchema.xsd"
+	    xmlns:test="http://www.example.org/test"
+            targetNamespace="http://www.example.org/test"
+	    >
+
+  <!--
+  
+    Tests escaping of target language (c++) keywords.
+
+  -->
+  
+  <!-- case 1 -->
+    
+  <xsd:complexType name="class">
+    <xsd:sequence>
+      <xsd:element name="int" type="xsd:int"/>
+      <xsd:element name="long" type="xsd:long" minOccurs="0"/>
+      <xsd:element name="double" type="xsd:double" maxOccurs="unbounded"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:element name="switch" type="test:class"/>
+
+</xsd:schema>

@@ -1,0 +1,134 @@
+This document is for capturing XML Schema Compiler (XSC) design decisions.
+
+Introduction
+------------
+
+Prior to detailed discussions general idea description is in order. The 
+purpose of XSC is to automatically generate the following elements from
+an XML Schema (XS) specification for an instance document:
+
+ - semantic graph node types
+
+ - traversal mechanism for semantic graph
+
+ - parser that will construct semantic graph from the instance document
+
+
+XML and XML Schema are meant for representing and describing simple 
+structures. Using XML as a language to capture XML Schema specifications 
+was undoubtedly tempting but also undoubtedly stupid idea since it is
+anything but simple.
+
+In cases when XML and XML Schema are used to describe complex structures 
+many relationships are left unspecified in XML Schema. In such cases I
+expect XSC-generated in-memory representation to be just an intermediate
+step with further application-specific transformations (or even 
+re-translations) of the semantic graph. Putting it the other way, the more 
+complex the structure of the document the bigger the gap between the syntax 
+(specified in XML Schema) and the semantics and, as a result, the more 
+application-specific work will be needed to cross that gap.
+
+One of the main advantages of suggested approach is static typing of semantic
+graph. However, some of the construct of XML Schema (in particular xs:any & 
+friends) and unspecified relationships cannot be statically typed. In such 
+cases dynamic dispatch (traversal) will be used.
+
+General Ideas
+-------------
+
+* Use annotations for comments. This way it will be easier to 
+  reverse-engineer it.
+
+
+Semantic Graph for XML Schema
+----------------------------
+
+XML Schema is an ultimate example of the huge gap between syntax and
+semantics so the semantic graph will probably look very different from
+XML Schema file.
+
+
+* Type is just an abstract element/attribute.
+
+
+* When parsing instance document is there a way to get the namespace-
+  qualified name of the tag? (ARMS handlers are so broken! ;-)
+
+
+* Scope of the element inside a namespace (or schema).
+
+
+* It seems that just SAX/DOM won't be enough for the parser. Probably will
+  need to use PSVI. See example on p. 190.
+
+
+* Referencing undeclared entities in XS is legal but will lead to a great
+  difficulty in code generation. Are we to declare such (non-deterministic)
+  schemas illegal? What about recursive schemas? Are they at all possible?
+
+
+* The same instance document can use more than one schema (see p 186 for 
+  an example). It seems we will need to create a parser repository of
+  some sort.
+
+
+* Is it possible to name attribute and element with the same name in
+  the same scope? Is it possible to give the same name to a type and
+  element/attribute (it seems it is)?
+
+
+* What are element/attribute groups? Will it end up in the graph or
+  it's just a syntactic sugar? See some strange stuff on p. 132.
+
+
+* What is element/attribute referencing (ref="name"). Is it a mere
+  usage?
+
+
+* XS types can embed elements/attributes.
+
+
+
+XML to C++ mapping
+------------------
+
+
+* xs:include is translated to physical inclusion.
+
+
+* xs:import is translated to #include
+
+
+* Names that are valid XML element/attribute/etc names are not valid
+  C++ identifiers. Probably will simply prohibit them.
+
+
+* xs:ID stuff is completely typeless so it will be a pure dynamic 
+  dispatch. Maybe I should just not support it (use xs:key & friends)?
+  
+
+* xs:unique/key can (if restricted) be used to acquire type information.
+
+
+* xs:any should translate to something that can accommodate an unknown
+  semantic graph (only dynamic dispatch for traversal).
+
+
+* xml: namespace is special.
+
+
+* Mapping for basic types.
+
+
+* Prohibiting attribute can be translated to making it private.
+
+
+Not supported features:
+
+* unions
+
+* xs:redefine
+
+
+Vault
+-----
