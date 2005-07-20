@@ -195,6 +195,12 @@ namespace
 	else
 	  this->write_sequence (e);
       }
+      else if (e.min () == 0)
+      {
+	// optional
+	//
+	this->optional_element_list_.push_back (&e);
+      }
       else
       {
 	name = id (name);
@@ -279,6 +285,7 @@ namespace
     {
       this->has_attributes_ = 0;
       this->complex_list_.clear ();
+      this->optional_element_list_.clear ();
     }
 
     void
@@ -288,6 +295,29 @@ namespace
       if (! this->complex_list_.empty ())
 	for (size_t i =0; i < this->complex_list_.size (); i++)
 	  this->write_sequence (*this->complex_list_[i]);
+
+      // Write Optional elements AFTER sequence elements
+      if (! this->optional_element_list_.empty ())
+	for (size_t i=0; i < this->optional_element_list_.size (); i++)
+	{
+	  string name (this->optional_element_list_[i]->name ());
+	  string type (type_name (*this->optional_element_list_[i]));
+
+	  os << "// " << name << endl;
+	  
+	  // First write out the boolean value
+	  os << "stream.write_boolean (" << name << "_p ());";
+
+	  os << "if (" << name << "_p ())"
+	     << endl;  
+
+	  // check if the type is a boolean type
+	  if (type_is_boolean (type))
+	    os << "  stream.write_boolean (this->" << name 
+	       << " ());" << endl;
+	  else
+	    os << "  stream << this->" << name << " ();" << endl;  
+	}
     }
 
   private:
@@ -295,7 +325,8 @@ namespace
     Traversal::Inherits inherits_;
     Traversal::Names names_;
     bool has_attributes_;
-    std::vector< SemanticGraph::Element* > complex_list_;
+    std::vector < SemanticGraph::Element* > complex_list_;
+    std::vector < SemanticGraph::Element* > optional_element_list_;
   };
 
   // Traverser for CDR read operations
@@ -447,7 +478,7 @@ namespace
 	   << "auto_" << element_name << " (" << element_name << "_tmp);";
       else
 	os << type << "::CDR_Type__ " << element_name << "_tmp"
-	 << ";" ;
+	   << ";" ;
 
       os << "if (" << element_name << "_p)"
 	 << "{";
@@ -467,7 +498,7 @@ namespace
 						  L"_tmp");
 	// read_simple_type (element_name, type);
 	// execept that we don't create the element 
-	if (element_name == L"::XMLSchema::boolean")
+	if (type == L"::XMLSchema::boolean")
 	  os << "stream.read_boolean";
 	else
 	  os << "stream >>";
@@ -482,7 +513,8 @@ namespace
      * Function to read any generic type.
      */
     void
-    read_generic_type (SemanticGraph::Element &e)
+    read_generic_type (SemanticGraph::Element &e, 
+		       bool is_type_optional)
     {
       // What we need here is to check
       // for is three cases:
@@ -597,7 +629,7 @@ namespace
          << "{" ;
 
       // Read the generic element type
-      read_generic_type (e);
+      read_generic_type (e,0);
 
       // Post: Add the element to the list 
       os << "element->add_" << name;
@@ -659,10 +691,14 @@ namespace
 	// released elsewhere. So this is safe
 	this->complex_list_.push_back (&e);
       }
+      else if (e.min () == 0)
+      {
+	this->optional_element_list_.push_back (&e);
+      }
       else
       {
 	// Read a generic type
-	read_generic_type (e);
+	read_generic_type (e,0);
       }
     }
 
@@ -723,6 +759,7 @@ namespace
       this->complex_list_.clear ();
       this->type_name_list_.clear ();
       this->optional_attribute_list_.clear ();
+      this->optional_element_list_.clear ();
     }
 
     void
@@ -754,7 +791,16 @@ namespace
 	add_attribute (attribute_name);
       }
       else
-	add_attribute (name);
+      {
+	string::size_type position = name.rfind (L"_tmp");
+	if (position != string::npos)
+	{
+	  string attribute_name (name, 0, position);
+	  add_attribute (attribute_name);
+	}
+	else
+	  add_attribute (name);
+      }
     }
 
     void
@@ -774,6 +820,29 @@ namespace
       if (! this->complex_list_.empty ())
 	for (size_t i =0; i < this->complex_list_.size (); i++)
 	  this->read_sequence (*this->complex_list_[i]);
+
+      // NOTE: The optional elements ALWAYS have to be read at 
+      // the END.
+      if (! this->optional_element_list_.empty ())
+	for (size_t i = 0; i < this->optional_element_list_.size (); i++)
+	{
+	  string name (this->optional_element_list_[i]->name ());
+	  // Read the optional part first
+	  os << "bool " << name << "_p;"
+	     << "stream.read_boolean (" << name << "_p);";
+
+	  os << "if (" << name << "_p)"
+	     << "{";
+
+	  // The element is optional
+	  read_generic_type (*this->optional_element_list_[i], 1);
+
+	  // Add that type to the element
+	  os << "element->" << name << " (" << name << ");"
+	     << endl;
+
+	  os << "}";
+	}
     }
 
   private:
@@ -798,6 +867,14 @@ namespace
     // complex element. However, unlike sequences, they will
     // be read/written in place i.e., in the same order they
     // occur in the schema.
+
+    std::vector < SemanticGraph::Element* > optional_element_list_;
+    // This list maintains elements that are defined in the schema
+    // of the form:
+    // <xs:element name="ContactInfo" type="xs:string" 
+    // minOccurs="0" maxOccurs="1"/>, where the element is itself
+    // optional. These are added to the element after the element
+    // is constructed.
 
     string element_name_;
     // Points to the name of the current element being traversed
