@@ -1,3 +1,9 @@
+Thu Aug  4 11:12:44 2005  Arvind Krishna  <arvindkr@arvindkr.qualcomm.com>
+
+	* CXX/CDR.hpp:
+	* CXX/CDR.cpp:
+	  Removed these extraneous files as these are not necessary now!
+
 Wed Jul 20 17:15:16 2005  Arvind S. Krishna  <arvindk@dre.vanderbilt.edu>
 
         * CXX/Source.cpp:
