@@ -1,3 +1,15 @@
+Thu Aug  4 11:25:52 2005  Arvind Krishna  <arvindkr@arvindkr.qualcomm.com>
+
+	* Tests/ComplexTypeImport:
+	
+	  A simple test where a schema's type extends a type defined in
+	  another schema.
+	
+	* Tests/ComplexTypeImport/Importee.xsd:
+	* Tests/ComplexTypeImport/Importer.xsd:
+
+	  Individual schema files.
+	
 Thu Aug  4 11:12:44 2005  Arvind Krishna  <arvindkr@arvindkr.qualcomm.com>
 
 	* CXX/CDR.hpp:

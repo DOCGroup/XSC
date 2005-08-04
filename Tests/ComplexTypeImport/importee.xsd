@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema
+    xmlns:foobaz="http://www.example.com/foobaz"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.example.com/foobaz"
+    elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xs:complexType name="FooType">
+        <xs:attribute name="a" type="xs:boolean" default="false"/>
+        <xs:attribute name="aa" type="xs:boolean" default="false"/>
+        <xs:attribute name="aaa" type="xs:string" default=""/>
+        <xs:attribute name="bbb" type="xs:boolean" default="false"/>
+        <xs:attribute name="ccc" type="xs:boolean" default="false"/>
+        <xs:attribute name="ddd" type="xs:string" default="*"/>
+    </xs:complexType>
+
+</xs:schema>
+~
+
