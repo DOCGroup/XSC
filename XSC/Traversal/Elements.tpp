@@ -2,6 +2,8 @@
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
 // cvs-id    : $Id$
 
+#ifndef XSC_ELEMENTS_TPP
+#define XSC_ELEMENTS_TPP
 #include <iostream>
 
 using std::wcerr;
@@ -123,3 +125,5 @@ namespace XSC
     }
   }
 }
+
+#endif /* XSC_ELEMENTS_TPP */
