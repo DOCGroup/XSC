@@ -157,7 +157,9 @@ namespace
         os << name << "_const_iterator end_" << name << " () const;";
 
         os << "void add_" << name << " (" << type << " const& );";
-
+        
+        os << "size_t count_" << name << " (void) const;";
+        
         os << endl
            << "protected:" << endl;
 

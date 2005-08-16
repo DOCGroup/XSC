@@ -1,3 +1,11 @@
+2005-08-16  William Otte  <wotte@dre.vanderbilt.edu>
+
+	* CXX/Header.cpp
+	* CXX/Inline.cpp
+
+	Added a method to count the number of elements present when
+	maxOccurs > 1.
+	
 2005-08-05  William Otte  <wotte@dre.vanderbilt.edu>
 
 	* XSC/SemanticGraph.hpp

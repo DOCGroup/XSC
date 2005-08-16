@@ -64,7 +64,7 @@ namespace
 
         os << i
            << "void " << scope << "::" << endl
-           << "add_" << name << " (" << type << " const& e)"
+           << "add_" << name << " (" << type << " const& e) const"
            << "{"
            << "if (" << name << "_.capacity () < " << name << "_.size () + 1)"
            << "{"
@@ -85,6 +85,14 @@ namespace
            << name << "_.push_back (e);"
            << name << "_.back ().container (this);"
            << "}";
+        
+        os << i
+           << "size_t " << scope << "::" << endl
+           << "count_" << name << "(void)"
+           << "{"
+           << "return " << name << "_.size ();"
+           << "}";
+        
       }
       else if (e.min () == 0)
       {
