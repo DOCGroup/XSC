@@ -64,7 +64,7 @@ namespace
 
         os << i
            << "void " << scope << "::" << endl
-           << "add_" << name << " (" << type << " const& e) const"
+           << "add_" << name << " (" << type << " const& e)"
            << "{"
            << "if (" << name << "_.capacity () < " << name << "_.size () + 1)"
            << "{"
@@ -85,14 +85,14 @@ namespace
            << name << "_.push_back (e);"
            << name << "_.back ().container (this);"
            << "}";
-        
+
         os << i
            << "size_t " << scope << "::" << endl
-           << "count_" << name << "(void)"
+           << "count_" << name << "(void) const"
            << "{"
            << "return " << name << "_.size ();"
            << "}";
-        
+
       }
       else if (e.min () == 0)
       {
@@ -382,12 +382,12 @@ namespace
 
       os << ")" << endl
          << ": " << endl;
-      
-      
+
+
       inherits (c, ctor_base_);
 
       // Resets a flag that determines
-      // if a Complex Type's copy constructor 
+      // if a Complex Type's copy constructor
       // has inherited from the base XSCRT::Type
       // class.
       ctor_member__.reset_base_class_initialization ();
@@ -408,7 +408,7 @@ namespace
          << ":" << endl;
 
       // Resets a flag that determines
-      // if a Complex Type's copy constructor 
+      // if a Complex Type's copy constructor
       // has inherited from the base XSCRT::Type
       // class.
       copy_.reset_base_class_initialization ();
@@ -453,7 +453,7 @@ namespace
       Type::InheritsIterator b (c.inherits_begin ()), e (c.inherits_end ());
       if (b == e)
 	return true;
-      
+
       // Checks only for simple types having attributes.
       bool ret_val (has<Traversal::Attribute> (c));
       return ret_val;
@@ -462,7 +462,7 @@ namespace
     void
     insertion_extraction (Type &c)
     {
-      // Check if we need to generate 
+      // Check if we need to generate
       // cdr insertion and extraction
       // operators
       if (! generate_cdr_types (c))
@@ -471,13 +471,13 @@ namespace
       string type (type_name (c));
 
       if (this->cdr_reader_generation_)
-	os << "bool " << endl 
+	os << "bool " << endl
 	   << "operator >> (::XMLSchema::CDR_InputStream &stream,"
 	   << endl
 	   << "             ::XMLSchema::cdr_arg_traits < "
-	   << type << " >::inout_type element)" 
+	   << type << " >::inout_type element)"
 	   << endl
-	   << "{" 
+	   << "{"
 	   << "return " << type << "::read_"
 	   << name << " (stream, element);"
 	   << endl
@@ -635,7 +635,7 @@ namespace
 
           os << name << "_ (new " << type << " (" << name << "__))," << endl;
         }
-	
+
       }
 
       void reset_base_class_initialization ()
@@ -721,7 +721,7 @@ namespace
 	    os << "::XSCRT::Type ()," << endl;
 	    base_class_initialized_ = 1;
 	  }
-	
+
 	if (e.max () != 1)
         {
           // sequence
@@ -767,7 +767,7 @@ namespace
 	base_class_initialized_ = 0;
       }
 
-    private: 
+    private:
       bool base_class_initialized_;
     };
 
@@ -994,13 +994,13 @@ namespace
 
       // CDR Insertion extraction operations if needed
       if (this->cdr_reader_generation_)
-	os << "bool " << endl 
+	os << "bool " << endl
 	   << "operator >> (::XMLSchema::CDR_InputStream &stream,"
 	   << endl
 	   << "             ::XMLSchema::cdr_arg_traits < "
-	   << type << " >::inout_type element)" 
+	   << type << " >::inout_type element)"
 	   << endl
-	   << "{" 
+	   << "{"
 	   << "return " << type << "::read_"
 	   << name << " (stream, element);"
 	   << endl
