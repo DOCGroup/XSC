@@ -1,3 +1,15 @@
+2005-10-03  William Otte  <wotte@dre.vanderbilt.edu>
+
+	* CXX/Header.cpp
+
+	Added opererator== and operator!= prototypes after classes that
+	define them
+	
+	* CXX/WriterHeader.cpp
+	* CXX/WriterSource.cpp
+
+	Fixed compile errors in Borland.
+	
 Fri Aug 19 09:39:48 2005  Arvind S. Krishna  <arvindk@dre.vanderbilt.edu>
 
         * CXX/Inline.cpp:

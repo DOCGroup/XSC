@@ -189,7 +189,7 @@ namespace
       os << name << "::" << endl
          << name << " ()"
          << "{"
-         << "}";
+         << "}";      
 
       // traverse
       //

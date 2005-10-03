@@ -505,15 +505,19 @@ namespace
   struct Label : Traversal::Enumerator, protected virtual Context
   {
     Label (Context& c)
-        : Context (c)
+      : Context (c)
     {
     }
 
     virtual void
     traverse (Type& e)
     {
-      os << id (e.name ()) << "_l," << endl;
+      os << id (e.name ()) << "_l,";
     }
+    
+
+  private:
+    
   };
 
   struct Enumeration : Traversal::Enumeration, protected virtual Context
@@ -556,21 +560,21 @@ namespace
 
       os << "enum Value"
          << "{";
-
+      
       names (e, names_labels_);
 
-      os << "};"
+      os << endl << "};"
          << endl;
 
       os << "Value" << endl
          << "integral () const;"
          << endl;
 
-      os << "friend bool" << endl
+      os << "friend bool" << ex << endl
          << "operator== (" << name << " const& a, " << name << " const& b);"
          << endl;
 
-      os << "friend bool" << endl
+      os << "friend bool" << ex << endl
          << "operator!= (" << name << " const& a, " << name << " const& b);"
          << endl;
 
@@ -621,7 +625,15 @@ namespace
       
       // End of class
       os << "};";
-
+      
+      os << "bool" << ex 
+         << "operator== (" << name << "const &a, " << name << "const &b);"
+         << endl;
+      
+      os << "bool" << ex
+         << "operator!= (" << name << "const &a, " << name << "const &b);"
+         << endl;
+      
       if (this->cdr_reader_generation_)
 	os << "extern bool" << endl
 	   << "operator >> (::XMLSchema::CDR_InputStream &,"
