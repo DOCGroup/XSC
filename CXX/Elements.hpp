@@ -56,7 +56,8 @@ public:
         ns_suffix_ (ns_suffix__),
         ns_mapping_ (ns_mapping),
 	cdr_reader_generation_(0),
-	cdr_writer_generation_(0)
+	cdr_writer_generation_(0),
+        generate_ra_sequences_ (false)
   {
   }
 
@@ -78,7 +79,8 @@ protected:
         ns_suffix_ (c.ns_suffix_),
         ns_mapping_ (c.ns_mapping_),
         cdr_reader_generation_ (c.cdr_reader_generation_),
-	cdr_writer_generation_ (c.cdr_writer_generation_)
+	cdr_writer_generation_ (c.cdr_writer_generation_),
+        generate_ra_sequences_ (c.generate_ra_sequences_)
   {
   }
 
@@ -192,6 +194,18 @@ public:
     return this->cdr_writer_generation_;
   }
 
+  void
+  generate_ra_sequences (bool flag)
+  {
+    this->generate_ra_sequences_ = flag;
+  }
+  
+  bool
+  generate_ra_sequences (void)
+  {
+    return this->generate_ra_sequences_;
+  }
+  
 public:
   std::wostream& os;
   string& scope;
@@ -242,6 +256,8 @@ protected:
 //-- CDR Insertion and Extraction Operators --
   bool cdr_reader_generation_;
   bool cdr_writer_generation_;
+
+  bool generate_ra_sequences_;
 };
 
 struct Anonymous : Traversal::Element,

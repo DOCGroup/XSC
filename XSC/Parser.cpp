@@ -297,6 +297,8 @@ namespace XSC
 
       s.new_edge<Names> (ns, s.new_node<Id> (), L"ID");
       s.new_edge<Names> (ns, s.new_node<IdRef> (), L"IDREF");
+      
+      s.new_edge<Names> (ns, s.new_node<String> (), L"href");
     }
 
 

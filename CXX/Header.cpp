@@ -10,6 +10,7 @@
 
 #include <CCF/CodeGenerationKit/Regex.hpp>
 
+
 namespace
 {
   struct Base : Traversal::Type, protected virtual Context
@@ -136,7 +137,14 @@ namespace
     {
       string name (c.name ());
       string type (type_name (c));
-
+      
+      
+      string container;
+      if (this->generate_ra_sequences_)
+        container = L"::std::vector";
+      else
+        container = L"::std::list";
+      
       os << "// " << name << endl
          << "// " << endl
          << "public:" << endl;
@@ -145,10 +153,10 @@ namespace
       {
         // sequence
         //
-        os << "typedef ::std::vector< " << type << " >::iterator "
+        os << "typedef " << container  << "< " << type << " >::iterator "
            << name << "_iterator;";
 
-        os << "typedef ::std::vector< " << type << " >::const_iterator "
+        os << "typedef " << container << "< " << type << " >::const_iterator "
            << name << "_const_iterator;";
 
         os << name << "_iterator begin_" << name << " ();";
@@ -163,7 +171,7 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os << "::std::vector< " << type << " > " << name << "_;";
+        os <<  container << "< " << type << " > " << name << "_;";
       }
       else if (c.min () == 0)
       {
@@ -171,7 +179,7 @@ namespace
         //
         os << "bool " << name << "_p () const;";
         os << type << " const& " << id (name) << " () const;";
-        os << type << "& " << id (name) << " ();";
+        // os << type << "& " << id (name) << " ();";  // Lets just have one mutator
         os << "void " << id (name) << " (" << type << " const& );";
 
         os << endl
@@ -184,7 +192,7 @@ namespace
         // one
         //
         os << type << " const& " << id (name) << " () const;";
-        os << type << "& " << id (name) << " ();";
+        // os << type << "& " << id (name) << " ();"; // Lets just have one mutator.
         os << "void " << id (name) << " (" << type << " const& );";
 
         os << endl
@@ -570,11 +578,11 @@ namespace
          << "integral () const;"
          << endl;
 
-      os << "friend bool" << ex << endl
+      os << "friend bool " << ex << endl
          << "operator== (" << name << " const& a, " << name << " const& b);"
          << endl;
 
-      os << "friend bool" << ex << endl
+      os << "friend bool " << ex << endl
          << "operator!= (" << name << " const& a, " << name << " const& b);"
          << endl;
 
@@ -626,12 +634,12 @@ namespace
       // End of class
       os << "};";
       
-      os << "bool" << ex 
-         << "operator== (" << name << "const &a, " << name << "const &b);"
+      os << "bool " << ex 
+         << "operator== (" << name << " const &a, " << name << " const &b);"
          << endl;
       
-      os << "bool" << ex
-         << "operator!= (" << name << "const &a, " << name << "const &b);"
+      os << "bool " << ex
+         << "operator!= (" << name << " const &a, " << name << " const &b);"
          << endl;
       
       if (this->cdr_reader_generation_)
@@ -743,9 +751,14 @@ generate_header (Context& ctx,
                  SemanticGraph::Schema& schema,
                  std::string const& expr)
 {
-  ctx.os << "#include <memory>" << endl
-         << "#include <vector>" << endl
-         << "#include \"XMLSchema/Types.hpp\"" << endl
+  ctx.os << "#include <memory>" << endl;
+  
+  if (ctx.generate_ra_sequences ())
+    ctx.os << "#include <vector>" << endl;
+  else
+    ctx.os << "#include <list>" << endl;
+  
+  ctx.os << "#include \"XMLSchema/Types.hpp\"" << endl
          << endl;
 
   // -- Include CDR Type headers if cdr generation is

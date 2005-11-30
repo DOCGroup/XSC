@@ -229,7 +229,7 @@ namespace
       string name (id (c.name ()));
       string type (type_name (c));
 
-      os << "struct " << e << name << " : Traversal::" << name << ", " << endl;
+      os << "struct " << name << " : Traversal::" << name << ", " << endl;
 
       inherits (c, inherits_);
 
@@ -299,7 +299,7 @@ namespace
       string name (id (e.name ()));
       string type (type_name (e));
 
-      os << "struct " << ex << name << " : Traversal::" << name << ", " << endl
+      os << "struct " << name << " : Traversal::" << name << ", " << endl
          << "virtual ::XSCRT::Writer< " << char_type << " >"
          << "{";
 

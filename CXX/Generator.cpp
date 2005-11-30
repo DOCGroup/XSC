@@ -179,6 +179,13 @@ options (CL::Description& d)
 		  "Generate code for reading types from "
                   "CDR streams.",
                   true));
+
+  d.add_option (CL::OptionDescription (
+                   "cxx-enable-random-access-sequences",
+                   "Generate code that allows random access to "
+                   "sequence elements.  Trades off with less efficient"
+                   "parsing.",
+                   true));
 }
 
 void CXX_Generator::
@@ -368,6 +375,9 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
   bool cdr_reader (cl.get_value ("cxx-generate-cdr-reader-types", false));
   bool cdr_writer (cl.get_value ("cxx-generate-cdr-writer-types", false));
 
+  // Check about random access sequences
+  bool ra_sequences (cl.get_value ("cxx-enable-random-access-sequences", false));
+  
   Context::NamespaceMapping nsm;
 
   // Default mapping.
@@ -425,7 +435,10 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
     // Add information to generate reader/writer types
     ctx.cdr_reader_generation (cdr_reader);
     ctx.cdr_writer_generation (cdr_writer);
-
+    
+    // Add additional information to the context:
+    ctx.generate_ra_sequences (ra_sequences);
+    
     generate_forward (ctx, schema);
     generate_header (ctx, schema, hxx_expr); //@@ move expr to ctx
 
@@ -461,6 +474,9 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
     ctx.cdr_reader_generation (cdr_reader);
     ctx.cdr_writer_generation (cdr_writer);
 
+    // Add additional information to the context:
+    ctx.generate_ra_sequences (ra_sequences);
+    
     generate_inline (ctx, schema, inline_); //@@ move inline_ to ctx
   }
 
@@ -476,7 +492,10 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
     // Add information to generate reader/writer types
     ctx.cdr_reader_generation (cdr_reader);
     ctx.cdr_writer_generation (cdr_writer);
-
+    
+    // Add additional information to the context:
+    ctx.generate_ra_sequences (ra_sequences);
+    
     if (!inline_)
     {
       generate_inline (ctx, schema, inline_);

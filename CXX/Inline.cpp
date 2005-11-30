@@ -26,7 +26,8 @@ namespace
     {
       string name (e.name ());
       string type (type_name (e));
-
+      bool ra_sequence (this->generate_ra_sequences_);
+      
       os << "// " << scope << endl
          << "// " << endl;
 
@@ -34,27 +35,34 @@ namespace
       {
         // sequence
         //
+        
+        // begin_typename
+        //
         os << i
            << scope << "::" << name << "_iterator " << scope << "::" << endl
            << "begin_" << name << " ()"
            << "{"
            << "return " << name << "_.begin ();"
            << "}";
-
+        
+        // end_typename
+        //
         os << i
            << scope << "::" << name << "_iterator " << scope << "::" << endl
            << "end_" << name << " ()"
            << "{"
            << "return " << name << "_.end ();"
            << "}";
-
+        
+        // begin_typename const
         os << i
            << scope << "::" << name << "_const_iterator " << scope << "::" << endl
            << "begin_" << name << " () const"
            << "{"
            << "return " << name << "_.begin ();"
            << "}";
-
+        
+        // end_typename const
         os << i
            << scope << "::" << name << "_const_iterator " << scope << "::" << endl
            << "end_" << name << " () const"
@@ -62,30 +70,40 @@ namespace
            << "return " << name << "_.end ();"
            << "}";
 
+        // add_typename
         os << i
            << "void " << scope << "::" << endl
            << "add_" << name << " (" << type << " const& e)"
-           << "{"
-           << "if (" << name << "_.capacity () < " << name << "_.size () + 1)"
-           << "{"
-           << "::std::vector< " << type << " > v;"
-           << "v.reserve (" << name << "_.size () + 1);"
-           << endl
-           << "while (" << name << "_.size ())"
-           << "{"
-           << "//@@ VC6" << endl
-           << type << "& t = " << name << "_.back ();"
-           << "t.container (0);"
-           << "v.push_back (t);"
-           << "v.back ().container (this);"
-           << name << "_.pop_back ();"
-           << "}"
-           << name << "_.swap (v);"
-           << "}"
-           << name << "_.push_back (e);"
-           << name << "_.back ().container (this);"
-           << "}";
-
+           << "{";
+        
+        if (ra_sequence)
+          {
+            os << "if (" << name << "_.capacity () < " << name << "_.size () + 1)"
+               << "{"
+               << "::std::vector< " << type << " > v;"
+               << "v.reserve (" << name << "_.size () + 1);"
+               << endl
+               << "for (" << name << "_iterator i = " << name << "_.begin ();"
+               << "i != " << name << "_.end (); ++i)"
+               << "{"
+               << type << "& t = *i;"
+               << "t.container (0);"
+               << "v.push_back (t);"
+               << "v.back ().container (this);"
+               << "}"
+               << name << "_.swap (v);"
+               << "}"
+               << name << "_.push_back (e);"
+               << name << "_.back ().container (this);";
+          }
+        else
+          {
+            os << name << "_.push_back (e);";
+          }
+        os << "}";
+        
+        // count_typename
+        //
         os << i
            << "size_t " << scope << "::" << endl
            << "count_" << name << "(void) const"
@@ -111,14 +129,14 @@ namespace
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
-
+        /* Lets just have one accessor. WRO
         os << i
            << type << "& " << scope << "::" << endl
            << id (name) << " ()"
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
-
+        */
         os << i
            << "void " << scope << "::" << endl
            << id (name) << " (" << type << " const& e)"
@@ -145,14 +163,14 @@ namespace
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
-
+        /* Lets just have one mutator
         os << i
            << type << "& " << scope << "::" << endl
            << id (name) << " ()"
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
-
+        */
         os << i
            << "void " << scope << "::" << endl
            << id (name) << " (" << type << " const& e)"
@@ -791,8 +809,10 @@ namespace
 
           // sequence
           //
-          os << name << "_.reserve (s." << name << "_.size ());"
-             << "{"
+          if (this->generate_ra_sequences_)
+            os << name << "_.reserve (s." << name << "_.size ());";
+          
+          os << "{"
              << "for (" << name << "_const_iterator i (s."
              << name << "_.begin ());"
              << "i != s." << name << "_.end ();"
@@ -862,9 +882,12 @@ namespace
         {
           // sequence
           //
-          os << name << "_.clear ();"
-             << name << "_.reserve (s." << name << "_.size ());"
-             << "{"
+          os << name << "_.clear ();";
+          
+          if (this->generate_ra_sequences_)
+            os   << name << "_.reserve (s." << name << "_.size ());";
+              
+          os << "{"
              << "for (" << name << "_const_iterator i (s."
              << name << "_.begin ());"
              << "i != s." << name << "_.end ();"

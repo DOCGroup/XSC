@@ -1,3 +1,19 @@
+2005-11-30  William Otte  <wotte@dre.vanderbilt.edu>
+
+	* xsc.cpp
+
+	Updated version string.
+	
+	* CXX/Elements.hpp
+	* CXX/Generator.cpp
+	* CXX/Header.cpp
+	* CXX/Inline.cpp
+	* CXX/WriterHeader.cpp
+	* XSC/Parser.cpp
+
+	Added support for optionally generating code using lists or 
+	vectors for sequences with cardinality greater than one. 
+	
 2005-10-03  William Otte  <wotte@dre.vanderbilt.edu>
 
 	* CXX/Header.cpp

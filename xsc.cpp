@@ -24,7 +24,7 @@ using std::wcerr;
 using std::endl;
 using std::auto_ptr;
 
-wchar_t const* const version = L"0.0.6";
+wchar_t const* const version = L"0.0.8";
 
 class ErrorDetector : public std::wstreambuf
 {
