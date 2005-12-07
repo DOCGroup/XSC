@@ -33,11 +33,8 @@ namespace
         // sequence
         //
         
-        // Borland Pre 
+        // Pre 
         //
-        os << "// Hack to make borland stop complaining.  " << endl;
-        os << "#ifdef __BORLANDC__" << endl;
-        
         os << "virtual void " << endl
            << name << "_pre (Type &o)" << endl
            << "{" << endl
@@ -45,20 +42,14 @@ namespace
            << "const_cast <Type const &> (o));" << endl
            << "}" << endl;
         
-        os << "#endif /* __BORLANDC__ */" << endl;
-        
-
         // pre
         //
         os << "virtual void" << endl
            << name << "_pre (Type const&);"
            << endl;
         
-        // Borland next
+        // non-const next
         //
-        os << "// Hack to make borland stop complaining.  " << endl;
-        os << "#ifdef __BORLANDC__" << endl;
-        
         os << "virtual void " << endl
            << name << "_next (Type &o)" << endl
            << "{" << endl
@@ -66,26 +57,19 @@ namespace
            << "const_cast <Type const &> (o));" << endl
            << "}" << endl;
         
-        os << "#endif /* __BORLANDC__ */" << endl;
-
         // next
         //
         os << "virtual void" << endl
            << name << "_next (Type const&);"
            << endl;
 
-        // Borland post
-        os << "// Hack to make borland stop complaining.  " << endl;
-        os << "#ifdef __BORLANDC__" << endl;
-        
+        //  post
         os << "virtual void " << endl
            << name << "_post (Type &o)" << endl
            << "{" << endl
            << "this->" << name << "_post ("
            << "const_cast <Type const &> (o));" << endl
            << "}" << endl;
-        
-        os << "#endif /* __BORLANDC__ */" << endl;
         
         // post
         //
@@ -96,17 +80,12 @@ namespace
       else if (e.min () == 0)
       {
         // Borland post
-        os << "// Hack to make borland stop complaining.  " << endl;
-        os << "#ifdef __BORLANDC__" << endl;
-        
         os << "virtual void " << endl
            << id (name)  << " (Type &o)" << endl
            << "{" << endl
            << "this->" << id (name) << " ("
            << "const_cast <Type const &> (o));" << endl
            << "}" << endl;
-        
-        os << "#endif /* __BORLANDC__ */" << endl;
         
         // optional
         //
@@ -117,17 +96,12 @@ namespace
       else
       {
         // Borland post
-        os << "// Hack to make borland stop complaining.  " << endl;
-        os << "#ifdef __BORLANDC__" << endl;
-        
         os << "virtual void " << endl
            << id (name)  << " (Type &o)" << endl
            << "{" << endl
            << "this->" << id (name) << " ("
            << "const_cast <Type const &> (o));" << endl
            << "}" << endl;
-        
-        os << "#endif /* __BORLANDC__ */" << endl;
         
         // one
         //
@@ -147,9 +121,6 @@ namespace
       string name (a.name ());
       
       // Borland post
-      os << "// Hack to make borland stop complaining.  " << endl;
-      os << "#ifdef __BORLANDC__" << endl;
-      
       os << "virtual void " << endl
          << id (name)  << " (Type &o)" << endl
          << "{" << endl
@@ -157,7 +128,6 @@ namespace
          << "const_cast <Type const &> (o));" << endl
          << "}" << endl;
       
-      os << "#endif /* __BORLANDC__ */" << endl;
       
       os << "virtual void" << endl
          << id (name) << " (Type const&);"
@@ -246,18 +216,13 @@ namespace
          << endl;
       
       // Non-const traverse for Borland
-      os << "#ifdef __BORLANDC__" << endl;
-      
       os << "virtual void " << endl
          << "traverse (Type &o)" << endl
          << "{" << endl
          << "this->traverse ("
          << "const_cast <Type const &> (o));"
-        //         << "Traversal::" << name << "::traverse (o);"
          << "}" << endl;
       
-      os << "#endif /* __BORLANDC__ */" << endl;
-     
 
       // traverse
       //
@@ -309,16 +274,12 @@ namespace
          << endl;
       
       // Non-const traverse for Borland
-      os << "#ifdef __BORLANDC__" << endl;
-      
       os << "virtual void " << name << "::" << endl
          << "traverse (Type &o)"
          << "{"
          << "this->traverse (" 
          << "const_cast <Type const &> (o));"
-        //         << "Traversal::" << name << "::traverse (o);"
          << "}";
-      os << "#endif /* __BORLANDC__ */" << endl;
 
       // traverse
       //

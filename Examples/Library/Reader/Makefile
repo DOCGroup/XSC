@@ -1,5 +1,5 @@
 CXX := g++ -Wall -O3
-XSC := ../../../xsc
+XSC := ../../../xsc-binary
 XSCRT := ../../../XSCRT
 
 vpath %.cpp ..

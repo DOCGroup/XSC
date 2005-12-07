@@ -1,3 +1,16 @@
+2005-12-07  William Otte  <wotte@dre.vanderbilt.edu>
+
+	* CXX/WriterHeader.cpp
+
+	Removed Borland specifc ifdefs to make the fix from:
+	2005-10-03  William Otte  <wotte@dre.vanderbilt.edu>
+	apply to all compilers.
+	
+	* Examples/Library/Reader/Makefile
+	* Examples/Library/Writer/Makefile
+
+	Fixed the name of the xsc binary listed there. 
+	
 2005-11-30  William Otte  <wotte@dre.vanderbilt.edu>
 
 	* xsc.cpp
