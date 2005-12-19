@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<xsc:SchoolDirectory 
+  xmlns:xsc="http://www.dre.vanderbilt.edu/XSC/Tests"  
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.dre.vanderbilt.edu/XSC/Tests inheritance.xsd">
+  
+  <UndergraduateStudent>
+    <FirstName>John</FirstName>
+    <LastName>Williams</LastName>
+    <SSN>000000000</SSN>
+    <HighSchool>Freedom Speaks H.S.</HighSchool>
+  </UndergraduateStudent>
+
+  <GraduateStudent>
+    <FirstName>James</FirstName>
+    <LastName>Hill</LastName>
+    <SSN>459813456</SSN>
+    <HighSchool>Hume-Fogg Academic</HighSchool>
+    <UndergraduateSchoool>Morehouse College</UndergraduateSchoool>  
+  </GraduateStudent>
+</SchoolDirectory>

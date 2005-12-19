@@ -1,3 +1,9 @@
+2005-12-18  James H. Hill  <hillj@isis.vanderbilt.edu>
+  * Tests/Abstract/abstract.xsd
+  * Tests/Abstract/abstract.xml
+  
+  Added test case for abstract complex types
+
 2005-12-07  William Otte  <wotte@dre.vanderbilt.edu>
 
 	* CXX/WriterHeader.cpp
