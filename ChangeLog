@@ -1,3 +1,15 @@
+2005-12-20  William Otte  <wotte@dre.vanderbilt.edu>
+
+	* xsc.mpb
+	* XSC.mwc
+	* XSC/libXSC.mpc
+	* CXX/libCXX.mpc
+	* XSC.mpc
+	* IDL/libIDL.mpc
+
+	Updates to the mpc system to bring it up to speed with recent
+	enhancements to MPC base projects.
+
 2005-12-18  James H. Hill  <hillj@isis.vanderbilt.edu>
   * Tests/Abstract/abstract.xsd
   * Tests/Abstract/abstract.xml

@@ -1,30 +1,14 @@
 //$Id$
 
-project(XSC): xerces {
+project(XSC): xsc, xerces {
   requires += exceptions
   exename = xsc-binary
-  includes += . $(CIAO_ROOT)/CCF
+
   after += libXSC libCXX libIDL CodeGenerationKit CompilerElements
   install = ../bin
-  libpaths += $(CIAO_ROOT)/CCF/CCF ./XSC ./CXX ./IDL $(BOOST_LIB)
+  libpaths += ./XSC ./CXX ./IDL
   libs += CXX IDL XSC CodeGenerationKit CompilerElements
   Source_Files {
-    ./CXX
-    ./IDL
-    ./xsc.cpp
-  }
-
-  specific(vc71) {
-    libs += boost_regex_debug boost_filesystem_debug
-  }
-
-  verbatim(gnuace, top) {
-    include $(CIAO_ROOT)/CCF/Config.rules
-  }
-
-  verbatim(gnuace, local) {
-    LIBS += $(BOOST_LD_FLAGS)	\
-            -lboost_regex 	\
-            -lboost_filesystem
+    xsc.cpp
   }
 }

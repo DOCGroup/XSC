@@ -1,0 +1,10 @@
+// $Id$
+
+project: boost_filesystem, boost_regex {
+  requires += xsc
+  includes += $(CIAO_ROOT)/CCF $(ACE_ROOT)/contrib/utility
+  
+  specific(vc71, vc8) {
+    compile_flags += /wd4290 /wd4800 /wd4250 /wd4355
+  }
+}
