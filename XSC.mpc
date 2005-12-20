@@ -5,6 +5,7 @@ project(XSC): xsc, xerces {
   exename = xsc-binary
 
   after += libXSC libCXX libIDL CodeGenerationKit CompilerElements
+  includes += .
   install = ../bin
   libpaths += ./XSC ./CXX ./IDL
   libs += CXX IDL XSC CodeGenerationKit CompilerElements
