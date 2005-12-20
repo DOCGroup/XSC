@@ -1,3 +1,9 @@
+Tue Dec 20 14:37:14  2005  William Otte  <wotte@dre.vanderbilt.edu>
+
+	* Tests/Abstract/abstract.xsd
+
+	Fixed a syntax error. 
+	
 2005-12-20  William Otte  <wotte@dre.vanderbilt.edu>
 
 	* xsc.mpb

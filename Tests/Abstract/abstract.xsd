@@ -4,7 +4,7 @@
   targetNamespace="http://www.dre.vanderbilt.edu/XSC/Tests">
   <xsd:complexType name="SchoolDirectory">
     <xsd:sequence minOccurs="0" maxOccurs="unbounded">
-      <xsd:element name="StudentEntry" type="Student" />
+      <xsd:element name="StudentEntry" type="xsc:Student" />
     </xsd:sequence>
   </xsd:complexType>
   <xsd:complexType name="Student" abstract="true">
