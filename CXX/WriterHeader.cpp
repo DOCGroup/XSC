@@ -153,7 +153,7 @@ namespace
     }
 
     virtual void
-    traverse (SemanticGraph::IdRef& r)
+    traverse (SemanticGraph::IdRef&)
     {
       os << "virtual ::XMLSchema::Writer::IDREF< " << char_type << " >, " <<
         endl;
@@ -274,7 +274,7 @@ namespace
          << endl;
       
       // Non-const traverse for Borland
-      os << "virtual void " << name << "::" << endl
+      os << "virtual void " << endl
          << "traverse (Type &o)"
          << "{"
          << "this->traverse (" 

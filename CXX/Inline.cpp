@@ -528,13 +528,13 @@ namespace
       }
 
       virtual void
-      traverse (SemanticGraph::Type& t)
+      traverse (SemanticGraph::Type&)
       {
         os << "Base__ (b__)," << endl;
       }
 
       virtual void
-      traverse (SemanticGraph::Enumeration& e)
+      traverse (SemanticGraph::Enumeration&)
       {
         os << "Base__ (b__)," << endl;
       }
@@ -568,13 +568,13 @@ namespace
         }
 
         virtual void
-        traverse (SemanticGraph::Type& t)
+        traverse (SemanticGraph::Type&)
         {
           os << comma () << "b__";
         }
 
         virtual void
-        traverse (SemanticGraph::Enumeration& e)
+        traverse (SemanticGraph::Enumeration&)
         {
           os << comma () << "b__";
         }
@@ -721,7 +721,7 @@ namespace
       }
 
       virtual void
-      traverse (SemanticGraph::Type& c)
+      traverse (SemanticGraph::Type&)
       {
         os << "Base__ (s)," << endl;
       }
@@ -864,7 +864,7 @@ namespace
       }
 
       virtual void
-      traverse (SemanticGraph::Type& c)
+      traverse (SemanticGraph::Type&)
       {
         os << "static_cast< Base__& > (*this) = "
            << "static_cast< Base__ const& > (s);"

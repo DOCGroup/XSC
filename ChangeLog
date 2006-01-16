@@ -1,3 +1,18 @@
+Mon Jan 16 18:40:30 GMT 2006  William Otte  <wotte@dre.vanderbilt.edu>
+
+        * CXX/Header.cpp
+        * CXX/Inline.cpp
+        * CXX/Source.cpp
+        * CXX/TraversalHeader.cpp
+        * CXX/WriterHeader.cpp
+        * CXX/WriterSource.cpp
+        * IDL/Elements.cpp
+        * XSC/Parser.cpp
+        * XSC/Parser.hpp
+        
+        Addressed compile warnings, additional commenting, errors in
+        generated code. 
+        
 Tue Dec 20 14:37:14  2005  William Otte  <wotte@dre.vanderbilt.edu>
 
 	* Tests/Abstract/abstract.xsd

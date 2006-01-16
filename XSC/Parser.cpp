@@ -42,9 +42,9 @@ namespace XSC
     T&
     resolve (string const& ns_name,
              string const& uq_name,
-             Schema& s_)
+             Schema& schema)
     {
-      Scope::NamesIteratorPair nss (s_.find (ns_name));
+      Scope::NamesIteratorPair nss (schema.find (ns_name));
 
       if (nss.first == nss.second)
       {
@@ -78,7 +78,7 @@ namespace XSC
                       Traversal::Scope // group
     {
       Resolver (Schema& s)
-          : s_ (s)
+        : schema_ (s)
       {
       }
 
@@ -95,8 +95,8 @@ namespace XSC
             ns_name = i.context ().get<string> ("type-ns-name");
             uq_name = i.context ().get<string> ("type-uq-name");
 
-            s_.new_edge<Belongs> (
-              i, resolve<SemanticGraph::Type> (ns_name, uq_name, s_));
+            schema_.new_edge<Belongs> (
+              i, resolve<SemanticGraph::Type> (ns_name, uq_name, schema_));
 
             i.context ().remove ("type-ns-name");
             i.context ().remove ("type-uq-name");
@@ -107,11 +107,11 @@ namespace XSC
             uq_name = i.context ().get<string> ("instance-uq-name");
 
             SemanticGraph::Instance& ref (
-              resolve<SemanticGraph::Instance> (ns_name, uq_name, s_));
+              resolve<SemanticGraph::Instance> (ns_name, uq_name, schema_));
 
             if (ref.typed ())
             {
-              s_.new_edge<Belongs> (i, ref.type ());
+              schema_.new_edge<Belongs> (i, ref.type ());
 
               i.context ().remove ("instance-ns-name");
               i.context ().remove ("instance-uq-name");
@@ -147,8 +147,7 @@ namespace XSC
             ns_name = c.context ().get<string> ("type-ns-name");
             uq_name = c.context ().get<string> ("type-uq-name");
 
-            s_.new_edge<Inherits> (
-              c, resolve<SemanticGraph::Type> (ns_name, uq_name, s_));
+            schema_.new_edge<Inherits> (c, resolve<SemanticGraph::Type> (ns_name, uq_name, schema_));
 
             c.context ().remove ("type-ns-name");
             c.context ().remove ("type-uq-name");
@@ -161,21 +160,21 @@ namespace XSC
             unsigned long min (c.context ().get<unsigned long> ("group-min")),
               max (c.context ().get<unsigned long> ("group-max"));
 
-            Scope& s (resolve<Scope> (ns_name, uq_name, s_));
+            Scope& scope (resolve<Scope> (ns_name, uq_name, schema_));
 
             // @@ same code as in Parser::group
             //
-            for (Scope::NamesIterator i (s.names_begin ());
-                 i != s.names_end (); ++i)
+            for (Scope::NamesIterator i (scope.names_begin ());
+                 i != scope.names_end (); ++i)
             {
               Element& prot (dynamic_cast<Element&> ((*i)->named ()));
 
-              Element& e (s_.new_node<Element> (
+              Element& e (schema_.new_node<Element> (
                             min == 0 ? min : prot.min (),
                             max == 0 ? max : prot.max (),
                             prot.qualified ()));
 
-              s_.new_edge<Names> (c, e, prot.name ());
+              schema_.new_edge<Names> (c, e, prot.name ());
 
               // Now we set element's type.
               //
@@ -184,7 +183,7 @@ namespace XSC
               {
                 // Easy case.
                 //
-                s_.new_edge<Belongs> (e, prot.type ());
+                schema_.new_edge<Belongs> (e, prot.type ());
               }
               else if (prot.context ().count ("type-ns-name"))
               {
@@ -239,18 +238,18 @@ namespace XSC
       }
 
     private:
-      Schema& s_;
+      Schema& schema_;
     };
   }
 
   Parser::
   Parser ()
-      : s_ (0), cur_ (0), qualify_attribute_ (false), qualify_element_ (false)
+      : root_schema_ (0), cur_schema_ (0), qualify_attribute_ (false), qualify_element_ (false)
   {
   }
 
   Schema* Parser::
-  parse (fs::path const& tu)
+  parse (fs::path const& uri)
   {
     auto_ptr<Schema> rs (new Schema);
 
@@ -304,7 +303,7 @@ namespace XSC
 
     // Parse.
     //
-    if (DOMDocument* d  = dom (tu))
+    if (DOMDocument* d  = dom (uri))
     {
       XML::Element root (d->getDocumentElement ());
 
@@ -314,18 +313,18 @@ namespace XSC
 
       // Enter the file into file_map_.
       //
-      file_map_[tu] = ns;
+      file_map_[uri] = ns;
 
-      s_ = cur_ = rs.get ();
+      root_schema_ = cur_schema_ = rs.get ();
 
-      push_scope (s_->new_node<Namespace> ());
-      s_->new_edge<Names> (*cur_, scope (), ns);
+      push_scope (root_schema_->new_node<Namespace> ());
+      root_schema_->new_edge<Names> (*cur_schema_, scope (), ns);
 
       schema (root);
 
       pop_scope ();
 
-      s_ = cur_ = 0;
+      root_schema_ = cur_schema_ = 0;
     }
 
     //@@ don't need this in case of an error
@@ -446,17 +445,19 @@ namespace XSC
     std::wcstombs (str, loc.c_str (), len);
     fs::path path (str);
     delete[] str;
-
+    
+    // Check to see if we have already parsed this file....
     if (file_map_.find (path) != file_map_.end ()) return;
-
+    
+    
     file_map_[path] = i[L"namespace"];
 
     if (trace_) wcout << "importing " << path.string ().c_str () << endl;
 
     if (DOMDocument* d  = dom (path))
     {
-      Schema& s (s_->new_node<Schema> ());
-      s_->new_edge<Imports> (*cur_, s, path);
+      Schema& s (root_schema_->new_node<Schema> ());
+      root_schema_->new_edge<Imports> (*cur_schema_, s, path);
 
       XML::Element root (d->getDocumentElement ());
 
@@ -464,16 +465,16 @@ namespace XSC
 
       if (trace_) wcout << "target namespace: " << ns << endl;
 
-      Schema* old (cur_);
-      cur_ = &s;
+      Schema* old (cur_schema_);
+      cur_schema_ = &s;
 
-      push_scope (s_->new_node<Namespace> ());
-      s_->new_edge<Names> (*cur_, scope (), ns);
+      push_scope (root_schema_->new_node<Namespace> ());
+      root_schema_->new_edge<Names> (*cur_schema_, scope (), ns);
 
       schema (root);
 
       pop_scope ();
-      cur_ = old;
+      cur_schema_ = old;
     }
   }
 
@@ -496,39 +497,40 @@ namespace XSC
 
     if (DOMDocument* d  = dom (path))
     {
-      Schema& s (s_->new_node<Schema> ());
+      Schema& s (root_schema_->new_node<Schema> ());
 
       XML::Element root (d->getDocumentElement ());
 
       string ns (root[L"targetNamespace"]), cur_ns;
 
       if (ns.empty () &&
-          !(cur_ns = (*(cur_->names_begin ()))->name ()).empty ())
+          !(cur_ns = (*(cur_schema_->names_begin ()))->name ()).empty ())
       {
         // Chameleon.
         //
+	// @@Will:  What is a chameleon schema?
         ns = cur_ns;
-        s_->new_edge<Sources> (*cur_, s, path);
+        root_schema_->new_edge<Sources> (*cur_schema_, s, path);
 
         if (trace_) wcout << "handling chameleon schema" << endl;
       }
       else
       {
-        s_->new_edge<Includes> (*cur_, s, path);
+        root_schema_->new_edge<Includes> (*cur_schema_, s, path);
       }
 
       if (trace_) wcout << "target namespace: " << ns << endl;
 
-      Schema* old (cur_);
-      cur_ = &s;
+      Schema* old (cur_schema_);
+      cur_schema_ = &s;
 
-      push_scope (s_->new_node<Namespace> ());
-      s_->new_edge<Names> (*cur_, scope (), ns);
+      push_scope (root_schema_->new_node<Namespace> ());
+      root_schema_->new_edge<Names> (*cur_schema_, scope (), ns);
 
       schema (root);
 
       pop_scope ();
-      cur_ = old;
+      cur_schema_ = old;
     }
   }
 
@@ -537,8 +539,8 @@ namespace XSC
   {
     if (string name = g[L"name"])
     {
-      Scope& group (s_->new_node<Scope> ());
-      s_->new_edge<Names> (scope (), group, name);
+      Scope& group (root_schema_->new_node<Scope> ());
+      root_schema_->new_edge<Names> (scope (), group, name);
 
       push_scope (group);
       push (g);
@@ -579,19 +581,19 @@ namespace XSC
 
       try
       {
-        Scope& s (resolve<Scope> (ns_name, uq_name, *s_));
+        Scope& s (resolve<Scope> (ns_name, uq_name, *root_schema_));
 
         for (Scope::NamesIterator i (s.names_begin ());
              i != s.names_end (); ++i)
         {
           Element& prot (dynamic_cast<Element&> ((*i)->named ()));
 
-          Element& e (s_->new_node<Element> (
+          Element& e (root_schema_->new_node<Element> (
                         min == 0 ? min : prot.min (),
                         max == 0 ? max : prot.max (),
                         prot.qualified ()));
 
-          s_->new_edge<Names> (scope (), e, prot.name ());
+          root_schema_->new_edge<Names> (scope (), e, prot.name ());
 
           // Now we set element's type.
           //
@@ -599,7 +601,7 @@ namespace XSC
           {
             // Easy case.
             //
-            s_->new_edge<Belongs> (e, prot.type ());
+            root_schema_->new_edge<Belongs> (e, prot.type ());
           }
           else if (prot.context ().count ("type-ns-name"))
           {
@@ -724,12 +726,12 @@ namespace XSC
         //
         enum_ = true;
 
-        Enumeration& node (s_->new_node<Enumeration> ());
+        Enumeration& node (root_schema_->new_node<Enumeration> ());
         set_type<Inherits> (r[L"base"], r, node);
 
         if (string name = r.parent ()[L"name"])
         {
-          s_->new_edge<Names> (scope (), static_cast<Nameable&> (node), name);
+          root_schema_->new_edge<Names> (scope (), static_cast<Nameable&> (node), name);
         }
 
         push_scope (node);
@@ -744,12 +746,12 @@ namespace XSC
 
     if (!enum_)
     {
-      Complex& node (s_->new_node<Complex> ());
+      Complex& node (root_schema_->new_node<Complex> ());
       set_type<Inherits> (r[L"base"], r, node);
 
       if (string name = r.parent ()[L"name"])
       {
-        s_->new_edge<Names> (scope (), node, name);
+        root_schema_->new_edge<Names> (scope (), node, name);
       }
 
       rv = &node;
@@ -767,9 +769,9 @@ namespace XSC
 
     if (trace_) wcout << "enumeration value: " << value << endl;
 
-    Enumerator& node (s_->new_node<Enumerator> ());
-    s_->new_edge<Names> (scope (), node, value);
-    s_->new_edge<Belongs> (node, dynamic_cast<Type&>(scope ()));
+    Enumerator& node (root_schema_->new_node<Enumerator> ());
+    root_schema_->new_edge<Names> (scope (), node, value);
+    root_schema_->new_edge<Belongs> (node, dynamic_cast<Type&>(scope ()));
   }
 
   Type* Parser::
@@ -783,11 +785,11 @@ namespace XSC
       return r;
     }
 
-    Complex& node (s_->new_node<Complex> ());
+    Complex& node (root_schema_->new_node<Complex> ());
 
     if (string name = t[L"name"])
     {
-      s_->new_edge<Names> (scope (), node, name);
+      root_schema_->new_edge<Names> (scope (), node, name);
     }
 
     r = &node;
@@ -840,13 +842,14 @@ namespace XSC
     //  values for `all' are min=1, max=1. Therefore we don't
     //  really need to push/pop cardinality.
     //
-    push (a);
+    this->push (a);
 
-    annotation ();
-
-    while (more ())
+    this->annotation ();
+    
+    // The content of the all must be a number of elements.  
+    while (this->more ())
     {
-      XML::Element e (next ());
+      XML::Element e (this->next ());
 
       string name (e.name ());
 
@@ -863,7 +866,7 @@ namespace XSC
   choice (XML::Element const& c)
   {
     // Establish cardinality.
-    //
+    // All choice elements have a min cardinality of 0
     push_cardinality (0,
                       c[L"maxOccurs"] && c[L"maxOccurs"] != L"1" ? 0 : max ());
 
@@ -1032,8 +1035,8 @@ namespace XSC
 
     if (string name = e[L"name"])
     {
-      Element& node (s_->new_node<Element> (min, max, qualified));
-      s_->new_edge<Names> (scope (), node, name);
+      Element& node (root_schema_->new_node<Element> (min, max, qualified));
+      root_schema_->new_edge<Names> (scope (), node, name);
 
 
       if (string type = e[L"type"])
@@ -1069,7 +1072,7 @@ namespace XSC
 
           if (t)
           {
-            s_->new_edge<Belongs> (node, *t);
+            root_schema_->new_edge<Belongs> (node, *t);
           }
         }
         else
@@ -1090,16 +1093,16 @@ namespace XSC
       string uq_name (XML::uq_name (ref));
       string ns_name (XML::ns_name (e, ref));
 
-      Element& node (s_->new_node<Element> (min, max, qualified));
-      s_->new_edge<Names> (scope (), node, uq_name);
+      Element& node (root_schema_->new_node<Element> (min, max, qualified));
+      root_schema_->new_edge<Names> (scope (), node, uq_name);
 
       try
       {
-        Element& e (resolve<Element> (ns_name, uq_name, *s_));
+        Element& e (resolve<Element> (ns_name, uq_name, *root_schema_));
 
         if (e.typed ())
         {
-          s_->new_edge<Belongs> (node, e.type ());
+          root_schema_->new_edge<Belongs> (node, e.type ());
         }
         else if (e.context ().count ("type-ns-name"))
         {
@@ -1170,7 +1173,7 @@ namespace XSC
 
     bool optional (true);
 
-    string use (a[L"use"]);
+   string use (a[L"use"]);
 
     if (use == L"prohibited") return;
     else if (use == L"required") optional = false;
@@ -1183,8 +1186,8 @@ namespace XSC
       qualified = form == L"qualified";
     }
 
-    Attribute& node (s_->new_node<Attribute> (optional, qualified));
-    s_->new_edge<Names> (scope (), node, name);
+    Attribute& node (root_schema_->new_node<Attribute> (optional, qualified));
+    root_schema_->new_edge<Names> (scope (), node, name);
 
     string type (a[L"type"]);
 
@@ -1209,9 +1212,9 @@ namespace XSC
 
     try
     {
-      Type& t (resolve<Type> (ns_name, uq_name, *s_));
+      Type& t (resolve<Type> (ns_name, uq_name, *root_schema_));
 
-      s_->template new_edge<Edge> (node, t);
+      root_schema_->template new_edge<Edge> (node, t);
     }
     catch (NotNamespace const&)
     {
@@ -1325,7 +1328,7 @@ namespace XSC
 
       // Do not create EntityReference nodes in the DOM tree. No
       // EntityReference nodes will be created, only the nodes
-      // corresponding to their fully expanded substitution text will be
+      // Corresponding to their fully expanded substitution text will be
       // created.
       //
       parser->setFeature (XMLUni::fgDOMEntities, false);

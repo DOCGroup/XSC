@@ -254,7 +254,7 @@ namespace
     }
 
     virtual void
-    post (Type& c)
+    post (Type& )
     {
       // post ()
       //

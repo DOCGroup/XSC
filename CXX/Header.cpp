@@ -303,7 +303,7 @@ namespace
     }
 
     virtual void
-    pre (Type& c)
+    pre (Type&)
     {
       os << "class " << e << name;
     }

@@ -514,7 +514,7 @@ namespace
      */
     void
     read_generic_type (SemanticGraph::Element &e, 
-		       bool is_type_optional)
+		       bool )
     {
       // What we need here is to check
       // for is three cases:
@@ -983,7 +983,7 @@ namespace
     }
 
     virtual void
-    post (Type& c)
+    post (Type& )
     {
       os << "}";
     }
@@ -1136,7 +1136,7 @@ namespace
 
 
     virtual void
-    pre (Type& c)
+    pre (Type&)
     {
       os << scope << "::" << endl
          << name << " (" << xml_attribute_type << " const& a)" << endl
@@ -1147,7 +1147,7 @@ namespace
     }
 
     virtual void
-    post (Type& c)
+    post (Type&)
     {
       os << "}";
     }

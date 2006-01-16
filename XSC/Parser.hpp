@@ -236,7 +236,8 @@ namespace XSC
 
     void
     schema (XML::Element const&);
-
+    
+    /// Skips a single annotation element, if present.
     void
     annotation ();
 
@@ -289,6 +290,7 @@ namespace XSC
     attribute (XML::Element const&, bool global = false);
 
   private:
+    /// @returns true if there are more children of current parent
     bool
     more () const
     {
@@ -296,7 +298,8 @@ namespace XSC
 
       return it.l_->getLength () > it.i_;
     }
-
+    
+    /// Go to next child of current parent and return it. 
     XML::Element
     next ()
     {
@@ -306,6 +309,7 @@ namespace XSC
         dynamic_cast<Xerces::DOMElement*> (it.l_->item (it.i_++)));
     }
 
+    /// Go to previous child of current parent
     void
     prev ()
     {
@@ -313,13 +317,16 @@ namespace XSC
 
       if (it.i_) --it.i_;
     }
-
+    
+    /// Places a new parent element on the stack.  Further calls to
+    /// more, next, and prev will use this element.
     void
     push (XML::Element const& e)
     {
       iteration_state_.push (e.dom_element ());
     }
-
+    
+    /// Removes the current parent element from the stack. 
     void
     pop ()
     {
@@ -390,8 +397,8 @@ namespace XSC
     };
 
     std::stack<Iterator> iteration_state_;
-    SemanticGraph::Schema* s_;   // root schema file
-    SemanticGraph::Schema* cur_; // current schema file
+    SemanticGraph::Schema* root_schema_;   // root schema file
+    SemanticGraph::Schema* cur_schema_; // current schema file
 
 
     //
