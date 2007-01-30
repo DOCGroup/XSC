@@ -43,12 +43,12 @@ namespace IDL
   options (CL::Description& d)
   {
 
-    d.add_option (CL::OptionDescription (
-                    "idl-char-type",
-                    "type-name",
-                    "Generate code using provided character type "
-                    "instead of default `wchar'.",
-                    true));
+    d.add_option (CL::OptionDescription ("idl-char-type",
+                                         "type-name",
+                                         "Generate code using provided character type"
+                                         "instead of default `wchar'.",
+                                         CL::OptionType::value,
+                                         true));
 
     d.add_option (CL::OptionDescription (
                     "idl-namespace-regex",
@@ -58,6 +58,7 @@ namespace IDL
                     "namespace names to IDL module names. The first successful "
                     "substitution is used. The last specified expression "
                     "is considered first.",
+                    CL::OptionType::value,
                     true));
 
     d.add_option (CL::OptionDescription (
@@ -65,6 +66,7 @@ namespace IDL
                     "suffix",
                     "Use provided suffix instead of default `.idl' "
                     "when constructing the name of the IDL file.",
+                    CL::OptionType::value,
                     true));
 
     d.add_option (CL::OptionDescription (
@@ -72,6 +74,7 @@ namespace IDL
                     "/pattern/replacement/",
                     "Use provided regular expression when constructing "
                     "the name of the IDL file.",
+                    CL::OptionType::value,
                     true));
 
     d.add_option (CL::OptionDescription (
@@ -79,6 +82,7 @@ namespace IDL
                     "file-name",
                     "Copy provided banner at the beginning of every generated "
                     "file for which file-specific banner is not provided.",
+                    CL::OptionType::value,
                     true));
   }
 

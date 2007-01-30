@@ -58,17 +58,20 @@ options (CL::Description& d)
                   "type-name",
                   "Generate code using provided character type "
                   "instead of default `wchar_t'.",
+                  CL::OptionType::value,
                   true));
 
   d.add_option (CL::OptionDescription (
                   "cxx-generate-writer-types",
                   "Generate code for un-parsing document back to DOM "
                   "which, in turn, can be serialized to a file.",
+                  CL::OptionType::flag,
                   true));
 
   d.add_option (CL::OptionDescription (
                   "cxx-generate-extended-rtti",
                   "Generate extended run-time type information.",
+                  CL::OptionType::flag,
                   true));
 
   d.add_option (CL::OptionDescription (
@@ -77,11 +80,13 @@ options (CL::Description& d)
                   "traversal of the graph. Usually useful for performing "
                   "operations on complex recursive and/or dynamically-typed "
                   "(ID/IDREF) graphs.",
+                  CL::OptionType::flag,
                   true));
 
   d.add_option (CL::OptionDescription (
                   "cxx-generate-inline",
                   "Generate inline implementation for certain functions.",
+                  CL::OptionType::flag,
                   true));
 
   d.add_option (CL::OptionDescription (
@@ -92,6 +97,7 @@ options (CL::Description& d)
                   "namespace names to C++ namespace names. The first "
                   "successful substitution is used. The last specified "
                   "expression is considered first.",
+                  CL::OptionType::value,
                   true));
 
   d.add_option (CL::OptionDescription (
@@ -99,6 +105,7 @@ options (CL::Description& d)
                   "suffix",
                   "Use provided suffix instead of default `.hpp' "
                   "when constructing the name of the header file.",
+                  CL::OptionType::value,
                   true));
 
   d.add_option (CL::OptionDescription (
@@ -106,6 +113,7 @@ options (CL::Description& d)
                   "suffix",
                   "Use provided suffix instead of default `.ipp' "
                   "when constructing the name of the inline file.",
+                  CL::OptionType::value,
                   true));
 
   d.add_option (CL::OptionDescription (
@@ -113,6 +121,7 @@ options (CL::Description& d)
                   "suffix",
                   "Use provided suffix instead of default `.cpp' "
                   "when constructing the name of the source file.",
+                  CL::OptionType::value,
                   true));
 
   d.add_option (CL::OptionDescription (
@@ -120,6 +129,7 @@ options (CL::Description& d)
                   "/pattern/replacement/",
                   "Use provided regular expression when constructing "
                   "the name of the header file.",
+                  CL::OptionType::value,
                   true));
 
   d.add_option (CL::OptionDescription (
@@ -127,6 +137,7 @@ options (CL::Description& d)
                   "/pattern/replacement/",
                   "Use provided regular expression when constructing "
                   "the name of the inline file.",
+                  CL::OptionType::value,
                   true));
 
   d.add_option (CL::OptionDescription (
@@ -134,6 +145,7 @@ options (CL::Description& d)
                   "/pattern/replacement/",
                   "Use provided regular expression when constructing "
                   "the name of the source file.",
+                  CL::OptionType::value,
                   true));
 
   d.add_option (CL::OptionDescription (
@@ -141,30 +153,35 @@ options (CL::Description& d)
                   "file-name",
                   "Copy provided banner at the beginning of every generated "
                   "file for which file-specific banner is not provided.",
+                  CL::OptionType::value,
                   true));
 
   d.add_option (CL::OptionDescription (
                   "cxx-header-banner-file",
                   "file-name",
                   "Copy provided banner at the beginning of the header file.",
+                  CL::OptionType::value,
                   true));
 
   d.add_option (CL::OptionDescription (
                   "cxx-inline-banner-file",
                   "file-name",
                   "Copy provided banner at the beginning of the inline file.",
+                  CL::OptionType::value,
                   true));
 
   d.add_option (CL::OptionDescription (
                   "cxx-source-banner-file",
                   "file-name",
                   "Copy provided banner at the beginning of the source file.",
+                  CL::OptionType::value,
                   true));
 
   d.add_option (CL::OptionDescription (
                   "cxx-export-symbol",
                   "symbol",
                   "Export symbol for Win32 DLL export/import control.",
+                  CL::OptionType::value,
                   true));
 
   // -- cdr insertion and extraction
@@ -172,12 +189,14 @@ options (CL::Description& d)
                   "cxx-generate-cdr-writer-types",
 		  "Generate code for writing types onto "
                   "CDR streams.",
+                  CL::OptionType::flag,
                   true));
   
   d.add_option (CL::OptionDescription (
 		  "cxx-generate-cdr-reader-types",
 		  "Generate code for reading types from "
                   "CDR streams.",
+                  CL::OptionType::flag,
                   true));
 
   d.add_option (CL::OptionDescription (
@@ -185,6 +204,7 @@ options (CL::Description& d)
                    "Generate code that allows random access to "
                    "sequence elements.  Trades off with less efficient"
                    "parsing.",
+                   CL::OptionType::flag,
                    true));
 }
 

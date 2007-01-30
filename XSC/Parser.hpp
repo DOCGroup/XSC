@@ -232,7 +232,7 @@ namespace XSC
     parse (fs::path const&);
 
   private:
-    Xerces::DOMDocument* Parser::
+    Xerces::DOMDocument* 
     dom (fs::path const&);
 
     void
