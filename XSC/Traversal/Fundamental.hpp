@@ -125,6 +125,10 @@ namespace XSC
     typedef
     Node<SemanticGraph::IdRef>
     IdRef;
+
+    typedef
+    Node<SemanticGraph::href>
+    href;
   }
 }
 

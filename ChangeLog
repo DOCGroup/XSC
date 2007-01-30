@@ -1,3 +1,23 @@
+Tue Jan 30 21:08:04 GMT 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
+
+        * CXX/Elements.cpp
+        * Tests/ComplexTypeImport/importee.xsd
+        * XSC/Parser.hpp
+        * XSC/Traversal/Fundamental.hpp
+        * XSC/Traversal/Schema.hpp
+        * XSC/Traversal/Elements.hpp
+        * XSC/SemanticGraph/Fundamental.cpp
+        * XSC/SemanticGraph/Element.hpp
+        * XSC/SemanticGraph/Fundamental.hpp
+        * XSC/SemanticGraph/Fundamental.cpp.m4
+        * XSC/SemanticGraph/Fundamental.hpp.m4
+        * XSC/SemanticGraph/Graph.tpp
+        * XSC/Parser.cpp
+        * xsc.cpp
+        
+          A number of changes imported from the old CVS repository,
+          not gauranteed to compile.
+
 Mon Jan 16 18:40:30 GMT 2006  William Otte  <wotte@dre.vanderbilt.edu>
 
         * CXX/Header.cpp

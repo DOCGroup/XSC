@@ -225,7 +225,8 @@ namespace XSC
   class Parser
   {
   public:
-    Parser ();
+    
+    Parser (bool trace);
 
     SemanticGraph::Schema*
     parse (fs::path const&);

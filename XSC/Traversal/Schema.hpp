@@ -20,7 +20,7 @@ namespace XSC
       virtual void
       traverse (Type& e)
       {
-        node_traverser ().dispatch (e.element ());
+        this->node_traverser ().dispatch (e.element ());
       }
     };
 
@@ -32,7 +32,7 @@ namespace XSC
       virtual void
       traverse (Type& e)
       {
-        node_traverser ().dispatch (e.element ());
+        this->node_traverser ().dispatch (e.element ());
       }
     };
 
@@ -45,7 +45,7 @@ namespace XSC
       virtual void
       traverse (Type& e)
       {
-        node_traverser ().dispatch (e.element ());
+        this->node_traverser ().dispatch (e.element ());
       }
     };
 
@@ -58,7 +58,7 @@ namespace XSC
       virtual void
       traverse (Type& e)
       {
-        node_traverser ().dispatch (e.element ());
+        this->node_traverser ().dispatch (e.element ());
       }
     };
 
@@ -73,11 +73,11 @@ namespace XSC
       {
         pre (s);
 
-        iterate_and_traverse (s.contains_begin (),
-                              s.contains_end (),
-                              edge_traverser ());
+        this->iterate_and_traverse (s.contains_begin (),
+                                    s.contains_end (),
+                                    edge_traverser ());
 
-        names (s);
+        this->names (s);
 
         post (s);
       }

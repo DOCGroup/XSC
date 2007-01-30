@@ -11,6 +11,7 @@ namespace XSC
 {
   namespace SemanticGraph
   {
+    /// This class represents an xsd:element in the semantic graph.
     class Element : public virtual Instance
     {
     public:
@@ -20,21 +21,27 @@ namespace XSC
       unsigned long
       min () const
       {
-        return min_;
+        return this->min_;
       }
 
       unsigned long
       max () const
       {
-        return max_;
+        return this->max_;
       }
 
       bool
       qualified () const
       {
-        return qualified_;
+        return this->qualified_;
       }
-
+      
+      bool
+      href () const
+      {
+        return this->href_;
+      }
+      
     protected:
       friend class Graph<Node, Edge>;
 
@@ -45,8 +52,16 @@ namespace XSC
       }
 
     private:
-      unsigned long min_, max_;
+      /// The minimum cardinality of the element.
+      unsigned long min_;
+      /// The maximum cardinality of the element
+      unsigned long max_;
+      /// ?
       bool qualified_;
+      
+      /// true if this element can be specified using an xmi href reference
+      bool href_;
+      
     };
   }
 }

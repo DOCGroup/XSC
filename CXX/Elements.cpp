@@ -134,7 +134,6 @@ namespace
                     Traversal::NCName,
                     Traversal::Id,
                     Traversal::IdRef
-
   {
     TypeName (Context& c, string& r_, string const& nss)
         : Context (c), r (r_), nss_ (nss)

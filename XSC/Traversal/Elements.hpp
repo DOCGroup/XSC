@@ -320,12 +320,12 @@ namespace XSC
       virtual void
       names (T& s)
       {
-        typename T::NamesIterator b (s.names_begin ()), e (s.names_end ());
+        typename T::NamesIterator begin (s.names_begin ()), end (s.names_end ());
 
-        if (b != e)
+        if (begin != end)
         {
           names_pre (s);
-          iterate_and_traverse (b, e, this->edge_traverser ());
+          iterate_and_traverse (begin, end, this->edge_traverser ());
           names_post (s);
         }
         else

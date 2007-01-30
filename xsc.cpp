@@ -101,7 +101,10 @@ main (int argc, char* argv[])
     if (cl.get_value ("help", false) || cl.get_value ("help-html", false))
     {
       CL::Description d (argv[0]);
-
+      
+      d.add_option (CL::OptionDescription ("trace",
+                                           "Trace parser actions.  Useful for debugging.\n",
+                                           true));
       if (backend == "cxx")
       {
         CXX_Generator::options (d);
@@ -172,8 +175,8 @@ main (int argc, char* argv[])
     ErrorDetector detector (wcerr);
 
     fs::path tu (*i);
-
-    Parser parser;
+    
+    Parser parser (cl.get_value ("trace", false));;
     auto_ptr<SemanticGraph::Schema> s (parser.parse (tu));
 
     if (detector.error ()) return 1;

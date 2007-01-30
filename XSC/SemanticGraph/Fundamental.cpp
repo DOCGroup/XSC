@@ -599,5 +599,25 @@ namespace XSC
 
     TypeInfo const& IdRef::
     static_type_info () { return id_ref_; }
+
+    // href
+    //
+    //
+    namespace
+    {
+      TypeInfo
+      href_init_ ()
+      {
+        TypeInfo ti (typeid (href));
+        ti.add_base (
+          Access::PUBLIC, true, FundamentalType::static_type_info ());
+        return ti;
+      }
+
+      TypeInfo href_ (href_init_ ());
+    }
+
+    TypeInfo const& href::
+    static_type_info () { return href_; }
   }
 }

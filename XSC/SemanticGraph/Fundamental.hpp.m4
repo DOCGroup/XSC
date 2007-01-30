@@ -90,6 +90,7 @@ fundamental_type(`NM TOKEN')
 fundamental_type(`NC name')
 fundamental_type(`id')
 fundamental_type(`id ref')
+fundamental_type(`href')
 dnl
   }
 }

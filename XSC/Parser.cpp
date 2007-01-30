@@ -32,7 +32,8 @@ namespace XSC
   using std::auto_ptr;
 
   string const xsd = L"http://www.w3.org/2001/XMLSchema";
-
+  string const xmi = L"http://www.omg.org/XMI";
+  
   namespace
   {
     class NotNamespace {};
@@ -243,9 +244,10 @@ namespace XSC
   }
 
   Parser::
-  Parser ()
+  Parser (bool trace)
       : root_schema_ (0), cur_schema_ (0), qualify_attribute_ (false), qualify_element_ (false)
   {
+    trace_ = trace;
   }
 
   Schema* Parser::
@@ -296,11 +298,19 @@ namespace XSC
 
       s.new_edge<Names> (ns, s.new_node<Id> (), L"ID");
       s.new_edge<Names> (ns, s.new_node<IdRef> (), L"IDREF");
+    }
+    
+    // Supported XMI features
+    {
+      Schema &s (rs->new_node<Schema> ());
+      rs->new_edge<Implies> (*rs, s, fs::path ("XMI.xsd"));
+      Namespace &ns (s.new_node<Namespace> ());
+      
+      s.new_edge<Names> (s, ns, xmi);
       
       s.new_edge<Names> (ns, s.new_node<String> (), L"href");
     }
-
-
+    
     // Parse.
     //
     if (DOMDocument* d  = dom (uri))

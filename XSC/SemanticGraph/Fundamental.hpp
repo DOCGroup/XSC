@@ -542,6 +542,21 @@ namespace XSC
         type_info (static_type_info ());
       }
     };
+    
+    class href : public virtual FundamentalType
+    {
+    public:
+      static Introspection::TypeInfo const& static_type_info ();
+      
+    protected:
+      friend class Graph<Node, Edge>;
+      
+      href ()
+      {
+        type_info (static_type_info ());
+      }
+    };
+    
   }
 }
 
