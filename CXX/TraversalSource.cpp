@@ -8,6 +8,15 @@
 #include <XSC/SemanticGraph.hpp>
 #include <XSC/Traversal.hpp>
 
+#if defined (_WINDOWS)
+# if defined (min)
+#   undef min
+# endif
+# if defined (max)
+#   undef max
+# endif
+#endif
+
 namespace
 {
   struct Member : Traversal::Element,
@@ -54,13 +63,13 @@ namespace
           //
           // << "iterate_and_dispatch< " << scope << ", Type > " <<
           //"(b, e, *this, &" << scope << "::" << name << "_next, o);"
-          
+
            << "for (; b != e;)"
            << "{"
            << "dispatch (*b);"
            << "if (++b != e) " << name << "_next (o);"
            << "}"
-          
+
            << name << "_post (o);"
            << "}";
 
@@ -92,7 +101,7 @@ namespace
            << "dispatch (*b);"
            << "if (++b != e) " << name << "_next (o);"
            << "}"
-          
+
            << name << "_post (o);"
            << "}";
 

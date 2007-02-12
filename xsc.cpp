@@ -73,23 +73,83 @@ private:
   std::wostream& os_;
 };
 
-int
-main (int argc, char* argv[])
+//
+// init_basic_commandline_description
+//
+int init_basic_commandline_description (CL::Description & d)
+{
+  // We have to initialize the decription with the minimal amount
+  // of options, e.g., help options, before we can do any parsing.
+  d.add_option (CL::OptionDescription (
+                "help",
+                "Display usage information.\n\t\tUse --backend <name> "
+                "--help for backend-specific information.",
+                CL::OptionType::flag,
+                true));
+
+  d.add_option (CL::OptionDescription (
+                "help-html",
+                "Display usage information in HTML format.\n\t\tUse "
+                "--backend <name> --help for backend-specific information.",
+                CL::OptionType::flag,
+                true));
+
+  d.add_option (CL::OptionDescription (
+                "version",
+                "Display the version of XSC\n",
+                CL::OptionType::flag,
+                true));
+
+  d.add_option (CL::OptionDescription (
+                "trace",
+                "Trace parser actions. Useful for debugging.\n",
+                CL::OptionType::flag,
+                true));
+
+  d.add_option (CL::OptionDescription (
+                "backend",
+                "\tSelect backend to use.",
+                "\tcxx - C++ mapping\n"
+                "\t\t\tidl - CORBA IDL mapping\n",
+                CL::OptionType::value,
+                false));
+
+  return 0;
+}
+
+//
+// main
+//
+int main (int argc, char* argv[])
 {
   try
   {
-    // Parsing command line options and arguments
-    //
-    //
+    // We are going to play a little trick here and have a description
+    // of all the options that we pass to the parse (...) method. We
+    // are also going to have one of only the basic options that we
+    // use for displaying things. This is necessary because the new
+    // implemenation of parse (...) thinks everthing thats not in the
+    // description is a "argument" and not a "option" if it is found
+    // on argv[].
     CommandLine cl;
+    CL::Description basic_desc (argv[0]),
+                    complete_desc (argv[0]);
 
-    if (!parse (argc, argv, cl))
+    init_basic_commandline_description (basic_desc);
+    init_basic_commandline_description (complete_desc);
+
+    CXX_Generator::options (complete_desc);
+    IDL::Generator::options (complete_desc);
+
+    // Parse the command-line options.
+    if (!parse (argc, argv, complete_desc, cl))
     {
       wcerr << "command line syntax error" << endl;
       wcerr << "try " << argv[0] << " --help for usage information" << endl;
       return 1;
     }
 
+    // Display the version and then exit.
     if (cl.get_value ("version", false))
     {
       wcerr << "XML Schema compiler " << version << endl;
@@ -98,60 +158,32 @@ main (int argc, char* argv[])
 
     std::string backend (cl.get_value ("backend", ""));
 
-    if (cl.get_value ("help", false) || cl.get_value ("help-html", false))
+    if (cl.get_value ("help", false) ||
+        cl.get_value ("help-html", false))
     {
-      CL::Description d (argv[0]);
-      
-      d.add_option (CL::OptionDescription ("trace",
-                                           "Trace parser actions.  Useful for debugging.\n",
-                                           true));
+      // Fill in the basic description with the options for the
+      // specific backend.
+
       if (backend == "cxx")
-      {
-        CXX_Generator::options (d);
-      }
+        CXX_Generator::options (basic_desc);
       else if (backend == "idl")
-      {
-        IDL::Generator::options (d);
-      }
+        IDL::Generator::options (basic_desc);
+
+      // Add the argument to the command line options.
+      basic_desc.add_argument ("xml schema file");
+
+      // Write the output in the correct format.
+      if (cl.get_value ("help-html", false))
+        CL::print_html (std::cerr, basic_desc);
       else
-      {
-        d.add_option (CL::OptionDescription (
-                        "backend",
-                        "Select backend to use. Supported in this version: \n"
-                        "\t\t\tcxx - C++ mapping\n"
-                        "\t\t\tidl - CORBA IDL mapping\n",
-                        true));
-
-        d.add_option (CL::OptionDescription (
-                        "version",
-                        "Display version information and exit.",
-                        true));
-
-        d.add_option (CL::OptionDescription (
-                        "help",
-                        "Display usage information and exit. "
-                        "Use --backend <name> --help for backend-specific "
-                        "information",
-                        true));
-
-        /*
-          d.add_option (CL::OptionDescription (
-          "help-html",
-          "Dump usage information in html format and exit.",
-          true));
-        */
-      }
-
-
-      d.add_argument ("xml schema file");
-
-      if (cl.get_value ("help-html", false)) CL::print_html (std::cerr, d);
-      else CL::print_text (std::cerr, d);
+        CL::print_text (std::cerr, basic_desc);
 
       return 0;
     }
 
-    if (backend.empty ()) backend = "cxx";
+    // Set the default backend to CXX.
+    if (backend.empty ())
+      backend = "cxx";
 
     if (backend != "cxx" && backend != "idl")
     {
@@ -164,7 +196,7 @@ main (int argc, char* argv[])
 
     if (i == cl.arguments_end ())
     {
-      wcerr << "xsc: error: no input file." << endl;
+      wcerr << "error: no input file." << endl;
       return 1;
     }
 
@@ -175,11 +207,12 @@ main (int argc, char* argv[])
     ErrorDetector detector (wcerr);
 
     fs::path tu (*i);
-    
-    Parser parser (cl.get_value ("trace", false));;
-    auto_ptr<SemanticGraph::Schema> s (parser.parse (tu));
 
-    if (detector.error ()) return 1;
+    Parser parser (cl.get_value ("trace", false));;
+    auto_ptr <SemanticGraph::Schema> s (parser.parse (tu));
+
+    if (detector.error ())
+      return 1;
 
     if (backend == "cxx")
     {

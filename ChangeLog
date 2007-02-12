@@ -1,12 +1,43 @@
+Mon Feb 12 22:22:51 UTC 2007  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * CXX/Elements.hpp:
+
+          Moved the Traverser template declared in the has template
+          method outside the function. This was preventing XSC from
+          compiling on tools that supported templates correctly.
+
+        * CXX/Header.cpp:
+        * CXX/Inline.cpp:
+        * CXX/Source.cpp:
+        * CXX/TraversalHeader.cpp:
+        * CXX/TraversalSource.cpp:
+        * CXX/WriterHeader.cpp:
+        * CXX/WriterSource.cpp:
+        * IDL/Definition.cpp:
+
+          Added a preprocessor definition that will undef min and max
+          definition on Windows since the windows.h header files is
+          causing conflicts with classes that define a max and min
+          method.
+
+        * XSC.mpc:
+
+          Changed the install directory of XSC to $(XSC_ROOT).
+
+        * xsc.cpp:
+
+          Update the driver program so that it is compatible with the
+          lastest version of CommandLineOptions in CIDL.
+
 Tue Jan 30 21:43:32 GMT 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
 
         * CXX/Generator.cpp
         * IDL/Generator.cpp
-        
+
           Updated to work with recent changes to CommandLineParser
-        
+
         * XSC/Parser.hpp
-        
+
           Random compile error.
 
 Tue Jan 30 21:08:04 GMT 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
@@ -25,7 +56,7 @@ Tue Jan 30 21:08:04 GMT 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
         * XSC/SemanticGraph/Graph.tpp
         * XSC/Parser.cpp
         * xsc.cpp
-        
+
           A number of changes imported from the old CVS repository,
           not gauranteed to compile.
 
@@ -40,75 +71,75 @@ Mon Jan 16 18:40:30 GMT 2006  William Otte  <wotte@dre.vanderbilt.edu>
         * IDL/Elements.cpp
         * XSC/Parser.cpp
         * XSC/Parser.hpp
-        
+
         Addressed compile warnings, additional commenting, errors in
-        generated code. 
-        
+        generated code.
+
 Tue Dec 20 14:37:14  2005  William Otte  <wotte@dre.vanderbilt.edu>
 
-	* Tests/Abstract/abstract.xsd
+        * Tests/Abstract/abstract.xsd
 
-	Fixed a syntax error. 
-	
+        Fixed a syntax error.
+
 2005-12-20  William Otte  <wotte@dre.vanderbilt.edu>
 
-	* xsc.mpb
-	* XSC.mwc
-	* XSC/libXSC.mpc
-	* CXX/libCXX.mpc
-	* XSC.mpc
-	* IDL/libIDL.mpc
+        * xsc.mpb
+        * XSC.mwc
+        * XSC/libXSC.mpc
+        * CXX/libCXX.mpc
+        * XSC.mpc
+        * IDL/libIDL.mpc
 
-	Updates to the mpc system to bring it up to speed with recent
-	enhancements to MPC base projects.
+        Updates to the mpc system to bring it up to speed with recent
+        enhancements to MPC base projects.
 
 2005-12-18  James H. Hill  <hillj@isis.vanderbilt.edu>
   * Tests/Abstract/abstract.xsd
   * Tests/Abstract/abstract.xml
-  
+
   Added test case for abstract complex types
 
 2005-12-07  William Otte  <wotte@dre.vanderbilt.edu>
 
-	* CXX/WriterHeader.cpp
+        * CXX/WriterHeader.cpp
 
-	Removed Borland specifc ifdefs to make the fix from:
-	2005-10-03  William Otte  <wotte@dre.vanderbilt.edu>
-	apply to all compilers.
-	
-	* Examples/Library/Reader/Makefile
-	* Examples/Library/Writer/Makefile
+        Removed Borland specifc ifdefs to make the fix from:
+        2005-10-03  William Otte  <wotte@dre.vanderbilt.edu>
+        apply to all compilers.
 
-	Fixed the name of the xsc binary listed there. 
-	
+        * Examples/Library/Reader/Makefile
+        * Examples/Library/Writer/Makefile
+
+        Fixed the name of the xsc binary listed there.
+
 2005-11-30  William Otte  <wotte@dre.vanderbilt.edu>
 
-	* xsc.cpp
+        * xsc.cpp
 
-	Updated version string.
-	
-	* CXX/Elements.hpp
-	* CXX/Generator.cpp
-	* CXX/Header.cpp
-	* CXX/Inline.cpp
-	* CXX/WriterHeader.cpp
-	* XSC/Parser.cpp
+        Updated version string.
 
-	Added support for optionally generating code using lists or 
-	vectors for sequences with cardinality greater than one. 
-	
+        * CXX/Elements.hpp
+        * CXX/Generator.cpp
+        * CXX/Header.cpp
+        * CXX/Inline.cpp
+        * CXX/WriterHeader.cpp
+        * XSC/Parser.cpp
+
+        Added support for optionally generating code using lists or
+        vectors for sequences with cardinality greater than one.
+
 2005-10-03  William Otte  <wotte@dre.vanderbilt.edu>
 
-	* CXX/Header.cpp
+        * CXX/Header.cpp
 
-	Added opererator== and operator!= prototypes after classes that
-	define them
-	
-	* CXX/WriterHeader.cpp
-	* CXX/WriterSource.cpp
+        Added opererator== and operator!= prototypes after classes that
+        define them
 
-	Fixed compile errors in Borland.
-	
+        * CXX/WriterHeader.cpp
+        * CXX/WriterSource.cpp
+
+        Fixed compile errors in Borland.
+
 Fri Aug 19 09:39:48 2005  Arvind S. Krishna  <arvindk@dre.vanderbilt.edu>
 
         * CXX/Inline.cpp:
@@ -121,35 +152,35 @@ Fri Aug 19 09:39:48 2005  Arvind S. Krishna  <arvindk@dre.vanderbilt.edu>
 
 2005-08-16  William Otte  <wotte@dre.vanderbilt.edu>
 
-	* CXX/Header.cpp
-	* CXX/Inline.cpp
+        * CXX/Header.cpp
+        * CXX/Inline.cpp
 
-	Added a method to count the number of elements present when
-	maxOccurs > 1.
+        Added a method to count the number of elements present when
+        maxOccurs > 1.
 
 2005-08-05  William Otte  <wotte@dre.vanderbilt.edu>
 
-	* XSC/SemanticGraph.hpp
+        * XSC/SemanticGraph.hpp
 
-	Added this back into the repository.
+        Added this back into the repository.
 
 Thu Aug  4 11:25:52 2005  Arvind Krishna  <arvindkr@arvindkr.qualcomm.com>
 
-	* Tests/ComplexTypeImport:
+        * Tests/ComplexTypeImport:
 
-	  A simple test where a schema's type extends a type defined in
-	  another schema.
+          A simple test where a schema's type extends a type defined in
+          another schema.
 
-	* Tests/ComplexTypeImport/Importee.xsd:
-	* Tests/ComplexTypeImport/Importer.xsd:
+        * Tests/ComplexTypeImport/Importee.xsd:
+        * Tests/ComplexTypeImport/Importer.xsd:
 
-	  Individual schema files.
+          Individual schema files.
 
 Thu Aug  4 11:12:44 2005  Arvind Krishna  <arvindkr@arvindkr.qualcomm.com>
 
-	* CXX/CDR.hpp:
-	* CXX/CDR.cpp:
-	  Removed these extraneous files as these are not necessary now!
+        * CXX/CDR.hpp:
+        * CXX/CDR.cpp:
+          Removed these extraneous files as these are not necessary now!
 
 Wed Jul 20 17:15:16 2005  Arvind S. Krishna  <arvindk@dre.vanderbilt.edu>
 
@@ -267,63 +298,63 @@ Fri Jun 24 14:15:23 2005  Arvind S. Krishna  <arvindk@dre.vanderbilt.edu>
 
 Tue Apr  5 10:22:00 CDT 2005  Will Otte <wotte@dre.vanderbilt.edu>
 
-	* XSC.mwc
+        * XSC.mwc
 
-	Removed CCF from the list of projects built by this mwc.
+        Removed CCF from the list of projects built by this mwc.
 
-	* CXX/Inline.cpp
+        * CXX/Inline.cpp
 
-	Changed the complex type initialization list.
+        Changed the complex type initialization list.
 
-	* CXX/Header.cpp
-	* CXX/TraversalHeader.cpp
-	* CXX/TypeInfoSource.cpp
-	* CXX/WriterHeader.cpp
+        * CXX/Header.cpp
+        * CXX/TraversalHeader.cpp
+        * CXX/TypeInfoSource.cpp
+        * CXX/WriterHeader.cpp
 
-	Fixed all non-system includes in generated code to use ""
-	instead of <>
+        Fixed all non-system includes in generated code to use ""
+        instead of <>
 
 Fri Mar 11 10:39:34 2005  Will Otte <wotte@dre.vanderbilt.edu>
 
-	* XSCRT/XMLSchema/Types.hpp
-	* XSCRT/XSCRT/ExtendedTypeInfo.ipp
+        * XSCRT/XMLSchema/Types.hpp
+        * XSCRT/XSCRT/ExtendedTypeInfo.ipp
 
-	Disabled VC++ warnings for:
-	  - using this inside the base member initialization section
-	  - converting int to bool.
+        Disabled VC++ warnings for:
+          - using this inside the base member initialization section
+          - converting int to bool.
 
-	See the comments at the top of those files for the rationale.
+        See the comments at the top of those files for the rationale.
 
 Thu Mar 10 13:11:56 2005  Will Otte <wotte@dre.vanderbilt.edu>
 
-	* CXX/Inline.cpp
-	* XSCRT/XMLSchema/Types.hpp
+        * CXX/Inline.cpp
+        * XSCRT/XMLSchema/Types.hpp
 
-	Fixed a couple warnings in GCC.
+        Fixed a couple warnings in GCC.
 
-	The fix in Inline.cpp is a HACK and should be looked into at a
-	later date.
+        The fix in Inline.cpp is a HACK and should be looked into at a
+        later date.
 
 Fri Feb 25 13:00:40 2005  Will Otte <wotte@dre.vanderbilt.edu>
 
-	* XSC.mpc
-	* CXX/libCXX.mpc
-	* IDL/libIDL.mpc
-	* XSC/libXSC.mpc
+        * XSC.mpc
+        * CXX/libCXX.mpc
+        * IDL/libIDL.mpc
+        * XSC/libXSC.mpc
 
-	Made all paths relative to CIAO_ROOT so that XSC doesn't care
-	where its being built.
+        Made all paths relative to CIAO_ROOT so that XSC doesn't care
+        where its being built.
 
-	* XSC.mwc
+        * XSC.mwc
 
-	Removed the CCF elements from the build.  This was causing problems
-	when generating makefiles.  Note that these CCF elements will still
-	need to be build for XSC.
+        Removed the CCF elements from the build.  This was causing problems
+        when generating makefiles.  Note that these CCF elements will still
+        need to be build for XSC.
 
-	* XSC/Parser.hpp
+        * XSC/Parser.hpp
 
-	Fixed a compile error on Mac OS X.
+        Fixed a compile error on Mac OS X.
 
 Mon Jan 31 13:42:08 2005  Will Otte <wotte@dre.vanderbilt.edu>
 
-	Initial repository population.
+        Initial repository population.

@@ -12,6 +12,15 @@
 
 #include <ctype.h>
 
+#if defined (_WINDOWS)
+# if defined (min)
+#   undef min
+# endif
+# if defined (max)
+#   undef max
+# endif
+#endif
+
 namespace
 {
   struct Element : Traversal::Element, protected virtual Context
@@ -100,10 +109,10 @@ namespace
 
   // Traverser for CDR write operations
   struct CDR_WriterTraverser : Traversal::Complex,
-			       protected Traversal::Type,
-			       protected Traversal::Element,
-			       protected Traversal::Attribute,
-			       protected virtual Context
+             protected Traversal::Type,
+             protected Traversal::Element,
+             protected Traversal::Attribute,
+             protected virtual Context
   {
 
   public:
@@ -113,7 +122,7 @@ namespace
       // Set up traversal mechanism
       complex_.edge_traverser (inherits_);
       complex_.edge_traverser (names_);
-	    
+
       inherits_.node_traverser (*this);
       names_.node_traverser (*this);
     }
@@ -132,19 +141,19 @@ namespace
       // from basic type
 
       // One needs to check for boolean
-      // types. If a type is boolean, we 
+      // types. If a type is boolean, we
       // to write it out as stream.write_boolean
       // rather than as << name. This is because
       // there will be an operator overloading
       // mismatch if this occurs.
       string type (type_name (c));
       if (type_is_boolean (type))
-	os << "stream.write_boolean (*this);" << endl;
+  os << "stream.write_boolean (*this);" << endl;
       else
-     	// Convert it to its base type. This will 
-	// have an operator << defined to 
-	// serialize this type
-	os << "stream << static_cast < const Base__& > (*this);" << endl;
+       // Convert it to its base type. This will
+  // have an operator << defined to
+  // serialize this type
+  os << "stream << static_cast < const Base__& > (*this);" << endl;
     }
 
     // Helper method implementation
@@ -154,27 +163,27 @@ namespace
       string name (e.name ());
       string type (type_name (e));
 
-      // Write length first 
+      // Write length first
       os << "// " << name << endl;
       os << "size_t " << name << "_size = "
-	 << "this->" << name << "_.size ();"
-	 << "stream << " << name << "_size;"
-	 << endl;
-      
+   << "this->" << name << "_.size ();"
+   << "stream << " << name << "_size;"
+   << endl;
+
       // Write each member next
       os << "for (" << name << "_const_iterator "
-	 << name << "_iter = " << "this->begin_" << name << " ();"
-	 << "    " << name << "_iter != this->end_" << name
-	 << " ();"
-	 << "    ++" << name << "_iter)"
-	 << "{";
+   << name << "_iter = " << "this->begin_" << name << " ();"
+   << "    " << name << "_iter != this->end_" << name
+   << " ();"
+   << "    ++" << name << "_iter)"
+   << "{";
 
-      // Check if the type being written is a boolean 
+      // Check if the type being written is a boolean
       // type
       if (type_is_boolean (type))
-	os << "stream.write_boolean (*" << name << ");";
+  os << "stream.write_boolean (*" << name << ");";
       else
-	os << "stream << (*" << name << "_iter);";
+  os << "stream << (*" << name << "_iter);";
 
       os << "}";
     }
@@ -187,34 +196,34 @@ namespace
 
       if (e.max () != 1)
       {
-	// Write sequence types after we write the attributes
-	if (this->has_attributes_)
-	  // Safe hack: Memory not managed by container.
-	  // released elsewhere. So this is safe
-	  this->complex_list_.push_back (&e);
-	else
-	  this->write_sequence (e);
+  // Write sequence types after we write the attributes
+  if (this->has_attributes_)
+    // Safe hack: Memory not managed by container.
+    // released elsewhere. So this is safe
+    this->complex_list_.push_back (&e);
+  else
+    this->write_sequence (e);
       }
       else if (e.min () == 0)
       {
-	// optional
-	//
-	this->optional_element_list_.push_back (&e);
+  // optional
+  //
+  this->optional_element_list_.push_back (&e);
       }
       else
       {
-	name = id (name);
-	
-	//
-	// one
-	os << "// " << name << endl;
+  name = id (name);
 
-	// check if the type is a boolean type
-	if (type_is_boolean (type))
-	  os << "stream.write_boolean (this->" << name 
-	     << " ());" << endl;
-	else
-	  os << "stream << this->" << name << " ();" << endl;  
+  //
+  // one
+  os << "// " << name << endl;
+
+  // check if the type is a boolean type
+  if (type_is_boolean (type))
+    os << "stream.write_boolean (this->" << name
+       << " ());" << endl;
+  else
+    os << "stream << this->" << name << " ();" << endl;
       }
     }
 
@@ -224,7 +233,7 @@ namespace
     traverse (SemanticGraph::Complex &c)
     {
       complex_.traverse (c);
-      
+
       // Write out sequence types if any after
       // wrting out the element
       finally ();
@@ -238,39 +247,39 @@ namespace
 
       if (a.optional ())
       {
-	name = id (name);
+  name = id (name);
 
-	// optional
-	//
-	os << " // " << name << endl;
-	os << "bool " << name << "_p = this->" << name << "_p ();";
-	os << "stream.write_boolean (" << name << "_p" << ");";
-	
-	os << "if (" << name << "_p)"
-	   << "{";
-	
-	// check if the type is a boolean type
-	if (type_is_boolean (type))
-	  os << "stream.write_boolean (this->" << name 
-	     << " ());" << endl;
-	else
-	  os << "stream << this->" << name << " ();";
-	
-	os << "}" << endl;
+  // optional
+  //
+  os << " // " << name << endl;
+  os << "bool " << name << "_p = this->" << name << "_p ();";
+  os << "stream.write_boolean (" << name << "_p" << ");";
+
+  os << "if (" << name << "_p)"
+     << "{";
+
+  // check if the type is a boolean type
+  if (type_is_boolean (type))
+    os << "stream.write_boolean (this->" << name
+       << " ());" << endl;
+  else
+    os << "stream << this->" << name << " ();";
+
+  os << "}" << endl;
       }
       else
       {
-	//
-	// one
-	
-	// check if the type is a boolean type
-	if (type_is_boolean (type))
-	  os << "// " << name << endl
-	     << "stream.write_boolean (this->" << name 
-	     << " ());" << endl;
-	else
-	  os << "// " << name << endl
-	     << "stream << this->" << name << " ();" << endl; 
+  //
+  // one
+
+  // check if the type is a boolean type
+  if (type_is_boolean (type))
+    os << "// " << name << endl
+       << "stream.write_boolean (this->" << name
+       << " ());" << endl;
+  else
+    os << "// " << name << endl
+       << "stream << this->" << name << " ();" << endl;
       }
     }
 
@@ -293,31 +302,31 @@ namespace
     {
       // Write the sequence elements
       if (! this->complex_list_.empty ())
-	for (size_t i =0; i < this->complex_list_.size (); i++)
-	  this->write_sequence (*this->complex_list_[i]);
+  for (size_t i =0; i < this->complex_list_.size (); i++)
+    this->write_sequence (*this->complex_list_[i]);
 
       // Write Optional elements AFTER sequence elements
       if (! this->optional_element_list_.empty ())
-	for (size_t i=0; i < this->optional_element_list_.size (); i++)
-	{
-	  string name (this->optional_element_list_[i]->name ());
-	  string type (type_name (*this->optional_element_list_[i]));
+  for (size_t i=0; i < this->optional_element_list_.size (); i++)
+  {
+    string name (this->optional_element_list_[i]->name ());
+    string type (type_name (*this->optional_element_list_[i]));
 
-	  os << "// " << name << endl;
-	  
-	  // First write out the boolean value
-	  os << "stream.write_boolean (" << name << "_p ());";
+    os << "// " << name << endl;
 
-	  os << "if (" << name << "_p ())"
-	     << endl;  
+    // First write out the boolean value
+    os << "stream.write_boolean (" << name << "_p ());";
 
-	  // check if the type is a boolean type
-	  if (type_is_boolean (type))
-	    os << "  stream.write_boolean (this->" << name 
-	       << " ());" << endl;
-	  else
-	    os << "  stream << this->" << name << " ();" << endl;  
-	}
+    os << "if (" << name << "_p ())"
+       << endl;
+
+    // check if the type is a boolean type
+    if (type_is_boolean (type))
+      os << "  stream.write_boolean (this->" << name
+         << " ());" << endl;
+    else
+      os << "  stream << this->" << name << " ();" << endl;
+  }
     }
 
   private:
@@ -331,10 +340,10 @@ namespace
 
   // Traverser for CDR read operations
   struct CDR_ReaderTraverser : Traversal::Complex,
-			       protected Traversal::Type,
-			       protected Traversal::Element,
-			       protected Traversal::Attribute,
-			       protected virtual Context
+             protected Traversal::Type,
+             protected Traversal::Element,
+             protected Traversal::Attribute,
+             protected virtual Context
   {
 
   public:
@@ -344,14 +353,14 @@ namespace
       // Set up traversal mechanism
       complex_.edge_traverser (inherits_);
       complex_.edge_traverser (names_);
-	    
+
       inherits_.node_traverser (*this);
       names_.node_traverser (*this);
     }
 
     /*
      * Helper method to check if a type needs to be read
-     * via the value semantics or using a pointer 
+     * via the value semantics or using a pointer
      * semantics. This method only works for predefined types.
      * such as bool, string, name ID, IDREF etc.
      */
@@ -362,20 +371,20 @@ namespace
       // and make the search faster in O(log N)
       // time.
       if (type.find (L"::XMLSchema::string") != string::npos ||
-	  type.find (L"::XMLSchema::ID") != string::npos     ||
-	  type.find (L"::XMLSchema::IDREF") != string::npos  ||
-	  type.find (L"::XMLSchema::token") != string::npos  ||
-	  type.find (L"::XMLSchema::NMTOKEN") != string::npos||
-	  type.find (L"::XMLSchema::Name") != string::npos   ||
-	  type.find (L"::XMLSchema::NCName") != string::npos)
-	return true;
+    type.find (L"::XMLSchema::ID") != string::npos     ||
+    type.find (L"::XMLSchema::IDREF") != string::npos  ||
+    type.find (L"::XMLSchema::token") != string::npos  ||
+    type.find (L"::XMLSchema::NMTOKEN") != string::npos||
+    type.find (L"::XMLSchema::Name") != string::npos   ||
+    type.find (L"::XMLSchema::NCName") != string::npos)
+  return true;
       else
-	return false;
+  return false;
     }
 
     /*
-     * Reading a pointer type. 
-     * A type which is read in via the pointer semantics. This 
+     * Reading a pointer type.
+     * A type which is read in via the pointer semantics. This
      * corresponds to strings, ID, IDREFs and types that have
      * attributes defined in them.
      *
@@ -385,15 +394,15 @@ namespace
      * stream >> foo;
      * type element (foo);
      */
-    void 
+    void
     read_pointer_type (string &element_name, string &type)
     {
       os << "stream >> " << element_name << "_tmp;"
-	 << "std::auto_ptr < " << type << "::CDR_Type__ > "
-	 << "auto_" << element_name << " (" << element_name << "_tmp);"
-	 << type << " " << element_name << " (" << element_name
-	 << "_tmp);"
-	 << endl;
+   << "std::auto_ptr < " << type << "::CDR_Type__ > "
+   << "auto_" << element_name << " (" << element_name << "_tmp);"
+   << type << " " << element_name << " (" << element_name
+   << "_tmp);"
+   << endl;
     }
 
     /*
@@ -404,15 +413,15 @@ namespace
     read_complex_type (string &element_name, string &type)
     {
       os << "stream >> " << element_name << ";"
-	 << "std::auto_ptr < " << type << " > "
-	 << "auto_" << element_name << " (" << element_name << ");"
-	 << endl;
+   << "std::auto_ptr < " << type << " > "
+   << "auto_" << element_name << " (" << element_name << ");"
+   << endl;
     }
 
     /*
      * Reading a simple type
-     * This simple type is read in as value and not via the 
-     * inout semantics defined. So we need not create an 
+     * This simple type is read in as value and not via the
+     * inout semantics defined. So we need not create an
      * auto_ptr for the temporary
      *
      * The only thing that we need to be careful about is that
@@ -423,14 +432,14 @@ namespace
     read_simple_type (string &element_name, string &type)
     {
       if (type == L"::XMLSchema::boolean")
-	os << "stream.read_boolean (" << element_name
-	   << "_tmp);";
+  os << "stream.read_boolean (" << element_name
+     << "_tmp);";
       else
-	os << "stream >> " << element_name << "_tmp;";
+  os << "stream >> " << element_name << "_tmp;";
 
       os << type << " " << element_name << " ("
-	 << element_name << "_tmp);"
-	 << endl;
+   << element_name << "_tmp);"
+   << endl;
     }
 
     void
@@ -443,28 +452,28 @@ namespace
       bool pointer_semantics = read_type_as_pointer (type);
 
       if (pointer_semantics)
-	os << type << "::CDR_Type__ *" << element_name << "_tmp (0)"
-	   << ";" ;
+  os << type << "::CDR_Type__ *" << element_name << "_tmp (0)"
+     << ";" ;
       else
-	os << type << "::CDR_Type__ " << element_name << "_tmp"
-	 << ";" ;
+  os << type << "::CDR_Type__ " << element_name << "_tmp"
+   << ";" ;
 
       if (pointer_semantics)
-	read_pointer_type (element_name, type);
+  read_pointer_type (element_name, type);
       else
-	read_simple_type (element_name, type);
-      
+  read_simple_type (element_name, type);
+
       this->type_name_list_.push_back (element_name);
     }
 
     void
     read_optional_attribute (string &element_name, string &type)
     {
-      // Read the boolean value and then 
+      // Read the boolean value and then
       // read the attribute
       os << "bool " << element_name << "_p;"
-	 << "stream.read_boolean (" << element_name << "_p);";
-      
+   << "stream.read_boolean (" << element_name << "_p);";
+
       // For an optional attribute; declare it first
       // Again bear in mind that even for simple types
       // such as strings, ID, IDREFs we read them as
@@ -472,37 +481,37 @@ namespace
       bool pointer_semantics = read_type_as_pointer (type);
 
       if (pointer_semantics)
-	os << type << "::CDR_Type__ *" << element_name << "_tmp (0)"
-	   << ";" 
-	   << "std::auto_ptr < " << type << "::CDR_Type__ > "
-	   << "auto_" << element_name << " (" << element_name << "_tmp);";
+  os << type << "::CDR_Type__ *" << element_name << "_tmp (0)"
+     << ";"
+     << "std::auto_ptr < " << type << "::CDR_Type__ > "
+     << "auto_" << element_name << " (" << element_name << "_tmp);";
       else
-	os << type << "::CDR_Type__ " << element_name << "_tmp"
-	   << ";" ;
+  os << type << "::CDR_Type__ " << element_name << "_tmp"
+     << ";" ;
 
       os << "if (" << element_name << "_p)"
-	 << "{";
+   << "{";
 
       if (pointer_semantics)
       {
-	this->optional_attribute_list_.push_back (L"*" + 
-						  element_name +
-						  L"_tmp");
-	// read_pointer_type (element_name, type);
-	// execept that we don't create the element
-	os << "stream >> " << element_name << "_tmp;";
+  this->optional_attribute_list_.push_back (L"*" +
+              element_name +
+              L"_tmp");
+  // read_pointer_type (element_name, type);
+  // execept that we don't create the element
+  os << "stream >> " << element_name << "_tmp;";
       }
       else
       {
-	this->optional_attribute_list_.push_back (element_name + 
-						  L"_tmp");
-	// read_simple_type (element_name, type);
-	// execept that we don't create the element 
-	if (type == L"::XMLSchema::boolean")
-	  os << "stream.read_boolean";
-	else
-	  os << "stream >>";
-	os << " (" << element_name << "_tmp);";
+  this->optional_attribute_list_.push_back (element_name +
+              L"_tmp");
+  // read_simple_type (element_name, type);
+  // execept that we don't create the element
+  if (type == L"::XMLSchema::boolean")
+    os << "stream.read_boolean";
+  else
+    os << "stream >>";
+  os << " (" << element_name << "_tmp);";
       }
 
       // post close the bracked
@@ -513,8 +522,8 @@ namespace
      * Function to read any generic type.
      */
     void
-    read_generic_type (SemanticGraph::Element &e, 
-		       bool )
+    read_generic_type (SemanticGraph::Element &e,
+           bool )
     {
       // What we need here is to check
       // for is three cases:
@@ -522,7 +531,7 @@ namespace
       //         in the schema. Then all we need to
       //         is directly read in the value.
       //
-      // Case 2: Type is a simple type, i.e., it 
+      // Case 2: Type is a simple type, i.e., it
       //         does not have >> and << generated.
       //  Case 2.1: Type inherits from a type that
       //            has to be read as a pointer
@@ -533,75 +542,75 @@ namespace
       string name (e.name ());
 
       os << "// " << name << endl;
-	
+
       SemanticGraph::Type& t (e.type ());
-      if (SemanticGraph::Complex* c = 
-	  dynamic_cast<SemanticGraph::Complex*> (&t))
+      if (SemanticGraph::Complex* c =
+    dynamic_cast<SemanticGraph::Complex*> (&t))
       {
-	// Case 1: Inherits from none -- Complex type
-	SemanticGraph::Complex::InheritsIterator b (c->inherits_begin ()), 
-	  e (c->inherits_end ());
+  // Case 1: Inherits from none -- Complex type
+  SemanticGraph::Complex::InheritsIterator b (c->inherits_begin ()),
+    e (c->inherits_end ());
 
-	if (b == e)
-	{
-	  os << type << " *" << name << " (0);";
-	  read_complex_type (name, type);
-	  this->type_name_list_.push_back (L"*" + name);
-	  return;
-	}
-	  
-	// Inherit from something defined in the schema
-	// Case 1: Simple type i.e. no CDR operators define
-	// Case 2: Complex type i.e. class has attributes 
-	//         so this in turn became a comple type and 
-	//         we generated >> and << operators.
-	  
-	// Check if the type has an attribute or 
-	// is an enumeration
-	if (has<Traversal::Attribute> (*c) ||
-	    dynamic_cast<SemanticGraph::Enumeration*> (&t))
-	{
-	  os << type << " *" << name << "(0);";
-	  read_complex_type (name, type);
-	  this->type_name_list_.push_back (L"*" + name);
-	  return;
-	}
+  if (b == e)
+  {
+    os << type << " *" << name << " (0);";
+    read_complex_type (name, type);
+    this->type_name_list_.push_back (L"*" + name);
+    return;
+  }
 
-	// Simple type: However this type is different 
-	// from a XSC defined type. For example, this type
-	// inherits from XSC defined type. 
-	// class foo : XMLSchema::string < wchar_t >
-	// @@ Look at only the immediate predecessor. Is this 
-	// always enough?
-	string base_type (type_name ((**b).inheritee ()));
-	if (read_type_as_pointer (base_type))
-	{
-	  os << base_type << "::CDR_Type__ *" << name << "_tmp (0);";
-	  read_pointer_type (name, base_type);
-	}
-	else
-	{
-	  os << base_type << "::CDR_Type__ " << name << "_tmp;";
-	  read_simple_type (name, base_type);
-	}
+  // Inherit from something defined in the schema
+  // Case 1: Simple type i.e. no CDR operators define
+  // Case 2: Complex type i.e. class has attributes
+  //         so this in turn became a comple type and
+  //         we generated >> and << operators.
 
-	this->type_name_list_.push_back (name);
+  // Check if the type has an attribute or
+  // is an enumeration
+  if (has<Traversal::Attribute> (*c) ||
+      dynamic_cast<SemanticGraph::Enumeration*> (&t))
+  {
+    os << type << " *" << name << "(0);";
+    read_complex_type (name, type);
+    this->type_name_list_.push_back (L"*" + name);
+    return;
+  }
+
+  // Simple type: However this type is different
+  // from a XSC defined type. For example, this type
+  // inherits from XSC defined type.
+  // class foo : XMLSchema::string < wchar_t >
+  // @@ Look at only the immediate predecessor. Is this
+  // always enough?
+  string base_type (type_name ((**b).inheritee ()));
+  if (read_type_as_pointer (base_type))
+  {
+    os << base_type << "::CDR_Type__ *" << name << "_tmp (0);";
+    read_pointer_type (name, base_type);
+  }
+  else
+  {
+    os << base_type << "::CDR_Type__ " << name << "_tmp;";
+    read_simple_type (name, base_type);
+  }
+
+  this->type_name_list_.push_back (name);
       }
       else
       {
-	// Simple type: i.e. XMLSchema::boolean, XMLSchema::integer
-	if (read_type_as_pointer (type))
-	{
-	  os << type << "::CDR_Type__ *" << name << "_tmp (0);";
-	  read_pointer_type (name, type);
-	}
-	else
-	{
-	  os << type << "::CDR_Type__ " << name << "_tmp;";
-	  read_simple_type (name, type);
-	}
-      
-	this->type_name_list_.push_back (name);
+  // Simple type: i.e. XMLSchema::boolean, XMLSchema::integer
+  if (read_type_as_pointer (type))
+  {
+    os << type << "::CDR_Type__ *" << name << "_tmp (0);";
+    read_pointer_type (name, type);
+  }
+  else
+  {
+    os << type << "::CDR_Type__ " << name << "_tmp;";
+    read_simple_type (name, type);
+  }
+
+  this->type_name_list_.push_back (name);
       }
     }
 
@@ -631,28 +640,28 @@ namespace
       // Read the generic element type
       read_generic_type (e,0);
 
-      // Post: Add the element to the list 
+      // Post: Add the element to the list
       os << "element->add_" << name;
-      
-      // Code to add the id: Now how do we know if 
+
+      // Code to add the id: Now how do we know if
       // type is a simple type or a complex type?
-      // the read_generic_type (e) determined that 
+      // the read_generic_type (e) determined that
       // for us. But, here we don't have the type
       // information. Ok! the type_name_list's data
-      // item would have the type as we pushed it onto 
+      // item would have the type as we pushed it onto
       // the list!! Use that here..
-      std::vector < string >::reverse_iterator iter = 
-	this->type_name_list_.rbegin ();
+      std::vector < string >::reverse_iterator iter =
+  this->type_name_list_.rbegin ();
       os << " (" << (*iter) << ");"
          << "}";
-    }   
+    }
 
     //// Acutal Traversal functions ///////////////
     void
     traverse (SemanticGraph::Type &c)
     {
 
-      // These types are defined in the schema as 
+      // These types are defined in the schema as
       // follows:
       // <xsd complex element foo>
       // <xsd:extension name="foobar" type = "xyz>
@@ -660,20 +669,20 @@ namespace
       // type from the stream
 
       string type (type_name (c));
-      
-      // We need to transform the element_name to 
+
+      // We need to transform the element_name to
       // lowercase
       std::transform (element_name_.begin (),
-		      element_name_.end (),
-		      element_name_.begin (),
-		      tolower);
+          element_name_.end (),
+          element_name_.begin (),
+          tolower);
 
       // read the complex type in
       os << type << "::CDR_Type__ *" << element_name_ << "_tmp;";
       read_pointer_type (element_name_, type);
 
-      // Add this to the list of arguments to construct the 
-      // element. 
+      // Add this to the list of arguments to construct the
+      // element.
       this->type_name_list_.push_back (element_name_);
     }
 
@@ -685,20 +694,20 @@ namespace
 
       if (e.max () != 1)
       {
-	// Sequence: Read sequences after creating
-	// the element
-	// Safe hack: Memory not managed by container.
-	// released elsewhere. So this is safe
-	this->complex_list_.push_back (&e);
+  // Sequence: Read sequences after creating
+  // the element
+  // Safe hack: Memory not managed by container.
+  // released elsewhere. So this is safe
+  this->complex_list_.push_back (&e);
       }
       else if (e.min () == 0)
       {
-	this->optional_element_list_.push_back (&e);
+  this->optional_element_list_.push_back (&e);
       }
       else
       {
-	// Read a generic type
-	read_generic_type (e,0);
+  // Read a generic type
+  read_generic_type (e,0);
       }
     }
 
@@ -707,28 +716,28 @@ namespace
     void
     traverse (SemanticGraph::Complex &c)
     {
-      // set the name of the element we are 
+      // set the name of the element we are
       // processing. In particular, we need the
       // lowercase. For example, a name could be
-      // Title, Car etc. We need car, title 
+      // Title, Car etc. We need car, title
       element_name_  = c.name ();
 
       complex_.traverse (c);
 
       // post: Create the element
       string type (type_name (c));
-      
+
       os << "element = new " << type << " (";
       for (size_t i =0; i < this->type_name_list_.size (); i++)
       {
-	os << (i? ", " : "") 
-	   << this->type_name_list_[i];
+  os << (i? ", " : "")
+     << this->type_name_list_[i];
       }
 
       os << ");" << endl;
-      
+
       // Add any sequence/optional attribute elements
-      this->finally (); 
+      this->finally ();
     }
 
     virtual void
@@ -736,14 +745,14 @@ namespace
     {
       string type (type_name (a));
       string name (id (a.name ()));
-      
+
       os << "// " << name << endl;
 
       if (!a.optional ())
-	read_attribute (name, type);
+  read_attribute (name, type);
       else
-      	// Read in the optional attribute
-	read_optional_attribute (name, type);
+        // Read in the optional attribute
+  read_optional_attribute (name, type);
     }
 
     void
@@ -769,8 +778,8 @@ namespace
       // if we read this. so check if we read this
       // attribute
       os << "if (" << name << "_p) "
-	 << "element->" << name
-	 << " (" << name << "_tmp);";
+   << "element->" << name
+   << " (" << name << "_tmp);";
     }
 
     void
@@ -780,26 +789,26 @@ namespace
       // Indicates the type is a pointer type
       if (name[0] == L'*')
       {
-	// Find the position in the string where
-	// "_tmp" was added. NOTE: we add _tmp at the
-	// end so we need to use rfind and not find.
-	// using find might not work!!!
-	string::size_type position = name.rfind (L"_tmp");
+  // Find the position in the string where
+  // "_tmp" was added. NOTE: we add _tmp at the
+  // end so we need to use rfind and not find.
+  // using find might not work!!!
+  string::size_type position = name.rfind (L"_tmp");
 
-	// Ignore the leading * 
-	string attribute_name (name, 1, position-1);
-	add_attribute (attribute_name);
+  // Ignore the leading *
+  string attribute_name (name, 1, position-1);
+  add_attribute (attribute_name);
       }
       else
       {
-	string::size_type position = name.rfind (L"_tmp");
-	if (position != string::npos)
-	{
-	  string attribute_name (name, 0, position);
-	  add_attribute (attribute_name);
-	}
-	else
-	  add_attribute (name);
+  string::size_type position = name.rfind (L"_tmp");
+  if (position != string::npos)
+  {
+    string attribute_name (name, 0, position);
+    add_attribute (attribute_name);
+  }
+  else
+    add_attribute (name);
       }
     }
 
@@ -809,40 +818,40 @@ namespace
       // Add optional attributes to the element
       if (! this->optional_attribute_list_.empty ())
       {
-	for (size_t j =0; 
-	     j < this->optional_attribute_list_.size (); 
-	     j++)
-	  pretty_print_optional_attribute (this->optional_attribute_list_[j]);
-	os << endl;
+  for (size_t j =0;
+       j < this->optional_attribute_list_.size ();
+       j++)
+    pretty_print_optional_attribute (this->optional_attribute_list_[j]);
+  os << endl;
       }
-      
+
       // Write the sequence elements
       if (! this->complex_list_.empty ())
-	for (size_t i =0; i < this->complex_list_.size (); i++)
-	  this->read_sequence (*this->complex_list_[i]);
+  for (size_t i =0; i < this->complex_list_.size (); i++)
+    this->read_sequence (*this->complex_list_[i]);
 
-      // NOTE: The optional elements ALWAYS have to be read at 
+      // NOTE: The optional elements ALWAYS have to be read at
       // the END.
       if (! this->optional_element_list_.empty ())
-	for (size_t i = 0; i < this->optional_element_list_.size (); i++)
-	{
-	  string name (this->optional_element_list_[i]->name ());
-	  // Read the optional part first
-	  os << "bool " << name << "_p;"
-	     << "stream.read_boolean (" << name << "_p);";
+  for (size_t i = 0; i < this->optional_element_list_.size (); i++)
+  {
+    string name (this->optional_element_list_[i]->name ());
+    // Read the optional part first
+    os << "bool " << name << "_p;"
+       << "stream.read_boolean (" << name << "_p);";
 
-	  os << "if (" << name << "_p)"
-	     << "{";
+    os << "if (" << name << "_p)"
+       << "{";
 
-	  // The element is optional
-	  read_generic_type (*this->optional_element_list_[i], 1);
+    // The element is optional
+    read_generic_type (*this->optional_element_list_[i], 1);
 
-	  // Add that type to the element
-	  os << "element->" << name << " (" << name << ");"
-	     << endl;
+    // Add that type to the element
+    os << "element->" << name << " (" << name << ");"
+       << endl;
 
-	  os << "}";
-	}
+    os << "}";
+  }
     }
 
   private:
@@ -855,15 +864,15 @@ namespace
     std::vector < string > type_name_list_;
     // For complex types, we first read in the types (types
     // and or attributes)
-    // that are contained by this type and then add the sequence 
+    // that are contained by this type and then add the sequence
     // elements and the attribute list. These two data structures
     // help us in storing the typenames of the sequence elements
     // and their attributes
-    
+
     std::vector < string > optional_attribute_list_;
     // This list stores all optional attributes in the schema
     // types. These optional attributes similar to sequences
-    // will be added to the element after construction of the 
+    // will be added to the element after construction of the
     // complex element. However, unlike sequences, they will
     // be read/written in place i.e., in the same order they
     // occur in the schema.
@@ -871,7 +880,7 @@ namespace
     std::vector < SemanticGraph::Element* > optional_element_list_;
     // This list maintains elements that are defined in the schema
     // of the form:
-    // <xs:element name="ContactInfo" type="xs:string" 
+    // <xs:element name="ContactInfo" type="xs:string"
     // minOccurs="0" maxOccurs="1"/>, where the element is itself
     // optional. These are added to the element after the element
     // is constructed.
@@ -894,8 +903,8 @@ namespace
           name (name_),
           element_ (c),
           attribute_ (c),
-	  cdr_writer_ (c),
-	  cdr_reader_ (c)
+    cdr_writer_ (c),
+    cdr_reader_ (c)
     {
       names_elements_.node_traverser (element_);
       names_attributes_.node_traverser (attribute_);
@@ -994,8 +1003,8 @@ namespace
       // Is type a complex type?
       Type::InheritsIterator b (c.inherits_begin ()), e (c.inherits_end ());
       if (b == e)
-	return true;
-      
+  return true;
+
     // Checks only for simple types having attributes.
       bool ret_val (has<Traversal::Attribute> (c));
       return ret_val;
@@ -1007,63 +1016,63 @@ namespace
       // Check if one needs to generate read/write operations
       // for this type
       if (! generate_cdr_types (c))
-	return;
+  return;
 
       //write all elements contained in this type
       if (this->cdr_writer_generation_)
       {
-	
- 	// pre
- 	os << "// write " << name << endl;
- 	os << "bool " << endl << name << "::write_" << name 
- 	   << " (::XMLSchema::CDR_OutputStream &stream) const"
- 	   << "{";
 
-	{
-	  // Check if the type has any attributes. If so then
-	  // if the type also has sequences, we write the 
-	  // attributes before writing the sequence elements.
-	  // This is because, at the recipient, the type can be 
-	  // reconstructed before adding the sequences eliminating
-	  // temporary storage
-	  this->cdr_writer_.has_attributes (has<Traversal::Attribute> (c));
-	  this->cdr_writer_.traverse (c);
-	  this->cdr_writer_.reset_type_attribute_settings ();
-	}
+   // pre
+   os << "// write " << name << endl;
+   os << "bool " << endl << name << "::write_" << name
+      << " (::XMLSchema::CDR_OutputStream &stream) const"
+      << "{";
 
-	// post
- 	os << "return stream.good_bit ();";
- 	os << "}" << endl;
+  {
+    // Check if the type has any attributes. If so then
+    // if the type also has sequences, we write the
+    // attributes before writing the sequence elements.
+    // This is because, at the recipient, the type can be
+    // reconstructed before adding the sequences eliminating
+    // temporary storage
+    this->cdr_writer_.has_attributes (has<Traversal::Attribute> (c));
+    this->cdr_writer_.traverse (c);
+    this->cdr_writer_.reset_type_attribute_settings ();
+  }
+
+  // post
+   os << "return stream.good_bit ();";
+   os << "}" << endl;
       }
-      
+
       // Read the written types from the stream
       if (this->cdr_reader_generation_)
       {
-	// pre
- 	os << "// read " << name << endl;
- 	os << "bool" << endl << name << "::" << endl
-	   << "read_" << name 
- 	   << " (::XMLSchema::CDR_InputStream &stream," << endl;
+  // pre
+   os << "// read " << name << endl;
+   os << "bool" << endl << name << "::" << endl
+     << "read_" << name
+      << " (::XMLSchema::CDR_InputStream &stream," << endl;
 
-	for (size_t j =0; j < name.length () + 5; j++)
-	  os << " ";
+  for (size_t j =0; j < name.length () + 5; j++)
+    os << " ";
 
-	os << "::XMLSchema::cdr_arg_traits < " << name 
-	   << " >::inout_type element)"
- 	   << "{";
+  os << "::XMLSchema::cdr_arg_traits < " << name
+     << " >::inout_type element)"
+      << "{";
 
-	{
-	  this->cdr_reader_.has_attributes (has<Traversal::Attribute> (c));
-	  this->cdr_reader_.traverse (c);
-	  this->cdr_reader_.reset_type_attribute_settings ();
-	}
+  {
+    this->cdr_reader_.has_attributes (has<Traversal::Attribute> (c));
+    this->cdr_reader_.traverse (c);
+    this->cdr_reader_.reset_type_attribute_settings ();
+  }
 
-	// post
- 	os << "return stream.good_bit ();";
- 	os << "}" << endl;
+  // post
+   os << "return stream.good_bit ();";
+   os << "}" << endl;
       }
-    
-    } 
+
+    }
 
   private:
     string name;
@@ -1248,49 +1257,49 @@ namespace
       // CDR reading/writing if enabled
       if (this->cdr_writer_generation_)
       {
-	// pre
-	os << "// write " << name << endl;
-	os << "bool " << endl << name << "::write_" << name 
-	   << " (::XMLSchema::CDR_OutputStream &stream) const"
-	   << "{";
+  // pre
+  os << "// write " << name << endl;
+  os << "bool " << endl << name << "::write_" << name
+     << " (::XMLSchema::CDR_OutputStream &stream) const"
+     << "{";
 
-	// For enumerations marshal them using the
-	// corresponding integer value
-      	os << "// " << name << endl;
-	os << "int " << name << "_integral = " 
-	   << "this->integral ();"
-	   << "stream << " << name << "_integral;"
-	   << endl;
+  // For enumerations marshal them using the
+  // corresponding integer value
+        os << "// " << name << endl;
+  os << "int " << name << "_integral = "
+     << "this->integral ();"
+     << "stream << " << name << "_integral;"
+     << endl;
 
-	// post
-	os << "return stream.good_bit ();" << endl;
-	os << "}" << endl;
+  // post
+  os << "return stream.good_bit ();" << endl;
+  os << "}" << endl;
       }
 
       // CDR reading/writing if enabled
       if (this->cdr_reader_generation_)
       {
-	// pre
-	os << "// read " << name << endl;
-	os << "bool " << endl << name << "::read_" << name 
-	   << " (::XMLSchema::CDR_InputStream &stream, "
-	   << endl
-	   << "::XMLSchema::cdr_arg_traits < " << name 
-	   << " >::inout_type element)" << endl
-	   << "{";
+  // pre
+  os << "// read " << name << endl;
+  os << "bool " << endl << name << "::read_" << name
+     << " (::XMLSchema::CDR_InputStream &stream, "
+     << endl
+     << "::XMLSchema::cdr_arg_traits < " << name
+     << " >::inout_type element)" << endl
+     << "{";
 
-	// For enumerations demarshal them via the 
-	// corresponding integer value
-	string type (type_name (e));
-	os << "int " << name << "_tmp;" 
-	   << "stream >> " << name << "_tmp;"
-	   << "element = new " << type << " (Value ("
-	   << name << "_tmp));";
+  // For enumerations demarshal them via the
+  // corresponding integer value
+  string type (type_name (e));
+  os << "int " << name << "_tmp;"
+     << "stream >> " << name << "_tmp;"
+     << "element = new " << type << " (Value ("
+     << name << "_tmp));";
 
-	// post
-	os << "return stream.good_bit ();"
-	   << "}"
-	   << endl;
+  // post
+  os << "return stream.good_bit ();"
+     << "}"
+     << endl;
       }
 
       leave_scope ();

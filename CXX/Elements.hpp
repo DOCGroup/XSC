@@ -183,7 +183,7 @@ public:
   {
     this->cdr_writer_generation_ = flag;
   }
-  bool 
+  bool
   cdr_reader_generation_enabled ()
   {
     return this->cdr_reader_generation_;
@@ -199,13 +199,13 @@ public:
   {
     this->generate_ra_sequences_ = flag;
   }
-  
+
   bool
   generate_ra_sequences (void)
   {
     return this->generate_ra_sequences_;
   }
-  
+
 public:
   std::wostream& os;
   string& scope;
@@ -359,6 +359,23 @@ struct Namespace : Traversal::Namespace, protected virtual Context
   post (Type&);
 };
 
+template <typename T>
+struct Traverser : T
+{
+  Traverser (bool& v)
+      : v_ (v)
+  {
+  }
+
+  virtual void
+  traverse (typename T::Type &)
+  {
+    v_ = true;
+  }
+
+private:
+  bool& v_;
+};
 
 // Checks if scope `Y' names any of `X'
 //
@@ -368,23 +385,7 @@ has (Y& y)
 {
   bool r (false);
 
-  struct Traverser : X
-  {
-    Traverser (bool& v)
-        : v_ (v)
-    {
-    }
-
-    virtual void
-    traverse (typename X::Type&)
-    {
-      v_ = true;
-    }
-
-  private:
-    bool& v_;
-  } t (r);
-
+  Traverser <X> t (r);
   Traversal::Scope s;
   Traversal::Names n;
   s.edge_traverser (n);

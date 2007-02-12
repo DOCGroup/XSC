@@ -8,6 +8,15 @@
 #include <XSC/SemanticGraph.hpp>
 #include <XSC/Traversal.hpp>
 
+#if defined (_WINDOWS)
+# if defined (min)
+#   undef min
+# endif
+# if defined (max)
+#   undef max
+# endif
+#endif
+
 namespace
 {
   struct Member : Traversal::Element,
@@ -189,7 +198,7 @@ namespace
       os << name << "::" << endl
          << name << " ()"
          << "{"
-         << "}";      
+         << "}";
 
       // traverse
       //

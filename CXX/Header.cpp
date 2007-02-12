@@ -10,6 +10,14 @@
 
 #include <CCF/CodeGenerationKit/Regex.hpp>
 
+#if defined (_WINDOWS)
+# if defined (min)
+#   undef min
+# endif
+# if defined (max)
+#   undef max
+# endif
+#endif
 
 namespace
 {
@@ -137,14 +145,14 @@ namespace
     {
       string name (c.name ());
       string type (type_name (c));
-      
-      
+
+
       string container;
       if (this->generate_ra_sequences_)
         container = L"::std::vector";
       else
         container = L"::std::list";
-      
+
       os << "// " << name << endl
          << "// " << endl
          << "public:" << endl;
@@ -165,9 +173,9 @@ namespace
         os << name << "_const_iterator end_" << name << " () const;";
 
         os << "void add_" << name << " (" << type << " const& );";
-        
+
         os << "size_t count_" << name << " (void) const;";
-        
+
         os << endl
            << "protected:" << endl;
 
@@ -330,8 +338,8 @@ namespace
       // Is type a complex type?
       Type::InheritsIterator b (c.inherits_begin ()), e (c.inherits_end ());
       if (b == e)
-	return true;
-      
+  return true;
+
       // Checks only for simple types having attributes.
       bool ret_val (has<Traversal::Attribute> (c));
       return ret_val;
@@ -341,41 +349,41 @@ namespace
     read_write_type (Type &c)
     {
       if (! generate_cdr_types (c))
-	  return;
+    return;
 
       // CDR Insertion/Extraction Operators
       bool reader = 0;
       if (this->cdr_reader_generation_)
       {
-	os << "// read " << endl
-	   << "//" << endl;
-	reader = 1;
+  os << "// read " << endl
+     << "//" << endl;
+  reader = 1;
 
-	os << "public:" << endl;
-	os << "static bool " << endl
-	   << "read_" << name 
-	   << " (::XMLSchema::CDR_InputStream &,"
-	   << endl;
+  os << "public:" << endl;
+  os << "static bool " << endl
+     << "read_" << name
+     << " (::XMLSchema::CDR_InputStream &,"
+     << endl;
 
-	for (size_t j =0; j < name.length () + 5; j++)
-	  os << " ";
+  for (size_t j =0; j < name.length () + 5; j++)
+    os << " ";
 
-	os << " ::XMLSchema::cdr_arg_traits < " << name 
-	   << " >::inout_type);" << endl;
+  os << " ::XMLSchema::cdr_arg_traits < " << name
+     << " >::inout_type);" << endl;
       }
 
       // CDR Extraction Operators
       if (this->cdr_writer_generation_)
       {
-	if (!reader)
-	  os << "public:" << endl;
+  if (!reader)
+    os << "public:" << endl;
 
-	os << "// write " << endl
-	   << "//" << endl
-	   << "bool" << endl
-	   << "write_" << name 
-	   << " (::XMLSchema::CDR_OutputStream &) const;"
-	   << endl;
+  os << "// write " << endl
+     << "//" << endl
+     << "bool" << endl
+     << "write_" << name
+     << " (::XMLSchema::CDR_OutputStream &) const;"
+     << endl;
       }
     }
 
@@ -447,7 +455,7 @@ namespace
 
       os << "private:" << endl
          << "char regulator__;";
-         
+
 
       // Closing brace for the class declaration
       // Example: class Foo {
@@ -461,24 +469,24 @@ namespace
       // Check to see if >> and << operators need to
       // be generated
       if (! generate_cdr_types (c))
-	return;
-      
+  return;
+
       if (this->cdr_reader_generation_)
-	os << "extern bool" << endl
-	   << "operator >> (::XMLSchema::CDR_InputStream &,"
-	   << endl
-	   << "             ::XMLSchema::cdr_arg_traits < "
-	   << name << " >::inout_type);";
-      
+  os << "extern bool" << endl
+     << "operator >> (::XMLSchema::CDR_InputStream &,"
+     << endl
+     << "             ::XMLSchema::cdr_arg_traits < "
+     << name << " >::inout_type);";
+
       if (this->cdr_writer_generation_)
-	os << "extern bool" << endl
-	   << "operator << (::XMLSchema::CDR_OutputStream &,"
-	   << endl
-	   << "             ::XMLSchema::cdr_arg_traits < "
-	   << name << " >::in_type);"
-	   << endl;
+  os << "extern bool" << endl
+     << "operator << (::XMLSchema::CDR_OutputStream &,"
+     << endl
+     << "             ::XMLSchema::cdr_arg_traits < "
+     << name << " >::in_type);"
+     << endl;
       else
-	os << endl;
+  os << endl;
     }
 
   private:
@@ -522,10 +530,10 @@ namespace
     {
       os << id (e.name ()) << "_l,";
     }
-    
+
 
   private:
-    
+
   };
 
   struct Enumeration : Traversal::Enumeration, protected virtual Context
@@ -568,7 +576,7 @@ namespace
 
       os << "enum Value"
          << "{";
-      
+
       names (e, names_labels_);
 
       os << endl << "};"
@@ -598,65 +606,65 @@ namespace
       bool reader = 0;
       if (this->cdr_reader_generation_)
       {
-	os << "// read " << endl
-	   << "//" << endl;
-	reader = 1;
+  os << "// read " << endl
+     << "//" << endl;
+  reader = 1;
 
-	os << "public:" << endl;
-	os << "static bool " << endl
-	   << "read_" << name 
-	   << " (::XMLSchema::CDR_InputStream &,"
-	   << endl;
+  os << "public:" << endl;
+  os << "static bool " << endl
+     << "read_" << name
+     << " (::XMLSchema::CDR_InputStream &,"
+     << endl;
 
-	for (size_t j =0; j < name.length () + 5; j++)
-	  os << " ";
+  for (size_t j =0; j < name.length () + 5; j++)
+    os << " ";
 
-	os << " ::XMLSchema::cdr_arg_traits < " << name 
-	   << " >::inout_type);" << endl;
+  os << " ::XMLSchema::cdr_arg_traits < " << name
+     << " >::inout_type);" << endl;
       }
 
       // CDR Extraction Operators
       if (this->cdr_writer_generation_enabled ())
       {
-	if (!reader)
-	  os << "public:" << endl;
+  if (!reader)
+    os << "public:" << endl;
 
-	os << "// write " << endl
-	   << "//" << endl
-	   << "bool" << endl
-	   << "write_" << name 
-	   << " (::XMLSchema::CDR_OutputStream &) const;"
-	   << endl;
+  os << "// write " << endl
+     << "//" << endl
+     << "bool" << endl
+     << "write_" << name
+     << " (::XMLSchema::CDR_OutputStream &) const;"
+     << endl;
       }
-    
+
       leave_scope ();
-      
+
       // End of class
       os << "};";
-      
-      os << "bool " << ex 
+
+      os << "bool " << ex
          << "operator== (" << name << " const &a, " << name << " const &b);"
          << endl;
-      
+
       os << "bool " << ex
          << "operator!= (" << name << " const &a, " << name << " const &b);"
          << endl;
-      
+
       if (this->cdr_reader_generation_)
-	os << "extern bool" << endl
-	   << "operator >> (::XMLSchema::CDR_InputStream &,"
-	   << endl
-	   << "             ::XMLSchema::cdr_arg_traits < "
-	   << name << " >::inout_type);";
-      
+  os << "extern bool" << endl
+     << "operator >> (::XMLSchema::CDR_InputStream &,"
+     << endl
+     << "             ::XMLSchema::cdr_arg_traits < "
+     << name << " >::inout_type);";
+
       if (this->cdr_writer_generation_enabled ())
-	os << "extern bool" << endl
-	   << "operator << (::XMLSchema::CDR_OutputStream &,"
-	   << endl
-	   << "             ::XMLSchema::cdr_arg_traits < "
-	   << name << " >::in_type);" << endl;
+  os << "extern bool" << endl
+     << "operator << (::XMLSchema::CDR_OutputStream &,"
+     << endl
+     << "             ::XMLSchema::cdr_arg_traits < "
+     << name << " >::in_type);" << endl;
       else
-	os << endl;
+  os << endl;
     }
   private:
     string name;
@@ -752,12 +760,12 @@ generate_header (Context& ctx,
                  std::string const& expr)
 {
   ctx.os << "#include <memory>" << endl;
-  
+
   if (ctx.generate_ra_sequences ())
     ctx.os << "#include <vector>" << endl;
   else
     ctx.os << "#include <list>" << endl;
-  
+
   ctx.os << "#include \"XMLSchema/Types.hpp\"" << endl
          << endl;
 
@@ -766,7 +774,7 @@ generate_header (Context& ctx,
   if (ctx.cdr_reader_generation_enabled () ||
       ctx.cdr_writer_generation_enabled ())
     ctx.os << "#include \"XMLSchema/CDR_Types.hpp\"" << endl
-	   << endl;
+     << endl;
 
   Traversal::Schema traverser;
 

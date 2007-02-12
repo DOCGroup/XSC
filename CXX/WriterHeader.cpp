@@ -8,6 +8,15 @@
 #include <XSC/SemanticGraph.hpp>
 #include <XSC/Traversal.hpp>
 
+#if defined (_WINDOWS)
+# if defined (min)
+#   undef min
+# endif
+# if defined (max)
+#   undef max
+# endif
+#endif
+
 namespace
 {
   struct Member : Traversal::Element,
@@ -32,8 +41,8 @@ namespace
       {
         // sequence
         //
-        
-        // Pre 
+
+        // Pre
         //
         os << "virtual void " << endl
            << name << "_pre (Type &o)" << endl
@@ -41,13 +50,13 @@ namespace
            << "this->"  << name << "_pre ("
            << "const_cast <Type const &> (o));" << endl
            << "}" << endl;
-        
+
         // pre
         //
         os << "virtual void" << endl
            << name << "_pre (Type const&);"
            << endl;
-        
+
         // non-const next
         //
         os << "virtual void " << endl
@@ -56,7 +65,7 @@ namespace
            << "this->"  << name << "_next ("
            << "const_cast <Type const &> (o));" << endl
            << "}" << endl;
-        
+
         // next
         //
         os << "virtual void" << endl
@@ -70,7 +79,7 @@ namespace
            << "this->" << name << "_post ("
            << "const_cast <Type const &> (o));" << endl
            << "}" << endl;
-        
+
         // post
         //
         os << "virtual void" << endl
@@ -86,7 +95,7 @@ namespace
            << "this->" << id (name) << " ("
            << "const_cast <Type const &> (o));" << endl
            << "}" << endl;
-        
+
         // optional
         //
         os << "virtual void" << endl
@@ -102,7 +111,7 @@ namespace
            << "this->" << id (name) << " ("
            << "const_cast <Type const &> (o));" << endl
            << "}" << endl;
-        
+
         // one
         //
         os << "virtual void" << endl
@@ -119,7 +128,7 @@ namespace
       if (!a.type ().named ()) return;
 
       string name (a.name ());
-      
+
       // Borland post
       os << "virtual void " << endl
          << id (name)  << " (Type &o)" << endl
@@ -127,8 +136,8 @@ namespace
          << "this->" << id (name) << " ("
          << "const_cast <Type const &> (o));" << endl
          << "}" << endl;
-      
-      
+
+
       os << "virtual void" << endl
          << id (name) << " (Type const&);"
          << endl;
@@ -214,7 +223,7 @@ namespace
       //
       os << name << " (" << xml_element_type << "&);"
          << endl;
-      
+
       // Non-const traverse for Borland
       os << "virtual void " << endl
          << "traverse (Type &o)" << endl
@@ -222,7 +231,7 @@ namespace
          << "this->traverse ("
          << "const_cast <Type const &> (o));"
          << "}" << endl;
-      
+
 
       // traverse
       //
@@ -272,12 +281,12 @@ namespace
       //
       os << name << " (" << xml_element_type << "&);"
          << endl;
-      
+
       // Non-const traverse for Borland
       os << "virtual void " << endl
          << "traverse (Type &o)"
          << "{"
-         << "this->traverse (" 
+         << "this->traverse ("
          << "const_cast <Type const &> (o));"
          << "}";
 

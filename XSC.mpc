@@ -1,14 +1,17 @@
 //$Id$
 
 project(XSC): xsc, xerces {
-  requires += exceptions
-  exename = xsc-binary
+  exename   = xsc-binary
+  install   = $(XSC_ROOT)/bin
 
-  after += libXSC libCXX libIDL CodeGenerationKit CompilerElements
+  requires += exceptions
+
+  after    += libXSC libCXX libIDL CodeGenerationKit CompilerElements
   includes += .
-  install = ../bin
+
   libpaths += ./XSC ./CXX ./IDL
-  libs += CXX IDL XSC CodeGenerationKit CompilerElements
+  libs     += CXX IDL XSC CodeGenerationKit CompilerElements
+
   Source_Files {
     xsc.cpp
   }

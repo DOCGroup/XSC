@@ -10,6 +10,15 @@
 
 #include <CCF/CodeGenerationKit/Regex.hpp>
 
+#if defined (_WINDOWS)
+# if defined (min)
+#   undef min
+# endif
+# if defined (max)
+#   undef max
+# endif
+#endif
+
 namespace
 {
   struct Member : Traversal::Element,
@@ -27,7 +36,7 @@ namespace
       string name (e.name ());
       string type (type_name (e));
       bool ra_sequence (this->generate_ra_sequences_);
-      
+
       os << "// " << scope << endl
          << "// " << endl;
 
@@ -35,7 +44,7 @@ namespace
       {
         // sequence
         //
-        
+
         // begin_typename
         //
         os << i
@@ -44,7 +53,7 @@ namespace
            << "{"
            << "return " << name << "_.begin ();"
            << "}";
-        
+
         // end_typename
         //
         os << i
@@ -53,7 +62,7 @@ namespace
            << "{"
            << "return " << name << "_.end ();"
            << "}";
-        
+
         // begin_typename const
         os << i
            << scope << "::" << name << "_const_iterator " << scope << "::" << endl
@@ -61,7 +70,7 @@ namespace
            << "{"
            << "return " << name << "_.begin ();"
            << "}";
-        
+
         // end_typename const
         os << i
            << scope << "::" << name << "_const_iterator " << scope << "::" << endl
@@ -75,7 +84,7 @@ namespace
            << "void " << scope << "::" << endl
            << "add_" << name << " (" << type << " const& e)"
            << "{";
-        
+
         if (ra_sequence)
           {
             os << "if (" << name << "_.capacity () < " << name << "_.size () + 1)"
@@ -101,7 +110,7 @@ namespace
             os << name << "_.push_back (e);";
           }
         os << "}";
-        
+
         // count_typename
         //
         os << i
@@ -470,7 +479,7 @@ namespace
       // Is type a complex type?
       Type::InheritsIterator b (c.inherits_begin ()), e (c.inherits_end ());
       if (b == e)
-	return true;
+  return true;
 
       // Checks only for simple types having attributes.
       bool ret_val (has<Traversal::Attribute> (c));
@@ -484,35 +493,35 @@ namespace
       // cdr insertion and extraction
       // operators
       if (! generate_cdr_types (c))
-	return;
+  return;
 
       string type (type_name (c));
 
       if (this->cdr_reader_generation_)
-	os << "bool " << endl
-	   << "operator >> (::XMLSchema::CDR_InputStream &stream,"
-	   << endl
-	   << "             ::XMLSchema::cdr_arg_traits < "
-	   << type << " >::inout_type element)"
-	   << endl
-	   << "{"
-	   << "return " << type << "::read_"
-	   << name << " (stream, element);"
-	   << endl
-	   << "}";
+  os << "bool " << endl
+     << "operator >> (::XMLSchema::CDR_InputStream &stream,"
+     << endl
+     << "             ::XMLSchema::cdr_arg_traits < "
+     << type << " >::inout_type element)"
+     << endl
+     << "{"
+     << "return " << type << "::read_"
+     << name << " (stream, element);"
+     << endl
+     << "}";
 
       if (this->cdr_writer_generation_)
-	os << "bool" << endl
-	   << "operator << (::XMLSchema::CDR_OutputStream &stream,"
-	   << endl
-	   << "             ::XMLSchema::cdr_arg_traits < "
-	   << type << " >::in_type element)"
-	   << endl
-	   << "{"
-	   << "return element.write_"
-	   << name << " (stream);"
-	   << endl
-	   << "}";
+  os << "bool" << endl
+     << "operator << (::XMLSchema::CDR_OutputStream &stream,"
+     << endl
+     << "             ::XMLSchema::cdr_arg_traits < "
+     << type << " >::in_type element)"
+     << endl
+     << "{"
+     << "return element.write_"
+     << name << " (stream);"
+     << endl
+     << "}";
     }
 
     struct CtorBase : Traversal::Complex,
@@ -542,7 +551,7 @@ namespace
       void
       traverse (SemanticGraph::Complex& c)
       {
-	os << "Base__ (";
+  os << "Base__ (";
 
         args_.traverse (c);
 
@@ -628,21 +637,21 @@ namespace
                         protected virtual Context
     {
       CTorMember (Context& c)
-	: Context (c),
-	  base_class_initialized_ (0)
+  : Context (c),
+    base_class_initialized_ (0)
       {
       }
 
       virtual void
       traverse (SemanticGraph::Element& e)
       {
-	// Copy constructor for a complext type needs
-	// to inherit from the ::XSCRT::Type base class
-	if (! base_class_initialized_)
-	{
-	  os << "::XSCRT::Type (), " << endl;
-	  base_class_initialized_ = 1;
-	}
+  // Copy constructor for a complext type needs
+  // to inherit from the ::XSCRT::Type base class
+  if (! base_class_initialized_)
+  {
+    os << "::XSCRT::Type (), " << endl;
+    base_class_initialized_ = 1;
+  }
 
         if (e.min () == 1 && e.max () == 1)
         {
@@ -658,7 +667,7 @@ namespace
 
       void reset_base_class_initialization ()
       {
-	base_class_initialized_ = 0;
+  base_class_initialized_ = 0;
       }
 
       virtual void
@@ -715,8 +724,8 @@ namespace
 
     {
       Copy (Context& c)
-	: Context (c),
-	  base_class_initialized_ (0)
+  : Context (c),
+    base_class_initialized_ (0)
       {
       }
 
@@ -732,15 +741,15 @@ namespace
         string name (id (e.name ()));
         string type (type_name (e));
 
-	// Call the ::XSCRT::Type () base class
-	// constructor. Fix for compile warnings.
-	if (! base_class_initialized_)
-	  {
-	    os << "::XSCRT::Type ()," << endl;
-	    base_class_initialized_ = 1;
-	  }
+  // Call the ::XSCRT::Type () base class
+  // constructor. Fix for compile warnings.
+  if (! base_class_initialized_)
+    {
+      os << "::XSCRT::Type ()," << endl;
+      base_class_initialized_ = 1;
+    }
 
-	if (e.max () != 1)
+  if (e.max () != 1)
         {
           // sequence
           //
@@ -782,7 +791,7 @@ namespace
 
       void reset_base_class_initialization ()
       {
-	base_class_initialized_ = 0;
+  base_class_initialized_ = 0;
       }
 
     private:
@@ -811,7 +820,7 @@ namespace
           //
           if (this->generate_ra_sequences_)
             os << name << "_.reserve (s." << name << "_.size ());";
-          
+
           os << "{"
              << "for (" << name << "_const_iterator i (s."
              << name << "_.begin ());"
@@ -883,10 +892,10 @@ namespace
           // sequence
           //
           os << name << "_.clear ();";
-          
+
           if (this->generate_ra_sequences_)
             os   << name << "_.reserve (s." << name << "_.size ());";
-              
+
           os << "{"
              << "for (" << name << "_const_iterator i (s."
              << name << "_.begin ());"
@@ -1017,30 +1026,30 @@ namespace
 
       // CDR Insertion extraction operations if needed
       if (this->cdr_reader_generation_)
-	os << "bool " << endl
-	   << "operator >> (::XMLSchema::CDR_InputStream &stream,"
-	   << endl
-	   << "             ::XMLSchema::cdr_arg_traits < "
-	   << type << " >::inout_type element)"
-	   << endl
-	   << "{"
-	   << "return " << type << "::read_"
-	   << name << " (stream, element);"
-	   << endl
-	   << "}";
+  os << "bool " << endl
+     << "operator >> (::XMLSchema::CDR_InputStream &stream,"
+     << endl
+     << "             ::XMLSchema::cdr_arg_traits < "
+     << type << " >::inout_type element)"
+     << endl
+     << "{"
+     << "return " << type << "::read_"
+     << name << " (stream, element);"
+     << endl
+     << "}";
 
       if (this->cdr_writer_generation_)
-	os << "bool" << endl
-	   << "operator << (::XMLSchema::CDR_OutputStream &stream,"
-	   << endl
-	   << "             ::XMLSchema::cdr_arg_traits < "
-	   << type << " >::in_type element)"
-	   << endl
-	   << "{"
-	   << "return element.write_"
-	   << name << " (stream);"
-	   << endl
-	   << "}";
+  os << "bool" << endl
+     << "operator << (::XMLSchema::CDR_OutputStream &stream,"
+     << endl
+     << "             ::XMLSchema::cdr_arg_traits < "
+     << type << " >::in_type element)"
+     << endl
+     << "{"
+     << "return element.write_"
+     << name << " (stream);"
+     << endl
+     << "}";
     }
 
   private:
