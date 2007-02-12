@@ -3,9 +3,10 @@
 project(libCXX) : xsc {
   sharedname =
   staticname = CXX
-  libout = .
-  includes += ..
+
+  includes  += ..
+
   Source_Files {
-	.
+	  .
   }
 }

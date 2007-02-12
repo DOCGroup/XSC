@@ -3,11 +3,12 @@
 project(libXSC): xsc, xerces {
   sharedname =
   staticname = XSC
-  libout = .
-  includes += ..
+
+  includes  += ..
+
   Source_Files {
-	.
-	./SemanticGraph
-	./Traversal
+	  .
+	  ./SemanticGraph
+	  ./Traversal
   }
 }

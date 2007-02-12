@@ -3,9 +3,10 @@
 project(libIDL) : xsc {
   sharedname =
   staticname = IDL
-  libout = .
-  includes += ..
+
+  includes  += ..
+
   Source_Files {
-	.
+	  .
   }
 }

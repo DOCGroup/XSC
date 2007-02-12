@@ -1,3 +1,17 @@
+Mon Feb 12 23:34:40 UTC 2007  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * CXX/libCXX.mpc:
+        * IDL/libIDL.mpc:
+        * XSC/libXSC.mpc:
+
+          Removed the libout property.
+
+        * xsc.mpb:
+
+          - Added a default libout property, which points to
+            $(XSC_ROOT)/lib
+          - Added $(XSC_ROOT)/lib to the libpaths property.
+
 Mon Feb 12 22:22:51 UTC 2007  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * CXX/Elements.hpp:
