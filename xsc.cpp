@@ -113,7 +113,12 @@ int init_basic_commandline_description (CL::Description & d)
                 "\t\t\tidl - CORBA IDL mapping\n",
                 CL::OptionType::value,
                 false));
-
+  
+  d.add_option (CL::OptionDescription ("search-path",
+                                       "\tAdd to search path",
+                                       "\tAdd a path to the list of those searched by XSC when opening an include.",
+                                       CL::OptionType::value,
+                                       false));
   return 0;
 }
 
@@ -180,7 +185,30 @@ int main (int argc, char* argv[])
 
       return 0;
     }
-
+    
+    // process search paths
+    std::vector <std::string> search_path_strings;
+    cl.get_all_values ("search-path",
+                       search_path_strings);
+    
+    Parser::Paths search_paths;
+    search_paths.push_back (fs::path ("./"));
+    
+    for (std::vector <std::string>::const_iterator i = search_path_strings.begin ();
+         i != search_path_strings.end ();
+         ++i)
+      {
+        try
+          {
+            search_paths.push_back (fs::path (*i, fs::native));
+          }
+        catch (...)
+          {
+            wcerr << "error: Nonexistaqnt search path supplied:" << i->c_str () << endl;
+            return -1;
+          }
+      }
+    
     // Set the default backend to CXX.
     if (backend.empty ())
       backend = "cxx";
@@ -207,12 +235,15 @@ int main (int argc, char* argv[])
     ErrorDetector detector (wcerr);
 
     fs::path tu (*i);
-
-    Parser parser (cl.get_value ("trace", false));;
+    
+    Parser parser (cl.get_value ("trace", false), search_paths);
     auto_ptr <SemanticGraph::Schema> s (parser.parse (tu));
 
     if (detector.error ())
-      return 1;
+      {
+        wcerr << "Parsing encountered an error.\n";
+        return 1;
+      }
 
     if (backend == "cxx")
     {
@@ -223,7 +254,7 @@ int main (int argc, char* argv[])
       {
         return 1;
       }
-
+      
       CXX_Generator cxx;
       cxx.generate (cl, *s, tu);
     }

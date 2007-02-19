@@ -226,7 +226,7 @@ namespace XSC
   {
   public:
     
-    Parser (bool trace);
+    Parser (bool trace, const std::vector <fs::path> &include_paths);
 
     SemanticGraph::Schema*
     parse (fs::path const&);
@@ -439,6 +439,12 @@ namespace XSC
     FileMap_;
 
     FileMap_ file_map_;
+    
+  public:
+    typedef std::vector <fs::path> Paths;
+    
+  private:
+    Paths include_paths_;
 
   private:
     bool qualify_attribute_;

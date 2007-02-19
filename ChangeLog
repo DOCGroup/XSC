@@ -1,3 +1,36 @@
+Mon Feb 19 15:07:58 UTC 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
+
+        * XSC/Parser.hpp
+        * XSC/Parser.cpp
+        
+          Formatting changes, changes to support --search-path, fixed a 
+          couple small memory leaks.  
+        
+        * XSC/XercesString.cpp
+        * XSC/XercesString.hpp
+        
+          A simple std::string like wrapper for XMLCh* based strings.
+        
+        * XSC/XML_Schema_Resolver.cpp
+        * XSC/XML_Schema_Resolver.hpp
+          
+          Simple schema resolver used by Xerces to support --search-path.
+        
+        * xsc.cpp
+         
+          Added new command line argument --search-path, wich can be used
+          to create a stack of paths XSC will search when attempting to resolve
+          both schema provided as arguments, and as included schemata.
+
+        * CXX/Generator.cpp
+        
+          Changed the filename generation regular expressions to account for
+          a behavior change in the boost regex library (possibly platform
+          portability problem) which would greedily match extensions twice,
+          resulting in transformation like:
+        
+          foo.xsd => foo.hpp.hpp
+
 Mon Feb 12 23:34:40 UTC 2007  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * CXX/libCXX.mpc:

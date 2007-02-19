@@ -184,6 +184,13 @@ options (CL::Description& d)
                   CL::OptionType::value,
                   true));
 
+  d.add_option (CL::OptionDescription (
+                  "cxx-export-header",
+                  "header",
+                  "Export header for Win32 DLL export/import control.",
+                  CL::OptionType::value,
+                  true));
+
   // -- cdr insertion and extraction
   d.add_option (CL::OptionDescription (
                   "cxx-generate-cdr-writer-types",
@@ -218,19 +225,19 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
   std::string cxx_suffix (cl.get_value ("cxx-source-suffix", ".cpp"));
 
   std::string hxx_expr (
-    cl.get_value ("cxx-header-regex", "/(\\..+)?$/" + hxx_suffix + "/"));
+    cl.get_value ("cxx-header-regex", "/(\\..+)$/" + hxx_suffix + "/"));
 
   std::string ixx_expr (
-    cl.get_value ("cxx-inline-regex", "/(\\..+)?$/" + ixx_suffix + "/"));
+    cl.get_value ("cxx-inline-regex", "/(\\..+)$/" + ixx_suffix + "/"));
 
   std::string cxx_expr (
-    cl.get_value ("cxx-source-regex", "/(\\..+)?$/" + cxx_suffix + "/"));
+    cl.get_value ("cxx-source-regex", "/(\\..+)$/" + cxx_suffix + "/"));
 
-
+  
   std::string hxx_name (regex::perl_s (name, hxx_expr));
   std::string ixx_name (regex::perl_s (name, ixx_expr));
   std::string cxx_name (regex::perl_s (name, cxx_expr));
-
+  
   fs::path hxx_path (hxx_name);
   fs::path ixx_path (ixx_name);
   fs::path cxx_path (cxx_name);
@@ -448,7 +455,17 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
   hxx << "#ifndef " << guard.c_str () << endl
       << "#define " << guard.c_str () << endl
       << endl;
-
+  
+  // Export header file
+  {
+    std::string tmp (cl.get_value ("cxx-export-header", ""));
+    
+    if (tmp != "")
+      {
+        hxx << "#include \"" << tmp.c_str () << '"' << endl;
+      }
+  }
+  
   {
     Context ctx (hxx, char_type, export_symbol, nsm);
 
