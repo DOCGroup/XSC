@@ -192,7 +192,7 @@ int main (int argc, char* argv[])
                        search_path_strings);
     
     Parser::Paths search_paths;
-    search_paths.push_back (fs::path ("./"));
+    search_paths.push_back (fs::path ());
     
     for (std::vector <std::string>::const_iterator i = search_path_strings.begin ();
          i != search_path_strings.end ();

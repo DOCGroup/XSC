@@ -1,3 +1,10 @@
+Wed Feb 21 16:27:30 UTC 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
+
+        * xsc.cpp
+          
+          Fixed specification of default search path, so that it will
+          correctly check the provided file as an absolute path.
+
 Mon Feb 19 15:07:58 UTC 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
 
         * XSC/Parser.hpp
