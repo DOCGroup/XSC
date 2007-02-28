@@ -1,3 +1,10 @@
+Wed Feb 28 03:11:47 UTC 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
+
+        * contrib
+        
+          Added CodeGenerationKit and Utility from the ACE repository
+          as externals.
+
 Wed Feb 21 16:27:30 UTC 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
 
         * xsc.cpp
