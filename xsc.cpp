@@ -4,12 +4,11 @@
 
 #include <memory> // std::auto_ptr
 #include <iostream>
+#include <vector>
 
-#include <CCF/CompilerElements/FileSystem.hpp>
+#include "boost/program_options.hpp"
 
-#include <CCF/CodeGenerationKit/CommandLine.hpp>
-#include <CCF/CodeGenerationKit/CommandLineParser.hpp>
-#include <CCF/CodeGenerationKit/CommandLineDescriptor.hpp>
+#include <XSC/FileSystem.hpp>
 
 #include <XSC/Parser.hpp>
 
@@ -73,54 +72,32 @@ private:
   std::wostream& os_;
 };
 
+namespace po = boost::program_options;
+
 //
 // init_basic_commandline_description
 //
-int init_basic_commandline_description (CL::Description & d)
+void init_basic_commandline_description (po::options_description &desc)
 {
-  // We have to initialize the decription with the minimal amount
-  // of options, e.g., help options, before we can do any parsing.
-  d.add_option (CL::OptionDescription (
-                "help",
-                "Display usage information.\n\t\tUse --backend <name> "
-                "--help for backend-specific information.",
-                CL::OptionType::flag,
-                true));
-
-  d.add_option (CL::OptionDescription (
-                "help-html",
-                "Display usage information in HTML format.\n\t\tUse "
-                "--backend <name> --help for backend-specific information.",
-                CL::OptionType::flag,
-                true));
-
-  d.add_option (CL::OptionDescription (
-                "version",
-                "Display the version of XSC\n",
-                CL::OptionType::flag,
-                true));
-
-  d.add_option (CL::OptionDescription (
-                "trace",
-                "Trace parser actions. Useful for debugging.\n",
-                CL::OptionType::flag,
-                true));
-
-  d.add_option (CL::OptionDescription (
-                "backend",
-                "\tSelect backend to use.",
-                "\tcxx - C++ mapping\n"
-                "\t\t\tidl - CORBA IDL mapping\n",
-                CL::OptionType::value,
-                false));
-  
-  d.add_option (CL::OptionDescription ("search-path",
-                                       "\tAdd to search path",
-                                       "\tAdd a path to the list of those searched by XSC when opening an include.",
-                                       CL::OptionType::value,
-                                       false));
-  return 0;
+  desc.add_options ()
+    ("help", "Display usage information.  "
+     "Use --backend <name> for backend specific information")
+    ("version", "Display the current version of XSC")
+    ("trace", "Trace parser actions.  Useful for debugging")
+    ("backend", po::value<std::string> ()->default_value (""),
+     "Specify the backend to be used.  Valid options are cxx, idl")
+    ("search-path", po::value < std::vector<std::string> > (),
+     "Specify search paths for the compiler to use when resolving schema.")
+    
+    ;
+//   d.add_option (CL::OptionDescription (
+//                 "help-html",
+//                 "Display usage information in HTML format.\n\t\tUse "
+//                 "--backend <name> --help for backend-specific information.",
+//                 CL::OptionType::flag,
+//                 true));
 }
+
 
 //
 // main
@@ -136,65 +113,75 @@ int main (int argc, char* argv[])
     // implemenation of parse (...) thinks everthing thats not in the
     // description is a "argument" and not a "option" if it is found
     // on argv[].
-    CommandLine cl;
-    CL::Description basic_desc (argv[0]),
-                    complete_desc (argv[0]);
+    po::options_description basic_desc ("Basic Options"),
+      hidden_desc ("Hidden Options"),
+      cxx_desc ("CXX Backend Options"),
+      idl_desc ("IDL Backend Options");
+    
+    hidden_desc.add_options ()
+      ("input-file", po::value <std::string>  (), "Input schema");
 
     init_basic_commandline_description (basic_desc);
-    init_basic_commandline_description (complete_desc);
 
-    CXX_Generator::options (complete_desc);
-    IDL::Generator::options (complete_desc);
+    CXX_Generator::options (cxx_desc);
+    IDL::Generator::options (idl_desc);
 
     // Parse the command-line options.
-    if (!parse (argc, argv, complete_desc, cl))
-    {
-      wcerr << "command line syntax error" << endl;
-      wcerr << "try " << argv[0] << " --help for usage information" << endl;
-      return 1;
-    }
+    po::variables_map vm;
+    
+    try
+      {
+        po::options_description all_options;
+        all_options.add (basic_desc);
+        all_options.add (hidden_desc);
+        all_options.add (cxx_desc);
+        all_options.add (idl_desc);
+        
+        po::positional_options_description p;
+        p.add ("input-file", 1);
+        
+        po::store (po::command_line_parser (argc, argv).
+                   options(all_options).positional(p).run (), vm);
+        po::notify (vm);
+      }
+    catch (...)
+      {
+        wcerr << "command line syntax error" << endl;
+        wcerr << "try " << argv[0] << " --help for usage information" << endl;
+        return 1;
+      }
 
     // Display the version and then exit.
-    if (cl.get_value ("version", false))
+    if (vm.count("version"))
     {
       wcerr << "XML Schema compiler " << version << endl;
       return 0;
     }
 
-    std::string backend (cl.get_value ("backend", ""));
+    const std::string &backend (vm["backend"].as<std::string> ());
 
-    if (cl.get_value ("help", false) ||
-        cl.get_value ("help-html", false))
+    if (vm.count ("help"))
     {
-      // Fill in the basic description with the options for the
-      // specific backend.
-
+      // @todo: add positional argument.
       if (backend == "cxx")
-        CXX_Generator::options (basic_desc);
+        basic_desc.add (cxx_desc);
       else if (backend == "idl")
-        IDL::Generator::options (basic_desc);
-
-      // Add the argument to the command line options.
-      basic_desc.add_argument ("xml schema file");
-
-      // Write the output in the correct format.
-      if (cl.get_value ("help-html", false))
-        CL::print_html (std::cerr, basic_desc);
-      else
-        CL::print_text (std::cerr, basic_desc);
+        basic_desc.add (idl_desc);
+      
+      std::cerr << basic_desc;
 
       return 0;
     }
     
     // process search paths
-    std::vector <std::string> search_path_strings;
-    cl.get_all_values ("search-path",
-                       search_path_strings);
+    typedef std::vector <std::string> SearchPaths;
+    
+    const SearchPaths &search_path_strings (vm["search-path"].as <SearchPaths> ());
     
     Parser::Paths search_paths;
     search_paths.push_back (fs::path ());
     
-    for (std::vector <std::string>::const_iterator i = search_path_strings.begin ();
+    for (SearchPaths::const_iterator i = search_path_strings.begin ();
          i != search_path_strings.end ();
          ++i)
       {
@@ -204,15 +191,11 @@ int main (int argc, char* argv[])
           }
         catch (...)
           {
-            wcerr << "error: Nonexistaqnt search path supplied:" << i->c_str () << endl;
+            wcerr << "error: Nonexistant search path supplied:" << i->c_str () << endl;
             return -1;
           }
       }
     
-    // Set the default backend to CXX.
-    if (backend.empty ())
-      backend = "cxx";
-
     if (backend != "cxx" && backend != "idl")
     {
       wcerr << "unknown backend: " << backend.c_str () << endl;
@@ -220,9 +203,10 @@ int main (int argc, char* argv[])
       return 1;
     }
 
-    CommandLine::ArgumentsIterator i = cl.arguments_begin ();
+    const std::string argument (vm["input-file"].as<std::string> ());
+    
 
-    if (i == cl.arguments_end ())
+    if (argument == "")
     {
       wcerr << "error: no input file." << endl;
       return 1;
@@ -234,9 +218,9 @@ int main (int argc, char* argv[])
     //
     ErrorDetector detector (wcerr);
 
-    fs::path tu (*i);
+    fs::path tu (argument.c_str ());
     
-    Parser parser (cl.get_value ("trace", false), search_paths);
+    Parser parser (vm.count ("trace"), search_paths);
     auto_ptr <SemanticGraph::Schema> s (parser.parse (tu));
 
     if (detector.error ())
@@ -256,16 +240,20 @@ int main (int argc, char* argv[])
       }
       
       CXX_Generator cxx;
-      cxx.generate (cl, *s, tu);
+      cxx.generate (vm, *s, tu);
     }
     else if (backend == "idl")
     {
       IDL::Generator idl;
-      idl.generate (cl, *s, tu);
+      idl.generate (vm, *s, tu);
     }
 
     return 0;
   }
+  catch (boost::bad_any_cast &)
+    {
+      wcerr << "Bad program option" << endl;
+    }
   catch (...)
   {
     wcerr << "caught unknown exception" << endl;

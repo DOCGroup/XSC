@@ -8,9 +8,11 @@
 #include <map>
 #include <set>
 
-#include "CCF/CompilerElements/Introspection.hpp"
+#include "Utility/Introspection/Introspection.hpp"
 
 #include "XSC/SemanticGraph/Elements.hpp"
+
+namespace Introspection = Utility::Introspection;
 
 /*
 #include <iostream>

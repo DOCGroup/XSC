@@ -1,10 +1,9 @@
 // $Id:
 workspace {
   cmdline += -static -include .
-  //$(CIAO_ROOT)/CCF/CCF/CodeGenerationKit
-  //$(CIAO_ROOT)/CCF/CCF/CompilerElements
   ./XSC
   ./CXX
   ./IDL
+  ./contrib/Utility.mpc
   XSC.mpc
 }

@@ -37,6 +37,7 @@ using std::endl;
 using std::wcerr;
 
 using namespace XSC::SemanticGraph;
+namespace po = boost::program_options;
 
 namespace
 {
@@ -50,197 +51,96 @@ namespace
 }
 
 void CXX_Generator::
-options (CL::Description& d)
+options (po::options_description& d)
 {
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-char-type",
-                  "type-name",
-                  "Generate code using provided character type "
-                  "instead of default `wchar_t'.",
-                  CL::OptionType::value,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-generate-writer-types",
-                  "Generate code for un-parsing document back to DOM "
-                  "which, in turn, can be serialized to a file.",
-                  CL::OptionType::flag,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-generate-extended-rtti",
-                  "Generate extended run-time type information.",
-                  CL::OptionType::flag,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-generate-traversal-types",
-                  "Generate traversal types that implement visitor-style "
-                  "traversal of the graph. Usually useful for performing "
-                  "operations on complex recursive and/or dynamically-typed "
-                  "(ID/IDREF) graphs.",
-                  CL::OptionType::flag,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-generate-inline",
-                  "Generate inline implementation for certain functions.",
-                  CL::OptionType::flag,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-namespace-regex",
-                  "/pattern/replacement/",
-                  "Add provided regular expression to the list "
-                  "of regular expressions used to translate XML Schema "
-                  "namespace names to C++ namespace names. The first "
-                  "successful substitution is used. The last specified "
-                  "expression is considered first.",
-                  CL::OptionType::value,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-header-suffix",
-                  "suffix",
-                  "Use provided suffix instead of default `.hpp' "
-                  "when constructing the name of the header file.",
-                  CL::OptionType::value,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-inline-suffix",
-                  "suffix",
-                  "Use provided suffix instead of default `.ipp' "
-                  "when constructing the name of the inline file.",
-                  CL::OptionType::value,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-source-suffix",
-                  "suffix",
-                  "Use provided suffix instead of default `.cpp' "
-                  "when constructing the name of the source file.",
-                  CL::OptionType::value,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-header-regex",
-                  "/pattern/replacement/",
-                  "Use provided regular expression when constructing "
-                  "the name of the header file.",
-                  CL::OptionType::value,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-inline-regex",
-                  "/pattern/replacement/",
-                  "Use provided regular expression when constructing "
-                  "the name of the inline file.",
-                  CL::OptionType::value,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-source-regex",
-                  "/pattern/replacement/",
-                  "Use provided regular expression when constructing "
-                  "the name of the source file.",
-                  CL::OptionType::value,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-banner-file",
-                  "file-name",
-                  "Copy provided banner at the beginning of every generated "
-                  "file for which file-specific banner is not provided.",
-                  CL::OptionType::value,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-header-banner-file",
-                  "file-name",
-                  "Copy provided banner at the beginning of the header file.",
-                  CL::OptionType::value,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-inline-banner-file",
-                  "file-name",
-                  "Copy provided banner at the beginning of the inline file.",
-                  CL::OptionType::value,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-source-banner-file",
-                  "file-name",
-                  "Copy provided banner at the beginning of the source file.",
-                  CL::OptionType::value,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-export-symbol",
-                  "symbol",
-                  "Export symbol for Win32 DLL export/import control.",
-                  CL::OptionType::value,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                  "cxx-export-header",
-                  "header",
-                  "Export header for Win32 DLL export/import control.",
-                  CL::OptionType::value,
-                  true));
+  
+  d.add_options ()
+    ("cxx-char-type", po::value<std::string> ()->default_value ("wchar_t"),
+     "Generate code using provided character type instead of wchar_t.")
+    ("cxx-generate-writer-types", 
+     "Generate code for serializing documents back to DOM.")
+    ("cxx-generate-extended-rtti",
+     "Generate extended run-time type identification")
+    ("cxx-generate-traversal-types",
+     "Generate traversal types that implement visitor-style "
+     "traversal of the graph. Usually useful for performing "
+     "operations on complex recursive and/or dynamically-typed "
+     "(ID/IDREF) graphs.")
+    ("cxx-generate-inline",
+     "Generate inline implementation for certain functions.")
+    ("cxx-namespace-regex", po::value< std::vector<std::string> > (),
+     "Add provided regular expression of the form /pattern/replacement/ to the list "
+     "of regular expressions used to translate XML Schema "
+     "namespace names to C++ namespace names. The first "
+     "successful substitution is used. The last specified "
+     "expression is considered first.")
+    ("cxx-header-suffix", po::value<std::string> ()->default_value (".hpp"),
+     "Use provided suffix instead of default `.hpp' "
+     "when constructing the name of the header file.")
+    ("cxx-inline-suffix", po::value<std::string> ()->default_value (".ipp"),
+     "Use provided suffix instead of default `.ipp' "
+     "when constructing the name of the inline file.")
+    ("cxx-source-suffix", po::value<std::string> ()->default_value (".cpp"),
+     "Use provided suffix instead of default `.cpp' "
+     "when constructing the name of the source file.")
+    ("cxx-header-regex", po::value<std::string> ()->default_value ("/\\..*$//"),
+     "Use provided regular expression of the form /pattern/replacement/ when constructing "
+     "the name of the header file.")
+    ("cxx-inline-regex", po::value<std::string> ()->default_value ("/\\..*$//"),
+     "Use provided regular expression of the form /pattern/replacemsnet when constructing "
+     "the name of the inline file.")
+    ("cxx-source-regex", po::value<std::string> ()->default_value ("/\\..*$//"),
+     "Use provided regular expression of the form /pattern/replacement/ when constructing "
+     "the name of the source file.")
+    ("cxx-banner-file", po::value<std::string> ()->default_value (""),
+     "Copy provided banner at the beginning of every generated "
+     "file for which file-specific banner is not provided.")
+    ("cxx-header-banner-file", po::value<std::string> ()->default_value (""),
+     "Copy provided banner at the beginning of the header file.")
+    ("cxx-inline-banner-file", po::value<std::string> ()->default_value (""),
+     "Copy provided banner at the beginning of the inline file.")
+    ("cxx-source-banner-file", po::value<std::string> ()->default_value (""),
+     "Copy provided banner at the beginning of the source file.")
+    ("cxx-export-symbol", po::value<std::string> ()->default_value (""),
+     "Export symbol for Win32 DLL export/import control.")
+    ("cxx-export-header", po::value<std::string> ()->default_value (""),
+     "Export header for Win32 DLL export/import control.")
+    ("cxx-enable-random-access-sequences",
+     "Generate code that allows random access to "
+     "sequence elements.  Trades off with less efficient"
+     "parsing.")
 
   // -- cdr insertion and extraction
-  d.add_option (CL::OptionDescription (
-                  "cxx-generate-cdr-writer-types",
-		  "Generate code for writing types onto "
-                  "CDR streams.",
-                  CL::OptionType::flag,
-                  true));
-  
-  d.add_option (CL::OptionDescription (
-		  "cxx-generate-cdr-reader-types",
-		  "Generate code for reading types from "
-                  "CDR streams.",
-                  CL::OptionType::flag,
-                  true));
-
-  d.add_option (CL::OptionDescription (
-                   "cxx-enable-random-access-sequences",
-                   "Generate code that allows random access to "
-                   "sequence elements.  Trades off with less efficient"
-                   "parsing.",
-                   CL::OptionType::flag,
-                   true));
+    ("cxx-generate-cdr-writer-types",
+     "Generate code for writing types onto "
+     "CDR streams.")
+    ("cxx-generate-cdr-reader-types",
+     "Generate code for reading types from "
+     "CDR streams.")
+    ;
 }
 
 void CXX_Generator::
-generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
+generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path)
 {
   std::string name (file_path.leaf ());
 
-  std::string hxx_suffix (cl.get_value ("cxx-header-suffix", ".hpp"));
-  std::string ixx_suffix (cl.get_value ("cxx-inline-suffix", ".ipp"));
-  std::string cxx_suffix (cl.get_value ("cxx-source-suffix", ".cpp"));
+  std::string hxx_suffix (vm["cxx-header-suffix"].as<std::string> ());
+  std::string ixx_suffix (vm["cxx-inline-suffix"].as<std::string> ());
+  std::string cxx_suffix (vm["cxx-source-suffix"].as<std::string> ());
 
-  std::string hxx_expr (
-    cl.get_value ("cxx-header-regex", "/(\\..+)$/" + hxx_suffix + "/"));
-
-  std::string ixx_expr (
-    cl.get_value ("cxx-inline-regex", "/(\\..+)$/" + ixx_suffix + "/"));
-
-  std::string cxx_expr (
-    cl.get_value ("cxx-source-regex", "/(\\..+)$/" + cxx_suffix + "/"));
+  std::string hxx_expr (vm["cxx-header-regex"].as<std::string> ());
+  std::string ixx_expr (vm["cxx-inline-regex"].as<std::string> ());
+  std::string cxx_expr (vm["cxx-source-regex"].as<std::string> ());
 
   
   std::string hxx_name (regex::perl_s (name, hxx_expr));
   std::string ixx_name (regex::perl_s (name, ixx_expr));
   std::string cxx_name (regex::perl_s (name, cxx_expr));
   
-  fs::path hxx_path (hxx_name);
-  fs::path ixx_path (ixx_name);
-  fs::path cxx_path (cxx_name);
+  fs::path hxx_path (hxx_name + hxx_suffix);
+  fs::path ixx_path (ixx_name + ixx_suffix);
+  fs::path cxx_path (cxx_name + cxx_suffix);
 
   fs::wofstream hxx (hxx_path, std::ios_base::out);
   fs::wofstream ixx;
@@ -253,7 +153,7 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
     return;
   }
 
-  bool inline_ (cl.get_value ("cxx-generate-inline", false));
+  bool inline_ (vm.count ("cxx-generate-inline"));
 
   if (inline_)
   {
@@ -273,13 +173,14 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
           << endl;
     return;
   }
-
+  
   // Banner.
   //
   {
     using namespace std;
 
-    std::string name (cl.get_value ("cxx-banner-file", ""));
+    std::string name (vm["cxx-banner-file"].as<std::string> ());
+    
     fs::wifstream banner;
 
     if (!name.empty ())
@@ -297,7 +198,7 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
     // header
     //
     {
-      std::string bn (cl.get_value ("cxx-header-banner-file", ""));
+      std::string bn (vm["cxx-header-banner-file"].as<std::string> ());
 
       if (!bn.empty ())
       {
@@ -323,7 +224,7 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
     //
     if (inline_)
     {
-      std::string bn (cl.get_value ("cxx-inline-banner-file", ""));
+      std::string bn (vm["cxx-inline-banner-file"].as<std::string> ());
 
       if (!bn.empty ())
       {
@@ -348,37 +249,37 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
     // source
     //
     {
-      std::string bn (cl.get_value ("cxx-source-banner-file", ""));
-
+      std::string bn (vm["cxx-header-banner-file"].as<std::string> ());
+      
       if (!bn.empty ())
-      {
-        fs::wifstream b (bn, ios_base::in | ios_base::binary);
-
-        if (!b.is_open ())
         {
-          wcerr << bn.c_str () << ": error: unable to open in read mode"
-                << endl;
-          return;
-        }
+          fs::wifstream b (bn, ios_base::in | ios_base::binary);
+          
+          if (!b.is_open ())
+            {
+              wcerr << bn.c_str () << ": error: unable to open in read mode"
+                    << endl;
+              return;
+            }
 
-        cxx << b.rdbuf ();
-      }
+          cxx << b.rdbuf ();
+        }
       else if (banner.is_open ())
-      {
-        cxx << banner.rdbuf ();
-        banner.seekg (0, ios_base::beg);
-      }
+        {
+          cxx << banner.rdbuf ();
+          banner.seekg (0, ios_base::beg);
+        }
     }
   }
-
-
+  
+  
   //
   //
   string char_type;
 
   {
     std::wostringstream ostr;
-    ostr << cl.get_value ("cxx-char-type", "wchar_t").c_str ();
+    ostr << vm["cxx-char-type"].as <std::string> ().c_str ();
 
     char_type = ostr.str ();
   }
@@ -390,22 +291,22 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
   Indentation::Implanter<Indentation::Cxx, wchar_t> ixx_guard (ixx);
   Indentation::Implanter<Indentation::Cxx, wchar_t> cxx_guard (cxx);
 
-  bool writer (cl.get_value ("cxx-generate-writer-types", false));
+  bool writer (vm.count ("cxx-generate-writer-types"));
 
-  bool traversal (cl.get_value ("cxx-generate-traversal-types", false) ||
+  bool traversal (vm.count ("cxx-generate-traversal-types") ||
                   writer);
 
-  bool rtti (cl.get_value ("cxx-generate-extended-rtti", false) ||
+  bool rtti (vm.count ("cxx-generate-extended-rtti") ||
              traversal);
 
   // Check if cdr reader/writer options are set
-  bool cdr_reader (cl.get_value ("cxx-generate-cdr-reader-types", false));
-  bool cdr_writer (cl.get_value ("cxx-generate-cdr-writer-types", false));
+  bool cdr_reader (vm.count ("cxx-generate-cdr-reader-types"));
+  bool cdr_writer (vm.count ("cxx-generate-cdr-writer-types"));
 
   // Check about random access sequences
-  bool ra_sequences (cl.get_value ("cxx-enable-random-access-sequences", false));
-  
-  Context::NamespaceMapping nsm;
+  bool ra_sequences (vm.count ("cxx-enable-random-access-sequences"));
+
+  NamespaceMapping nsm;
 
   // Default mapping.
   //
@@ -413,25 +314,23 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
 
   // Custom mappings.
   //
-  for (CommandLine::OptionsIterator
-         i (cl.options_begin ()), e (cl.options_end ()); i != e; ++i)
-  {
-    if (i->name () == "cxx-namespace-regex")
+  const std::vector<std::string> &custom_nsm 
+    (vm["cxx-namespace-regex"].as< std::vector <std::string> > ());
+  
+  for (std::vector<std::string>::const_iterator i = custom_nsm.begin ();
+       i != custom_nsm.end (); ++i)
     {
-      std::wostringstream ostr;
-      ostr << i->value ().c_str ();
-
-      nsm.push_back (ostr.str ());
+      std::wostringstream o;
+      o << i->c_str ();
+      nsm.push_back (o.str ());
     }
-  }
 
   // Export symbol
   //
   string export_symbol;
   {
-    std::string tmp (cl.get_value ("cxx-export-symbol", ""));
     std::wostringstream o;
-    o << tmp.c_str ();
+    o << vm["cxx-export-symbol"].as<std::string> ().c_str ();
     export_symbol = o.str ();
   }
 
@@ -458,7 +357,7 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
   
   // Export header file
   {
-    std::string tmp (cl.get_value ("cxx-export-header", ""));
+    std::string tmp (vm["cxx-export-header"].as<std::string> ());
     
     if (tmp != "")
       {
@@ -467,7 +366,7 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
   }
   
   {
-    Context ctx (hxx, char_type, export_symbol, nsm);
+    ::Context ctx (hxx, char_type, export_symbol, nsm);
 
     // Add information to generate reader/writer types
     ctx.cdr_reader_generation (cdr_reader);
@@ -505,7 +404,7 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
   //
   if (inline_)
   {
-    Context ctx (ixx, char_type, export_symbol, nsm);
+    ::Context ctx (ixx, char_type, export_symbol, nsm);
 
     // Add information to generate reader/writer types
     ctx.cdr_reader_generation (cdr_reader);
@@ -524,7 +423,7 @@ generate (CommandLine const& cl, Schema& schema, fs::path const& file_path)
       << endl;
 
   {
-    Context ctx (cxx, char_type, export_symbol, nsm);
+    ::Context ctx (cxx, char_type, export_symbol, nsm);
 
     // Add information to generate reader/writer types
     ctx.cdr_reader_generation (cdr_reader);

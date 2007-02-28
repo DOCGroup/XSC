@@ -153,7 +153,7 @@ namespace
        // Convert it to its base type. This will
   // have an operator << defined to
   // serialize this type
-  os << "stream << static_cast < const Base__& > (*this);" << endl;
+  os << "stream << static_cast < const Base& > (*this);" << endl;
     }
 
     // Helper method implementation
@@ -944,7 +944,7 @@ namespace
 
       os << scope << "::" << endl
          << name << " (" << xml_element_type << " const& e)" << endl
-         << ":" << "Base__ (e), regulator__ ()"
+         << ":" << "Base (e), regulator__ ()"
          << "{"
          << endl;
     }
@@ -1150,7 +1150,7 @@ namespace
       os << scope << "::" << endl
          << name << " (" << xml_attribute_type << " const& a)" << endl
          << ":" << endl
-         << "Base__ (a)," << endl
+         << "Base (a)," << endl
          << "regulator__ ()"
          << "{";
     }

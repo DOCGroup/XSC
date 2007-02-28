@@ -19,12 +19,14 @@ using std::endl;
 
 typedef std::wstring string;
 
+typedef std::vector<string> NamespaceMapping;
+
 //
 //
 class Context
 {
 public:
-  typedef std::vector<string> NamespaceMapping;
+
 
 public:
   Context (std::wostream& o,

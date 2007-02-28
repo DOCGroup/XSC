@@ -35,8 +35,8 @@ namespace
 
       os << " : public " << name
          << "{"
-         << "//@@ VC6 anathema" << endl
-         << "typedef " << name << " Base__;"
+        //         << "//@@ VC6 anathema" << endl
+         << "typedef " << name << " Base;"
          << endl;
 
     }
@@ -321,8 +321,8 @@ namespace
     {
       os << " : public ::XSCRT::Type"
          << "{"
-         << "//@@ VC6 anathema" << endl
-         << "typedef ::XSCRT::Type Base__;"
+        //         << "//@@ VC6 anathema" << endl
+         << "typedef ::XSCRT::Type Base;"
          << endl;
     }
 
@@ -528,12 +528,23 @@ namespace
     virtual void
     traverse (Type& e)
     {
-      os << id (e.name ()) << "_l,";
+      if (!first_)
+        {
+          os << ", ";
+        }
+      else first_ = false;
+
+      os << id (e.name ()) << "_l";
     }
-
-
+    
+    void reset (void)
+    {
+      first_ = true;
+    }
+    
   private:
-
+    /// Controls how commas are printed in the enumeration list.
+    bool first_;
   };
 
   struct Enumeration : Traversal::Enumeration, protected virtual Context
@@ -576,7 +587,8 @@ namespace
 
       os << "enum Value"
          << "{";
-
+      
+      label_.reset ();
       names (e, names_labels_);
 
       os << endl << "};"
@@ -606,42 +618,42 @@ namespace
       bool reader = 0;
       if (this->cdr_reader_generation_)
       {
-  os << "// read " << endl
-     << "//" << endl;
-  reader = 1;
-
-  os << "public:" << endl;
-  os << "static bool " << endl
-     << "read_" << name
-     << " (::XMLSchema::CDR_InputStream &,"
-     << endl;
-
-  for (size_t j =0; j < name.length () + 5; j++)
-    os << " ";
-
-  os << " ::XMLSchema::cdr_arg_traits < " << name
-     << " >::inout_type);" << endl;
+        os << "// read " << endl
+           << "//" << endl;
+        reader = 1;
+        
+        os << "public:" << endl;
+        os << "static bool " << endl
+           << "read_" << name
+           << " (::XMLSchema::CDR_InputStream &,"
+           << endl;
+        
+        for (size_t j =0; j < name.length () + 5; j++)
+          os << " ";
+        
+        os << " ::XMLSchema::cdr_arg_traits < " << name
+           << " >::inout_type);" << endl;
       }
-
+      
       // CDR Extraction Operators
       if (this->cdr_writer_generation_enabled ())
-      {
-  if (!reader)
-    os << "public:" << endl;
-
-  os << "// write " << endl
-     << "//" << endl
-     << "bool" << endl
-     << "write_" << name
-     << " (::XMLSchema::CDR_OutputStream &) const;"
-     << endl;
-      }
-
+        {
+          if (!reader)
+            os << "public:" << endl;
+          
+          os << "// write " << endl
+             << "//" << endl
+             << "bool" << endl
+             << "write_" << name
+             << " (::XMLSchema::CDR_OutputStream &) const;"
+             << endl;
+        }
+      
       leave_scope ();
-
+      
       // End of class
       os << "};";
-
+      
       os << "bool " << ex
          << "operator== (" << name << " const &a, " << name << " const &b);"
          << endl;
@@ -651,25 +663,25 @@ namespace
          << endl;
 
       if (this->cdr_reader_generation_)
-  os << "extern bool" << endl
-     << "operator >> (::XMLSchema::CDR_InputStream &,"
-     << endl
-     << "             ::XMLSchema::cdr_arg_traits < "
-     << name << " >::inout_type);";
-
+        os << "extern bool" << endl
+           << "operator >> (::XMLSchema::CDR_InputStream &,"
+           << endl
+           << "             ::XMLSchema::cdr_arg_traits < "
+           << name << " >::inout_type);";
+      
       if (this->cdr_writer_generation_enabled ())
-  os << "extern bool" << endl
-     << "operator << (::XMLSchema::CDR_OutputStream &,"
-     << endl
-     << "             ::XMLSchema::cdr_arg_traits < "
-     << name << " >::in_type);" << endl;
+        os << "extern bool" << endl
+           << "operator << (::XMLSchema::CDR_OutputStream &,"
+           << endl
+           << "             ::XMLSchema::cdr_arg_traits < "
+           << name << " >::in_type);" << endl;
       else
-  os << endl;
+        os << endl;
     }
   private:
     string name;
     string ex;
-
+    
     Enumerator enumerator_;
     Traversal::Names names_enumerators_;
 

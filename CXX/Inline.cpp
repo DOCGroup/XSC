@@ -539,19 +539,19 @@ namespace
       virtual void
       traverse (SemanticGraph::Type&)
       {
-        os << "Base__ (b__)," << endl;
+        os << "Base (b__)," << endl;
       }
 
       virtual void
       traverse (SemanticGraph::Enumeration&)
       {
-        os << "Base__ (b__)," << endl;
+        os << "Base (b__)," << endl;
       }
 
       void
       traverse (SemanticGraph::Complex& c)
       {
-  os << "Base__ (";
+        os << "Base (";
 
         args_.traverse (c);
 
@@ -732,7 +732,7 @@ namespace
       virtual void
       traverse (SemanticGraph::Type&)
       {
-        os << "Base__ (s)," << endl;
+        os << "Base (s)," << endl;
       }
 
       virtual void
@@ -875,8 +875,8 @@ namespace
       virtual void
       traverse (SemanticGraph::Type&)
       {
-        os << "static_cast< Base__& > (*this) = "
-           << "static_cast< Base__ const& > (s);"
+        os << "static_cast< Base& > (*this) = "
+           << "static_cast< Base const& > (s);"
            << endl;
       }
 

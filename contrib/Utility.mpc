@@ -1,6 +1,8 @@
 project (Utility) {
        staticname = Utility
        includes += ./utility       
+       libout = $(XSC_ROOT)/lib
+
        Source_Files {
            ./utility/Utility/Introspection
        }

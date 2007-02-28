@@ -5,7 +5,7 @@
 #ifndef XSC_SEMANTIC_GRAPH_SCHEMA_HXX
 #define XSC_SEMANTIC_GRAPH_SCHEMA_HXX
 
-#include "CCF/CompilerElements/FileSystem.hpp"
+#include <CCF/CompilerElements/FileSystem.hpp>
 
 #include <XSC/SemanticGraph/Elements.hpp>
 #include <XSC/SemanticGraph/Namespace.hpp>

@@ -5,13 +5,13 @@
 #ifndef IDL_GENERATOR_HPP
 #define IDL_GENERATOR_HPP
 
-#include "CCF/CompilerElements/FileSystem.hpp"
-#include "CCF/CodeGenerationKit/CommandLine.hpp"
-#include "CCF/CodeGenerationKit/CommandLineDescriptor.hpp"
+#include <CCF/CompilerElements/FileSystem.hpp>
 
 //@@ SemanticGraphFwd could be useful here.
 //
 #include "XSC/SemanticGraph.hpp"
+
+#include "boost/program_options.hpp"
 
 namespace IDL
 {
@@ -19,11 +19,11 @@ namespace IDL
   {
   public:
     static void
-    options (CL::Description& d);
-
-
+    options (boost::program_options::options_description &d);
+    
+    
     void
-    generate (CommandLine const& cl,
+    generate (boost::program_options::variables_map const& vm,
               XSC::SemanticGraph::Schema&,
               fs::path const& file);
   };

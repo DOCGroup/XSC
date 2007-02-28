@@ -1,3 +1,29 @@
+Wed Feb 28 13:01:34 UTC 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
+
+        * CXX/Source.cpp
+        * CXX/Inline.cpp
+        * CXX/Header.cpp
+
+          Various compile error/warning fixes in generated code.
+        
+        * XSC.mwc
+        * XSC/Traversal/Elements.hpp
+        * XSC/SemanticGraph/Schema.hpp
+        * XSC/SemanticGraph/Elements.hpp
+        * contrib/Utility.mpc
+        * CXX/Elements.hpp
+        * CXX/Generator.cpp
+        * CXX/Generator.hpp
+        * IDL/Generator.cpp
+        * IDL/Generator.hpp
+        * xsc.mpb
+        * XSC.mpc
+        * xsc.cpp
+        
+          Changes to support 1) removal of link-time dependancy on 
+          CCF, 2) use of boost program options instead of command line
+          parser from CCF.
+        
 Wed Feb 28 03:11:47 UTC 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
 
         * contrib

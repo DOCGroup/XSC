@@ -6,11 +6,11 @@ project(XSC): xsc, xerces {
 
   requires += exceptions
 
-  after    += libXSC libCXX libIDL CodeGenerationKit CompilerElements
+  after    += libXSC libCXX libIDL 
   includes += .
 
   libpaths += ./XSC ./CXX ./IDL
-  libs     += CXX IDL XSC CodeGenerationKit CompilerElements
+  libs     += CXX IDL XSC 
 
   Source_Files {
     xsc.cpp

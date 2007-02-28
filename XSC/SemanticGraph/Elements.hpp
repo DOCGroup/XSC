@@ -8,11 +8,12 @@
 #include <string>
 
 #include <XSC/SemanticGraph/Graph.hpp>
+#include <XSC/SemanticGraph/Context.hpp>
 
-#include <CCF/CompilerElements/Introspection.hpp>
-#include <CCF/CompilerElements/Context.hpp>
+#include <Utility/Introspection/Introspection.hpp>
 
-namespace CompilerElements = CCF::CompilerElements;
+
+namespace Introspection = Utility::Introspection;
 
 namespace XSC
 {
@@ -31,13 +32,13 @@ namespace XSC
     class Edge : public virtual Introspection::Object
     {
     public:
-      CompilerElements::Context const&
+      Context const&
       context () const
       {
         return context_;
       }
 
-      CompilerElements::Context&
+      Context&
       context ()
       {
         return context_;
@@ -62,7 +63,7 @@ namespace XSC
       }
 
     private:
-      CompilerElements::Context context_;
+      Context context_;
     };
 
     inline bool
@@ -75,13 +76,13 @@ namespace XSC
     class Node : public virtual Introspection::Object
     {
     public:
-      CompilerElements::Context const&
+      Context const&
       context () const
       {
         return context_;
       }
 
-      CompilerElements::Context&
+      Context&
       context ()
       {
         return context_;
@@ -120,7 +121,7 @@ namespace XSC
       }
 
     private:
-      CompilerElements::Context context_;
+      Context context_;
     };
 
     inline bool
