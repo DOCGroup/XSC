@@ -1,0 +1,7 @@
+project (Utility) {
+       staticname = Utility
+       includes += ./utility       
+       Source_Files {
+           ./utility/Utility/Introspection
+       }
+}
