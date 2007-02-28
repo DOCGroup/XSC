@@ -1,3 +1,9 @@
+Wed Feb 28 14:32:25 UTC 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
+
+        * XSC/SemanticGraph/Context.hpp
+        
+          Missing from previous commit.
+
 Wed Feb 28 13:01:34 UTC 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
 
         * CXX/Source.cpp
