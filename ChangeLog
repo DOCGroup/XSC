@@ -1,3 +1,9 @@
+Thu Mar  1 00:45:49 UTC 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
+
+        * xsc.cpp
+         
+          Fixed an incorrect include.
+
 Wed Feb 28 14:32:25 UTC 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
 
         * XSC/SemanticGraph/Context.hpp

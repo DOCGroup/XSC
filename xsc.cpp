@@ -8,7 +8,7 @@
 
 #include "boost/program_options.hpp"
 
-#include <XSC/FileSystem.hpp>
+#include <CCF/CompilerElements/FileSystem.hpp>
 
 #include <XSC/Parser.hpp>
 
