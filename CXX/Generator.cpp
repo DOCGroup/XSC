@@ -134,13 +134,13 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   std::string cxx_expr (vm["cxx-source-regex"].as<std::string> ());
 
   
-  std::string hxx_name (regex::perl_s (name, hxx_expr));
-  std::string ixx_name (regex::perl_s (name, ixx_expr));
-  std::string cxx_name (regex::perl_s (name, cxx_expr));
+  std::string hxx_name (regex::perl_s (name, hxx_expr) + hxx_suffix);
+  std::string ixx_name (regex::perl_s (name, ixx_expr) + ixx_suffix);
+  std::string cxx_name (regex::perl_s (name, cxx_expr) + cxx_suffix);
   
-  fs::path hxx_path (hxx_name + hxx_suffix);
-  fs::path ixx_path (ixx_name + ixx_suffix);
-  fs::path cxx_path (cxx_name + cxx_suffix);
+  fs::path hxx_path (hxx_name);
+  fs::path ixx_path (ixx_name);
+  fs::path cxx_path (cxx_name);
 
   fs::wofstream hxx (hxx_path, std::ios_base::out);
   fs::wofstream ixx;
@@ -367,16 +367,19 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   
   {
     ::Context ctx (hxx, char_type, export_symbol, nsm);
-
+    
+    ctx.hxx_expr = hxx_expr.c_str ();
+    ctx.hxx_suffix = hxx_suffix.c_str ();
+    
     // Add information to generate reader/writer types
     ctx.cdr_reader_generation (cdr_reader);
     ctx.cdr_writer_generation (cdr_writer);
     
     // Add additional information to the context:
     ctx.generate_ra_sequences (ra_sequences);
-    
+
     generate_forward (ctx, schema);
-    generate_header (ctx, schema, hxx_expr); //@@ move expr to ctx
+    generate_header (ctx, schema); //@@ move expr to ctx
 
     generate_parser_header (ctx, schema);
 

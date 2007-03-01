@@ -782,15 +782,23 @@ namespace XSC
 
     if (!enum_)
       {
-        Complex& node (root_schema_->new_node<Complex> ());
-        set_type<Inherits> (r[L"base"], r, node);
+        //Complex& node (root_schema_->new_node<Complex> ());
+        //
+        //set_type<Inherits> (r[L"base"], r, node);
 
+        // base is likely a fundamental type?
+        string type (r[L"base"]);
+        string ns_name (XML::ns_name (r, type));
+        string uq_name (XML::uq_name (type));
+        
+        Type &t (resolve<Type> (ns_name, uq_name, *root_schema_));
+        
         if (string name = r.parent ()[L"name"])
           {
-            root_schema_->new_edge<Names> (scope (), node, name);
+            root_schema_->new_edge<Names> (scope (), t, name);
           }
 
-        rv = &node;
+        rv = &t;
       }
 
     pop ();

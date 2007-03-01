@@ -10,7 +10,6 @@
 
 void
 generate_header (Context&,
-                 SemanticGraph::Schema&,
-                 std::string const& expr);
+                 SemanticGraph::Schema&);
 
 #endif  // CXX_HEADER_HXX

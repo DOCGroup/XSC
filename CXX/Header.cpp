@@ -735,8 +735,8 @@ namespace
                     Traversal::Includes,
                     protected virtual Context
   {
-    Includes (Context& c, std::string const& expr)
-        : Context (c), expr_ (expr)
+    Includes (Context& c)
+        : Context (c)
     {
     }
 
@@ -755,7 +755,8 @@ namespace
     virtual void
     traverse (fs::path const& f)
     {
-      std::string name (regex::perl_s (f.string (), expr_));
+      std::string name (regex::perl_s (f.string (), hxx_expr.c_str ()));
+      name += hxx_suffix;
 
       os << "#include \"" << name.c_str () << "\"" << endl
          << endl;
@@ -768,8 +769,7 @@ namespace
 
 void
 generate_header (Context& ctx,
-                 SemanticGraph::Schema& schema,
-                 std::string const& expr)
+                 SemanticGraph::Schema& schema)
 {
   ctx.os << "#include <memory>" << endl;
 
@@ -780,7 +780,7 @@ generate_header (Context& ctx,
 
   ctx.os << "#include \"XMLSchema/Types.hpp\"" << endl
          << endl;
-
+  
   // -- Include CDR Type headers if cdr generation is
   // enabled
   if (ctx.cdr_reader_generation_enabled () ||
@@ -791,7 +791,7 @@ generate_header (Context& ctx,
   Traversal::Schema traverser;
 
   Traversal::Sources sources;
-  Includes includes (ctx, expr);
+  Includes includes (ctx);
   Traversal::Names schema_names;
 
   Namespace ns (ctx);

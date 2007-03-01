@@ -1,3 +1,21 @@
+Thu Mar  1 07:12:19 UTC 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
+
+        * XSC/SemanticGraph/Fundamental.hpp
+        * XSC/Parser.cpp
+        
+          Fixed bug whereby restrictions inside simple types would be
+          interpreted as both complex types and simple types, messing up
+          generated code. 
+        
+        * CXX/Elements.hpp
+        * CXX/Generator.cpp
+        * CXX/Header.cpp
+        * CXX/Header.hpp
+
+          Fixed suble bug that arose as a result of the migration to 
+          boost::program_options, causing header file names to be improperly
+          generated for include guards and includes.
+        
 Thu Mar  1 00:45:49 UTC 2007  William R. Otte  <wotte@dre.vanderbilt.edu>
 
         * xsc.cpp

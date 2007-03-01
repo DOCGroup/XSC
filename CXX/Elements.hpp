@@ -59,7 +59,11 @@ public:
         ns_mapping_ (ns_mapping),
 	cdr_reader_generation_(0),
 	cdr_writer_generation_(0),
-        generate_ra_sequences_ (false)
+        generate_ra_sequences_ (false),
+        hxx_expr_ (),
+        hxx_expr (hxx_expr_),
+        hxx_suffix_ (),
+        hxx_suffix (hxx_suffix_)
   {
   }
 
@@ -82,7 +86,9 @@ protected:
         ns_mapping_ (c.ns_mapping_),
         cdr_reader_generation_ (c.cdr_reader_generation_),
 	cdr_writer_generation_ (c.cdr_writer_generation_),
-        generate_ra_sequences_ (c.generate_ra_sequences_)
+        generate_ra_sequences_ (c.generate_ra_sequences_),
+        hxx_expr (c.hxx_expr),
+        hxx_suffix (c.hxx_suffix)
   {
   }
 
@@ -220,6 +226,9 @@ public:
   string& xml_attribute_type;
 
   string& esymbol;
+  
+  std::string &hxx_expr;
+  std::string &hxx_suffix;
 
 private:
   string scope_;
@@ -230,7 +239,10 @@ private:
   string parser_type_;
   string xml_element_type_;
   string xml_attribute_type_;
-
+  
+  std::string hxx_expr_;
+  std::string hxx_suffix_;
+  
   string esymbol_;
 
   typedef

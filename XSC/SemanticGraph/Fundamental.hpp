@@ -24,6 +24,8 @@ namespace XSC
         static_type_info ();
 
     protected:
+      friend class Graph<Node, Edge>;
+      
       FundamentalType ()
       {
         type_info (static_type_info ());
