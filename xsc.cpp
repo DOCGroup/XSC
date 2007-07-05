@@ -144,11 +144,16 @@ int main (int argc, char* argv[])
                    options(all_options).positional(p).run (), vm);
         po::notify (vm);
       }
-    catch (...)
+    catch (po::error &ex)
       {
-        wcerr << "command line syntax error" << endl;
+        wcerr << "command line syntax error: " << ex.what () << endl;
         wcerr << "try " << argv[0] << " --help for usage information" << endl;
         return 1;
+      }
+    catch (...)
+      {
+	wcerr << "unexpected po exception" << endl;
+	return 1;
       }
 
     // Display the version and then exit.
@@ -176,26 +181,30 @@ int main (int argc, char* argv[])
     // process search paths
     typedef std::vector <std::string> SearchPaths;
     
-    const SearchPaths &search_path_strings (vm["search-path"].as <SearchPaths> ());
-    
+
     Parser::Paths search_paths;
     search_paths.push_back (fs::path ());
     
-    for (SearchPaths::const_iterator i = search_path_strings.begin ();
-         i != search_path_strings.end ();
-         ++i)
+    if (vm.count ("search-path"))
       {
-        try
-          {
-            search_paths.push_back (fs::path (*i, fs::native));
-          }
-        catch (...)
-          {
-            wcerr << "error: Nonexistant search path supplied:" << i->c_str () << endl;
-            return -1;
-          }
+	const SearchPaths &search_path_strings (vm["search-path"].as <SearchPaths> ());
+	
+	for (SearchPaths::const_iterator i = search_path_strings.begin ();
+	     i != search_path_strings.end ();
+         ++i)
+	  {
+	    try
+	      {
+		search_paths.push_back (fs::path (*i, fs::native));
+	      }
+	    catch (...)
+	      {
+		wcerr << "error: Nonexistant search path supplied:" << i->c_str () << endl;
+		return -1;
+	      }
+	  }
       }
-    
+
     if (backend != "cxx" && backend != "idl")
     {
       wcerr << "unknown backend: " << backend.c_str () << endl;
