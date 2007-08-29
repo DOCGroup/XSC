@@ -1,3 +1,16 @@
+2007-08-29    <wotte@localhost.localdomain>
+
+	* XSC.mwc
+	* XSC/Parser.hpp
+	* XSC/SemanticGraph/Fundamental.cpp
+	* XSC/SemanticGraph/Fundamental.hpp
+	* XSC/SemanticGraph/Fundamental.cpp.m4
+	* XSC/SemanticGraph/Fundamental.hpp.m4
+	* XSC/Parser.cpp
+	* CXX/Generator.cpp
+
+	  Changes necessary to support AttributeGroups.
+
 2007-07-05    <wotte@localhost.localdomain>
 
 	* xsc.cpp

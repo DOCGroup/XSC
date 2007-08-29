@@ -24,8 +24,6 @@ namespace XSC
         static_type_info ();
 
     protected:
-      friend class Graph<Node, Edge>;
-      
       FundamentalType ()
       {
         type_info (static_type_info ());
@@ -511,6 +509,25 @@ namespace XSC
     //
     //
     //
+    class QName : public virtual FundamentalType
+    {
+    public:
+      static Introspection::TypeInfo const&
+      static_type_info ();
+
+    protected:
+      friend class Graph<Node, Edge>;
+
+      QName ()
+      {
+        type_info (static_type_info ());
+      }
+    };
+
+
+    //
+    //
+    //
     class Id : public virtual FundamentalType
     {
     public:
@@ -544,21 +561,25 @@ namespace XSC
         type_info (static_type_info ());
       }
     };
-    
-    class href : public virtual FundamentalType
+
+
+    //
+    //
+    //
+    class Href : public virtual FundamentalType
     {
     public:
-      static Introspection::TypeInfo const& static_type_info ();
-      
+      static Introspection::TypeInfo const&
+      static_type_info ();
+
     protected:
       friend class Graph<Node, Edge>;
-      
-      href ()
+
+      Href ()
       {
         type_info (static_type_info ());
       }
     };
-    
   }
 }
 

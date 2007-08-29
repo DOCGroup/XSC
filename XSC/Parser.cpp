@@ -314,6 +314,7 @@ namespace XSC
       s.new_edge<Names> (ns, s.new_node<Name> (), L"Name");
       s.new_edge<Names> (ns, s.new_node<NMTOKEN> (), L"NMTOKEN");
       s.new_edge<Names> (ns, s.new_node<NCName> (), L"NCName");
+      s.new_edge<Names> (ns, s.new_node<QName> (), L"QName");
 
       s.new_edge<Names> (ns, s.new_node<Id> (), L"ID");
       s.new_edge<Names> (ns, s.new_node<IdRef> (), L"IDREF");
@@ -453,6 +454,8 @@ namespace XSC
         else if (name == L"simpleType") simple_type (e); 
         else if (name == L"complexType") complex_type (e);
         else if (name == L"element") element (e, true);
+        else if (name == L"attributeGroup") attribute_group (e, true);
+        else if (name == L"attribute") attribute (e, true);
         else wcerr << "unexpected top-level element: " << name << endl;
       }
 
@@ -853,6 +856,7 @@ namespace XSC
     else if (name == L"all") all (e); 
     else if (name == L"choice") choice (e); 
     else if (name == L"sequence") sequence (e); 
+    else if (name == L"attributeGroup") attribute_group (e); 
     else if (name == L"attribute") attribute (e); 
     else if (name == L"simpleContent") simple_content (e); 
     else if (name == L"complexContent") complex_content (e); 
@@ -867,6 +871,7 @@ namespace XSC
         e = next ();
 
         if (e.name () == L"attribute") attribute (e); else
+        if (e.name () == L"attributeGroup") attribute_group (e); else
           {
             wcerr << "expected `attribute' instead of " << e.name () << endl;
             return r;
@@ -1207,15 +1212,117 @@ namespace XSC
       }
   }
 
+  
+  void Parser::
+  attribute_group (XML::Element const &a, bool global)
+  {
+    string ref (a[L"ref"]);
+    string name (a[L"name"]);
+    
+    if (ref.empty ())
+      {
+        if (name.empty ())
+          {
+            std::wcerr << "error: attribute group has both empty name and ref values." << std::endl;
+            return;
+          }
+        
+        // Attribute group definition
+        Scope &node (root_schema_->new_node<Scope> ());
+        root_schema_->new_edge <Names> (scope (), node, name);
+        
+        push_scope (node);
+        push (a);
+
+        annotation ();
+        
+        while (more ())
+          {
+            XML::Element e (next ());
+            string ch_name (e.name ());
+            
+            if (trace_) wcout << ch_name << endl;
+            if (ch_name == L"attribute") attribute (e);
+            else if (ch_name == L"attributeGroup") attribute_group (e);
+            else std::wcerr << "error: expected attribute child, got " << name << " instead." << endl;
+          } 
+        
+        pop ();
+        pop_scope ();
+      }
+    else
+      { // Refering to an already declared attribute group.
+        string uq_name (XML::uq_name (ref));
+        string ns_name (XML::ns_name (a, ref));
+        
+        try
+          {
+            Scope& s (resolve<Scope> (ns_name, uq_name, *root_schema_));
+            
+            for (Scope::NamesIterator i (s.names_begin ());
+                 i != s.names_end (); ++i)
+              {
+                Attribute &prot (dynamic_cast <Attribute &> ((*i)->named ()));
+                
+                Attribute &attr (root_schema_->new_node<Attribute> (prot.optional (),
+                                                                   prot.qualified ()));
+                root_schema_->new_edge<Names> (scope (), attr, prot.name ());
+                
+                // Set the attributes type
+                if (prot.typed ())
+                  root_schema_->new_edge<Belongs> (attr, prot.type ());
+                else
+                  std::wcerr << "error:  unexpected untyped attribute" << endl;
+              }
+          }
+        catch (NotNamespace const&)
+          {
+            wcerr << "unable to resolve namespace `" << ns_name << "'" << endl;
+          }
+        catch (NotName const&)
+          {
+            wcerr << "unable to resolve group name `" << uq_name
+                  << "' inside namespace `" << ns_name << "'" << endl;
+          }
+      }
+  }
 
   void Parser::
   attribute (XML::Element const& a, bool global)
   {
     string name (a[L"name"]);
-
+    string ref (a[L"ref"]);
     if (name.empty ())
       {
-        wcerr << "`name' attribute is missing for attribute declaration"
+        if (!ref.empty ())
+          {
+            string uq_name (XML::uq_name (ref));
+            string ns_name (XML::ns_name (a, ref));
+
+            try
+              {
+                Attribute &attr_ref (resolve<Attribute> (ns_name, uq_name, *root_schema_));
+                Attribute &attr (root_schema_->new_node<Attribute> (attr_ref.optional (),
+                                                                    attr_ref.qualified ()));
+                if (attr_ref.typed ())
+                  root_schema_->new_edge<Belongs> (attr, attr_ref.type ());
+                else
+                  std::wcerr << "unexpected untyped attribute reference." << endl;
+              }
+            catch (NotNamespace const&)
+              {
+                wcerr << "unable to resolve namespace `" << ns_name << "'" << endl;
+              }
+            catch (NotName const&)
+              {
+                wcerr << "unable to resolve name `" << uq_name
+                      << "' inside namespace `" << ns_name << "'" << endl;
+              }
+            
+            return;
+          }
+
+        wcerr << "`name'  or `ref' attribute is missing for attribute declaration"
               << endl;
         return;
       }

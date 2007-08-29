@@ -127,7 +127,9 @@ namespace XSC
       Element
       parent () const
       {
+	std::wcout << "c8" << std::endl;
         return dynamic_cast<Xerces::DOMElement*>(e_->getParentNode ());
+	std::wcout << "/c8" << std::endl;
       }
 
     public:
@@ -289,6 +291,9 @@ namespace XSC
 
     void
     attribute (XML::Element const&, bool global = false);
+
+    void
+    attribute_group (XML::Element const&, bool global = false);
 
   private:
     /// @returns true if there are more children of current parent

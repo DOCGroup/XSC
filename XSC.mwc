@@ -1,6 +1,6 @@
 // $Id:
 workspace {
-  cmdline += -static -include .
+  cmdline += -static -include . -include ./bin
   ./XSC
   ./CXX
   ./IDL

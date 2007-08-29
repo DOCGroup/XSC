@@ -311,18 +311,21 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   // Default mapping.
   //
   nsm.push_back (L"#^.* (.*?/)??"L"(([a-zA-Z_]\\w*)(/[a-zA-Z_]\\w*)*)$#$2#");
-
-  // Custom mappings.
-  //
-  const std::vector<std::string> &custom_nsm 
-    (vm["cxx-namespace-regex"].as< std::vector <std::string> > ());
   
-  for (std::vector<std::string>::const_iterator i = custom_nsm.begin ();
-       i != custom_nsm.end (); ++i)
+  if (vm.count ("cxx-namespace-regex"))
     {
-      std::wostringstream o;
-      o << i->c_str ();
-      nsm.push_back (o.str ());
+      // Custom mappings.
+      //
+      const std::vector<std::string> &custom_nsm 
+        (vm["cxx-namespace-regex"].as< std::vector <std::string> > ());
+      
+      for (std::vector<std::string>::const_iterator i = custom_nsm.begin ();
+           i != custom_nsm.end (); ++i)
+        {
+          std::wostringstream o;
+          o << i->c_str ();
+          nsm.push_back (o.str ());
+      }
     }
 
   // Export symbol

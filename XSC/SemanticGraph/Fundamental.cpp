@@ -559,6 +559,27 @@ namespace XSC
     static_type_info () { return NC_name_; }
 
 
+    // QName
+    //
+    //
+    namespace
+    {
+      TypeInfo
+      Q_name_init_ ()
+      {
+        TypeInfo ti (typeid (QName));
+        ti.add_base (
+          Access::PUBLIC, true, FundamentalType::static_type_info ());
+        return ti;
+      }
+
+      TypeInfo Q_name_ (Q_name_init_ ());
+    }
+
+    TypeInfo const& QName::
+    static_type_info () { return Q_name_; }
+
+
     // Id
     //
     //
@@ -600,7 +621,8 @@ namespace XSC
     TypeInfo const& IdRef::
     static_type_info () { return id_ref_; }
 
-    // href
+
+    // Href
     //
     //
     namespace
@@ -608,7 +630,7 @@ namespace XSC
       TypeInfo
       href_init_ ()
       {
-        TypeInfo ti (typeid (href));
+        TypeInfo ti (typeid (Href));
         ti.add_base (
           Access::PUBLIC, true, FundamentalType::static_type_info ());
         return ti;
@@ -617,7 +639,7 @@ namespace XSC
       TypeInfo href_ (href_init_ ());
     }
 
-    TypeInfo const& href::
+    TypeInfo const& Href::
     static_type_info () { return href_; }
   }
 }
