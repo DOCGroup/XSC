@@ -59,11 +59,12 @@ public:
         ns_mapping_ (ns_mapping),
 	cdr_reader_generation_(0),
 	cdr_writer_generation_(0),
-        generate_ra_sequences_ (false),
         hxx_expr_ (),
         hxx_expr (hxx_expr_),
         hxx_suffix_ (),
-        hxx_suffix (hxx_suffix_)
+        hxx_suffix (hxx_suffix_),
+        generate_ra_sequences_ (false)
+
   {
   }
 
@@ -420,7 +421,8 @@ struct Fundamental : Traversal::FundamentalType,
                      Traversal::NMTOKEN,
                      Traversal::NCName,
                      Traversal::Id,
-                     Traversal::IdRef
+                     Traversal::IdRef,
+                     Traversal::QName
   {
     virtual void
     fundamental_type (SemanticGraph::FundamentalType& t) = 0;
@@ -466,6 +468,12 @@ struct Fundamental : Traversal::FundamentalType,
 
     virtual void
     traverse (SemanticGraph::NCName& t)
+    {
+      fundamental_template (t);
+    }
+
+    virtual void
+    traverse (SemanticGraph::QName& t)
     {
       fundamental_template (t);
     }

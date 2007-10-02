@@ -1304,6 +1304,11 @@ namespace XSC
                 Attribute &attr_ref (resolve<Attribute> (ns_name, uq_name, *root_schema_));
                 Attribute &attr (root_schema_->new_node<Attribute> (attr_ref.optional (),
                                                                     attr_ref.qualified ()));
+                
+                string norm_name (normalize (ref));
+                
+                root_schema_->new_edge<Names> (scope (), attr, norm_name);
+                
                 if (attr_ref.typed ())
                   root_schema_->new_edge<Belongs> (attr, attr_ref.type ());
                 else

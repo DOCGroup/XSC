@@ -117,6 +117,9 @@ namespace XSC
     Node<SemanticGraph::NCName>
     NCName;
 
+    typedef
+    Node<SemanticGraph::QName>
+    QName;
 
     typedef
     Node<SemanticGraph::Id>
@@ -127,8 +130,8 @@ namespace XSC
     IdRef;
 
     typedef
-    Node<SemanticGraph::href>
-    href;
+    Node<SemanticGraph::Href>
+    Href;
   }
 }
 

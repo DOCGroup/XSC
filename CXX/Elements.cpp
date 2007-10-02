@@ -133,7 +133,8 @@ namespace
                     Traversal::NMTOKEN,
                     Traversal::NCName,
                     Traversal::Id,
-                    Traversal::IdRef
+                    Traversal::IdRef,
+                    Traversal::QName
   {
     TypeName (Context& c, string& r_, string const& nss)
         : Context (c), r (r_), nss_ (nss)
@@ -249,6 +250,12 @@ namespace
     traverse (SemanticGraph::NCName&)
     {
       r = schema_ns () + L"::NCName< " + char_type + L" >";
+    }
+
+    virtual void
+    traverse (SemanticGraph::QName&)
+    {
+      r = schema_ns () + L"::QName< " + char_type + L" >";
     }
 
     virtual void

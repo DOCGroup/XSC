@@ -6,7 +6,4 @@ This is a set of notes to myself regarding possible future enhancements.
 
 *  Enable capability to use ACE macros to define other basic types besides char.
 
-*  It would appear that we can support Borland 5.5.  Most of the problems appear to boil
-   down to broken auto_ptr assignment semantics.  if you make all assignments do
-   ptr.reset (new_ptr), it should solve most of the problems.  I am loath to add this unless
-   there is significant request, as it makes the code look dirty.
+*  Elements can't have the same name of types.  

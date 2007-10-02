@@ -13,6 +13,8 @@
 
 #include <XSC/SemanticGraph/Schema.hpp>
 
+#include <CCF/CodeGenerationKit/Regex.hpp>
+
 namespace Xerces = xercesc;
 
 namespace XSC
@@ -384,7 +386,21 @@ namespace XSC
       if (cardinality_stack_.empty ()) return 1;
       else return cardinality_stack_.top ().max_;
     }
-
+    
+    string
+    normalize (const string &str)
+    {
+      string retval (str);
+      size_t pos (string::npos);
+      
+      while ((pos = retval.find_first_of (L":")) != string::npos)
+        {
+          retval[pos] = L'_';
+        }
+      
+      return retval;
+    }
+    
   private:
     template <typename Edge, typename Node>
     void
@@ -401,7 +417,7 @@ namespace XSC
       Xerces::DOMNodeList* l_;
       unsigned long i_;
     };
-
+    
     std::stack<Iterator> iteration_state_;
     SemanticGraph::Schema* root_schema_;   // root schema file
     SemanticGraph::Schema* cur_schema_; // current schema file
