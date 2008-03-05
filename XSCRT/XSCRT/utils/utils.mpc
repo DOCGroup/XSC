@@ -1,0 +1,22 @@
+// $Id$
+
+project (XSCRT_Utils) : xerces, xsc_common {
+  sharedname = XSCRT_Utils
+
+  includes  += $(XSC_ROOT)/XSCRT
+  
+  dynamicflags += XSCRT_UTILS_HAS_DLL XSCRT_UTILS_BUILD_DLL
+  staticflags  += XSCRT_UTILS_AS_STATIC_LIBS
+
+  Source_Files {
+    File.cpp
+  }
+
+  Template_Files {
+    File_T.cpp
+  }
+
+  Header_Files {
+    XSCRT_Utils_export.h
+  }
+}

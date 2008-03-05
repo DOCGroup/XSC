@@ -1,0 +1,12 @@
+// $Id$
+
+project {
+  requires += xsc
+
+  libout = $(XSC_ROOT)/lib
+  dllout = $(XSC_ROOT)/lib
+
+  specific(vc71, vc8, vc9) {
+    compile_flags += /wd4290 /wd4800 /wd4250 /wd4355
+  }
+}

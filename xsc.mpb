@@ -1,16 +1,9 @@
 // $Id$
 
-project: boost_filesystem, boost_regex, boost_program_options {
+project: boost_filesystem, boost_regex, boost_program_options, xsc_common {
   after += Utility
-  libs += Utility
-  requires += xsc
-
-  libout    = $(XSC_ROOT)/lib
+  libs  += Utility
 
   includes += $(XSC_ROOT)/contrib $(XSC_ROOT)/contrib/utility
   libpaths += $(XSC_ROOT)/lib
-
-  specific(vc71, vc8) {
-    compile_flags += /wd4290 /wd4800 /wd4250 /wd4355
-  }
 }

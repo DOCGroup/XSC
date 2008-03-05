@@ -1,9 +1,17 @@
-// $Id:
+// $Id$
+
 workspace {
-  cmdline += -static -include . -include ./bin
-  ./XSC
-  ./CXX
-  ./IDL
-  ./contrib/Utility.mpc
-  XSC.mpc
+  binary {
+    cmdline += -static -include . -include ./bin
+
+    ./XSC
+    ./CXX
+    ./IDL
+    ./contrib/Utility.mpc
+    XSC.mpc
+  }
+
+  runtime {
+    ./XSCRT
+  }
 }
