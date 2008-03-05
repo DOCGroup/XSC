@@ -1,3 +1,19 @@
+Wed Mar  5 21:26:10 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * MPC:
+        * MPC/config:
+        * MPC/config/xsc.mpb:
+        * MPC/config/xsc_common.mpb:
+        * XSC.mwc:
+        
+          Moved all the base projects to MPC/config, which is the 
+          standard convention for DOC projects.
+
+        * xsc.mpb:
+        * xsc_common.mpb:
+
+          Removed these files.
+
 Wed Mar  5 21:09:16 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSC.mwc:
@@ -8,13 +24,13 @@ Wed Mar  5 21:09:16 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
         * XSCRT/XSCRT/utils/File_T.cpp:
         * XSCRT/XSCRT/utils/XSCRT_Utils_export.h:
         * XSCRT/XSCRT/utils/utils.mpc:
-        
+
           Implemented a utility class to simplify reading XML files and
           populating XSC generated objects.
 
         * xsc.mpb:
         * xsc_common.mpb:
-        
+
           Base projects used to build XSC.
 
 2007-08-29    <wotte@localhost.localdomain>

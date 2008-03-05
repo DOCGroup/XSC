@@ -1,6 +1,8 @@
 // $Id$
 
-workspace {
+workspace (XSC) {
+  cmdline += -include $XSC_ROOT/MPC/config
+  
   binary {
     cmdline += -static -include . -include ./bin
 
