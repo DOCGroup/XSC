@@ -16,7 +16,6 @@
 #include "xercesc/dom/DOM.hpp"
 #include "xercesc/framework/LocalFileFormatTarget.hpp"
 #include "xercesc/util/XMLUniDefs.hpp"
-
 #include "XSCRT_Utils_export.h"
 
 namespace XSCRT

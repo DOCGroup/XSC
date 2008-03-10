@@ -1,7 +1,7 @@
 // $Id$
 
 project (XSCRT_Utils) : xerces, xsc_common {
-  sharedname = XSCRT_Utils
+  staticname = XSCRT_Utils
 
   includes  += $(XSC_ROOT)/XSCRT
   
