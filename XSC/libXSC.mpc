@@ -1,11 +1,13 @@
 //$Id$
 
-project(libXSC): xsc, xerces {
-  sharedname =
+project(libXSC): xsc_be, xerces {
   staticname = XSC
-
-  includes  += ..
-
+  
+  includes  += $(XSC_ROOT)/contrib $(XSC_ROOT)
+  
+  after += Utilitys
+  libs  += Utilitys
+  
   Source_Files {
 	  .
 	  ./SemanticGraph

@@ -5,8 +5,10 @@ project {
 
   libout = $(XSC_ROOT)/lib
   dllout = $(XSC_ROOT)/lib
+  
+  libpaths += $(XSC_ROOT)/lib
 
-  specific(vc71, vc8, vc9) {
+  specific (vc7, vc71, vc8, vc9, nmake) {
     compile_flags += /wd4290 /wd4800 /wd4250 /wd4355
   }
 }

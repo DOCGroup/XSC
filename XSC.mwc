@@ -4,16 +4,16 @@ workspace (XSC) {
   cmdline += -include $XSC_ROOT/MPC/config
   
   binary {
-    cmdline += -include . -include ./bin  -static
+    cmdline += -static
+    contrib/Utility.mpc
 
-    ./XSC
-    ./CXX
-    ./IDL
-    ./contrib/Utility.mpc
+    XSC
+    CXX
+    IDL    
     XSC.mpc
   }
-
+  
   runtime {
-    ./XSCRT
+    XSCRT
   }
 }

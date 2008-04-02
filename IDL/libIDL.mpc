@@ -1,10 +1,7 @@
 //$Id$
 
-project(libIDL) : xsc {
-  sharedname =
+project(libIDL) : xsc_be {
   staticname = IDL
-
-  includes  += ..
 
   Source_Files {
 	  .

@@ -126,4 +126,12 @@ namespace XSC
   {
     return !operator==(lhs, rhs);
   }
+
+  XMLCh * XStr::release (void)
+  {
+    XMLCh * temp = this->_wstr;
+    this->_wstr = 0;
+
+    return temp;
+  }
 }

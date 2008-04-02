@@ -1,6 +1,6 @@
 // $Id$
 
-//#include "xercesc/util/XMLString.hpp"
+#include "XSC/XercesString.hpp"
 
 namespace XSCRT
 {
@@ -13,8 +13,8 @@ namespace utils
 //
 // File_Reader_T
 //
-template <typename T, typename C>
-File_Reader_T <T, C>::
+template <typename T, typename CHAR_TYPE>
+File_Reader_T <T, CHAR_TYPE>::
 File_Reader_T (typename reader_function <T>::result_type reader)
 : reader_ (reader),
   parser_ (0)
@@ -25,8 +25,8 @@ File_Reader_T (typename reader_function <T>::result_type reader)
 //
 // File_Reader_T
 //
-template <typename T, typename C>
-File_Reader_T <T, C>::~File_Reader_T (void)
+template <typename T, typename CHAR_TYPE>
+File_Reader_T <T, CHAR_TYPE>::~File_Reader_T (void)
 {
 
 }
@@ -34,15 +34,15 @@ File_Reader_T <T, C>::~File_Reader_T (void)
 //
 // open
 //
-template <typename T, typename C>
-int File_Reader_T <T, C>::
-open (const std::basic_string <C> & filename)
+template <typename T, typename CHAR_TYPE>
+int File_Reader_T <T, CHAR_TYPE>::
+open (const CHAR_TYPE * filename)
 {
   // Close the current document.
   this->close ();
 
   // Parse the new file to create a new document.
-  this->document_ = this->parser ()->parseURI (filename.c_str ());
+  this->document_ = this->parser ()->parseURI (filename);
 
   // Return the open status.
   return this->document_ != 0 ? 0 : -1;
@@ -51,8 +51,8 @@ open (const std::basic_string <C> & filename)
 //
 // parser
 //
-template <typename T, typename C>
-xercesc::DOMBuilder * File_Reader_T <T, C>::parser (void)
+template <typename T, typename CHAR_TYPE>
+xercesc::DOMBuilder * File_Reader_T <T, CHAR_TYPE>::parser (void)
 {
   using namespace xercesc;
 
@@ -71,8 +71,9 @@ xercesc::DOMBuilder * File_Reader_T <T, C>::parser (void)
 //
 // read
 //
-template <typename T, typename C>
-File_Reader_T <T, C> & File_Reader_T <T, C>::operator >> (T & entity)
+template <typename T, typename CHAR_TYPE>
+File_Reader_T <T, CHAR_TYPE> & 
+File_Reader_T <T, CHAR_TYPE>::operator >> (T & entity)
 {
   if (this->reader_ != 0)
     entity = (*this->reader_) (this->document ());
@@ -87,36 +88,25 @@ File_Reader_T <T, C> & File_Reader_T <T, C>::operator >> (T & entity)
 //
 // File_Writer_T
 //
-template <typename T, typename C>
-File_Writer_T <T, C>::
-File_Writer_T (const std::basic_string <C> & ns,
-               const std::basic_string <C> & root,
+template <typename T, typename CHAR_TYPE>
+File_Writer_T <T, CHAR_TYPE>::
+File_Writer_T (const CHAR_TYPE * ns,
+               const CHAR_TYPE * root,
                typename writer_function <T>::result_type writer)
 : writer_ (writer),
   dom_writer_ (0),
   target_ (0)
 {
-  // Convert the strings to a XML string.
-  XMLCh * xml_ns = xercesc::XMLString::transcode (ns.c_str ());
-  XMLCh * xml_root = xercesc::XMLString::transcode (root.c_str ());
-
   // Create the default document.
-  if (xml_ns != 0 && xml_root != 0)
-    this->document_ = this->impl ()->createDocument (xml_ns, xml_root, 0);
-
-  // Release the string resources.
-  if (xml_ns != 0)
-    xercesc::XMLString::release (&xml_ns);
-
-  if (xml_root != 0)
-    xercesc::XMLString::release (&xml_root);
+  this->document_ = 
+    this->impl ()->createDocument (XSC::XStr (ns), XSC::XStr (root), 0);
 }
 
 //
 // ~File_Writer_T 
 //
-template <typename T, typename C>
-File_Writer_T <T, C>::~File_Writer_T (void)
+template <typename T, typename CHAR_TYPE>
+File_Writer_T <T, CHAR_TYPE>::~File_Writer_T (void)
 {
   if (this->dom_writer_ != 0) 
   {
@@ -129,27 +119,29 @@ File_Writer_T <T, C>::~File_Writer_T (void)
 //
 // open
 //
-template <typename T, typename C>
-int File_Writer_T <T, C>::open (const std::basic_string <C> & filename)
+template <typename T, typename CHAR_TYPE>
+int File_Writer_T <T, CHAR_TYPE>::
+open (const CHAR_TYPE * filename)
 {
-  // Create a new XML target file for the writer.
-  this->target_.reset (
-    new xercesc::LocalFileFormatTarget (filename.c_str ()));
+  this->target_.reset (new xercesc::LocalFileFormatTarget (filename));
+  return 0;
 }
 
 //
 // operator <<
 //
-template <typename T, typename C>
-File_Writer_T <T, C> & File_Writer_T <T, C>::operator << (T & entity)
+template <typename T, typename CHAR_TYPE>
+File_Writer_T <T, CHAR_TYPE> & File_Writer_T <T, CHAR_TYPE>::operator << (T & entity)
 {
-  if (this->document_ != 0 && this->dom_writer_ != 0)
+  xercesc::DOMWriter const * dom_writer = this->writer ();
+
+  if (this->document_ != 0 && dom_writer)
   {
     // Serialize the entity into the document.
-    (*this->writer_) (entity, this->document_);
+    (*dom_writer) (entity, this->document_);
 
     // Write the document to the XML file.
-    this->dom_writer_->writeNode (this->target_.get (), *this->document_);
+    dom_writer->writeNode (this->target_.get (), *this->document_);
   }
 
   return *this;
@@ -158,8 +150,8 @@ File_Writer_T <T, C> & File_Writer_T <T, C>::operator << (T & entity)
 //
 // writer
 //
-template <typename T, typename C>
-xercesc::DOMWriter const * File_Writer_T <T, C>::writer (void)
+template <typename T, typename CHAR_TYPE>
+xercesc::DOMWriter const * File_Writer_T <T, CHAR_TYPE>::writer (void)
 {
   if (this->dom_writer_ == 0)
     this->dom_writer_ = this->impl ()->createDOMWriter ();

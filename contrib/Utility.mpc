@@ -1,9 +1,10 @@
-project (Utility) {
-       staticname = Utility
-       includes += ./utility       
-       libout = $(XSC_ROOT)/lib
+// $Id$
 
-       Source_Files {
-           ./utility/Utility/Introspection
-       }
+project (Utility) : xsc_common {
+  staticname  = Utility
+  includes   += ./utility       
+
+  Source_Files {
+    utility/Utility/Introspection
+  }
 }

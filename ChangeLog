@@ -1,3 +1,60 @@
+Wed Apr  2 21:23:25 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * MPC/config/xsc_base.mpb:
+        * MPC/config/xsc_be.mpb:
+        * MPC/config/xsc_common.mpb:
+        * MPC/config/xsc_cxx.mpb:
+        * MPC/config/xsc_idl.mpb:
+        * MPC/config/xscrt.mpb:
+        
+          MPC base projects for using XSC in projects.
+
+        * contrib/Utility.mpc:
+        * XSC/libXSC.mpc:
+        * CXX/libCXX.mpc:
+        * IDL/libIDL.mpc:
+        * XSC.mpc:
+        
+          Refactored the build scripts by pushing much of the project 
+          settings into base files.
+
+        * XSC.mwc:
+        
+          Removed the unnecessary include parameters from the 
+          binary scope.
+
+        * XSC/XercesString.cpp:
+        * XSC/XercesString.hpp:
+        
+          Implemented the release () method, which gives ownership of the
+          string to the client.
+          
+        * XSCRT/XSCRT/XSCRT.mpc:
+        * XSCRT/XSCRT/XSCRT_export.h:
+        
+          Now the XSC runtime files are compiled into a single binary.
+
+        * XSCRT/XSCRT/utils/File.h:
+        * XSCRT/XSCRT/utils/File_T.h:
+        * XSCRT/XSCRT/utils/File_T.cpp:
+        
+          Changed the template types from std::string <T> to T * 
+          types since it may be too expensive in some cases to 
+          construct a std::string object.
+        
+        * XSCRT/XSCRT/utils/XML_Schema_Resolver_T.h:
+        * XSCRT/XSCRT/utils/XML_Schema_Resolver_T.cpp:
+        
+          Predefined resolvers that can be used to determine the location
+          of a XML schema definition file at runtime.
+
+        * MPC/config/xsc.mpb:
+
+        * XSCRT/XSCRT/utils/XSCRT_Utils_export.h:
+        * XSCRT/XSCRT/utils/utils.mpc:
+
+          Removed these files.
+
 Mon Mar 10 15:14:30 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSC.mwc:
@@ -5,7 +62,7 @@ Mon Mar 10 15:14:30 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
         * XSCRT/XSCRT/utils/File_T.h:
         * XSCRT/XSCRT/utils/File_T.cpp:
         * XSCRT/XSCRT/utils/utils.mpc:
-        
+
           Added a generic writer to the utility classes.
 
 Wed Mar  5 21:26:10 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>

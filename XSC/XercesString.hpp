@@ -44,6 +44,8 @@ namespace XSC
 
     operator const XMLCh* () const { return _wstr; };
 
+    XMLCh * release (void);
+
   private:
 
     XMLCh* _wstr; // Internal representation

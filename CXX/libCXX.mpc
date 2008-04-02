@@ -1,10 +1,7 @@
 //$Id$
 
-project(libCXX) : xsc {
-  sharedname =
+project(libCXX) : xsc_be {
   staticname = CXX
-
-  includes  += ..
 
   Source_Files {
 	  .

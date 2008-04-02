@@ -16,7 +16,7 @@
 #include "xercesc/dom/DOM.hpp"
 #include "xercesc/framework/LocalFileFormatTarget.hpp"
 #include "xercesc/util/XMLUniDefs.hpp"
-#include "XSCRT_Utils_export.h"
+#include "XSCRT/XSCRT_export.h"
 
 namespace XSCRT
 {
@@ -29,7 +29,7 @@ namespace utils
  * ensures that Xerces-C and its elements needed to read/write XML files
  * are initialized/terminated as needed.
  */
-class XSCRT_UTILS_Export File 
+class XSCRT_Export File 
 {
 public:
   /// Default constructor.

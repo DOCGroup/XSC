@@ -1,9 +1,0 @@
-// $Id$
-
-project: boost_filesystem, boost_regex, boost_program_options, xsc_common {
-  after += Utility
-  libs  += Utility
-
-  includes += $(XSC_ROOT)/contrib $(XSC_ROOT)/contrib/utility
-  libpaths += $(XSC_ROOT)/lib
-}

@@ -47,7 +47,7 @@ struct writer_function
  *
  * Helper class for reading XML documents using XSC.
  */
-template <typename T, typename C = char>
+template <typename T, typename CHAR_TYPE = char>
 class File_Reader_T : public File
 {
 public:
@@ -55,7 +55,7 @@ public:
   typedef T entity_type;
 
   /// Type definition of the character type.
-  typedef C char_type;
+  typedef CHAR_TYPE char_type;
 
   /// Default constructor.
   File_Reader_T (typename reader_function <T>::result_type reader);
@@ -71,7 +71,7 @@ public:
    * @retval            0               Successfully opened file.
    * @retval            -1              Failed to open file.
    */
-  int open (const std::basic_string <C> & filename);
+  int open (const CHAR_TYPE * filename);
 
   /**
    * Get the underlying Xerces-C parser. This enables the client 
@@ -103,7 +103,7 @@ private:
  *
  * Helper class for reading XML documents using XSC.
  */
-template <typename T, typename C = char>
+template <typename T, typename CHAR_TYPE = char>
 class File_Writer_T : public File 
 {
 public:
@@ -111,7 +111,7 @@ public:
   typedef T entity_type;
 
   /// Type definition of the character type.
-  typedef C char_type;
+  typedef CHAR_TYPE char_type;
 
   /**
    * Initializing constructor.
@@ -120,8 +120,8 @@ public:
    * @param[in]       root        Name of the root element.
    * @param[in]       writer      The XSC writer function.
    */
-  File_Writer_T (const std::basic_string <C> & ns,
-                 const std::basic_string <C> & root,
+  File_Writer_T (const CHAR_TYPE * ns,
+                 const CHAR_TYPE * root,
                  typename writer_function <T>::result_type writer);
 
   /// Destructor.
@@ -135,7 +135,7 @@ public:
    * @retval            0               Successfully opened file.
    * @retval            -1              Failed to open file.
    */
-  int open (const std::basic_string <C> & filename);
+  int open (const CHAR_TYPE * filename);
 
   /**
    * Extraction operator.
