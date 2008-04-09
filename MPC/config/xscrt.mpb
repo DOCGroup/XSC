@@ -13,6 +13,8 @@ project : xerces {
 
   specific (vc7, vc71, vc8, vc9, nmake) {
     compile_flags += /wd4800
-    ignore_default_library_names = LIBCMTD
+    
+    Debug::ignore_default_library_names = LIBCMTD
+    Release::ignore_default_library_names = LIBCMT
   }
 }
