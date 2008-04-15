@@ -1,8 +1,22 @@
+Tue Apr 15 21:54:21 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * XSCRT/XSCRT/XSCRT.mpc:
+        
+          Inserted an empty Inline_Files {} block to prevent automatic
+          inclusion of inline files.
+          
+        * XSCRT/XSCRT/utils/File.h:
+        * XSCRT/XSCRT/utils/File.cpp:
+        * XSCRT/XSCRT/utils/File_T.cpp:
+        
+          Implemented an is_open () method to test if the XML file
+          was opened.
+
 Wed Apr  9 22:47:11 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * MPC/config/xscrt.mpb:
-        
-          Added configuration parameter to ignore one of the default 
+
+          Added configuration parameter to ignore one of the default
           libraries that was conflicting when building the release
           version.
 

@@ -45,7 +45,8 @@ open (const CHAR_TYPE * filename)
   this->document_ = this->parser ()->parseURI (filename);
 
   // Return the open status.
-  return this->document_ != 0 ? 0 : -1;
+  this->is_open_ = this->document_ != 0 ? true : false;
+  return this->is_open_ ? 0 : -1;
 }
 
 //
@@ -124,6 +125,7 @@ int File_Writer_T <T, CHAR_TYPE>::
 open (const CHAR_TYPE * filename)
 {
   this->target_.reset (new xercesc::LocalFileFormatTarget (filename));
+  this->is_open_ = true;
   return 0;
 }
 
@@ -131,7 +133,8 @@ open (const CHAR_TYPE * filename)
 // operator <<
 //
 template <typename T, typename CHAR_TYPE>
-File_Writer_T <T, CHAR_TYPE> & File_Writer_T <T, CHAR_TYPE>::operator << (T & entity)
+File_Writer_T <T, CHAR_TYPE> & 
+File_Writer_T <T, CHAR_TYPE>::operator << (T & entity)
 {
   xercesc::DOMWriter const * dom_writer = this->writer ();
 

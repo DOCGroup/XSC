@@ -16,8 +16,9 @@ size_t File::count_ = 0;
 // File
 //
 File::File (void)
-: impl_ (0),
-  document_ (0)
+: document_ (0),
+  impl_ (0),
+  is_open_ (false)
 {
   // Initiliaze the usage of Xerces-C
   if (++ File::count_ == 1)
@@ -47,6 +48,9 @@ void File::close (void)
     // Release the document.
     this->document_->release();
 	  this->document_ = 0;
+
+    // Reset the open flag.
+    this->is_open_ = false;
   }
 }
 
@@ -75,6 +79,14 @@ xercesc::DOMImplementation * File::impl (void)
   }
 
   return this->impl_;
+}
+
+//
+// is_open
+//
+bool File::is_open (void) const
+{
+  return this->is_open_;
 }
 
 }

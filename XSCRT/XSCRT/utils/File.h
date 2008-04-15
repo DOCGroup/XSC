@@ -55,12 +55,23 @@ public:
    */
   xercesc::DOMImplementation * impl (void);
 
+  /**
+   * Get the open state of the file.
+   *
+   * @retval    true    The file is open.
+   * @retval    false   The file is not open.
+   */
+  bool is_open (void) const;
+
+protected:
   /// Pointer to the DOM document.
 	xercesc::DOMDocument * document_;
 
-protected:
 	/// Implementation shared between all files.
 	xercesc::DOMImplementation * impl_;
+
+  /// The open state of the file.
+  bool is_open_;
 
 private:
   /// Number of open files.

@@ -19,6 +19,10 @@ project (XSCRT) : xerces, xsc_common {
     utils/XML_Schema_Resolver_T.cpp
   }
 
+  Inline_Files {
+ 
+  }
+  
   Header_Files {
     XSCRT_export.h
   }
