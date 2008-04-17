@@ -1,7 +1,7 @@
 //$Id$
 
-project(XSC_binary): xsc_be, xerces {
-  exename   = xsc-binary
+project(xsc-binary): xsc_be, xerces {
+  exename   = xsc
   install   = $(XSC_ROOT)/bin
 
   requires += exceptions

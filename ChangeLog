@@ -1,14 +1,28 @@
+Thu Apr 17 23:18:03 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * IDL/Generator.cpp:
+        
+          . Bug fix where --idl-namespace-regex was specified as 
+            --cxx-namespace-regex.
+          . Bug fix where not using the --idl-namespace-regex
+            parameter caused the program to terminate abnormally.
+
+        * MPC/config/xsc_base.mpb:
+        * XSC.mpc:
+
+          Changed generated binary file from `xsc-binary' to `xsc'.
+          
 Tue Apr 15 21:54:21 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSCRT/XSCRT/XSCRT.mpc:
-        
+
           Inserted an empty Inline_Files {} block to prevent automatic
           inclusion of inline files.
-          
+
         * XSCRT/XSCRT/utils/File.h:
         * XSCRT/XSCRT/utils/File.cpp:
         * XSCRT/XSCRT/utils/File_T.cpp:
-        
+
           Implemented an is_open () method to test if the XML file
           was opened.
 

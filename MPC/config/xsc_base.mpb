@@ -4,8 +4,8 @@ project  {
   requires += xsc
 
   specific {
-    xsc_bin   = $(XSC_ROOT)/bin/xsc-binary
-    xsc_dep   = $(XSC_ROOT)/bin/xsc-binary
+    xsc_bin   = $(XSC_ROOT)/bin/xsc
+    xsc_dep   = $(XSC_ROOT)/bin/xsc
   }
 
   Define_Custom(XSC) {

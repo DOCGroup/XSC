@@ -46,7 +46,7 @@ namespace IDL
   {
     d.add_options ()
       ("idl-char-type", po::value<std::string> ()->default_value ("wchar"),
-       "Generate code using provided character type"
+       "Generate code using provided character type "
        "instead of default `wchar'.")
 
       ("idl-namespace-regex", po::value< std::vector<std::string> > (),
@@ -143,15 +143,18 @@ namespace IDL
 
     // Custom mappings.
     //
-    const std::vector<std::string> &custom_nsm 
-      (vm["cxx-namespace-regex"].as< std::vector <std::string> > ());
-    
-    for (std::vector<std::string>::const_iterator i = custom_nsm.begin ();
-         i != custom_nsm.end (); ++i)
+    if (vm.count ("idl-namespace-regex"))
       {
-        std::wostringstream o;
-        o << i->c_str ();
-        nsm.push_back (o.str ());
+        const std::vector<std::string> &custom_nsm 
+          (vm["idl-namespace-regex"].as< std::vector <std::string> > ());
+        
+        for (std::vector<std::string>::const_iterator i = custom_nsm.begin ();
+            i != custom_nsm.end (); ++i)
+          {
+            std::wostringstream o;
+            o << i->c_str ();
+            nsm.push_back (o.str ());
+          }
       }
 
     std::string guard (out_name);
