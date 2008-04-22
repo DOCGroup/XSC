@@ -1,0 +1,8 @@
+// $Id$
+
+project : xscrt {
+  includes += $(XSC_ROOT)/XSCRT/IDL
+  idlflags += -I$(XSC_ROOT)/XSCRT/IDL
+  
+  libs += XSCRT_IDL
+}

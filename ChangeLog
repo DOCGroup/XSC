@@ -1,8 +1,14 @@
+Tue Apr 22 00:01:05 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * MPC/config/xscrt_idl.mpb:
+        
+          Base project for using the IDL XSC runtime.
+
 Thu Apr 17 23:18:03 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * IDL/Generator.cpp:
-        
-          . Bug fix where --idl-namespace-regex was specified as 
+
+          . Bug fix where --idl-namespace-regex was specified as
             --cxx-namespace-regex.
           . Bug fix where not using the --idl-namespace-regex
             parameter caused the program to terminate abnormally.
@@ -11,7 +17,7 @@ Thu Apr 17 23:18:03 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
         * XSC.mpc:
 
           Changed generated binary file from `xsc-binary' to `xsc'.
-          
+
 Tue Apr 15 21:54:21 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSCRT/XSCRT/XSCRT.mpc:
