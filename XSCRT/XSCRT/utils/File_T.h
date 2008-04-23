@@ -150,7 +150,7 @@ public:
    *
    * @return            Pointer to the DOM writer.
    */
-  xercesc::DOMWriter const * writer (void);
+  xercesc::DOMWriter * writer (void);
 
 private:
   /// The entity read from the document.

@@ -1,3 +1,22 @@
+Wed Apr 23 21:05:50 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * CXX/ParserHeader.cpp:
+        * CXX/ParserSource.cpp:
+        * CXX/WriterHeader.cpp:
+        * CXX/WriterSource.cpp:
+        
+          The top-level reader and writer methods are now defined in a
+          reader/writer namespace to prevent ambiguity when using either
+          function as a pointer-to-function.
+
+        * XSCRT/XSCRT/utils/File_T.h:
+        * XSCRT/XSCRT/utils/File_T.cpp:
+        
+          . The parser is released whenever the reader class is 
+            destroyed.
+
+          . Removed the 'const' quantifier from the writer () method.
+          
 Wed Apr 23 18:13:39 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * CXX/Elements.hpp:
@@ -7,12 +26,12 @@ Wed Apr 23 18:13:39 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
         * IDL/Elements.hpp:
         * XSC/Parser.cpp:
         * XSC/Parser.hpp:
-        
+
           . Bug fix where writers for anonymous types where not generated
             correctly. The bug was resolved by naming the anonymous type
-            at parsing time, which allowed the backend generator's to 
+            at parsing time, which allowed the backend generator's to
             handle it as if it was a named type.
-            
+
           . Anonymous types have to suffix 'Type'.
 
 Tue Apr 22 00:01:05 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>

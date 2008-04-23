@@ -23,9 +23,12 @@ namespace
       string name (c.name ());
       string type (type_name (c));
 
-      os << e
+      os << "namespace reader"
+         << "{"
+         << e
          << type << endl
          << id (name) << " (xercesc::DOMDocument const*);"
+         << "}"
          << endl;
     }
 

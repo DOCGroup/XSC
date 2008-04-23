@@ -444,7 +444,9 @@ namespace
 
       //@@ need to use FQ-names.
       //
-      os << "void" << endl
+      os << "namespace writer"
+         << "{"
+         << "void" << endl
          << id (name) << " (" << type << " const& s, xercesc::DOMDocument* d)"
          << "{"
          << xml_element_type << " e (d->getDocumentElement ());"
@@ -469,6 +471,7 @@ namespace
          << "};"
          << "W w (e);"
          << "w.dispatch (s);"
+         << "}"
          << "}";
     }
   };

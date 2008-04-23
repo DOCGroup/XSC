@@ -345,9 +345,12 @@ namespace
       string name (c.name ());
       string type (type_name (c));
 
-      os << e
+      os << "namespace writer"
+         << "{"
+         << e
          << "void" << endl
          << id (name) << " (" << type << " const&, xercesc::DOMDocument*);"
+         << "}"
          << endl;
     }
 

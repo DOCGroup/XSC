@@ -28,7 +28,11 @@ File_Reader_T (typename reader_function <T>::result_type reader)
 template <typename T, typename CHAR_TYPE>
 File_Reader_T <T, CHAR_TYPE>::~File_Reader_T (void)
 {
-
+  if (this->parser_ != 0)
+  {
+    this->parser_->release ();
+    this->parser_ = 0;
+  }
 }
 
 //
@@ -136,15 +140,16 @@ template <typename T, typename CHAR_TYPE>
 File_Writer_T <T, CHAR_TYPE> & 
 File_Writer_T <T, CHAR_TYPE>::operator << (T & entity)
 {
-  xercesc::DOMWriter const * dom_writer = this->writer ();
-
-  if (this->document_ != 0 && dom_writer)
+  if (this->document_ != 0 && this->writer_)
   {
     // Serialize the entity into the document.
-    (*dom_writer) (entity, this->document_);
+    (*this->writer_) (entity, this->document_);
 
     // Write the document to the XML file.
-    dom_writer->writeNode (this->target_.get (), *this->document_);
+    xercesc::DOMWriter * dom_writer = this->writer ();
+
+    if (dom_writer)
+      dom_writer->writeNode (this->target_.get (), *this->document_);
   }
 
   return *this;
@@ -154,7 +159,7 @@ File_Writer_T <T, CHAR_TYPE>::operator << (T & entity)
 // writer
 //
 template <typename T, typename CHAR_TYPE>
-xercesc::DOMWriter const * File_Writer_T <T, CHAR_TYPE>::writer (void)
+xercesc::DOMWriter * File_Writer_T <T, CHAR_TYPE>::writer (void)
 {
   if (this->dom_writer_ == 0)
     this->dom_writer_ = this->impl ()->createDOMWriter ();

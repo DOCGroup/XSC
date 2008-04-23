@@ -25,7 +25,9 @@ namespace
 
       //@@ need to use FQ-names.
       //
-      os << type << endl
+      os << "namespace reader"
+         << "{"
+         << type << endl
          << id (name) << " (xercesc::DOMDocument const* d)"
          << "{"
          << xml_element_type << " e (d->getDocumentElement ());"
@@ -37,6 +39,7 @@ namespace
          << "else"
          << "{"
          << "throw 1;"
+         << "}"
          << "}"
          << "}";
     }
