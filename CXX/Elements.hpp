@@ -33,8 +33,8 @@ public:
            string const& char_type__,
            string const& esymbol__,
            NamespaceMapping const& ns_mapping,
-           string const& anon_prefix = L"class ",
-           string const& anon_suffix = L"")
+           string const& anon_prefix = L"",
+           string const& anon_suffix = L"Type")
       : os (o),
         scope (scope_),
         char_type (char_type_),
@@ -57,8 +57,8 @@ public:
         ns_prefix_ (ns_prefix__),
         ns_suffix_ (ns_suffix__),
         ns_mapping_ (ns_mapping),
-	cdr_reader_generation_(0),
-	cdr_writer_generation_(0),
+	      cdr_reader_generation_ (0),
+	      cdr_writer_generation_ (0),
         hxx_expr_ (),
         hxx_expr (hxx_expr_),
         hxx_suffix_ (),

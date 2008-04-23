@@ -822,7 +822,7 @@ namespace XSC
   }
 
   Type* Parser::
-  complex_type (XML::Element const& t)
+  complex_type (XML::Element const& t, const string &provided_name)
   {
     Type* r (0);
 
@@ -834,7 +834,11 @@ namespace XSC
 
     Complex& node (root_schema_->new_node<Complex> ());
 
-    if (string name = t[L"name"])
+    if (!provided_name.empty ())
+      {
+        root_schema_->new_edge<Names> (scope (), node, provided_name);
+      }
+    else if (string name = t[L"name"])
       {
         root_schema_->new_edge<Names> (scope (), node, name);
       }
@@ -1091,7 +1095,6 @@ namespace XSC
         Element& node (root_schema_->new_node<Element> (min, max, qualified));
         root_schema_->new_edge<Names> (scope (), node, name);
 
-
         if (string type = e[L"type"])
           {
             if (trace_) wcout << "element type " << XML::fq_name (e, type) << endl;
@@ -1100,24 +1103,30 @@ namespace XSC
           }
         else
           {
-            // Looks like an anonymous type.
-            //
+            // Looks like an anonymous type. We need to append the 
+            // anonymous type's suffix to the name of the previous
+            // element.
+            name.append (L"Type");
             push (e);
 
             annotation ();
 
             if (more ())
               {
+                // Get the next element in the schema definition.
                 XML::Element e (next ());
 
-                string name (e.name ());
-
-                if (trace_) wcout << name << endl;
+                string anon_name (e.name ());
+                
+                if (trace_) 
+                  wcout << anon_name << endl;
 
                 Type* t (0);
 
-                if (name == L"simpleType")  t = simple_type (e); 
-                else if (name == L"complexType") t = complex_type (e); 
+                if (anon_name == L"simpleType") 
+                  t = simple_type (e); 
+                else if (anon_name == L"complexType")
+                  t = complex_type (e, name); 
                 else
                   {
                     wcerr << "expected `simpleType' or `complexType' instead of "

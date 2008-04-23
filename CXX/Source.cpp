@@ -1330,7 +1330,7 @@ namespace
 
       if (!t.named () && !t.context ().count ("seen"))
       {
-        string name (id (e.name ()));
+        string name (type_name (e));
 
         Traversal::Belongs belongs;
         ComplexElement complex_element (*this, *this, name);

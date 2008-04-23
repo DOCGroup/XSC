@@ -704,7 +704,7 @@ namespace
 
       if (!t.named () && !t.context ().count ("seen"))
       {
-        string name (e.name ());
+        string name = anon_prefix_ + e.name () + anon_suffix_;
 
         os << "// anonymous type for " << scope << "::" << name << endl
            << "//" << endl;

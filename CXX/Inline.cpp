@@ -394,7 +394,7 @@ namespace
     virtual void
     pre (Type& c)
     {
-      string type (type_name (c));
+      string type (name);
 
       os << "// " << scope << endl
          << "// " << endl << endl;
@@ -1071,11 +1071,11 @@ namespace
 
       if (!t.named () && !t.context ().count ("seen"))
       {
-        string name (e.name ());
+        string name (type_name (e));
 
         Traversal::Belongs belongs;
-        Complex complex (*this, *this, i_, id (name));
-        Enumeration enumeration (*this, i_, id (name));
+        Complex complex (*this, *this, i_, name);
+        Enumeration enumeration (*this, i_, name);
 
         belongs.node_traverser (complex);
         belongs.node_traverser (enumeration);

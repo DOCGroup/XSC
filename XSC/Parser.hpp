@@ -129,9 +129,9 @@ namespace XSC
       Element
       parent () const
       {
-	std::wcout << "c8" << std::endl;
+	      std::wcout << "c8" << std::endl;
         return dynamic_cast<Xerces::DOMElement*>(e_->getParentNode ());
-	std::wcout << "/c8" << std::endl;
+	      std::wcout << "/c8" << std::endl;
       }
 
     public:
@@ -265,7 +265,7 @@ namespace XSC
     enumeration (XML::Element const&);
 
     SemanticGraph::Type*
-    complex_type (XML::Element const&);
+    complex_type (XML::Element const &, const string & type_name = L"");
 
     void
     all (XML::Element const&);

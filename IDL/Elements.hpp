@@ -34,8 +34,8 @@ namespace IDL
              bool idl3_,
              string const& char_type__,
              NamespaceMapping const& ns_mapping,
-             string const& anon_prefix = L"class ",
-             string const& anon_suffix = L"")
+             string const& anon_prefix = L"",
+             string const& anon_suffix = L"Type")
         : os (o),
           idl3 (idl3_),
           scope (scope_),
