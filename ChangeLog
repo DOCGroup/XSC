@@ -1,22 +1,30 @@
+Wed Apr 23 22:10:44 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * XSCRT/XSCRT/utils/File_T.cpp:
+
+          Bug fix where manually releasing the parser caused Xerces-C
+          to throw an exception. Right now, this functionality has been
+          disabled.
+          
 Wed Apr 23 21:05:50 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * CXX/ParserHeader.cpp:
         * CXX/ParserSource.cpp:
         * CXX/WriterHeader.cpp:
         * CXX/WriterSource.cpp:
-        
+
           The top-level reader and writer methods are now defined in a
           reader/writer namespace to prevent ambiguity when using either
           function as a pointer-to-function.
 
         * XSCRT/XSCRT/utils/File_T.h:
         * XSCRT/XSCRT/utils/File_T.cpp:
-        
-          . The parser is released whenever the reader class is 
+
+          . The parser is released whenever the reader class is
             destroyed.
 
           . Removed the 'const' quantifier from the writer () method.
-          
+
 Wed Apr 23 18:13:39 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * CXX/Elements.hpp:

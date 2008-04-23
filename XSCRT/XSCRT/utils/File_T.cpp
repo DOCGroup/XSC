@@ -28,11 +28,11 @@ File_Reader_T (typename reader_function <T>::result_type reader)
 template <typename T, typename CHAR_TYPE>
 File_Reader_T <T, CHAR_TYPE>::~File_Reader_T (void)
 {
-  if (this->parser_ != 0)
-  {
-    this->parser_->release ();
-    this->parser_ = 0;
-  }
+  //if (this->parser_ != 0)
+  //{
+  //  this->parser_->release ();
+  //  this->parser_ = 0;
+  //}
 }
 
 //
