@@ -1,7 +1,15 @@
+Thu Apr 24 16:06:23 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * MPC/config/xscrt.mpb:
+        
+          Fixed build issues related to static vs. dynamic linkage. Right
+          now, its just a hack until we figure out how to correctly
+          resolve this problem.
+
 Wed Apr 23 23:29:58 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * MPC/config/xscrt.mpb
-        
+
           Force linkage against the static version of the libXSC.
 
 Wed Apr 23 22:10:44 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>

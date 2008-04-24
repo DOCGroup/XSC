@@ -10,12 +10,14 @@ project : xerces {
   staticflags  += XSCRT_AS_STATIC_LIBS
 
   libs += XSCRT
-  lit_libs += XSCs
 
   specific (vc7, vc71, vc8, vc9, nmake) {
     compile_flags += /wd4800
     
-    Debug::ignore_default_library_names = LIBCMTD
-    Release::ignore_default_library_names = LIBCMT
+    Debug::ignore_default_library_names += LIBCMTD
+    Release::ignore_default_library_names += LIBCMT
+        
+    Debug::lit_libs += XSCsd
+    Release::lit_libs += XSCs
   }
 }
