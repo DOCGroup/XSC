@@ -164,6 +164,12 @@ namespace XSC
         return *named_;
       }
 
+      bool
+      anonymous () const
+      {
+        return anonymous_;
+      }
+
     public:
       static Introspection::TypeInfo const&
       static_type_info ();
