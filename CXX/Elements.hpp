@@ -86,7 +86,7 @@ protected:
         ns_suffix_ (c.ns_suffix_),
         ns_mapping_ (c.ns_mapping_),
         cdr_reader_generation_ (c.cdr_reader_generation_),
-	cdr_writer_generation_ (c.cdr_writer_generation_),
+	      cdr_writer_generation_ (c.cdr_writer_generation_),
         generate_ra_sequences_ (c.generate_ra_sequences_),
         hxx_expr (c.hxx_expr),
         hxx_suffix (c.hxx_suffix)
@@ -102,8 +102,14 @@ protected:
     update_scope ();
   }
 
+  size_t 
+  scope_depth (void)
+  {
+    return scope_stack.size ();
+  }
+
   void
-  leave_scope ()
+  leave_scope (void)
   {
     scope_stack.pop_back ();
     update_scope ();

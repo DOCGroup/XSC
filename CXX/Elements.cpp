@@ -134,7 +134,8 @@ namespace
                     Traversal::NCName,
                     Traversal::Id,
                     Traversal::IdRef,
-                    Traversal::QName
+                    Traversal::QName,
+                    Traversal::AnyUri
   {
     TypeName (Context& c, string& r_, string const& nss)
         : Context (c), r (r_), nss_ (nss)
@@ -253,6 +254,12 @@ namespace
     }
 
     virtual void
+    traverse (SemanticGraph::AnyUri&)
+    {
+      r = schema_ns () + L"::anyURI< " + char_type + L" >";
+    }
+
+    virtual void
     traverse (SemanticGraph::QName&)
     {
       r = schema_ns () + L"::QName< " + char_type + L" >";
@@ -300,8 +307,8 @@ type_name (SemanticGraph::Type& t, string const& nss)
 
     return r;
   }
-
-  else return anon_prefix_ + scope + anon_suffix_;
+  else 
+    return anon_prefix_ + t.name () + anon_suffix_;
 }
 
 string Context::
@@ -328,7 +335,7 @@ type_name (SemanticGraph::Instance& i, string const& nss)
       //@@ I wonder if this is at all necessary now?
       //
 
-      if (!scope.empty ()) r += scope + L"::";
+      //if (!scope.empty ()) r += scope + L"::";
 
       //r += fq_name (i.scope ());
       //r += L"::";

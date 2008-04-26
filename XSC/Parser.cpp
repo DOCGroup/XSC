@@ -32,7 +32,7 @@ using boost::scoped_array;
 
 namespace XSC
 {
-  bool trace_ = false;
+  bool trace_ = true;
 
   using namespace SemanticGraph;
   using namespace Xerces;
@@ -285,6 +285,7 @@ namespace XSC
 
       s.new_edge<Names> (ns, s.new_node<AnyType> (), L"anyType");
       s.new_edge<Names> (ns, s.new_node<AnySimpleType> (), L"anySimpleType");
+      s.new_edge<Names> (ns, s.new_node<AnyUri> (), L"anyURI");
 
       s.new_edge<Names> (ns, s.new_node<Byte> (), L"byte");
       s.new_edge<Names> (ns, s.new_node<UnsignedByte> (), L"unsignedByte");
@@ -448,14 +449,22 @@ namespace XSC
         if (trace_) wcout << name << endl;
 
         if (name == L"annotation");
-        else if (name == L"import") import (e); 
-        else if (name == L"include") include (e);
-        else if (name == L"group") group (e);
-        else if (name == L"simpleType") simple_type (e); 
-        else if (name == L"complexType") complex_type (e);
-        else if (name == L"element") element (e, true);
-        else if (name == L"attributeGroup") attribute_group (e, true);
-        else if (name == L"attribute") attribute (e, true);
+        else if (name == L"import")
+          import (e); 
+        else if (name == L"include") 
+          include (e);
+        else if (name == L"group")
+          group (e);
+        else if (name == L"simpleType") 
+          simple_type (e); 
+        else if (name == L"complexType") 
+          complex_type (e);
+        else if (name == L"element") 
+          element (e, true);
+        else if (name == L"attributeGroup") 
+          attribute_group (e, true);
+        else if (name == L"attribute") 
+          attribute (e, true);
         else wcerr << "unexpected top-level element: " << name << endl;
       }
 
@@ -822,7 +831,7 @@ namespace XSC
   }
 
   Type* Parser::
-  complex_type (XML::Element const& t, const string &provided_name)
+  complex_type (XML::Element const& t, const string &anon_name)
   {
     Type* r (0);
 
@@ -834,13 +843,13 @@ namespace XSC
 
     Complex& node (root_schema_->new_node<Complex> ());
 
-    if (!provided_name.empty ())
+    if (!anon_name.empty ())
       {
-        root_schema_->new_edge<Names> (scope (), node, provided_name);
+        root_schema_->new_edge<Names> (scope (), node, anon_name, true);
       }
     else if (string name = t[L"name"])
       {
-        root_schema_->new_edge<Names> (scope (), node, name);
+        root_schema_->new_edge<Names> (scope (), node, name, false);
       }
 
     r = &node;
@@ -854,7 +863,8 @@ namespace XSC
 
     string name = e.name ();
 
-    if (trace_) wcout << name << endl;
+    if (trace_) 
+      wcout << name << endl;
 
     if (name == L"group") group (e); 
     else if (name == L"all") all (e); 
@@ -989,7 +999,9 @@ namespace XSC
     XML::Element e (next ());
     string name (e.name ());
 
-    if (name == L"extension") simple_content_extension (e); else
+    if (name == L"extension") 
+      simple_content_extension (e); 
+    else
       {
         wcerr << "expected `extension' instead of " << name << endl;
         return;
@@ -1024,7 +1036,8 @@ namespace XSC
   void Parser::
   simple_content_extension (XML::Element const& e)
   {
-    if (trace_) wcout << "extension base: " << fq_name (e, e[L"base"]) << endl;
+    if (trace_) 
+      wcout << "extension base: " << fq_name (e, e[L"base"]) << endl;
 
     set_type<Inherits> (e[L"base"], e, dynamic_cast<Complex&> (scope ()));
 
@@ -1077,8 +1090,16 @@ namespace XSC
   void Parser::
   element (XML::Element const& e, bool global)
   {
-    unsigned long min (e[L"minOccurs"] == L"0" ? 0 : this->min ()),
-      max (e[L"maxOccurs"] && e[L"maxOccurs"] != L"1" ? 0 : this->max ());
+    unsigned long min (e[L"minOccurs"] ? _wtoi (e[L"minOccurs"].c_str ()) : 1);
+    unsigned long max (1);
+    
+    if (e[L"maxOccurs"])
+    {
+      if (e[L"maxOccurs"] == L"unbounded")
+        max = std::numeric_limits <unsigned long>::max ();
+      else 
+        max = _wtoi (e[L"maxOccurs"].c_str ());
+    } 
 
     bool qualified (global ? true : qualify_element_);
 
@@ -1106,7 +1127,7 @@ namespace XSC
             // Looks like an anonymous type. We need to append the 
             // anonymous type's suffix to the name of the previous
             // element.
-            name.append (L"Type");
+            //name.append (L"Type");
             push (e);
 
             annotation ();

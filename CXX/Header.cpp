@@ -47,13 +47,14 @@ namespace
   //
   struct CtorArgs : Traversal::Complex,
                     protected Traversal::Enumeration,
-                    protected Traversal::Type,
+                    //protected Traversal::Type,
                     protected Traversal::Element,
                     protected Traversal::Attribute,
                     protected virtual Context
   {
     CtorArgs (Context& c)
-        : Context (c)
+        : Context (c),
+          first_ (false)
     {
       complex_.edge_traverser (inherits_);
       complex_.edge_traverser (names_);
@@ -62,24 +63,40 @@ namespace
       names_.node_traverser (*this);
     }
 
-    virtual void
-    traverse (SemanticGraph::Type& t)
-    {
-      os << comma () << type_name (t) << " const& b__";
-    }
+    //virtual void
+    //traverse (SemanticGraph::Type& t)
+    //{
+    //  os << comma () << type_name (t) << " const& " << id (t.name ()) << "__";
+    //}
 
     virtual void
     traverse (SemanticGraph::Enumeration& e)
     {
-      os << comma () << type_name (e) << " const& b__";
+      os << comma () << type_name (e) << " const& " << e.name () << "__";
     }
 
     virtual void
     traverse (SemanticGraph::Element& e)
     {
+      string type (type_name (e));
+      string name (id (e.name ()));
+
       if (e.min () == 1 && e.max () == 1)
       {
-        os << comma () << type_name (e) << " const& " << id (e.name ()) << "__";
+        os << comma () << type << " const& " << name << "__";
+      }
+      else if (e.min () >= 1)
+      {
+        string container;
+
+        if (this->generate_ra_sequences_)
+          container = L"::std::vector";
+        else
+          container = L"::std::list";
+
+        os << comma () 
+           << container << "< " << type << " > const& "
+           << name << "__";
       }
     }
 
@@ -96,7 +113,6 @@ namespace
     traverse (SemanticGraph::Complex& c)
     {
       first_ = true;
-
       complex_.traverse (c);
     }
 
@@ -146,8 +162,8 @@ namespace
       string name (c.name ());
       string type (type_name (c));
 
-
       string container;
+
       if (this->generate_ra_sequences_)
         container = L"::std::vector";
       else
@@ -212,7 +228,6 @@ namespace
       os << endl;
     }
   };
-
 
   struct Attribute : Traversal::Attribute, protected virtual Context
   {
@@ -301,13 +316,20 @@ namespace
     virtual void
     traverse (Type& c)
     {
-      if (c.named ()) name = id (c.name ());
+      // We need to get the name of the element. The name would
+      // be already set if it was an anonymous type.
+      if (c.named ()) 
+        name = id (c.name ());
 
-      enter_scope (name);
+      // We only continue if we have a valid name.
+      if (!name.empty ())
+      {
+        enter_scope (name);
 
-      Traversal::Complex::traverse (c);
+        Traversal::Complex::traverse (c);
 
-      leave_scope ();
+        leave_scope ();
+      }
     }
 
     virtual void
@@ -317,7 +339,7 @@ namespace
     }
 
     virtual void
-    inherits_none (Type&)
+    inherits_none (Type &)
     {
       os << " : public ::XSCRT::Type"
          << "{"
@@ -338,7 +360,7 @@ namespace
       // Is type a complex type?
       Type::InheritsIterator b (c.inherits_begin ()), e (c.inherits_end ());
       if (b == e)
-  return true;
+        return true;
 
       // Checks only for simple types having attributes.
       bool ret_val (has<Traversal::Attribute> (c));
@@ -349,41 +371,43 @@ namespace
     read_write_type (Type &c)
     {
       if (! generate_cdr_types (c))
-    return;
+        return;
 
       // CDR Insertion/Extraction Operators
       bool reader = 0;
+
       if (this->cdr_reader_generation_)
       {
-  os << "// read " << endl
-     << "//" << endl;
-  reader = 1;
+        os << "// read " << endl
+           << "//" << endl;
 
-  os << "public:" << endl;
-  os << "static bool " << endl
-     << "read_" << name
-     << " (::XMLSchema::CDR_InputStream &,"
-     << endl;
+        reader = 1;
 
-  for (size_t j =0; j < name.length () + 5; j++)
-    os << " ";
+        os << "public:" << endl;
+        os << "static bool " << endl
+           << "read_" << name
+           << " (::XMLSchema::CDR_InputStream &,"
+           << endl;
 
-  os << " ::XMLSchema::cdr_arg_traits < " << name
-     << " >::inout_type);" << endl;
+        for (size_t j =0; j < name.length () + 5; j++)
+          os << " ";
+
+        os << " ::XMLSchema::cdr_arg_traits < " << name
+           << " >::inout_type);" << endl;
       }
 
       // CDR Extraction Operators
       if (this->cdr_writer_generation_)
       {
-  if (!reader)
-    os << "public:" << endl;
+        if (!reader)
+          os << "public:" << endl;
 
-  os << "// write " << endl
-     << "//" << endl
-     << "bool" << endl
-     << "write_" << name
-     << " (::XMLSchema::CDR_OutputStream &) const;"
-     << endl;
+        os << "// write " << endl
+           << "//" << endl
+           << "bool" << endl
+           << "write_" << name
+           << " (::XMLSchema::CDR_OutputStream &) const;"
+           << endl;
       }
     }
 
@@ -422,8 +446,8 @@ namespace
         virtual void
         traverse (SemanticGraph::Complex& c)
         {
-          if (has<Traversal::Element> (c) ||
-              has<Traversal::Attribute> (c)) v_ = false;
+          if (has<Traversal::Element> (c) || has<Traversal::Attribute> (c))
+            v_ = false;
           else
           {
             inherits (c, *this);
@@ -445,7 +469,6 @@ namespace
       //
       os << name << " (" << name << " const& s);"
          << endl;
-
 
       // operator=
       //
@@ -469,24 +492,24 @@ namespace
       // Check to see if >> and << operators need to
       // be generated
       if (! generate_cdr_types (c))
-  return;
+        return;
 
       if (this->cdr_reader_generation_)
-  os << "extern bool" << endl
-     << "operator >> (::XMLSchema::CDR_InputStream &,"
-     << endl
-     << "             ::XMLSchema::cdr_arg_traits < "
-     << name << " >::inout_type);";
+        os << "extern bool" << endl
+          << "operator >> (::XMLSchema::CDR_InputStream &,"
+          << endl
+          << "             ::XMLSchema::cdr_arg_traits < "
+          << name << " >::inout_type);";
 
       if (this->cdr_writer_generation_)
-  os << "extern bool" << endl
-     << "operator << (::XMLSchema::CDR_OutputStream &,"
-     << endl
-     << "             ::XMLSchema::cdr_arg_traits < "
-     << name << " >::in_type);"
-     << endl;
+        os << "extern bool" << endl
+           << "operator << (::XMLSchema::CDR_OutputStream &,"
+           << endl
+           << "             ::XMLSchema::cdr_arg_traits < "
+           << name << " >::in_type);"
+           << endl;
       else
-  os << endl;
+        os << endl;
     }
 
   private:
@@ -502,7 +525,6 @@ namespace
 
     CtorArgs ctor_args_;
   };
-
 
   struct Enumerator : Traversal::Enumerator, protected virtual Context
   {
@@ -704,9 +726,9 @@ namespace
 
       if (!t.named () && !t.context ().count ("seen"))
       {
-        string name = anon_prefix_ + e.name () + anon_suffix_;
+        string name (type_name (e));
 
-        os << "// anonymous type for " << scope << "::" << name << endl
+        os << "// anonymous type for " /* << scope << "::"*/ << name << endl
            << "//" << endl;
 
         if (dynamic_cast<SemanticGraph::Type*> (&e.scope ()))

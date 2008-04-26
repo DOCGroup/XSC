@@ -70,6 +70,8 @@ namespace XMLSchema
 
     add_info<ID<C> > (map, 0);
 
+    add_info<anyURI<C> > (map, 0);
+
     // IDREF_Base
     //
     {

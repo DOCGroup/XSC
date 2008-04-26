@@ -271,7 +271,7 @@ namespace
   //
   struct CtorArgs : Traversal::Complex,
                     protected Traversal::Enumeration,
-                    protected Traversal::Type,
+                    //protected Traversal::Type,
                     protected Traversal::Element,
                     protected Traversal::Attribute,
                     protected virtual Context
@@ -286,11 +286,11 @@ namespace
       names_.node_traverser (*this);
     }
 
-    virtual void
-    traverse (SemanticGraph::Type& t)
-    {
-      os << comma () << type_name (t) << " const& b__";
-    }
+    //virtual void
+    //traverse (SemanticGraph::Type& t)
+    //{
+    //  os << comma () << type_name (t) << " const& b__";
+    //}
 
     virtual void
     traverse (SemanticGraph::Enumeration& e)
@@ -301,9 +301,25 @@ namespace
     virtual void
     traverse (SemanticGraph::Element& e)
     {
+      string type (type_name (e));
+      string name (id (e.name ()));
+
       if (e.min () == 1 && e.max () == 1)
       {
-        os << comma () << type_name (e) << " const& " << id (e.name ()) << "__";
+        os << comma () << type << " const& " << name << "__";
+      }
+      else if (e.min () >= 1)
+      {
+        string container;
+
+        if (this->generate_ra_sequences_)
+          container = L"::std::vector";
+        else
+          container = L"::std::list";
+
+        os << comma () 
+           << container << "< " << type << " > const& "
+           << name << "__";
       }
     }
 
@@ -320,7 +336,6 @@ namespace
     traverse (SemanticGraph::Complex& c)
     {
       first_ = true;
-
       complex_.traverse (c);
     }
 
@@ -368,7 +383,6 @@ namespace
       assign_base_.node_traverser (assign_);
       assign_member_.node_traverser (assign_);
 
-
       edge_traverser (names_);
       names_.node_traverser (anonymous_type);
       names_.node_traverser (member_);
@@ -377,17 +391,21 @@ namespace
     virtual void
     traverse (Type& c)
     {
-      if (c.named ()) name = id (c.name ());
+      if (c.named ())
+        name = id (c.name ());
 
-      enter_scope (name);
+      if (!name.empty ())
+      {
+        enter_scope (name);
 
-      c.context ().set ("name", scope);
+        c.context ().set ("name", scope);
 
-      Traversal::Complex::traverse (c);
+        Traversal::Complex::traverse (c);
 
-      c.context ().remove ("name");
+        c.context ().remove ("name");
 
-      leave_scope ();
+        leave_scope ();
+      }
     }
 
 
@@ -454,7 +472,7 @@ namespace
       // operator=
       //
       os << i
-         << type << "& " << scope << "::" << endl
+         << scope << "& " << scope << "::" << endl
          << "operator= (" << type << " const& s)"
          << "{";
 
@@ -478,8 +496,9 @@ namespace
     {
       // Is type a complex type?
       Type::InheritsIterator b (c.inherits_begin ()), e (c.inherits_end ());
+
       if (b == e)
-  return true;
+        return true;
 
       // Checks only for simple types having attributes.
       bool ret_val (has<Traversal::Attribute> (c));
@@ -493,40 +512,40 @@ namespace
       // cdr insertion and extraction
       // operators
       if (! generate_cdr_types (c))
-  return;
+        return;
 
       string type (type_name (c));
 
       if (this->cdr_reader_generation_)
-  os << "bool " << endl
-     << "operator >> (::XMLSchema::CDR_InputStream &stream,"
-     << endl
-     << "             ::XMLSchema::cdr_arg_traits < "
-     << type << " >::inout_type element)"
-     << endl
-     << "{"
-     << "return " << type << "::read_"
-     << name << " (stream, element);"
-     << endl
-     << "}";
+        os << "bool " << endl
+           << "operator >> (::XMLSchema::CDR_InputStream &stream,"
+           << endl
+           << "             ::XMLSchema::cdr_arg_traits < "
+           << type << " >::inout_type element)"
+           << endl
+           << "{"
+           << "return " << type << "::read_"
+           << name << " (stream, element);"
+           << endl
+           << "}";
 
       if (this->cdr_writer_generation_)
-  os << "bool" << endl
-     << "operator << (::XMLSchema::CDR_OutputStream &stream,"
-     << endl
-     << "             ::XMLSchema::cdr_arg_traits < "
-     << type << " >::in_type element)"
-     << endl
-     << "{"
-     << "return element.write_"
-     << name << " (stream);"
-     << endl
-     << "}";
+        os << "bool" << endl
+           << "operator << (::XMLSchema::CDR_OutputStream &stream,"
+           << endl
+           << "             ::XMLSchema::cdr_arg_traits < "
+           << type << " >::in_type element)"
+           << endl
+           << "{"
+           << "return element.write_"
+           << name << " (stream);"
+           << endl
+           << "}";
     }
 
     struct CtorBase : Traversal::Complex,
                       Traversal::Enumeration,
-                      Traversal::Type,
+                      //Traversal::Type,
                       protected Traversal::Element,
                       protected Traversal::Attribute,
                       protected virtual Context
@@ -536,11 +555,11 @@ namespace
       {
       }
 
-      virtual void
-      traverse (SemanticGraph::Type&)
-      {
-        os << "Base (b__)," << endl;
-      }
+      //virtual void
+      //traverse (SemanticGraph::Type&)
+      //{
+      //  os << "Base (b__)," << endl;
+      //}
 
       virtual void
       traverse (SemanticGraph::Enumeration&)
@@ -551,7 +570,10 @@ namespace
       void
       traverse (SemanticGraph::Complex& c)
       {
-        os << "Base (";
+        string type (type_name (c));
+        string name (id (c.name ()));
+
+        os << name << "_ (";
 
         args_.traverse (c);
 
@@ -637,21 +659,21 @@ namespace
                         protected virtual Context
     {
       CTorMember (Context& c)
-  : Context (c),
-    base_class_initialized_ (0)
+      : Context (c),
+        base_class_initialized_ (0)
       {
       }
 
       virtual void
       traverse (SemanticGraph::Element& e)
       {
-  // Copy constructor for a complext type needs
-  // to inherit from the ::XSCRT::Type base class
-  if (! base_class_initialized_)
-  {
-    os << "::XSCRT::Type (), " << endl;
-    base_class_initialized_ = 1;
-  }
+        // Copy constructor for a complex type needs
+        // to inherit from the ::XSCRT::Type base class
+        if (! base_class_initialized_)
+        {
+          os << "::XSCRT::Type (), " << endl;
+          base_class_initialized_ = 1;
+        }
 
         if (e.min () == 1 && e.max () == 1)
         {
@@ -662,12 +684,19 @@ namespace
 
           os << name << "_ (new " << type << " (" << name << "__))," << endl;
         }
+        else if (e.min () >= 1)
+        {
+          // more than one
+          string name (id (e.name ()));
+          string type (type_name (e));
 
+          os << name << "_ ("<< name << "__)," << endl;
+        }
       }
 
       void reset_base_class_initialization ()
       {
-  base_class_initialized_ = 0;
+        base_class_initialized_ = 0;
       }
 
       virtual void
@@ -681,6 +710,7 @@ namespace
           os << name << "_ (new " << type << " (" << name << "__))," << endl;
         }
       }
+    
     private:
       bool base_class_initialized_;
     };
@@ -717,23 +747,23 @@ namespace
     };
 
 
-    struct Copy : Traversal::Type,
+    struct Copy :/* Traversal::Type, */
                   Traversal::Element,
                   Traversal::Attribute,
                   protected virtual Context
 
     {
       Copy (Context& c)
-  : Context (c),
-    base_class_initialized_ (0)
+      : Context (c),
+        base_class_initialized_ (0)
       {
       }
 
-      virtual void
-      traverse (SemanticGraph::Type&)
-      {
-        os << "Base (s)," << endl;
-      }
+      //virtual void
+      //traverse (SemanticGraph::Type&)
+      //{
+      //  os << "Base (s)," << endl;
+      //}
 
       virtual void
       traverse (SemanticGraph::Element& e)
@@ -741,34 +771,37 @@ namespace
         string name (id (e.name ()));
         string type (type_name (e));
 
-  // Call the ::XSCRT::Type () base class
-  // constructor. Fix for compile warnings.
-  if (! base_class_initialized_)
-    {
-      os << "::XSCRT::Type ()," << endl;
-      base_class_initialized_ = 1;
-    }
+        // Call the ::XSCRT::Type () base class
+        // constructor. Fix for compile warnings.
+        if (! base_class_initialized_)
+          {
+            os << "::XSCRT::Type ()," << endl;
+            base_class_initialized_ = 1;
+          }
 
-  if (e.max () != 1)
-        {
-          // sequence
-          //
-          // os << "//" << name << "_ (s." << name << "_)," << endl;
-        }
+        if (e.min () == 1 && e.max () == 1)
+          {
+            // one
+            //
+
+            os << name << "_ (new " << type << " (*s." << name << "_))," << endl;
+          }
+        else if (e.min () >= 0)
+          {
+            // sequence
+            //   
+
+            os << name << "_ (s." << name << "_)," << endl;
+          }
         else if (e.min () == 0)
-        {
-          // optional
-          //
-          os << name << "_ ("
-             << "s." << name << "_.get () ? "
-             << "new " << type << " (*s." << name << "_) : " << "0)," << endl;
-        }
-        else
-        {
-          //
-          // one
-          os << name << "_ (new " << type << " (*s." << name << "_))," << endl;
-        }
+          {
+            // optional
+            //
+
+            os << name << "_ ("
+              << "s." << name << "_.get () ? "
+              << "new " << type << " (*s." << name << "_) : " << "0)," << endl;
+          }
       }
 
       virtual void
@@ -791,7 +824,7 @@ namespace
 
       void reset_base_class_initialization ()
       {
-  base_class_initialized_ = 0;
+        base_class_initialized_ = 0;
       }
 
     private:
@@ -814,19 +847,19 @@ namespace
 
         if (e.max () != 1)
         {
-          string type (type_name (e));
+          //string type (type_name (e));
 
-          // sequence
-          //
-          if (this->generate_ra_sequences_)
-            os << name << "_.reserve (s." << name << "_.size ());";
+          //// sequence
+          ////
+          //if (this->generate_ra_sequences_)
+          //  os << name << "_.reserve (s." << name << "_.size ());";
 
-          os << "{"
-             << "for (" << name << "_const_iterator i (s."
-             << name << "_.begin ());"
-             << "i != s." << name << "_.end ();"
-             << "++i) " << "add_" << name << " (*i);"
-             << "}";
+          //os << "{"
+          //   << "for (" << name << "_const_iterator i (s."
+          //   << name << "_.begin ());"
+          //   << "i != s." << name << "_.end ();"
+          //   << "++i) " << "add_" << name << " (*i);"
+          //   << "}";
         }
         else if (e.min () == 0)
         {
@@ -862,7 +895,7 @@ namespace
       }
     };
 
-    struct Assignment : Traversal::Type,
+    struct Assignment : /* Traversal::Type, */
                         Traversal::Element,
                         Traversal::Attribute,
                         protected virtual Context
@@ -872,13 +905,13 @@ namespace
       {
       }
 
-      virtual void
-      traverse (SemanticGraph::Type&)
-      {
-        os << "static_cast< Base& > (*this) = "
-           << "static_cast< Base const& > (s);"
-           << endl;
-      }
+      //virtual void
+      //traverse (SemanticGraph::Type&)
+      //{
+      //  os << "static_cast< Base& > (*this) = "
+      //     << "static_cast< Base const& > (s);"
+      //     << endl;
+      //}
 
 
       virtual void
@@ -887,41 +920,47 @@ namespace
         string name (e.name ());
         string type (type_name (e));
 
-        if (e.max () != 1)
-        {
-          // sequence
-          //
-          os << name << "_.clear ();";
-
-          if (this->generate_ra_sequences_)
-            os   << name << "_.reserve (s." << name << "_.size ());";
-
-          os << "{"
-             << "for (" << name << "_const_iterator i (s."
-             << name << "_.begin ());"
-             << "i != s." << name << "_.end ();"
-             << "++i) " << "add_" << name << " (*i);"
-             << "}";
-        }
-        else if (e.min () == 0)
+        if (e.min () == 0 && e.max () == 1)
         {
           name = id (name);
 
           // optional
           //
-          os << "if (s." << name << "_.get ()) "
-             << name << " (*(s." << name << "_));"
-             << "else "<< name << "_ = ::std::auto_ptr< " << type << " > (0);"
+          os << "if (s." << name << "_.get ())" << std::endl
+             << "  " << name << " (*(s." << name << "_));"
+             << "else" << std::endl
+             << "  " << name << "_.reset (0);"
+             << endl;
+        }
+        else if (e.min () == 1 && e.max () == 1)
+        {
+          name = id (name);
+
+          // one
+          //
+
+          os << name << " (*s." << name << "_);"
              << endl;
         }
         else
         {
-          name = id (name);
-
+          // sequence
           //
-          // one
-          os << name << " (s." << name << " ());"
-             << endl;
+          os << name << "_ = s." << name << "_;"
+             << std::endl;
+
+          //os << name << "_.clear ();";
+
+          //if (this->generate_ra_sequences_)
+          //  os   << name << "_.reserve (s." << name << "_.size ());";
+
+          //os << "{"
+          //   << "for (" << name << "_const_iterator i (s."
+          //   << name << "_.begin ());"
+          //   << "i != s." << name << "_.end ();"
+          //   << "++i) " << std::endl 
+          //   << "add_" << name << " (*i);"
+          //   << "}";
         }
       }
 
@@ -968,6 +1007,7 @@ namespace
     Traversal::Names assign_member_;
 
     Traversal::Names names_;
+
     Member member_;
 
     CtorArgs ctor_args_;

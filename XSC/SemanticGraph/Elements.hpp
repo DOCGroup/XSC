@@ -171,8 +171,9 @@ namespace XSC
     protected:
       friend class Graph<Node, Edge>;
 
-      Names (Name_ const& name)
-          : name_ (name)
+      Names (Name_ const& name, bool anonymous = false)
+          : name_ (name),
+            anonymous_ (anonymous)
       {
         type_info (static_type_info ());
       }
@@ -193,6 +194,7 @@ namespace XSC
       Scope* scope_;
       Nameable* named_;
       Name_ name_;
+      bool anonymous_;      
     };
 
 
@@ -206,7 +208,7 @@ namespace XSC
       bool
       named () const
       {
-        return !named_.empty ();
+        return !named_[0]->anonymous ();
       }
 
       Name_

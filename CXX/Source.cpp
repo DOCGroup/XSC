@@ -147,13 +147,14 @@ namespace
       // there will be an operator overloading
       // mismatch if this occurs.
       string type (type_name (c));
+
       if (type_is_boolean (type))
-  os << "stream.write_boolean (*this);" << endl;
+        os << "stream.write_boolean (*this);" << endl;
       else
-       // Convert it to its base type. This will
-  // have an operator << defined to
-  // serialize this type
-  os << "stream << static_cast < const Base& > (*this);" << endl;
+        // Convert it to its base type. This will
+        // have an operator << defined to
+        // serialize this type
+        os << "stream << static_cast < const Base& > (*this);" << endl;
     }
 
     // Helper method implementation
@@ -166,24 +167,24 @@ namespace
       // Write length first
       os << "// " << name << endl;
       os << "size_t " << name << "_size = "
-   << "this->" << name << "_.size ();"
-   << "stream << " << name << "_size;"
-   << endl;
+         << "this->" << name << "_.size ();"
+         << "stream << " << name << "_size;"
+         << endl;
 
       // Write each member next
       os << "for (" << name << "_const_iterator "
-   << name << "_iter = " << "this->begin_" << name << " ();"
-   << "    " << name << "_iter != this->end_" << name
-   << " ();"
-   << "    ++" << name << "_iter)"
-   << "{";
+         << name << "_iter = " << "this->begin_" << name << " ();"
+         << "    " << name << "_iter != this->end_" << name
+         << " ();"
+         << "    ++" << name << "_iter)"
+         << "{";
 
       // Check if the type being written is a boolean
       // type
       if (type_is_boolean (type))
-  os << "stream.write_boolean (*" << name << ");";
+        os << "stream.write_boolean (*" << name << ");";
       else
-  os << "stream << (*" << name << "_iter);";
+        os << "stream << (*" << name << "_iter);";
 
       os << "}";
     }
@@ -196,34 +197,34 @@ namespace
 
       if (e.max () != 1)
       {
-  // Write sequence types after we write the attributes
-  if (this->has_attributes_)
-    // Safe hack: Memory not managed by container.
-    // released elsewhere. So this is safe
-    this->complex_list_.push_back (&e);
-  else
-    this->write_sequence (e);
+        // Write sequence types after we write the attributes
+        if (this->has_attributes_)
+          // Safe hack: Memory not managed by container.
+          // released elsewhere. So this is safe
+          this->complex_list_.push_back (&e);
+        else
+          this->write_sequence (e);
       }
       else if (e.min () == 0)
       {
-  // optional
-  //
-  this->optional_element_list_.push_back (&e);
+        // optional
+        //
+        this->optional_element_list_.push_back (&e);
       }
       else
       {
-  name = id (name);
+        name = id (name);
 
-  //
-  // one
-  os << "// " << name << endl;
+        //
+        // one
+        os << "// " << name << endl;
 
-  // check if the type is a boolean type
-  if (type_is_boolean (type))
-    os << "stream.write_boolean (this->" << name
-       << " ());" << endl;
-  else
-    os << "stream << this->" << name << " ();" << endl;
+        // check if the type is a boolean type
+        if (type_is_boolean (type))
+          os << "stream.write_boolean (this->" << name
+             << " ());" << endl;
+        else
+          os << "stream << this->" << name << " ();" << endl;
       }
     }
 
@@ -247,27 +248,27 @@ namespace
 
       if (a.optional ())
       {
-  name = id (name);
+        name = id (name);
 
-  // optional
-  //
-  os << " // " << name << endl;
-  os << "bool " << name << "_p = this->" << name << "_p ();";
-  os << "stream.write_boolean (" << name << "_p" << ");";
+        // optional
+        //
+        os << " // " << name << endl;
+        os << "bool " << name << "_p = this->" << name << "_p ();";
+        os << "stream.write_boolean (" << name << "_p" << ");";
 
-  os << "if (" << name << "_p)"
-     << "{";
+        os << "if (" << name << "_p)"
+          << "{";
 
-  // check if the type is a boolean type
-  if (type_is_boolean (type))
-    os << "stream.write_boolean (this->" << name
-       << " ());" << endl;
-  else
-    os << "stream << this->" << name << " ();";
+        // check if the type is a boolean type
+        if (type_is_boolean (type))
+          os << "stream.write_boolean (this->" << name
+            << " ());" << endl;
+        else
+          os << "stream << this->" << name << " ();";
 
-  os << "}" << endl;
-      }
-      else
+        os << "}" << endl;
+            }
+            else
       {
   //
   // one
@@ -302,31 +303,35 @@ namespace
     {
       // Write the sequence elements
       if (! this->complex_list_.empty ())
-  for (size_t i =0; i < this->complex_list_.size (); i++)
-    this->write_sequence (*this->complex_list_[i]);
+        {
+          for (size_t i =0; i < this->complex_list_.size (); i++)
+            this->write_sequence (*this->complex_list_[i]);
 
-      // Write Optional elements AFTER sequence elements
-      if (! this->optional_element_list_.empty ())
-  for (size_t i=0; i < this->optional_element_list_.size (); i++)
-  {
-    string name (this->optional_element_list_[i]->name ());
-    string type (type_name (*this->optional_element_list_[i]));
+          // Write Optional elements AFTER sequence elements
+          if (! this->optional_element_list_.empty ())
+            {
+              for (size_t i=0; i < this->optional_element_list_.size (); i++)
+                {
+                  string name (this->optional_element_list_[i]->name ());
+                  string type (type_name (*this->optional_element_list_[i]));
 
-    os << "// " << name << endl;
+                  os << "// " << name << endl;
 
-    // First write out the boolean value
-    os << "stream.write_boolean (" << name << "_p ());";
+                  // First write out the boolean value
+                  os << "stream.write_boolean (" << name << "_p ());";
 
-    os << "if (" << name << "_p ())"
-       << endl;
+                  os << "if (" << name << "_p ())"
+                    << endl;
 
-    // check if the type is a boolean type
-    if (type_is_boolean (type))
-      os << "  stream.write_boolean (this->" << name
-         << " ());" << endl;
-    else
-      os << "  stream << this->" << name << " ();" << endl;
-  }
+                  // check if the type is a boolean type
+                  if (type_is_boolean (type))
+                    os << "  stream.write_boolean (this->" << name
+                      << " ());" << endl;
+                  else
+                    os << "  stream << this->" << name << " ();" << endl;
+                }
+            }
+        }
     }
 
   private:
@@ -891,7 +896,7 @@ namespace
     // extension base. Is not used in any other case
   };
 
-   //@@ I am using this traverser to handle anonymous types which is
+  //@@ I am using this traverser to handle anonymous types which is
   //   not very clean (and asymmetric).
   //
   struct ComplexElement : Traversal::Complex, protected virtual Context
@@ -903,12 +908,11 @@ namespace
           name (name_),
           element_ (c),
           attribute_ (c),
-    cdr_writer_ (c),
-    cdr_reader_ (c)
+          cdr_writer_ (c),
+          cdr_reader_ (c)
     {
       names_elements_.node_traverser (element_);
       names_attributes_.node_traverser (attribute_);
-
       names_anonymous_.node_traverser (anonymous_type);
     }
 
@@ -916,21 +920,25 @@ namespace
     virtual void
     traverse (Type& c)
     {
-      if (c.named ()) name = id (c.name ());
+      if (c.named ()) 
+        name = id (c.name ());
 
-      enter_scope (name);
+      if (!name.empty ())
+      {
+        enter_scope (name);
 
-      c.context ().set ("name", name);
+        c.context ().set ("name", name);
 
-      // Go after anonymous types first.
-      //
-      names (c, names_anonymous_);
+        // Go after anonymous types first.
+        //
+        names (c, names_anonymous_);
 
-      Traversal::Complex::traverse (c);
+        Traversal::Complex::traverse (c);
 
-      c.context ().remove ("name");
+        c.context ().remove ("name");
 
-      leave_scope ();
+        leave_scope ();
+      }
     }
 
     virtual void
@@ -1003,9 +1011,9 @@ namespace
       // Is type a complex type?
       Type::InheritsIterator b (c.inherits_begin ()), e (c.inherits_end ());
       if (b == e)
-  return true;
+       return true;
 
-    // Checks only for simple types having attributes.
+      // Checks only for simple types having attributes.
       bool ret_val (has<Traversal::Attribute> (c));
       return ret_val;
     }
@@ -1016,60 +1024,60 @@ namespace
       // Check if one needs to generate read/write operations
       // for this type
       if (! generate_cdr_types (c))
-  return;
+        return;
 
       //write all elements contained in this type
       if (this->cdr_writer_generation_)
       {
 
-   // pre
-   os << "// write " << name << endl;
-   os << "bool " << endl << name << "::write_" << name
-      << " (::XMLSchema::CDR_OutputStream &stream) const"
-      << "{";
+        // pre
+        os << "// write " << name << endl;
+        os << "bool " << endl << name << "::write_" << name
+           << " (::XMLSchema::CDR_OutputStream &stream) const"
+           << "{";
 
-  {
-    // Check if the type has any attributes. If so then
-    // if the type also has sequences, we write the
-    // attributes before writing the sequence elements.
-    // This is because, at the recipient, the type can be
-    // reconstructed before adding the sequences eliminating
-    // temporary storage
-    this->cdr_writer_.has_attributes (has<Traversal::Attribute> (c));
-    this->cdr_writer_.traverse (c);
-    this->cdr_writer_.reset_type_attribute_settings ();
-  }
+        {
+          // Check if the type has any attributes. If so then
+          // if the type also has sequences, we write the
+          // attributes before writing the sequence elements.
+          // This is because, at the recipient, the type can be
+          // reconstructed before adding the sequences eliminating
+          // temporary storage
+          this->cdr_writer_.has_attributes (has<Traversal::Attribute> (c));
+          this->cdr_writer_.traverse (c);
+          this->cdr_writer_.reset_type_attribute_settings ();
+        }
 
-  // post
-   os << "return stream.good_bit ();";
-   os << "}" << endl;
+        // post
+        os << "return stream.good_bit ();";
+        os << "}" << endl;
       }
 
       // Read the written types from the stream
       if (this->cdr_reader_generation_)
       {
-  // pre
-   os << "// read " << name << endl;
-   os << "bool" << endl << name << "::" << endl
-     << "read_" << name
-      << " (::XMLSchema::CDR_InputStream &stream," << endl;
+        // pre
+        os << "// read " << name << endl;
+        os << "bool" << endl << name << "::" << endl
+           << "read_" << name
+           << " (::XMLSchema::CDR_InputStream &stream," << endl;
 
-  for (size_t j =0; j < name.length () + 5; j++)
-    os << " ";
+        for (size_t j =0; j < name.length () + 5; j++)
+          os << " ";
 
-  os << "::XMLSchema::cdr_arg_traits < " << name
-     << " >::inout_type element)"
-      << "{";
+        os << "::XMLSchema::cdr_arg_traits < " << name
+           << " >::inout_type element)"
+           << "{";
 
-  {
-    this->cdr_reader_.has_attributes (has<Traversal::Attribute> (c));
-    this->cdr_reader_.traverse (c);
-    this->cdr_reader_.reset_type_attribute_settings ();
-  }
+        {
+          this->cdr_reader_.has_attributes (has<Traversal::Attribute> (c));
+          this->cdr_reader_.traverse (c);
+          this->cdr_reader_.reset_type_attribute_settings ();
+        }
 
-  // post
-   os << "return stream.good_bit ();";
-   os << "}" << endl;
+        // post
+        os << "return stream.good_bit ();";
+        os << "}" << endl;
       }
 
     }
@@ -1079,11 +1087,12 @@ namespace
 
     Traversal::Names names_elements_;
     Traversal::Names names_attributes_;
-
+  
     Element element_;
     Attribute attribute_;
 
     Traversal::Names names_anonymous_;
+
     CDR_WriterTraverser cdr_writer_;
     CDR_ReaderTraverser cdr_reader_;
   };

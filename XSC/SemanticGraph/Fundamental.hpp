@@ -72,6 +72,25 @@ namespace XSC
     //
     //
     //
+    class AnyUri : public virtual FundamentalType
+    {
+    public:
+      static Introspection::TypeInfo const&
+      static_type_info (void);
+
+    protected:
+      friend class Graph<Node, Edge>;
+
+      AnyUri (void)
+      {
+        type_info (static_type_info ());
+      }
+    };
+
+
+    //
+    //
+    //
     class Byte : public virtual FundamentalType
     {
     public:

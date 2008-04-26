@@ -5,9 +5,6 @@ project(libXSC): xsc_be, xerces {
   
   includes  += $(XSC_ROOT)/contrib $(XSC_ROOT)
   
-  after += Utilitys
-  libs  += Utilitys
-  
   Source_Files {
 	  .
 	  ./SemanticGraph

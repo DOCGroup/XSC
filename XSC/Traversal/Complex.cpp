@@ -35,13 +35,13 @@ namespace XSC
     {
       Type::InheritsIterator b (c.inherits_begin ()), e (c.inherits_end ());
 
-      if (b != e) iterate_and_traverse (b, e, d);
+      if (b != e) 
+        iterate_and_traverse (b, e, d);
+
       else return false;
 
       return true;
-    }
-
-   
+    }   
 
     void Complex::
     inherits (Type& c)
@@ -58,12 +58,11 @@ namespace XSC
                               &InterfaceTemplate::comma,
                               c*/);
 	
-	inherits_post (c);
+	      inherits_post (c);
       }
       else
       {
         inherits_none (c);
-
       }
 
     }

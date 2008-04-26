@@ -1,7 +1,63 @@
+Sat Apr 26 15:45:05 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * CXX/Elements.hpp:
+        * CXX/Elements.cpp:
+        * CXX/Header.cpp:
+        * CXX/Inline.cpp:
+        * CXX/Source.cpp:
+
+          . Bug fix where anonymous child elements where not handled
+            properly. Now anonymous child elements are generated as
+            a nested class.
+            
+        * XSC/Parser.cpp:
+        
+          . Bug fix where the cardinality on elements was not handled 
+            properly. The current implemenatation ignored the actual 
+            valued of the cardinality and always used 0 or 1. This made
+            it difficult to determine how to generate the correct 
+            implementation for a sequence.            
+
+        * XSC/SemanticGraph/Elements.hpp:
+        
+          . Redesigned how anonymous types are handled. Anonymous types
+            are now given a name by default, but a flag in class Name
+            determines if the type is anonymous. This makes it a LOT
+            easier to deterine the name of an anoymous types class when
+            in many cases the name would not be available.
+            
+        * XSC/SemanticGraph/Fundamental.hpp:
+        * XSC/SemanticGraph/Fundamental.cpp:
+        * XSCRT/XMLSchema/Traversal.hpp:
+        * XSCRT/XMLSchema/TypeInfo.tpp:
+        * XSCRT/XMLSchema/Types.hpp:
+        * XSC/Traversal/Fundamental.hpp:
+        
+          . Added support to xs:anyURI elements.
+
+        * XSC/Traversal/Complex.cpp:
+          
+          . Reformated the source code so its easier to debug in Visual
+            Studio.          
+
+        * XSC/libXSC.mpc:
+        
+          . Included template source files. This is useful for Visual 
+            Studio users who want to be able to browse the source code.
+            
+          . Removed the Utilitys from the 'libs' parameter since it was
+            forcing linkage against the wrong library on non-Windows 
+            machines.
+
+        * XSCRT/XSCRT/XSCRT.mpc:
+
+          . Included template source files. This is useful for Visual 
+            Studio users who want to be able to browse the source code.
+            
 Thu Apr 24 16:06:23 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * MPC/config/xscrt.mpb:
-        
+
           Fixed build issues related to static vs. dynamic linkage. Right
           now, its just a hack until we figure out how to correctly
           resolve this problem.

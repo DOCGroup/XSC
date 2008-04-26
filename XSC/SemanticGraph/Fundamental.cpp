@@ -76,6 +76,28 @@ namespace XSC
     static_type_info () { return any_simple_type_; }
 
 
+    // AnyUri
+    //
+    //
+    namespace
+    {
+      TypeInfo any_uri_init_ (void)
+      {
+        TypeInfo ti (typeid (AnyUri));
+
+        ti.add_base (Access::PUBLIC,
+                     true, 
+                     FundamentalType::static_type_info ());
+
+        return ti;
+      }
+
+      TypeInfo any_uri_ (any_uri_init_ ());
+    }
+
+    TypeInfo const & AnyUri::
+    static_type_info (void) { return any_uri_; }
+
     // Byte
     //
     //

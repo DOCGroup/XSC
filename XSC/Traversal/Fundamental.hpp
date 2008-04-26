@@ -25,6 +25,10 @@ namespace XSC
     AnySimpleType;
     
     typedef
+    Node<SemanticGraph::AnyUri>
+    AnyUri;
+
+    typedef
     Node<SemanticGraph::Byte>
     Byte;
 

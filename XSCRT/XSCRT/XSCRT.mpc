@@ -15,6 +15,9 @@ project (XSCRT) : xerces, xsc_common {
   }
 
   Template_Files {
+    ./*.tpp
+    ../XMLSchema/*.tpp
+    
     utils/File_T.cpp
     utils/XML_Schema_Resolver_T.cpp
   }

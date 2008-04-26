@@ -63,6 +63,12 @@ namespace XMLSchema
     struct ID : Traverser<XMLSchema::ID<C> >
     {
     };
+
+    template <typename C>
+    struct anyURI : Traverser <XMLSchema::anyURI <C> >
+    {
+
+    };
   }
 }
 
