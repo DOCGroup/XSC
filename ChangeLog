@@ -1,3 +1,14 @@
+Mon Apr 28 15:26:05 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * CXX/Forward.cpp:
+        * CXX/Header.cpp:
+        
+          . Bug fix where forward declarations were not handled correctly 
+            for named types. It would generate a fully qualified type name,
+            which included its scope. Forward declarations can not contain
+            a scope. This was resolved by adding different generation paths
+            for named/unnamed types.
+
 Mon Apr 28 14:42:20 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * CXX/Elements.hpp:
@@ -15,9 +26,9 @@ Mon Apr 28 14:42:20 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
         * XSCRT/XMLSchema/Traversal.hpp:
         * XSCRT/XMLSchema/Types.hpp:
         * XSCRT/XSCRT/ExtendedTypeInfo.hpp:
-        
+
           . Implemented support for generating writer types for complex
-            types that contained anonymous child elements.            
+            types that contained anonymous child elements.
 
 Sat Apr 26 16:11:23 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 

@@ -20,8 +20,13 @@ namespace
     virtual void
     traverse (Type& e)
     {
-      os << "class " << type_name (e) << ";";
+      if (e.named ())
+        os << "class " << id (e.name ()) << ";";
+      else
+        os << "class " << type_name (e) << ";";
     }
+
+    string name_;
   };
 
   struct Enumeration : Traversal::Enumeration, protected virtual Context
@@ -34,7 +39,10 @@ namespace
     virtual void
     traverse (Type& e)
     {
-      os << "class " << type_name (e) << ";";
+      if (e.named ())
+        os << "class " << id (e.name ()) << ";";
+      else
+        os << "class " << type_name (e) << ";";
     }
   };
 }

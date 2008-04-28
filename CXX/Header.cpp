@@ -585,7 +585,8 @@ namespace
     virtual void
     traverse (Type& e)
     {
-      if (e.named ()) name = id (e.name ());
+      if (e.named ()) 
+        name = id (e.name ());
 
       os << "class " << ex << name << " : public ::XSCRT::Type"
          << "{"
