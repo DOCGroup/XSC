@@ -30,11 +30,38 @@ namespace
 
   struct Complex : Traversal::Complex, protected virtual Context
   {
-    Complex (Context& c)
-        : Context (c), base_ (c)
+    Complex (Context& c,
+             Traversal::NodeDispatcher& anonymous_type,
+             string const& name = L"")
+        : Context (c),
+          name_ (name),
+          base_ (c)
     {
       edge_traverser (inherits_);
+
       inherits_.node_traverser (base_);
+
+      names_anonymous_.node_traverser (anonymous_type);
+    }
+
+    virtual void
+    traverse (Type& c)
+    {
+      if (c.named ()) 
+        name_ = id (c.name ());
+
+      if (!name_.empty ())
+      {
+        enter_scope (name_);
+
+        c.context ().set ("name", name_);
+
+        Traversal::Complex::traverse (c);
+
+        c.context ().remove ("name");
+
+        leave_scope ();
+      }
     }
 
     virtual void
@@ -42,13 +69,12 @@ namespace
     {
       //@@ cache name as a member?
       //
-      string name (c.name ());
 
-      os << "struct " << name << "TypeInfoInitializer"
+      os << "struct " << name_ << "TypeInfoInitializer"
          << "{"
-         << name << "TypeInfoInitializer ()"
+         << name_ << "TypeInfoInitializer ()"
          << "{"
-         << "::XSCRT::TypeId id (typeid (" << id (name) << "));"
+         << "::XSCRT::TypeId id (typeid (" << fq_name (c) << "));"
          << "::XSCRT::ExtendedTypeInfo nf (id);"
          << endl;
     }
@@ -56,8 +82,6 @@ namespace
     virtual void
     inherits_none (Type& c)
     {
-      string name (c.name ());
-
       os << "nf.add_base (::XSCRT::ExtendedTypeInfo::Access::public_, "
          << "false, typeid (::XSCRT::Type));";
     }
@@ -66,39 +90,47 @@ namespace
     virtual void
     post (Type& c)
     {
-      string name (c.name ());
-
       os << "::XSCRT::extended_type_info_map ().insert ("
          << "::std::make_pair (id, nf));"
-         << "}"
-         << "};"
-         << name << "TypeInfoInitializer " << name << "TypeInfoInitializer_;"
+         << "}";
+
+      // Go after anonymous types.
+      //
+      names (c, names_anonymous_);
+
+      os << "};"
+         << name_ << "TypeInfoInitializer " << name_ << "TypeInfoInitializer_;"
          << endl;
     }
 
   private:
+    string name_;
+    
     Base base_;
+    
     Traversal::Inherits inherits_;
+
+    Traversal::Names names_anonymous_;
   };
 
 
   struct Enumeration : Traversal::Enumeration, protected virtual Context
   {
-    Enumeration (Context& c)
-        : Context (c)
+    Enumeration (Context& c,
+                 string const & name = L"")
+    : Context (c),
+      name_ (name)
     {
     }
 
     virtual void
     traverse (Type& e)
     {
-      string name (e.name ());
-
-      os << "struct " << name << "TypeInfoInitializer"
+      os << "struct " << name_ << "TypeInfoInitializer"
          << "{"
-         << name << "TypeInfoInitializer ()"
+         << name_ << "TypeInfoInitializer ()"
          << "{"
-         << "::XSCRT::TypeId id (typeid (" << id (name) << "));"
+         << "::XSCRT::TypeId id (typeid (" << id (name_) << "));"
          << "::XSCRT::ExtendedTypeInfo nf (id);"
          << endl
          << "nf.add_base (::XSCRT::ExtendedTypeInfo::Access::public_, "
@@ -108,11 +140,51 @@ namespace
          << "::std::make_pair (id, nf));"
          << "}"
          << "};"
-         << name << "TypeInfoInitializer " << name << "TypeInfoInitializer_;"
+         << name_ << "TypeInfoInitializer " << name_ << "TypeInfoInitializer_;"
          << endl;
     }
+
+  private:
+    string name_;
   };
 
+  struct AnonymousType : Traversal::Element, protected virtual Context
+  {
+    AnonymousType (Context& c)
+        : Context (c)
+    {
+    }
+
+    virtual void
+    traverse (Type& e)
+    {
+      SemanticGraph::Type& t (e.type ());
+
+      if (!t.named () && !t.context ().count ("seen"))
+      {
+        string name (type_name (e));
+
+        os << "// anonymous type for " /* << scope << "::"*/ << name << endl
+           << "//" << endl;
+
+        if (dynamic_cast<SemanticGraph::Type*> (&e.scope ()))
+        {
+          os << "public:" << endl;
+        }
+
+        Traversal::Belongs belongs;
+        Complex complex (*this, *this, id (name));
+
+        belongs.node_traverser (complex);
+
+        t.context ().set ("seen", true);
+
+        Element::belongs (e, belongs);
+
+        t.context ().remove ("seen");
+      }
+    }
+  };
 
   struct TypeInfoNamespace : Namespace
   {
@@ -162,12 +234,14 @@ generate_type_info_source (Context& ctx, SemanticGraph::Schema& schema)
   schema_names.node_traverser (ns);
 
   Traversal::Names names;
-  Complex complex (ctx);
+  AnonymousType anonymous (ctx);
+  Complex complex (ctx, anonymous);
   Enumeration enumeration (ctx);
 
   ns.edge_traverser (names);
   names.node_traverser (complex);
   names.node_traverser (enumeration);
+  names.node_traverser (anonymous);
 
   traverser.traverse (schema);
 }

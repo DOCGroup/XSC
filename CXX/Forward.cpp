@@ -20,7 +20,7 @@ namespace
     virtual void
     traverse (Type& e)
     {
-      os << "class " << id (e.name ()) << ";";
+      os << "class " << type_name (e) << ";";
     }
   };
 
@@ -34,7 +34,7 @@ namespace
     virtual void
     traverse (Type& e)
     {
-      os << "class " << id (e.name ()) << ";";
+      os << "class " << type_name (e) << ";";
     }
   };
 }

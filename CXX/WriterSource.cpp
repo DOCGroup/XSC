@@ -33,10 +33,11 @@ namespace
     {
       // Anonymous types cannot be traversed.
       //
-      if (!e.type ().named ()) return;
+      //if (!e.type ().named ())
+      //  return;
 
       string name (e.name ());
-      string scope (id (e.scope ().name ()));
+      //string scope (id (e.scope ().name ()));
       string ns (xs_ns_name (e));
 
       bool q (e.qualified ());
@@ -97,10 +98,11 @@ namespace
     {
       // Anonymous types cannot be traversed.
       //
-      if (!a.type ().named ()) return;
+      //if (!a.type ().named ()) 
+      //  return;
 
       string name (a.name ());
-      string scope (id (a.scope ().name ()));
+      //string scope (id (a.scope ().name ()));
       string ns (xs_ns_name (a));
 
       bool q (a.qualified ());
@@ -166,19 +168,50 @@ namespace
 
   struct Complex : Traversal::Complex, protected virtual Context
   {
-    Complex (Context& c)
-        : Context (c), member_ (c), base__ (c)
+    Complex (Context& c,
+             Traversal::NodeDispatcher& anonymous_type,
+             string const& name = L"")
+        : Context (c), 
+          name_ (name),
+          member_ (c), 
+          base__ (c)
     {
       edge_traverser (names_);
       names_.node_traverser (member_);
 
       base_.node_traverser (base__);
+
+      names_anonymous_.node_traverser (anonymous_type);
+    }
+
+    virtual void
+    traverse (Type& c)
+    {
+      if (c.named ()) 
+        name_ = id (c.name ());
+
+      if (!name_.empty ())
+      {
+        enter_scope (name_);
+
+        c.context ().set ("name", name_);
+
+        // Go after anonymous types first.
+        //
+        names (c, names_anonymous_);
+
+        Traversal::Complex::traverse (c);
+
+        c.context ().remove ("name");
+
+        leave_scope ();
+      }
     }
 
     virtual void
     pre (Type& c)
     {
-      string name (id (c.name ()));
+      string name (id (name_));
 
       os << "// " << name << endl
          << "//" << endl
@@ -187,7 +220,7 @@ namespace
 
       // c-tor (XML::Element&)
       //
-      os << name << "::" << endl
+      os << scope << "::" << endl
          << name << " (" << xml_element_type << "& e)" << endl
          << ": ::XSCRT::Writer< " << char_type << " > (e)" << endl
          << "{"
@@ -195,29 +228,33 @@ namespace
 
       // c-tor ()
       //
-      os << name << "::" << endl
+      os << scope << "::" << endl
          << name << " ()"
          << "{"
          << "}";
 
       // traverse
       //
-      os << "void " << name << "::" << endl
+      os << "void " << scope << "::" << endl
          << "traverse (Type const& o)"
          << "{";
 
       inherits (c, base_);
 
-      os << "Traversal::" << name << "::traverse (o);"
+      os << "Traversal::" << scope << "::traverse (o);"
          << "}";
     }
 
   private:
+    string name_;
+
     Member member_;
     Traversal::Names names_;
 
     Base base__;
     Traversal::Inherits base_;
+
+    Traversal::Names names_anonymous_;
   };
 
   struct Enumerator : Traversal::Enumerator, protected virtual Context
@@ -241,8 +278,10 @@ namespace
 
   struct Enumeration : Traversal::Enumeration, protected virtual Context
   {
-    Enumeration (Context& c)
-        : Context (c), enumerator_ (c)
+    Enumeration (Context& c, string const & name = L"")
+        : Context (c), 
+          name_ (name),
+          enumerator_ (c)
     {
       names_.node_traverser (enumerator_);
     }
@@ -250,7 +289,7 @@ namespace
     virtual void
     traverse (Type& c)
     {
-      string name (id (c.name ()));
+      string name (id (name_));
 
       os << "// " << name << endl
          << "//" << endl
@@ -295,6 +334,7 @@ namespace
     }
 
   private:
+    string name_;
     Enumerator enumerator_;
     Traversal::Names names_;
   };
@@ -330,7 +370,7 @@ namespace
   //
   //
   //
-  struct WriterBase : Traversal::Type,
+  struct WriterBase : /*Traversal::Type, */
                       Fundamental,
                       Traversal::Complex,
                       Traversal::Element,
@@ -352,20 +392,21 @@ namespace
     {
       if (check (c))
       {
-        os << "virtual " << type_name (c, L"Writer") << "," << endl;
+
+        os << "virtual " << fq_name (c, L"Writer") << "," << endl;
 
         Traversal::Complex::traverse (c);
       }
     }
 
-    virtual void
-    traverse (SemanticGraph::Type& t)
-    {
-      if (check (t))
-      {
-        os << "virtual " << type_name (t, L"Writer") << "," << endl;
-      }
-    }
+    //virtual void
+    //traverse (SemanticGraph::Type& t)
+    //{
+    //  if (check (t))
+    //  {
+    //    os << "virtual " << type_name (t, L"Writer") << "," << endl;
+    //  }
+    //}
 
     virtual void
     traverse (SemanticGraph::IdRef& r)
@@ -425,6 +466,36 @@ namespace
     std::set<SemanticGraph::Type*> types_;
   };
 
+  struct AnonymousType : Traversal::Element, protected virtual Context
+  {
+    AnonymousType (Context& c)
+        : Context (c)
+    {
+    }
+
+    virtual void
+    traverse (Type& e)
+    {
+      SemanticGraph::Type& t (e.type ());
+
+      if (!t.named () && !t.context ().count ("seen"))
+      {
+        string name (type_name (e));
+
+        Traversal::Belongs belongs;
+        Complex complex_element (*this, *this, name);
+        Enumeration enumeration (*this, name);
+
+        belongs.node_traverser (complex_element);
+
+        t.context ().set ("seen", true);
+
+        Element::belongs (e, belongs);
+
+        t.context ().remove ("seen");
+      }
+    }
+  };
 
   struct Writer : Traversal::Element, protected virtual Context
   {
@@ -447,7 +518,7 @@ namespace
       os << "namespace writer"
          << "{"
          << "void" << endl
-         << id (name) << " (" << type << " const& s, xercesc::DOMDocument* d)"
+         << id (name) << " (" << fq_name (t) << " const& s, xercesc::DOMDocument* d)"
          << "{"
          << xml_element_type << " e (d->getDocumentElement ());"
          << "if (e.name () != " << L << "\"" << name << "\")"
@@ -492,12 +563,14 @@ generate_writer_source (Context& ctx, SemanticGraph::Schema& schema)
     schema_names.node_traverser (ns);
 
     Traversal::Names names;
-    Complex complex (ctx);
+    AnonymousType anonymous (ctx);
+    Complex complex (ctx, anonymous);
     Enumeration enumeration (ctx);
 
     ns.edge_traverser (names);
     names.node_traverser (complex);
     names.node_traverser (enumeration);
+    names.node_traverser (anonymous);
 
     traverser.traverse (schema);
   }

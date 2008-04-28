@@ -33,7 +33,8 @@ namespace
     {
       // Anonymous types cannot be traversed.
       //
-      if (!e.type ().named ()) return;
+      //if (!e.type ().named ()) 
+      //  return;
 
       string name (e.name ());
 
@@ -221,9 +222,12 @@ namespace
 
   struct Complex : Traversal::Complex, protected virtual Context
   {
-    Complex (Context& c)
+    Complex (Context& c,
+             Traversal::NodeDispatcher& anonymous_type,
+             string const& name = L"")
         : Context (c),
           e (c.esymbol.empty () ? c.esymbol : c.esymbol + L" "),
+          name_ (name),
           base_ (c),
           member_ (c)
     {
@@ -231,14 +235,34 @@ namespace
       edge_traverser (names_);
 
       inherits_.node_traverser (base_);
+      names_.node_traverser (anonymous_type);
       names_.node_traverser (member_);
+    }
+
+    virtual void
+    traverse (Type& c)
+    {
+      // We need to get the name of the element. The name would
+      // be already set if it was an anonymous type.
+      if (c.named ()) 
+        name_ = id (c.name ());
+
+      // We only continue if we have a valid name.
+      if (!name_.empty ())
+      {
+        enter_scope (name_);
+
+        Traversal::Complex::traverse (c);
+
+        leave_scope ();
+      }
     }
 
     virtual void
     pre (Type& c)
     {
-      os << "struct " << e << id(c.name ())
-         << " : ::XMLSchema::Traversal::Traverser< " << type_name (c) << " >"
+      os << "struct " << e << name_
+         << " : ::XMLSchema::Traversal::Traverser< " << fq_name (c) << " >"
          << "{";
 
       // traverse ()
@@ -280,6 +304,8 @@ namespace
 
   private:
     string e;
+    string name_;
+
     Base base_;
     Traversal::Inherits inherits_;
 
@@ -290,22 +316,25 @@ namespace
 
   struct Enumeration : Traversal::Enumeration, protected virtual Context
   {
-    Enumeration (Context& c)
-        : Context (c)
+    Enumeration (Context& c, string const & name = L"")
+        : Context (c),
+          name_ (name)
     {
     }
 
     virtual void
     traverse (Type& e)
     {
-      string name (id (e.name ()));
       string type (type_name (e));
 
       os << "typedef" << endl
          << "::XMLSchema::Traversal::Traverser< " << type << " >" << endl
-         << name << ";"
+         << name_ << ";"
          << endl;
     }
+
+  private:
+    string name_;
   };
 
 
@@ -333,6 +362,46 @@ namespace
       Namespace::post (n);
     }
   };
+
+  struct AnonymousType : Traversal::Element, protected virtual Context
+  {
+    AnonymousType (Context& c)
+        : Context (c)
+    {
+    }
+
+    virtual void
+    traverse (Type& e)
+    {
+      SemanticGraph::Type& t (e.type ());
+
+      if (!t.named () && !t.context ().count ("seen"))
+      {
+        string name (type_name (e));
+
+        os << "// anonymous type for " /* << scope << "::"*/ << name << endl
+           << "//" << endl;
+
+        if (dynamic_cast<SemanticGraph::Type*> (&e.scope ()))
+        {
+          os << "public:" << endl;
+        }
+
+        Traversal::Belongs belongs;
+        Complex complex (*this, *this, id (name));
+        Enumeration enumeration (*this, id (name));
+
+        belongs.node_traverser (complex);
+        belongs.node_traverser (enumeration);
+
+        t.context ().set ("seen", true);
+
+        Element::belongs (e, belongs);
+
+        t.context ().remove ("seen");
+      }
+    }
+  };
 }
 
 void
@@ -352,12 +421,14 @@ generate_traversal_header (Context& ctx, SemanticGraph::Schema& schema)
   schema_names.node_traverser (ns);
 
   Traversal::Names names;
-  Complex complex (ctx);
+  AnonymousType anonymous (ctx);
+  Complex complex (ctx, anonymous);
   Enumeration enumeration (ctx);
 
   ns.edge_traverser (names);
   names.node_traverser (complex);
   names.node_traverser (enumeration);
+  names.node_traverser (anonymous);
 
   traverser.traverse (schema);
 }

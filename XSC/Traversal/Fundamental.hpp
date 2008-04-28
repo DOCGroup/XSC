@@ -26,7 +26,7 @@ namespace XSC
     
     typedef
     Node<SemanticGraph::AnyUri>
-    AnyUri;
+    anyURI;
 
     typedef
     Node<SemanticGraph::Byte>

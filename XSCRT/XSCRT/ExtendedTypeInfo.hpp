@@ -163,7 +163,8 @@ namespace XSCRT
     ExtendedTypeInfoMap::const_iterator i (
       extended_type_info_map ().find (tid));
     
-    if (i == extended_type_info_map ().end ()) throw NotAvailable ();
+    if (i == extended_type_info_map ().end ()) 
+      throw NotAvailable ();
 
     return i->second;
   }

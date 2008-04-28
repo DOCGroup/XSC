@@ -33,13 +33,64 @@ namespace
     {
       // Anonymous types cannot be traversed.
       //
-      if (!e.type ().named ()) return;
+      //if (!e.type ().named ()) 
+        //return;
 
       //@@ rm string scope (id(e.scope ().name ()));
       string name (e.name ());
       string type (type_name (e));
 
-      if (e.max () != 1)
+      if (e.min () == 0 && e.max () == 1)
+      {
+        // optional
+        //
+
+        // name
+        //
+        os << "void " << scope << "::" << endl
+           << id (name) << " (Type& o)"
+           << "{"
+           << "dispatch (o." << id (name) << " ());"
+           << "}";
+
+        os << "void " << scope << "::" << endl
+           << id (name) << " (Type const& o)"
+           << "{"
+           << "dispatch (o." << id (name) << " ());"
+           << "}";
+
+        // name_none
+        //
+        os << "void " << scope << "::" << endl
+           << name << "_none (Type&)"
+           << "{"
+           << "}";
+
+        os << "void " << scope << "::" << endl
+           << name << "_none (Type const&)"
+           << "{"
+           << "}";
+      }
+      else if (e.min () == 1 && e.max () == 1)
+      {
+        // one
+        //
+
+        // name
+        //
+        os << "void " << scope << "::" << endl
+           << id (name) << " (Type& o)"
+           << "{"
+           << "dispatch (o." << id (name) << " ());"
+           << "}";
+
+        os << "void " << scope << "::" << endl
+           << id (name) << " (Type const& o)"
+           << "{"
+           << "dispatch (o." << id (name) << " ());"
+           << "}";
+      }
+      else 
       {
         // sequence
         //
@@ -51,7 +102,7 @@ namespace
            << "{"
            << "// VC6 anathema strikes again" << endl
            << "//" << endl
-           << scope << "::Type::" << name << "_iterator "
+           << fq_name (e) << "_iterator "
            << "b (o.begin_" << name << "()), "
            << "e (o.end_" << name << "());"
            << endl
@@ -73,7 +124,8 @@ namespace
            << name << "_post (o);"
            << "}";
 
-        if (e.min () == 0) os << "else " << name << "_none (o);";
+        if (e.min () == 0) 
+          os << "else " << name << "_none (o);";
 
         os << "}";
 
@@ -83,7 +135,7 @@ namespace
            << "{"
            << "// VC6 anathema strikes again" << endl
            << "//" << endl
-           << scope << "::Type::" << name << "_const_iterator "
+           << fq_name (e) << "_const_iterator "
            << "b (o.begin_" << name << "()), "
            << "e (o.end_" << name << "());"
            << endl
@@ -105,7 +157,8 @@ namespace
            << name << "_post (o);"
            << "}";
 
-        if (e.min () == 0) os << "else " << name << "_none (o);";
+        if (e.min () == 0) 
+          os << "else " << name << "_none (o);";
 
         os << "}";
 
@@ -163,56 +216,6 @@ namespace
              << "}";
         }
       }
-      else if (e.min () == 0)
-      {
-        // optional
-        //
-
-        // name
-        //
-        os << "void " << scope << "::" << endl
-           << id (name) << " (Type& o)"
-           << "{"
-           << "dispatch (o." << id (name) << " ());"
-           << "}";
-
-        os << "void " << scope << "::" << endl
-           << id (name) << " (Type const& o)"
-           << "{"
-           << "dispatch (o." << id (name) << " ());"
-           << "}";
-
-        // name_none
-        //
-        os << "void " << scope << "::" << endl
-           << name << "_none (Type&)"
-           << "{"
-           << "}";
-
-        os << "void " << scope << "::" << endl
-           << name << "_none (Type const&)"
-           << "{"
-           << "}";
-      }
-      else
-      {
-        // one
-        //
-
-        // name
-        //
-        os << "void " << scope << "::" << endl
-           << id (name) << " (Type& o)"
-           << "{"
-           << "dispatch (o." << id (name) << " ());"
-           << "}";
-
-        os << "void " << scope << "::" << endl
-           << id (name) << " (Type const& o)"
-           << "{"
-           << "dispatch (o." << id (name) << " ());"
-           << "}";
-      }
     }
 
 
@@ -221,7 +224,8 @@ namespace
     {
       // Anonymous types cannot be traversed.
       //
-      if (!a.type ().named ()) return;
+      //if (!a.type ().named ()) 
+      //  return;
 
       //@@ rm string scope (id(a.scope ().name ()));
       string name (a.name ());
@@ -311,26 +315,26 @@ namespace
     {
       // Anonymous types cannot be traversed.
       //
-      if (!e.type ().named ()) return;
+      //if (!e.type ().named ()) return;
 
       string name (e.name ());
 
-      if (e.max () != 1)
-      {
-        // sequence
-        //
-        os << id (name) << " (o);";
-      }
-      else if (e.min () == 0)
+      if (e.min () == 0 && e.max () == 1)
       {
         // optional
         //
         os << "if (o." << name << "_p ()) " << id (name) << " (o);"
            << "else " << name << "_none (o);";
       }
-      else
+      else if (e.min () == 1 && e.max () == 1)
       {
         // one
+        //
+        os << id (name) << " (o);";
+      }
+      else
+      {
+        // sequence
         //
         os << id (name) << " (o);";
       }
@@ -341,7 +345,7 @@ namespace
     {
       // Anonymous types cannot be traversed.
       //
-      if (!a.type ().named ()) return;
+      //if (!a.type ().named ()) return;
 
       string name (a.name ());
 
@@ -385,8 +389,11 @@ namespace
 
   struct Complex : Traversal::Complex, protected virtual Context
   {
-    Complex (Context& c)
+    Complex (Context& c,
+             Traversal::NodeDispatcher& anonymous_type,
+             string const& name = L"")
         : Context (c),
+          name_ (name),
           base_ (c),
           member_ (c),
           call_base_ (c),
@@ -397,26 +404,51 @@ namespace
 
       inherits_.node_traverser (base_);
       names_.node_traverser (member_);
+      names_anonymous_.node_traverser (anonymous_type);
 
       call_inherits_.node_traverser (call_base_);
       call_names_.node_traverser (call_member_);
     }
 
     virtual void
+    traverse (Type& c)
+    {
+      if (c.named ()) 
+        name_ = id (c.name ());
+
+      if (!name_.empty ())
+      {
+        enter_scope (name_);
+
+        c.context ().set ("name", name_);
+
+        // Go after anonymous types first.
+        //
+        names (c, names_anonymous_);
+
+        Traversal::Complex::traverse (c);
+
+        c.context ().remove ("name");
+
+        leave_scope ();
+      }
+    }
+
+   virtual void
     pre (Type& c)
     {
-      string name (id (c.name ()));
+      //string name (id (name_));
 
-      enter_scope (name);
+      //enter_scope (name);
 
-      os << "// " << name << endl
+      os << "// " << scope << endl
          << "//" << endl
          << "//" << endl
          << endl;
 
       // traverse (Type&)
       //
-      os << "void " << name << "::" << endl
+      os << "void " << scope << "::" << endl
          << "traverse (Type& o)"
          << "{"
          << "pre (o);";
@@ -429,7 +461,7 @@ namespace
 
       // traverse (Type const&)
       //
-      os << "void " << name << "::" << endl
+      os << "void " << scope << "::" << endl
          << "traverse (Type const& o)"
          << "{"
          << "pre (o);";
@@ -443,12 +475,12 @@ namespace
 
       // pre ()
       //
-      os << "void " << name << "::" << endl
+      os << "void " << scope << "::" << endl
          << "pre (Type&)"
          << "{"
          << "}";
 
-      os << "void " << name << "::" << endl
+      os << "void " << scope << "::" << endl
          << "pre (Type const&)"
          << "{"
          << "}";
@@ -457,24 +489,26 @@ namespace
     virtual void
     post (Type& c)
     {
-      string name (id (c.name ()));
+      // string name (id (name_));
 
       // post ()
       //
-      os << "void " << name << "::" << endl
+      os << "void " << scope << "::" << endl
          << "post (Type&)"
          << "{"
          << "}";
 
-      os << "void " << name << "::" << endl
+      os << "void " << scope << "::" << endl
          << "post (Type const&)"
          << "{"
          << "}";
 
-      leave_scope ();
+      //leave_scope ();
     }
 
   private:
+    string name_;
+
     Base base_;
     Traversal::Inherits inherits_;
 
@@ -487,6 +521,7 @@ namespace
     CallMember call_member_;
     Traversal::Names call_names_;
 
+    Traversal::Names names_anonymous_;
   };
 
   struct TraversalNamespace : Namespace
@@ -514,6 +549,36 @@ namespace
       Namespace::post (n);
     }
   };
+
+  struct AnonymousType : Traversal::Element, protected virtual Context
+  {
+    AnonymousType (Context& c)
+        : Context (c)
+    {
+    }
+
+    virtual void
+    traverse (Type& e)
+    {
+      SemanticGraph::Type& t (e.type ());
+
+      if (!t.named () && !t.context ().count ("seen"))
+      {
+        string name (type_name (e));
+
+        Traversal::Belongs belongs;
+        Complex complex_element (*this, *this, name);
+
+        belongs.node_traverser (complex_element);
+
+        t.context ().set ("seen", true);
+
+        Element::belongs (e, belongs);
+
+        t.context ().remove ("seen");
+      }
+    }
+  };
 }
 
 void
@@ -530,12 +595,14 @@ generate_traversal_source (Context& ctx, SemanticGraph::Schema& schema)
   schema_names.node_traverser (ns);
 
   Traversal::Names names;
-  Complex complex (ctx);
+  AnonymousType anonymous (ctx);
+  Complex complex (ctx, anonymous);
   Traversal::Enumeration enumeration;
 
   ns.edge_traverser (names);
   names.node_traverser (complex);
   names.node_traverser (enumeration);
+  names.node_traverser (anonymous);
 
   traverser.traverse (schema);
 }

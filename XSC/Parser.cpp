@@ -1127,7 +1127,6 @@ namespace XSC
             // Looks like an anonymous type. We need to append the 
             // anonymous type's suffix to the name of the previous
             // element.
-            //name.append (L"Type");
             push (e);
 
             annotation ();

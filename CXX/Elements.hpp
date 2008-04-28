@@ -428,7 +428,8 @@ struct Fundamental : Traversal::FundamentalType,
                      Traversal::NCName,
                      Traversal::Id,
                      Traversal::IdRef,
-                     Traversal::QName
+                     Traversal::QName,
+                     Traversal::anyURI
   {
     virtual void
     fundamental_type (SemanticGraph::FundamentalType& t) = 0;
@@ -480,6 +481,12 @@ struct Fundamental : Traversal::FundamentalType,
 
     virtual void
     traverse (SemanticGraph::QName& t)
+    {
+      fundamental_template (t);
+    }
+
+    virtual void
+    traverse (SemanticGraph::AnyUri & t)
     {
       fundamental_template (t);
     }

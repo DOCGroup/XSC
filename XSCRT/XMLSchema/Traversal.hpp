@@ -16,7 +16,7 @@ namespace XMLSchema
     //
     //
     struct IDREF :
-      XSCRT::Traversal::Traverser<XMLSchema::IDREF_Base, XSCRT::Type>
+    XSCRT::Traversal::Traverser<XMLSchema::IDREF_Base, XSCRT::Type>
     {
       virtual void
       traverse (XMLSchema::IDREF_Base& r)
@@ -65,9 +65,8 @@ namespace XMLSchema
     };
 
     template <typename C>
-    struct anyURI : Traverser <XMLSchema::anyURI <C> >
+    struct anyURI : Traverser <XMLSchema::anyURI<C> >
     {
-
     };
   }
 }

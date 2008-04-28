@@ -24,7 +24,7 @@ namespace
                   protected virtual Context
   {
     Member (Context& c)
-        : Context (c)
+      : Context (c)
     {
     }
 
@@ -33,11 +33,44 @@ namespace
     {
       // Anonymous types cannot be traversed.
       //
-      if (!e.type ().named ()) return;
+      //if (!e.type ().named ()) 
+      //  return;
 
       string name (e.name ());
 
-      if (e.max () != 1)
+      if (e.min () == 0 && e.max () == 1)
+      {
+        // Borland post
+        os << "virtual void " << endl
+           << id (name)  << " (Type &o)" << endl
+           << "{"
+           << "this->" << id (name) << " ("
+           << "const_cast <Type const &> (o));" << endl
+           << "}";
+
+        // optional
+        //
+        os << "virtual void" << endl
+           << id (name) << " (Type const&);"
+           << endl;
+      }
+      else if (e.min () == 1 && e.max () == 1)
+      {
+        // Borland post
+        os << "virtual void " << endl
+           << id (name)  << " (Type &o)" << endl
+           << "{"
+           << "this->" << id (name) << " ("
+           << "const_cast <Type const &> (o));" << endl
+           << "}";
+
+        // one
+        //
+        os << "virtual void" << endl
+           << id (name) << " (Type const&);"
+           << endl;
+      }
+      else
       {
         // sequence
         //
@@ -46,10 +79,10 @@ namespace
         //
         os << "virtual void " << endl
            << name << "_pre (Type &o)" << endl
-           << "{" << endl
+           << "{"
            << "this->"  << name << "_pre ("
            << "const_cast <Type const &> (o));" << endl
-           << "}" << endl;
+           << "}";
 
         // pre
         //
@@ -61,10 +94,10 @@ namespace
         //
         os << "virtual void " << endl
            << name << "_next (Type &o)" << endl
-           << "{" << endl
+           << "{"
            << "this->"  << name << "_next ("
            << "const_cast <Type const &> (o));" << endl
-           << "}" << endl;
+           << "}";
 
         // next
         //
@@ -75,47 +108,15 @@ namespace
         //  post
         os << "virtual void " << endl
            << name << "_post (Type &o)" << endl
-           << "{" << endl
+           << "{"
            << "this->" << name << "_post ("
            << "const_cast <Type const &> (o));" << endl
-           << "}" << endl;
+           << "}";
 
         // post
         //
         os << "virtual void" << endl
            << name << "_post (Type const&);"
-           << endl;
-      }
-      else if (e.min () == 0)
-      {
-        // Borland post
-        os << "virtual void " << endl
-           << id (name)  << " (Type &o)" << endl
-           << "{" << endl
-           << "this->" << id (name) << " ("
-           << "const_cast <Type const &> (o));" << endl
-           << "}" << endl;
-
-        // optional
-        //
-        os << "virtual void" << endl
-           << id (name) << " (Type const&);"
-           << endl;
-      }
-      else
-      {
-        // Borland post
-        os << "virtual void " << endl
-           << id (name)  << " (Type &o)" << endl
-           << "{" << endl
-           << "this->" << id (name) << " ("
-           << "const_cast <Type const &> (o));" << endl
-           << "}" << endl;
-
-        // one
-        //
-        os << "virtual void" << endl
-           << id (name) << " (Type const&);"
            << endl;
       }
     }
@@ -125,17 +126,18 @@ namespace
     {
       // Anonymous types cannot be traversed.
       //
-      if (!a.type ().named ()) return;
+      //if (!a.type ().named ()) 
+      //return;
 
       string name (a.name ());
 
       // Borland post
       os << "virtual void " << endl
          << id (name)  << " (Type &o)" << endl
-         << "{" << endl
+         << "{"
          << "this->" << id (name) << " ("
          << "const_cast <Type const &> (o));" << endl
-         << "}" << endl;
+         << "}";
 
 
       os << "virtual void" << endl
@@ -144,7 +146,7 @@ namespace
     }
   };
 
-  struct Base : Traversal::Type,
+  struct Base : // Traversal::Type,
                 Fundamental,
                 protected virtual Context
   {
@@ -153,13 +155,13 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Type& t)
-    {
-      string type (type_name (t, L"Writer"));
+    //virtual void
+    //traverse (SemanticGraph::Type& t)
+    //{
+    //  string type (type_name (t, L"Writer"));
 
-      os << "virtual " << type << "," << endl;
-    }
+    //  os << "virtual " << type << "," << endl;
+    //}
 
     virtual void
     traverse (SemanticGraph::IdRef&)
@@ -169,7 +171,7 @@ namespace
     }
 
     virtual void
-    fundamental_type (SemanticGraph::FundamentalType& t)
+    fundamental_type (SemanticGraph::FundamentalType & t)
     {
       string name (id (t.name ()));
 
@@ -190,25 +192,47 @@ namespace
 
   struct Complex : Traversal::Complex, protected virtual Context
   {
-    Complex (Context& c)
+    Complex (Context& c, 
+             Traversal::NodeDispatcher& anonymous_type,
+             string const& name = L"")
         : Context (c),
           e (c.esymbol.empty () ? c.esymbol : c.esymbol + L" "),
+          name_ (name),
           member_ (c),
           base_ (c)
     {
       edge_traverser (names_);
       names_.node_traverser (member_);
+      names_.node_traverser (anonymous_type);
 
       inherits_.node_traverser (base_);
+    }
+
+    virtual void 
+    traverse (Type & c)
+    {
+      // We need to get the name of the element. The name would
+      // be already set if it was an anonymous type.
+      if (c.named ()) 
+        name_ = id (c.name ());
+
+      // We only continue if we have a valid name.
+      if (!name_.empty ())
+      {
+        enter_scope (name_);
+
+        Traversal::Complex::traverse (c);
+
+        leave_scope ();
+      }
     }
 
     virtual void
     pre (Type& c)
     {
-      string name (id (c.name ()));
       string type (type_name (c));
 
-      os << "struct " << name << " : Traversal::" << name << ", " << endl;
+      os << "struct " << name_ << " : Traversal::" << scope << ", " << endl;
 
       inherits (c, inherits_);
 
@@ -217,20 +241,20 @@ namespace
 
       //@@ Should probably be Type__
       //
-      os << "typedef " << type << " Type;";
+      os << "typedef " << fq_name (c) << " Type;";
 
       // c-tor
       //
-      os << name << " (" << xml_element_type << "&);"
+      os << type << " (" << xml_element_type << "&);"
          << endl;
 
       // Non-const traverse for Borland
       os << "virtual void " << endl
          << "traverse (Type &o)" << endl
-         << "{" << endl
+         << "{"
          << "this->traverse ("
          << "const_cast <Type const &> (o));"
-         << "}" << endl;
+         << "}";
 
 
       // traverse
@@ -243,15 +267,15 @@ namespace
     virtual void
     post (Type& c)
     {
-      string name (id (c.name ()));
-
       os << "protected:" << endl
-         << name << " ();"
+         << name_ << " ();"
          <<"};";
     }
 
   private:
     string e;
+    string name_;
+
     Member member_;
     Traversal::Names names_;
 
@@ -261,25 +285,25 @@ namespace
 
   struct Enumeration : Traversal::Enumeration, protected virtual Context
   {
-    Enumeration (Context& c)
+    Enumeration (Context& c, string const & name = L"")
         : Context (c),
-          ex (c.esymbol.empty () ? c.esymbol : c.esymbol + L" ")
+          ex (c.esymbol.empty () ? c.esymbol : c.esymbol + L" "),
+          name_ (name)
     {
     }
 
     virtual void
     traverse (Type& e)
     {
-      string name (id (e.name ()));
       string type (type_name (e));
 
-      os << "struct " << name << " : Traversal::" << name << ", " << endl
+      os << "struct " << name_ << " : Traversal::" << name_ << ", " << endl
          << "virtual ::XSCRT::Writer< " << char_type << " >"
          << "{";
 
       // c-tor
       //
-      os << name << " (" << xml_element_type << "&);"
+      os << name_ << " (" << xml_element_type << "&);"
          << endl;
 
       // Non-const traverse for Borland
@@ -298,11 +322,13 @@ namespace
 
       os << "protected:" << endl
          << name << " ();"
-         <<"};";
+         << "};";
     }
 
   private:
     string ex;
+
+    string name_;
   };
 
 
@@ -343,7 +369,7 @@ namespace
     traverse (Type& c)
     {
       string name (c.name ());
-      string type (type_name (c));
+      string type (fq_name (c.type ()));
 
       os << "namespace writer"
          << "{"
@@ -356,6 +382,44 @@ namespace
 
   private:
     string e;
+  };
+
+  struct AnonymousType : Traversal::Element, protected virtual Context
+  {
+    AnonymousType (Context& c)
+        : Context (c)
+    {
+    }
+
+    virtual void
+    traverse (Type& e)
+    {
+      SemanticGraph::Type& t (e.type ());
+
+      if (!t.named () && !t.context ().count ("seen"))
+      {
+        string name (type_name (e));
+
+        os << "// anonymous type for " /* << scope << "::"*/ << name << endl
+           << "//" << endl;
+
+        if (dynamic_cast<SemanticGraph::Type*> (&e.scope ()))
+          os << "public:" << endl;
+
+        Traversal::Belongs belongs;
+        Complex complex (*this, *this, id (name));
+        Enumeration enumeration (*this, id (name));
+
+        belongs.node_traverser (complex);
+        belongs.node_traverser (enumeration);
+
+        t.context ().set ("seen", true);
+
+        Element::belongs (e, belongs);
+
+        t.context ().remove ("seen");
+      }
+    }
   };
 }
 
@@ -377,12 +441,14 @@ generate_writer_header (Context& ctx, SemanticGraph::Schema& schema)
     schema_names.node_traverser (ns);
 
     Traversal::Names names;
-    Complex complex (ctx);
+    AnonymousType anonymous_type (ctx);
+    Complex complex (ctx, anonymous_type);
     Enumeration enumeration (ctx);
 
     ns.edge_traverser (names);
     names.node_traverser (complex);
     names.node_traverser (enumeration);
+    names.node_traverser (anonymous_type);
 
     traverser.traverse (schema);
   }

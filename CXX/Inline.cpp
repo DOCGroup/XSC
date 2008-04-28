@@ -40,7 +40,73 @@ namespace
       os << "// " << scope << endl
          << "// " << endl;
 
-      if (e.max () != 1)
+      if (e.min () == 0 && e.max () == 1)
+      {
+        // optional
+        //
+        os << i
+           << "bool " << scope << "::" << endl
+           << name << "_p () const"
+           << "{"
+           << "return " << id (name) << "_.get () != 0;"
+           << "}";
+
+        os << i
+           << type << " const& " << scope << "::" << endl
+           << id (name) << " () const"
+           << "{"
+           << "return *" << id (name) << "_;"
+           << "}";
+        /* Lets just have one accessor. WRO
+        os << i
+           << type << "& " << scope << "::" << endl
+           << id (name) << " ()"
+           << "{"
+           << "return *" << id (name) << "_;"
+           << "}";
+        */
+        os << i
+           << "void " << scope << "::" << endl
+           << id (name) << " (" << type << " const& e)"
+           << "{"
+           << "if (" << id (name) << "_.get ())"
+           << "{"
+           << "*" << id (name) << "_ = e;"
+           << "}"
+           << "else"
+           << "{"
+           << id (name) << "_ = ::std::auto_ptr< " << type << " > (new "
+           << type << " (e));"
+           << id (name) << "_->container (this);"
+           << "}"
+           << "}";
+      }
+      else if (e.min () == 1 && e.max () == 1)
+      {
+        // one
+        //
+        os << i
+           << type << " const& " << scope << "::" << endl
+           << id (name) << " () const"
+           << "{"
+           << "return *" << id (name) << "_;"
+           << "}";
+        /* Lets just have one mutator
+        os << i
+           << type << "& " << scope << "::" << endl
+           << id (name) << " ()"
+           << "{"
+           << "return *" << id (name) << "_;"
+           << "}";
+        */
+        os << i
+           << "void " << scope << "::" << endl
+           << id (name) << " (" << type << " const& e)"
+           << "{"
+           << "*" << id (name) << "_ = e;"
+           << "}";
+      }
+      else
       {
         // sequence
         //
@@ -120,72 +186,6 @@ namespace
            << "return " << name << "_.size ();"
            << "}";
 
-      }
-      else if (e.min () == 0)
-      {
-        // optional
-        //
-        os << i
-           << "bool " << scope << "::" << endl
-           << name << "_p () const"
-           << "{"
-           << "return " << id (name) << "_.get () != 0;"
-           << "}";
-
-        os << i
-           << type << " const& " << scope << "::" << endl
-           << id (name) << " () const"
-           << "{"
-           << "return *" << id (name) << "_;"
-           << "}";
-        /* Lets just have one accessor. WRO
-        os << i
-           << type << "& " << scope << "::" << endl
-           << id (name) << " ()"
-           << "{"
-           << "return *" << id (name) << "_;"
-           << "}";
-        */
-        os << i
-           << "void " << scope << "::" << endl
-           << id (name) << " (" << type << " const& e)"
-           << "{"
-           << "if (" << id (name) << "_.get ())"
-           << "{"
-           << "*" << id (name) << "_ = e;"
-           << "}"
-           << "else"
-           << "{"
-           << id (name) << "_ = ::std::auto_ptr< " << type << " > (new "
-           << type << " (e));"
-           << id (name) << "_->container (this);"
-           << "}"
-           << "}";
-      }
-      else
-      {
-        // one
-        //
-        os << i
-           << type << " const& " << scope << "::" << endl
-           << id (name) << " () const"
-           << "{"
-           << "return *" << id (name) << "_;"
-           << "}";
-        /* Lets just have one mutator
-        os << i
-           << type << "& " << scope << "::" << endl
-           << id (name) << " ()"
-           << "{"
-           << "return *" << id (name) << "_;"
-           << "}";
-        */
-        os << i
-           << "void " << scope << "::" << endl
-           << id (name) << " (" << type << " const& e)"
-           << "{"
-           << "*" << id (name) << "_ = e;"
-           << "}";
       }
     }
 
@@ -452,9 +452,8 @@ namespace
          << name << " (" << type << " const& s)" << endl
          << ":" << endl;
 
-      // Resets a flag that determines
-      // if a Complex Type's copy constructor
-      // has inherited from the base XSCRT::Type
+      // Resets a flag that determines if a Complex Type's 
+      // copy constructor has inherited from the base XSCRT::Type
       // class.
       copy_.reset_base_class_initialization ();
 
@@ -747,7 +746,7 @@ namespace
     };
 
 
-    struct Copy :/* Traversal::Type, */
+    struct Copy : Traversal::Type,
                   Traversal::Element,
                   Traversal::Attribute,
                   protected virtual Context
@@ -759,11 +758,12 @@ namespace
       {
       }
 
-      //virtual void
-      //traverse (SemanticGraph::Type&)
-      //{
-      //  os << "Base (s)," << endl;
-      //}
+      virtual void
+      traverse (SemanticGraph::Type&)
+      {
+        if (!base_class_initialized_)
+          os << "Base (s)," << endl;
+      }
 
       virtual void
       traverse (SemanticGraph::Element& e)
@@ -779,21 +779,7 @@ namespace
             base_class_initialized_ = 1;
           }
 
-        if (e.min () == 1 && e.max () == 1)
-          {
-            // one
-            //
-
-            os << name << "_ (new " << type << " (*s." << name << "_))," << endl;
-          }
-        else if (e.min () >= 0)
-          {
-            // sequence
-            //   
-
-            os << name << "_ (s." << name << "_)," << endl;
-          }
-        else if (e.min () == 0)
+        if (e.min () == 0 && e.max () == 1)
           {
             // optional
             //
@@ -801,6 +787,20 @@ namespace
             os << name << "_ ("
               << "s." << name << "_.get () ? "
               << "new " << type << " (*s." << name << "_) : " << "0)," << endl;
+          }
+        else if (e.min () == 1 && e.max () == 1)
+          {
+            // one
+            //
+
+            os << name << "_ (new " << type << " (*s." << name << "_))," << endl;
+          }
+        else 
+          {
+            // sequence
+            //   
+
+            os << name << "_ (s." << name << "_)," << endl;
           }
       }
 
@@ -845,7 +845,20 @@ namespace
       {
         string name (e.name ());
 
-        if (e.max () != 1)
+        if (e.min () == 0 && e.max () == 1)
+        {
+          name = id (name);
+
+          // optional
+          //
+          os << "if (" << name << "_.get ()) "
+             << name << "_->container (this);";
+        }
+        else if (e.min () == 1 && e.max () == 1)
+        {
+          os << id (name) << "_->container (this);";
+        }
+        else
         {
           //string type (type_name (e));
 
@@ -860,19 +873,6 @@ namespace
           //   << "i != s." << name << "_.end ();"
           //   << "++i) " << "add_" << name << " (*i);"
           //   << "}";
-        }
-        else if (e.min () == 0)
-        {
-          name = id (name);
-
-          // optional
-          //
-          os << "if (" << name << "_.get ()) "
-             << name << "_->container (this);";
-        }
-        else
-        {
-          os << id (name) << "_->container (this);";
         }
       }
 
@@ -895,7 +895,7 @@ namespace
       }
     };
 
-    struct Assignment : /* Traversal::Type, */
+    struct Assignment : /*Traversal::Type, */
                         Traversal::Element,
                         Traversal::Attribute,
                         protected virtual Context
@@ -912,7 +912,6 @@ namespace
       //     << "static_cast< Base const& > (s);"
       //     << endl;
       //}
-
 
       virtual void
       traverse (SemanticGraph::Element& e)
@@ -1024,7 +1023,8 @@ namespace
     virtual void
     traverse (Type& e)
     {
-      if (e.named ()) name = id (e.name ());
+      if (e.named ()) 
+        name = id (e.name ());
 
       enter_scope (name);
 

@@ -376,15 +376,19 @@ namespace
       // and make the search faster in O(log N)
       // time.
       if (type.find (L"::XMLSchema::string") != string::npos ||
-    type.find (L"::XMLSchema::ID") != string::npos     ||
-    type.find (L"::XMLSchema::IDREF") != string::npos  ||
-    type.find (L"::XMLSchema::token") != string::npos  ||
-    type.find (L"::XMLSchema::NMTOKEN") != string::npos||
-    type.find (L"::XMLSchema::Name") != string::npos   ||
-    type.find (L"::XMLSchema::NCName") != string::npos)
-  return true;
+          type.find (L"::XMLSchema::ID") != string::npos     ||
+          type.find (L"::XMLSchema::IDREF") != string::npos  ||
+          type.find (L"::XMLSchema::token") != string::npos  ||
+          type.find (L"::XMLSchema::NMTOKEN") != string::npos||
+          type.find (L"::XMLSchema::Name") != string::npos   ||
+          type.find (L"::XMLSchema::NCName") != string::npos)
+      {
+        return true;
+      }
       else
-  return false;
+      {
+        return false;
+      }
     }
 
     /*

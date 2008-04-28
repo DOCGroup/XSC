@@ -1,8 +1,29 @@
+Mon Apr 28 14:42:20 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * CXX/Elements.hpp:
+        * CXX/Elements.cpp:
+        * CXX/Forward.cpp:
+        * CXX/Inline.cpp:
+        * CXX/Source.cpp:
+        * CXX/TraversalHeader.cpp:
+        * CXX/TraversalSource.cpp:
+        * CXX/TypeInfoSource.cpp:
+        * CXX/WriterHeader.cpp:
+        * CXX/WriterSource.cpp:
+        * XSC/Parser.cpp:
+        * XSC/Traversal/Fundamental.hpp:
+        * XSCRT/XMLSchema/Traversal.hpp:
+        * XSCRT/XMLSchema/Types.hpp:
+        * XSCRT/XSCRT/ExtendedTypeInfo.hpp:
+        
+          . Implemented support for generating writer types for complex
+            types that contained anonymous child elements.            
+
 Sat Apr 26 16:11:23 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSC/SemanticGraph/Elements.hpp:
-        
-          Accidently removed the anonymous () method and commited to 
+
+          Accidently removed the anonymous () method and commited to
           source code to the repo.
 
 Sat Apr 26 15:45:05 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>

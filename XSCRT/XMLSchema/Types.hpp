@@ -606,6 +606,12 @@ namespace XMLSchema
     {
     }
 
+    anyURI (const anyURI& s)
+      : Base__ (s)
+    {
+
+    }
+
     anyURI & operator= (Base__ const& x)
     {
       static_cast <Base__ &> (*this) = x;

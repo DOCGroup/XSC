@@ -83,14 +83,16 @@ fq_name (SemanticGraph::Nameable& n, string const& nss)
 
   Scope& s (n.scope ());
 
-  if (!dynamic_cast<Schema*> (&s)) r = fq_name (s, nss);
+  if (!dynamic_cast<Schema*> (&s)) 
+    r = fq_name (s, nss);
 
   if (SemanticGraph::Namespace* ns =
       dynamic_cast<SemanticGraph::Namespace*> (&n))
   {
     string name (ns_name (*ns));
 
-    if (!nss.empty ()) name += L"::" + nss;
+    if (!nss.empty ())
+      name += L"::" + nss;
 
     if (!name.empty ())
     {
@@ -101,7 +103,11 @@ fq_name (SemanticGraph::Nameable& n, string const& nss)
   else
   {
     r += L"::";
-    r += id (n.name ());
+
+    if (n.named ())
+      r += id (n.name ());
+    else
+      r += anon_prefix_ + id (n.name ()) + anon_suffix_;
   }
 
   return r;
@@ -135,7 +141,7 @@ namespace
                     Traversal::Id,
                     Traversal::IdRef,
                     Traversal::QName,
-                    Traversal::AnyUri
+                    Traversal::anyURI
   {
     TypeName (Context& c, string& r_, string const& nss)
         : Context (c), r (r_), nss_ (nss)
@@ -308,7 +314,7 @@ type_name (SemanticGraph::Type& t, string const& nss)
     return r;
   }
   else 
-    return anon_prefix_ + t.name () + anon_suffix_;
+    return anon_prefix_ + id (t.name ()) + anon_suffix_;
 }
 
 string Context::
@@ -381,6 +387,7 @@ namespace
     L"if",
     L"inline",
     L"int",
+    L"interface",
     L"long",
     L"mutable",
     L"namespace",
