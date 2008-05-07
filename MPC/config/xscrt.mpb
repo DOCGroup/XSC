@@ -19,5 +19,7 @@ project : xerces {
         
     Debug::lit_libs += XSCsd
     Release::lit_libs += XSCs
+  } else {
+    libs += XSC
   }
 }

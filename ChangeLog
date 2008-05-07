@@ -1,21 +1,34 @@
+Wed May  7 19:35:39 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * MPC/config/xscrt.mpb:
+
+	  XSC include library was missing for non-Windows builds.
+
+        * XSCRT/XSCRT/XSCRT.mpc:
+        * XSCRT/XSCRT/XSCRT_export.h:
+
+	  Fixed bugs related to the export header definition on non-Windows
+	  systems. This was resolved by regenerating the header file with 
+	  the latest PERL script.
+
 Wed May  7 17:38:10 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * CXX/WriterHeader.cpp:
 
-	  Fixed build errors that appparently were not caught in VC7.1.
-	
+          Fixed build errors that appparently were not caught in VC7.1.
+
         * MPC/config/xsc_be.mpb:
 
-	  Fixed build errors related to the ordering of the input
-	  libraries.
-	
+          Fixed build errors related to the ordering of the input
+          libraries.
+
         * XSC.mpc:
 
-	  Removed the XSC library input.
+          Removed the XSC library input.
 
         * XSC/Parser.cpp:
 
-	  Used istringstring to handle converting strings to integers.
+          Used istringstring to handle converting strings to integers.
 
 Mon Apr 28 15:26:05 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
