@@ -10,7 +10,7 @@ project(xsc-binary): xsc_be, xerces {
   includes += .
 
   libpaths += ./XSC ./CXX ./IDL
-  libs     += CXX IDL XSC 
+  libs     += CXX IDL 
 
   Source_Files {
     xsc.cpp

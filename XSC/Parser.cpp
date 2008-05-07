@@ -23,6 +23,7 @@
 #include <cstdlib>  // std::wcstombs
 #include <memory>   // std::auto_ptr
 #include <iostream>
+#include <sstream>
 
 using std::wcout;
 using std::wcerr;
@@ -1090,15 +1091,28 @@ namespace XSC
   void Parser::
   element (XML::Element const& e, bool global)
   {
-    unsigned long min (e[L"minOccurs"] ? _wtoi (e[L"minOccurs"].c_str ()) : 1);
+    unsigned long min (1);
     unsigned long max (1);
     
+    if (e[L"minOccurs"])
+      {
+	string value = e[L"minOccurs"];
+	std::wistringstream istr (value);
+
+	istr >> min;
+      }
+
     if (e[L"maxOccurs"])
     {
       if (e[L"maxOccurs"] == L"unbounded")
         max = std::numeric_limits <unsigned long>::max ();
       else 
-        max = _wtoi (e[L"maxOccurs"].c_str ());
+	{
+	  string value (e[L"maxOccurs"]);
+	  std::wistringstream istr (value);
+
+	  istr >> max;
+	}
     } 
 
     bool qualified (global ? true : qualify_element_);

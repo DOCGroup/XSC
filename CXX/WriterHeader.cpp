@@ -321,7 +321,7 @@ namespace
          << endl;
 
       os << "protected:" << endl
-         << name << " ();"
+         << name_ << " ();"
          << "};";
     }
 

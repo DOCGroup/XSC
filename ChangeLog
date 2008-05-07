@@ -1,9 +1,28 @@
+Wed May  7 17:38:10 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * CXX/WriterHeader.cpp:
+
+	  Fixed build errors that appparently were not caught in VC7.1.
+	
+        * MPC/config/xsc_be.mpb:
+
+	  Fixed build errors related to the ordering of the input
+	  libraries.
+	
+        * XSC.mpc:
+
+	  Removed the XSC library input.
+
+        * XSC/Parser.cpp:
+
+	  Used istringstring to handle converting strings to integers.
+
 Mon Apr 28 15:26:05 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * CXX/Forward.cpp:
         * CXX/Header.cpp:
-        
-          . Bug fix where forward declarations were not handled correctly 
+
+          . Bug fix where forward declarations were not handled correctly
             for named types. It would generate a fully qualified type name,
             which included its scope. Forward declarations can not contain
             a scope. This was resolved by adding different generation paths
