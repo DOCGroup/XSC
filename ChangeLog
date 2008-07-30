@@ -1,15 +1,22 @@
+Wed Jul 30 23:35:45 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * XSC.mpc:
+
+          Removed boost_system base project since its not needed to build
+          XSC.
+
 Wed May  7 19:35:39 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * MPC/config/xscrt.mpb:
 
-	  XSC include library was missing for non-Windows builds.
+          XSC include library was missing for non-Windows builds.
 
         * XSCRT/XSCRT/XSCRT.mpc:
         * XSCRT/XSCRT/XSCRT_export.h:
 
-	  Fixed bugs related to the export header definition on non-Windows
-	  systems. This was resolved by regenerating the header file with 
-	  the latest PERL script.
+          Fixed bugs related to the export header definition on non-Windows
+          systems. This was resolved by regenerating the header file with
+          the latest PERL script.
 
 Wed May  7 17:38:10 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 

@@ -1,16 +1,16 @@
 //$Id$
 
-project(xsc-binary): boost_system, xsc_be, xerces {
+project (xsc-binary) : xsc_be, xerces {
   exename   = xsc-binary
   install   = $(XSC_ROOT)/bin
 
   requires += exceptions
 
-  after    += libXSC libCXX libIDL 
+  after    += libXSC libCXX libIDL
   includes += .
 
   libpaths += ./XSC ./CXX ./IDL
-  libs     += CXX IDL 
+  libs     += CXX IDL
 
   Source_Files {
     xsc.cpp
