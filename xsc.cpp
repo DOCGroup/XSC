@@ -84,18 +84,10 @@ void init_basic_commandline_description (po::options_description &desc)
      "Use --backend <name> for backend specific information")
     ("version", "Display the current version of XSC")
     ("trace", "Trace parser actions.  Useful for debugging")
-    ("backend", po::value<std::string> ()->default_value (""),
+    ("backend", po::value<std::string> ()/*->default_value ("")*/,
      "Specify the backend to be used.  Valid options are cxx, idl")
     ("search-path", po::value < std::vector<std::string> > (),
-     "Specify search paths for the compiler to use when resolving schema.")
-    
-    ;
-//   d.add_option (CL::OptionDescription (
-//                 "help-html",
-//                 "Display usage information in HTML format.\n\t\tUse "
-//                 "--backend <name> --help for backend-specific information.",
-//                 CL::OptionType::flag,
-//                 true));
+     "Specify search paths for the compiler to use when resolving schema.");
 }
 
 
@@ -113,10 +105,10 @@ int main (int argc, char* argv[])
     // implemenation of parse (...) thinks everthing thats not in the
     // description is a "argument" and not a "option" if it is found
     // on argv[].
-    po::options_description basic_desc ("Basic Options"),
-      hidden_desc ("Hidden Options"),
-      cxx_desc ("CXX Backend Options"),
-      idl_desc ("IDL Backend Options");
+    po::options_description basic_desc ("Basic Options");
+    po::options_description hidden_desc ("Hidden Options");
+    po::options_description cxx_desc ("CXX Backend Options");
+    po::options_description idl_desc ("IDL Backend Options");
     
     hidden_desc.add_options ()
       ("input-file", po::value <std::string>  (), "Input schema");
@@ -152,8 +144,8 @@ int main (int argc, char* argv[])
       }
     catch (...)
       {
-	wcerr << "unexpected po exception" << endl;
-	return 1;
+        wcerr << "unexpected po exception" << endl;
+        return 1;
       }
 
     // Display the version and then exit.
@@ -163,7 +155,10 @@ int main (int argc, char* argv[])
       return 0;
     }
 
-    const std::string &backend (vm["backend"].as<std::string> ());
+    std::string backend ("");
+
+    if (vm.count ("backend"))
+      backend = vm["backend"].as <std::string> ();
 
     if (vm.count ("help"))
     {
@@ -180,37 +175,36 @@ int main (int argc, char* argv[])
     
     // process search paths
     typedef std::vector <std::string> SearchPaths;
-    
 
     Parser::Paths search_paths;
     search_paths.push_back (fs::path ());
     
     if (vm.count ("search-path"))
       {
-	const SearchPaths &search_path_strings (vm["search-path"].as <SearchPaths> ());
-	
-	for (SearchPaths::const_iterator i = search_path_strings.begin ();
-	     i != search_path_strings.end ();
-         ++i)
-	  {
-	    try
-	      {
-		search_paths.push_back (fs::path (*i, fs::native));
-	      }
-	    catch (...)
-	      {
-		wcerr << "error: Nonexistant search path supplied:" << i->c_str () << endl;
-		return -1;
-	      }
-	  }
+        const SearchPaths &search_path_strings (vm["search-path"].as <SearchPaths> ());
+        
+        for (SearchPaths::const_iterator i = search_path_strings.begin ();
+             i != search_path_strings.end ();
+             ++i)
+          {
+            try
+              {
+                search_paths.push_back (fs::path (*i, fs::native));
+              }
+            catch (...)
+              {
+                wcerr << "error: Nonexistant search path supplied:" << i->c_str () << endl;
+                return -1;
+              }
+          }
       }
-
+    
     if (backend != "cxx" && backend != "idl")
-    {
-      wcerr << "unknown backend: " << backend.c_str () << endl;
-      wcerr << "try " << argv[0] << " --help for backend list" << endl;
-      return 1;
-    }
+      {
+        wcerr << "unknown backend: " << backend.c_str () << endl;
+        wcerr << "try " << argv[0] << " --help for backend list" << endl;
+        return 1;
+      }
 
     const std::string argument (vm["input-file"].as<std::string> ());
     

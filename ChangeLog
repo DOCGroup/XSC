@@ -1,3 +1,17 @@
+Thu Jul 31 17:39:43 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * CXX/Elements.hpp:
+
+	  Fixed compiler warnings related to the initializing member
+	  variables in the incorrect order, i.e., not in the same order
+	  as specified in the header file.
+
+        * XSC.mpc:
+        * xsc.cpp:
+
+	  Bug fix where the 'backend' command-line option was specified
+	  incorrectly for the latest version of Boost.
+
 Wed Jul 30 23:35:45 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSC.mpc:

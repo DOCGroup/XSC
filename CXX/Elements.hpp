@@ -43,28 +43,27 @@ public:
         parser_type (parser_type_),
         xml_element_type (xml_element_type_),
         xml_attribute_type (xml_attribute_type_),
-        esymbol (esymbol_),
         char_type_ (char_type__),
         L_ (char_type == L"wchar_t" ? L"L" : L""),
         string_type_ (L"::std::basic_string< " + char_type + L" >"),
         parser_type_ (L"::XSCRT::Parser< " + char_type + L" >"),
         xml_element_type_ (L"::XSCRT::XML::Element< " + char_type + L" >"),
         xml_attribute_type_ (L"::XSCRT::XML::Attribute< " + char_type + L" >"),
+        hxx_expr_ (),
+        hxx_expr (hxx_expr_),
+        hxx_suffix_ (),
+        hxx_suffix (hxx_suffix_),
         esymbol_ (esymbol__),
+        esymbol (esymbol_),
         scope_stack (scope_stack_),
         anon_prefix_ (anon_prefix),
         anon_suffix_ (anon_suffix),
         ns_prefix_ (ns_prefix__),
         ns_suffix_ (ns_suffix__),
         ns_mapping_ (ns_mapping),
-	      cdr_reader_generation_ (0),
-	      cdr_writer_generation_ (0),
-        hxx_expr_ (),
-        hxx_expr (hxx_expr_),
-        hxx_suffix_ (),
-        hxx_suffix (hxx_suffix_),
+        cdr_reader_generation_ (0),
+        cdr_writer_generation_ (0),
         generate_ra_sequences_ (false)
-
   {
   }
 
@@ -78,6 +77,8 @@ protected:
         parser_type (c.parser_type),
         xml_element_type (c.xml_element_type),
         xml_attribute_type (c.xml_attribute_type),
+        hxx_expr (c.hxx_expr),
+        hxx_suffix (c.hxx_suffix),
         esymbol (c.esymbol),
         scope_stack (c.scope_stack),
         anon_prefix_ (c.anon_prefix_),
@@ -86,10 +87,8 @@ protected:
         ns_suffix_ (c.ns_suffix_),
         ns_mapping_ (c.ns_mapping_),
         cdr_reader_generation_ (c.cdr_reader_generation_),
-	      cdr_writer_generation_ (c.cdr_writer_generation_),
-        generate_ra_sequences_ (c.generate_ra_sequences_),
-        hxx_expr (c.hxx_expr),
-        hxx_suffix (c.hxx_suffix)
+        cdr_writer_generation_ (c.cdr_writer_generation_),
+        generate_ra_sequences_ (c.generate_ra_sequences_)
   {
   }
 
@@ -140,7 +139,7 @@ protected:
 
   string
   type_name (SemanticGraph::Type& t, string const& ns_suffix = L"");
-
+ 
 protected:
   string
   fq_name (SemanticGraph::Nameable& n, string const& ns_suffix = L"");
@@ -232,11 +231,6 @@ public:
   string& xml_element_type;
   string& xml_attribute_type;
 
-  string& esymbol;
-  
-  std::string &hxx_expr;
-  std::string &hxx_suffix;
-
 private:
   string scope_;
 
@@ -248,17 +242,30 @@ private:
   string xml_attribute_type_;
   
   std::string hxx_expr_;
+
+public:
+  std::string &hxx_expr;
+
+private:
   std::string hxx_suffix_;
   
+public:
+  std::string &hxx_suffix;
+
+private:
   string esymbol_;
 
+public:
+  string &esymbol;
+
+private:
   typedef
-  std::deque<string>
+  std::deque <string>
   Scope_;
 
-  Scope_& scope_stack;
-
   Scope_ scope_stack_;
+
+  Scope_ &scope_stack;
 
 protected:
   string anon_prefix_;
