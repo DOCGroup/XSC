@@ -53,11 +53,11 @@ namespace
 void CXX_Generator::
 options (po::options_description& d)
 {
-  
+
   d.add_options ()
     ("cxx-char-type", po::value<std::string> ()->default_value ("wchar_t"),
      "Generate code using provided character type instead of wchar_t.")
-    ("cxx-generate-writer-types", 
+    ("cxx-generate-writer-types",
      "Generate code for serializing documents back to DOM.")
     ("cxx-generate-extended-rtti",
      "Generate extended run-time type identification")
@@ -133,11 +133,11 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   std::string ixx_expr (vm["cxx-inline-regex"].as<std::string> ());
   std::string cxx_expr (vm["cxx-source-regex"].as<std::string> ());
 
-  
+
   std::string hxx_name (regex::perl_s (name, hxx_expr) + hxx_suffix);
   std::string ixx_name (regex::perl_s (name, ixx_expr) + ixx_suffix);
   std::string cxx_name (regex::perl_s (name, cxx_expr) + cxx_suffix);
-  
+
   fs::path hxx_path (hxx_name);
   fs::path ixx_path (ixx_name);
   fs::path cxx_path (cxx_name);
@@ -173,14 +173,14 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
           << endl;
     return;
   }
-  
+
   // Banner.
   //
   {
     using namespace std;
 
     std::string name (vm["cxx-banner-file"].as<std::string> ());
-    
+
     fs::wifstream banner;
 
     if (!name.empty ())
@@ -250,11 +250,11 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
     //
     {
       std::string bn (vm["cxx-header-banner-file"].as<std::string> ());
-      
+
       if (!bn.empty ())
         {
           fs::wifstream b (bn, ios_base::in | ios_base::binary);
-          
+
           if (!b.is_open ())
             {
               wcerr << bn.c_str () << ": error: unable to open in read mode"
@@ -271,8 +271,8 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
         }
     }
   }
-  
-  
+
+
   //
   //
   string char_type;
@@ -311,14 +311,14 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   // Default mapping.
   //
   nsm.push_back (L"#^.* (.*?/)??"L"(([a-zA-Z_]\\w*)(/[a-zA-Z_]\\w*)*)$#$2#");
-  
+
   if (vm.count ("cxx-namespace-regex"))
     {
       // Custom mappings.
       //
-      const std::vector<std::string> &custom_nsm 
+      const std::vector<std::string> &custom_nsm
         (vm["cxx-namespace-regex"].as< std::vector <std::string> > ());
-      
+
       for (std::vector<std::string>::const_iterator i = custom_nsm.begin ();
            i != custom_nsm.end (); ++i)
         {
@@ -353,31 +353,34 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   //
   guard = regex::perl_s (guard, "/\\./_/");
 
+  // Replace '-' with '_'.
+  //
+  guard = regex::perl_s (guard, "/\\-/_/");
 
   hxx << "#ifndef " << guard.c_str () << endl
       << "#define " << guard.c_str () << endl
       << endl;
-  
+
   // Export header file
   {
     std::string tmp (vm["cxx-export-header"].as<std::string> ());
-    
+
     if (tmp != "")
       {
         hxx << "#include \"" << tmp.c_str () << '"' << endl;
       }
   }
-  
+
   {
     ::Context ctx (hxx, char_type, export_symbol, nsm);
-    
+
     ctx.hxx_expr = hxx_expr.c_str ();
     ctx.hxx_suffix = hxx_suffix.c_str ();
-    
+
     // Add information to generate reader/writer types
     ctx.cdr_reader_generation (cdr_reader);
     ctx.cdr_writer_generation (cdr_writer);
-    
+
     // Add additional information to the context:
     ctx.generate_ra_sequences (ra_sequences);
 
@@ -418,7 +421,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
 
     // Add additional information to the context:
     ctx.generate_ra_sequences (ra_sequences);
-    
+
     generate_inline (ctx, schema, inline_); //@@ move inline_ to ctx
   }
 
@@ -434,10 +437,10 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
     // Add information to generate reader/writer types
     ctx.cdr_reader_generation (cdr_reader);
     ctx.cdr_writer_generation (cdr_writer);
-    
+
     // Add additional information to the context:
     ctx.generate_ra_sequences (ra_sequences);
-    
+
     if (!inline_)
     {
       generate_inline (ctx, schema, inline_);
