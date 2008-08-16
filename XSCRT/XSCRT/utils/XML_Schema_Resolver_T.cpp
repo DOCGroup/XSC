@@ -8,7 +8,7 @@
 namespace XSCRT
 {
   namespace utils
-  {    
+  {
     ///////////////////////////////////////////////////////////////////////////
     // XML_Schema_Resolver_T
 
@@ -32,11 +32,11 @@ namespace XSCRT
 
       if (path.begin () == 0)
         return 0;
-      
+
       // Ownership of these objects is given to other people.
       return new xercesc::
         Wrapper4InputSource (new xercesc::LocalFileInputSource (path));
-    }    
+    }
 
     ///////////////////////////////////////////////////////////////////////////
     // Basic_Resolver_T
@@ -46,7 +46,7 @@ namespace XSCRT
       : path_ (path)
     {
     }
-    
+
     template <typename T>
     Basic_Resolver_T <T>::Basic_Resolver_T (const Basic_Resolver_T <T> & res)
       : path_ (res.path_)
@@ -61,9 +61,10 @@ namespace XSCRT
       XSC::XStr path (this->path_);
       path.append (systemId);
 
-      return path.release ();
+      XMLCh * retval = path.release ();
+      return retval;
     }
-    
+
     ///////////////////////////////////////////////////////////////////////////
     // xml_schema_resolver
 

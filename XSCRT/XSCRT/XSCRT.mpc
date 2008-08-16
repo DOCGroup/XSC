@@ -13,24 +13,29 @@ project (XSCRT) : xerces, xsc_common {
   }
 
   dynamicflags += XSCRT_HAS_DLL XSCRT_BUILD_DLL
-  staticflags  += XSCRT_AS_STATIC_LIBS	
+  staticflags  += XSCRT_AS_STATIC_LIBS
 
   Source_Files {
-    utils/File.cpp
+    utils/Console_Error_Handler.cpp
   }
 
   Template_Files {
     ./*.tpp
     ../XMLSchema/*.tpp
-    
+
     utils/File_T.cpp
+    utils/File_Reader_T.cpp
+    utils/File_Writer_T.cpp
+    utils/Reader_T.cpp
+    utils/Writer_T.cpp
+    utils/Reader_Writer_Base_T.cpp
     utils/XML_Schema_Resolver_T.cpp
   }
 
   Inline_Files {
- 
+
   }
-  
+
   Header_Files {
     XSCRT_export.h
   }
