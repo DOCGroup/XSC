@@ -1,3 +1,17 @@
+Tue Aug 19 13:40:00 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * CXX/Inline.cpp:
+        * CXX/WriterSource.cpp:
+        * XSCRT/XSCRT/Traversal.tpp:
+
+          . Still trying to fix a bug related to using the <xsd:extension>
+            tag. Committing current progress of bug resolution.
+
+        * XSCRT/XSCRT/utils/Console_Error_Handler.cpp:
+
+          . Updated the console error handlers to print the line and
+            column number of the error.
+
 Sat Aug 16 15:55:47 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
 

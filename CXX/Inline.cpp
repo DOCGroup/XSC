@@ -317,7 +317,7 @@ namespace
         else
           container = L"::std::list";
 
-        os << comma () 
+        os << comma ()
            << container << "< " << type << " > const& "
            << name << "__";
       }
@@ -431,11 +431,12 @@ namespace
 
       inherits (c, ctor_base_);
 
-      // Resets a flag that determines
-      // if a Complex Type's copy constructor
-      // has inherited from the base XSCRT::Type
-      // class.
-      ctor_member__.reset_base_class_initialization ();
+      // Resets a flag that determines if a Complex Type's constructor
+      // has inherited from the base XSCRT::Type class. Right now, this
+      // is commented out since it was producing a bug when complex types
+      // extended another complete type.
+
+      //ctor_member__.reset_base_class_initialization ();
       names (c, ctor_member_);
 
       os << "regulator__ ()"
@@ -452,7 +453,7 @@ namespace
          << name << " (" << type << " const& s)" << endl
          << ":" << endl;
 
-      // Resets a flag that determines if a Complex Type's 
+      // Resets a flag that determines if a Complex Type's
       // copy constructor has inherited from the base XSCRT::Type
       // class.
       copy_.reset_base_class_initialization ();
@@ -572,7 +573,7 @@ namespace
         string type (type_name (c));
         string name (id (c.name ()));
 
-        os << name << "_ (";
+        os << name << " (";
 
         args_.traverse (c);
 
@@ -709,7 +710,7 @@ namespace
           os << name << "_ (new " << type << " (" << name << "__))," << endl;
         }
       }
-    
+
     private:
       bool base_class_initialized_;
     };
@@ -761,8 +762,11 @@ namespace
       virtual void
       traverse (SemanticGraph::Type&)
       {
-        if (!base_class_initialized_)
-          os << "Base (s)," << endl;
+        if (!this->base_class_initialized_)
+          {
+            os << "Base (s)," << endl;
+            this->base_class_initialized_ = 1;
+          }
       }
 
       virtual void
@@ -795,10 +799,10 @@ namespace
 
             os << name << "_ (new " << type << " (*s." << name << "_))," << endl;
           }
-        else 
+        else
           {
             // sequence
-            //   
+            //
 
             os << name << "_ (s." << name << "_)," << endl;
           }
@@ -957,7 +961,7 @@ namespace
           //   << "for (" << name << "_const_iterator i (s."
           //   << name << "_.begin ());"
           //   << "i != s." << name << "_.end ();"
-          //   << "++i) " << std::endl 
+          //   << "++i) " << std::endl
           //   << "add_" << name << " (*i);"
           //   << "}";
         }
@@ -1023,7 +1027,7 @@ namespace
     virtual void
     traverse (Type& e)
     {
-      if (e.named ()) 
+      if (e.named ())
         name = id (e.name ());
 
       enter_scope (name);

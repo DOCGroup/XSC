@@ -98,7 +98,7 @@ namespace
     {
       // Anonymous types cannot be traversed.
       //
-      //if (!a.type ().named ()) 
+      //if (!a.type ().named ())
       //  return;
 
       string name (a.name ());
@@ -171,9 +171,9 @@ namespace
     Complex (Context& c,
              Traversal::NodeDispatcher& anonymous_type,
              string const& name = L"")
-        : Context (c), 
+        : Context (c),
           name_ (name),
-          member_ (c), 
+          member_ (c),
           base__ (c)
     {
       edge_traverser (names_);
@@ -187,7 +187,7 @@ namespace
     virtual void
     traverse (Type& c)
     {
-      if (c.named ()) 
+      if (c.named ())
         name_ = id (c.name ());
 
       if (!name_.empty ())
@@ -279,7 +279,7 @@ namespace
   struct Enumeration : Traversal::Enumeration, protected virtual Context
   {
     Enumeration (Context& c, string const & name = L"")
-        : Context (c), 
+        : Context (c),
           name_ (name),
           enumerator_ (c)
     {
