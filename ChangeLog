@@ -1,3 +1,16 @@
+Thu Sep  4 20:32:59 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * XSCRT/XSCRT/XSCRT.mpc:
+        * XSCRT/XSCRT/utils/Buffer_Reader_T.h:
+        * XSCRT/XSCRT/utils/Buffer_Reader_T.cpp:
+        * XSCRT/XSCRT/utils/Buffer_Writer_T.h:
+        * XSCRT/XSCRT/utils/Buffer_Writer_T.cpp:
+
+          . First version of a buffer reader/writer for serializing/
+            deserializing XML to C++ objects. The implementation is
+            quick and dirty and can therefore benefit from several
+            optimizations.
+
 Tue Aug 19 13:40:00 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * CXX/Inline.cpp:

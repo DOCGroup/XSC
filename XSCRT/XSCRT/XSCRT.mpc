@@ -23,6 +23,8 @@ project (XSCRT) : xerces, xsc_common {
     ./*.tpp
     ../XMLSchema/*.tpp
 
+    utils/Buffer_Reader_T.cpp
+    utils/Buffer_Writer_T.cpp
     utils/File_T.cpp
     utils/File_Reader_T.cpp
     utils/File_Writer_T.cpp
