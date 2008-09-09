@@ -14,6 +14,7 @@
 #define _XSCRT_BUFFER_WRITER_H_
 
 #include "Writer_T.h"
+#include "xercesc/framework/MemBufFormatTarget.hpp"
 
 namespace XSCRT
 {
@@ -41,7 +42,25 @@ public:
   /// Destructor.
   ~Buffer_Writer_T (void);
 
-  bool write (const CHAR_TYPE * filename);
+  bool write (char * buffer, size_t & size);
+
+  /**
+   * Insertion operator.
+   *
+   * @param[in]         entity        Target entity.
+   * @return            Reference to the file reader.
+   */
+  void operator <<= (const T & entity);
+
+  /**
+   * Get the size of the buffer.
+   *
+   * @return            Size of the buffer in bytes.
+   */
+  size_t get_buffer_size (void) const;
+
+private:
+  std::auto_ptr <xercesc::MemBufFormatTarget> target_;
 };
 
 }
