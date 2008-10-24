@@ -14,6 +14,7 @@
 #define _XSCRT_BUFFER_READER_T_H_
 
 #include "Reader_T.h"
+#include "XSC/XercesString.hpp"
 
 namespace XSCRT
 {
@@ -39,7 +40,7 @@ public:
    *
    * @param[in]       reader        Target reader function
    */
-  Buffer_Reader_T (typename reader_function <T>::result_type reader
+  Buffer_Reader_T (typename reader_function <T>::result_type reader,
                    const CHAR_TYPE * fake_id);
 
   /// Destructor.

@@ -37,12 +37,19 @@ bool Buffer_Writer_T <T, CHAR_TYPE>::write (char * buffer, size_t & size)
 {
   // Get the size of the XML document.
   size_t copy_n = this->get_buffer_size ();
+//  std::cout << "SIZE in Writer = " << copy_n << std::endl;
 
   if (copy_n > size)
     return false;
 
+//  std::cout << "buffer size =  " << ACE_OS::strlen(buffer) << std::endl;
+//  std::cout << "getRawBuffer size =  " << this->target_->getRawBuffer () << std::endl;
+  
   // Copy the buffer, and set the size.
   ::memcpy (buffer, this->target_->getRawBuffer (), copy_n);
+
+  
+
   size = copy_n;
 
   return true;

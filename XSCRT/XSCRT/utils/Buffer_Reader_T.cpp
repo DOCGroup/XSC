@@ -41,7 +41,7 @@ bool Buffer_Reader_T <T, CHAR_TYPE>::read (const char * buffer, size_t size)
 
   // Open the file for reading.
   std::auto_ptr <MemBufInputSource>
-    input (new MemBufInputSource (buffer, size, this->fake_id_));
+    input (new MemBufInputSource (reinterpret_cast <const XMLByte * const> (buffer), size, this->fake_id_));
 
   Wrapper4InputSource wrapper (input.get ());
   input.release ();

@@ -1,10 +1,18 @@
+Fri Oct 24 22:15:14 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * XSCRT/XSCRT/utils/Buffer_Reader_T.h:
+        * XSCRT/XSCRT/utils/Buffer_Reader_T.cpp:
+        * XSCRT/XSCRT/utils/Buffer_Writer_T.cpp:
+
+          . Bug fix for compilation errors.
+
 Thu Sep 11 19:04:40 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * CXX/libCXX.mpc:
         * XSCRT/XSCRT/utils/Reader_Writer_Base_T.cpp:
 
-	  . Fixed build errors on non-Windows systems.
-	
+          . Fixed build errors on non-Windows systems.
+
 Tue Sep  9 22:21:47 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSCRT/XSCRT/utils/Buffer_Writer_T.h:
