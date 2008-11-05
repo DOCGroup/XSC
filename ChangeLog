@@ -1,3 +1,27 @@
+Wed Nov  5 21:30:23 UTC 2008  James H. Hill  <j.hill@vanderbilt.edu>
+
+        * MPC/config/xsc_be.mpb:
+        * contrib/Utility.mpc:
+        
+          . Improved the project specification to handle cases when 
+            externals are ignored during a repo checkout. A prime example
+            is when a checkout happens using the https:// protocol over
+            a proxy server. The externals are defined using the svn://
+            protocol, which is not recognizable by the proxy server. This
+            causes to the checkout process to fail, and thus prevents XSC
+            from building properly. 
+            
+            The solution to this problem (or one solution) is to omit 
+            externals so the repo checkout succeeds. This then requires
+            developers to have the original version of the external
+            present on the machine. We, therefore, use the *feature*
+            specification in a .mp{c|b} file, such as 'feature (external)'
+            and 'feature (!external)', to control how to configure the 
+            project build accordingly.
+            
+            So far, this seems to work in the case when 'externals=0'. I
+            still need to validate this process when 'externals=1'.           
+
 Fri Oct 24 22:15:14 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSCRT/XSCRT/utils/Buffer_Reader_T.h:

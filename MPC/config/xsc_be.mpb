@@ -1,9 +1,19 @@
 // $Id$
 
-project: boost_filesystem, boost_regex, boost_program_options, xsc_common {
+project : boost_filesystem, boost_regex, boost_program_options, xsc_common {
   after += libXSC Utility
   libs  += XSC Utility
 
-  includes += $(XSC_ROOT) $(XSC_ROOT)/contrib $(XSC_ROOT)/contrib/utility
+  includes += $(XSC_ROOT) 
   libpaths += $(XSC_ROOT)/lib
+}
+
+feature (externals) {
+  includes += $(XSC_ROOT)/contrib \
+              $(XSC_ROOT)/contrib/utility
+}
+
+feature (!externals) {
+  includes += $(CCF_ROOT) \
+              $(UTILITY_ROOT)
 }
