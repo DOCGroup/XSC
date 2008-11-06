@@ -1,3 +1,10 @@
+Thu Nov  6 03:31:55 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * CXX/WriterHeader.cpp:
+
+          . Bug fix where the constructor for the writer was generated
+            with unncessary scoping.
+
 Thu Nov  6 02:50:10 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSC.mpc:

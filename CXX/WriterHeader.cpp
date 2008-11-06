@@ -33,7 +33,7 @@ namespace
     {
       // Anonymous types cannot be traversed.
       //
-      //if (!e.type ().named ()) 
+      //if (!e.type ().named ())
       //  return;
 
       string name (e.name ());
@@ -126,7 +126,7 @@ namespace
     {
       // Anonymous types cannot be traversed.
       //
-      //if (!a.type ().named ()) 
+      //if (!a.type ().named ())
       //return;
 
       string name (a.name ());
@@ -192,7 +192,7 @@ namespace
 
   struct Complex : Traversal::Complex, protected virtual Context
   {
-    Complex (Context& c, 
+    Complex (Context& c,
              Traversal::NodeDispatcher& anonymous_type,
              string const& name = L"")
         : Context (c),
@@ -208,12 +208,12 @@ namespace
       inherits_.node_traverser (base_);
     }
 
-    virtual void 
+    virtual void
     traverse (Type & c)
     {
       // We need to get the name of the element. The name would
       // be already set if it was an anonymous type.
-      if (c.named ()) 
+      if (c.named ())
         name_ = id (c.name ());
 
       // We only continue if we have a valid name.
@@ -230,8 +230,6 @@ namespace
     virtual void
     pre (Type& c)
     {
-      string type (type_name (c));
-
       os << "struct " << name_ << " : Traversal::" << scope << ", " << endl;
 
       inherits (c, inherits_);
@@ -245,7 +243,7 @@ namespace
 
       // c-tor
       //
-      os << type << " (" << xml_element_type << "&);"
+      os << name_ << " (" << xml_element_type << "&);"
          << endl;
 
       // Non-const traverse for Borland
