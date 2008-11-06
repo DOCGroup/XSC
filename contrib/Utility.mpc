@@ -3,15 +3,9 @@
 project (Utility) : xsc_common {
   staticname  = Utility
   includes   += $(UTILITY_ROOT)
-  
+
   Source_Files {
     $(UTILITY_ROOT)/Utility/Introspection/Object.cpp
     $(UTILITY_ROOT)/Utility/Introspection/TypeId.cpp
   }
-}
-
-feature (externals) {
-  specific {
-    UTILITY_ROOT = $(XSC_ROOT)/contrib/utility
-  } 
 }
