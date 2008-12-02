@@ -1,3 +1,9 @@
+Tue Dec  2 18:11:58 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * XSC.mpc:
+
+	  . Updated the install name of the XSC binary.
+
 Thu Nov  6 03:31:55 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * CXX/WriterHeader.cpp:
