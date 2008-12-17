@@ -36,7 +36,7 @@ namespace XSCRT
      * const XMLCh * operator () (...arguments from resolveEntity...)
      */
     template <typename Resolver = NoOp_Resolver>
-    class XML_Schema_Resolver_T : 
+    class XML_Schema_Resolver_T :
       public virtual xercesc::DOMEntityResolver
     {
     public:
@@ -50,7 +50,7 @@ namespace XSCRT
 
       /// This function is called by the Xerces infrastructure to
       /// actually resolve the location of a schema.
-      virtual xercesc::DOMInputSource * 
+      virtual xercesc::DOMInputSource *
       resolveEntity (const XMLCh * const publicId,
                      const XMLCh * const systemId,
                      const XMLCh * const baseURI);
@@ -64,7 +64,7 @@ namespace XSCRT
       XML_Schema_Resolver_T (const XML_Schema_Resolver_T <Resolver> &);
       const XML_Schema_Resolver_T & operator = (const XML_Schema_Resolver_T &);
     };
-    
+
     /**
      * @class NoOp_Resolver
      * @brief Resolver that does nothing.
@@ -82,13 +82,13 @@ namespace XSCRT
      * @brief Resolves a schema location from a fixed path.
      */
     template <typename T = char>
-    struct Basic_Resolver_T 
+    struct Basic_Resolver_T
     {
       /// Type definition of the character type.
       typedef T char_type;
 
       Basic_Resolver_T (const T * path);
-      
+
       Basic_Resolver_T (const Basic_Resolver_T & res);
 
       XMLCh * operator () (const XMLCh * const publicId,
@@ -103,10 +103,35 @@ namespace XSCRT
     };
 
     /**
+     * @class Basic_Resolver
+     * @brief Resolves a schema location from a fixed path.
+     */
+    template <typename T = char>
+    struct Static_Resolver_T
+    {
+      /// Type definition of the character type.
+      typedef T char_type;
+
+      Static_Resolver_T (const T * path);
+
+      Static_Resolver_T (const Static_Resolver_T & res);
+
+      XMLCh * operator () (const XMLCh * const publicId,
+                           const XMLCh * const systemId,
+                           const XMLCh * const baseURI) const;
+
+    private:
+      XSC::XStr path_;
+
+      // prevent the following operation
+      Static_Resolver_T (void);
+    };
+
+    /**
      * @func  xml_schema_resolver
-     * @brief Factory function for creating XML_Schema_Resolver_T 
+     * @brief Factory function for creating XML_Schema_Resolver_T
      *        objects.
-     */    
+     */
     template <typename T>
     XML_Schema_Resolver_T <T> * xml_schema_resolver (const T & resolver);
   }

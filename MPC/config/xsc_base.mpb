@@ -1,6 +1,6 @@
 // $Id$
 
-project  {
+project : vcwarnings {
   requires += xsc
 
   specific {

@@ -7,13 +7,10 @@
 
 #include <stack>
 #include <string>
-
-#include <xercesc/dom/DOM.hpp>
-#include <xercesc/util/XMLString.hpp>
-
-#include <XSC/SemanticGraph/Schema.hpp>
-
-#include <CCF/CodeGenerationKit/Regex.hpp>
+#include "xercesc/dom/DOM.hpp"
+#include "xercesc/util/XMLString.hpp"
+#include "XSC/SemanticGraph/Schema.hpp"
+#include "CCF/CodeGenerationKit/Regex.hpp"
 
 namespace Xerces = xercesc;
 
@@ -129,9 +126,9 @@ namespace XSC
       Element
       parent () const
       {
-	      std::wcout << "c8" << std::endl;
+        std::wcout << "c8" << std::endl;
         return dynamic_cast<Xerces::DOMElement*>(e_->getParentNode ());
-	      std::wcout << "/c8" << std::endl;
+        std::wcout << "/c8" << std::endl;
       }
 
     public:
@@ -209,7 +206,7 @@ namespace XSC
                bool use_default)
     {
       XMLCh* p (transcode (ns));
-      XMLCh const* xns (e.dom_element ()->lookupNamespacePrefix (p, use_default));
+      XMLCh const* xns (e.dom_element ()->lookupPrefix (p/*, use_default*/));
       string prefix (xns ? transcode (xns) : string (L""));
       delete[] p;
       return prefix;
@@ -229,19 +226,19 @@ namespace XSC
   class Parser
   {
   public:
-    
+
     Parser (bool trace, const std::vector <fs::path> &include_paths);
 
     SemanticGraph::Schema*
     parse (fs::path const&);
 
   private:
-    Xerces::DOMDocument* 
+    Xerces::DOMDocument*
     dom (fs::path const&);
 
     void
     schema (XML::Element const&);
-    
+
     /// Skips a single annotation element, if present.
     void
     annotation ();
@@ -306,8 +303,8 @@ namespace XSC
 
       return it.l_->getLength () > it.i_;
     }
-    
-    /// Go to next child of current parent and return it. 
+
+    /// Go to next child of current parent and return it.
     XML::Element
     next ()
     {
@@ -325,7 +322,7 @@ namespace XSC
 
       if (it.i_) --it.i_;
     }
-    
+
     /// Places a new parent element on the stack.  Further calls to
     /// more, next, and prev will use this element.
     void
@@ -333,8 +330,8 @@ namespace XSC
     {
       iteration_state_.push (e.dom_element ());
     }
-    
-    /// Removes the current parent element from the stack. 
+
+    /// Removes the current parent element from the stack.
     void
     pop ()
     {
@@ -386,21 +383,21 @@ namespace XSC
       if (cardinality_stack_.empty ()) return 1;
       else return cardinality_stack_.top ().max_;
     }
-    
+
     string
     normalize (const string &str)
     {
       string retval (str);
       size_t pos (string::npos);
-      
+
       while ((pos = retval.find_first_of (L":")) != string::npos)
         {
           retval[pos] = L'_';
         }
-      
+
       return retval;
     }
-    
+
   private:
     template <typename Edge, typename Node>
     void
@@ -417,7 +414,7 @@ namespace XSC
       Xerces::DOMNodeList* l_;
       unsigned long i_;
     };
-    
+
     std::stack<Iterator> iteration_state_;
     SemanticGraph::Schema* root_schema_;   // root schema file
     SemanticGraph::Schema* cur_schema_; // current schema file
@@ -460,10 +457,10 @@ namespace XSC
     FileMap_;
 
     FileMap_ file_map_;
-    
+
   public:
     typedef std::vector <fs::path> Paths;
-    
+
   private:
     Paths include_paths_;
 

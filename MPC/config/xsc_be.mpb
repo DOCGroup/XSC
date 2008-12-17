@@ -1,11 +1,13 @@
 // $Id$
 
-project : boost_filesystem, boost_regex, boost_program_options, xsc_common {
-  after += libXSC Utility
-  libs  += XSC Utility
+project : boost_filesystem, boost_regex, boost_program_options, utility, xsc_common {
+  after += XSC_BE
 
-  includes += $(XSC_ROOT) 
-  libpaths += $(XSC_ROOT)/lib
+  specific (vc6, vc71, vc8, vc9, vc10, nmake) {
+    libs += XSC_BEs
+  } else {
+    libs += XSC_BE
+  }
 }
 
 feature (externals) {

@@ -1,8 +1,138 @@
+Wed Dec 17 20:40:12 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * MPC/config/utility.mpb:
+        * MPC/config/vcwarnings.mpb:
+        * MPC/config/xsc_base.mpb:
+        * MPC/config/xsc_be.mpb:
+        * MPC/config/xsc_common.mpb:
+        * MPC/config/xsc_cxx.mpb:
+        * MPC/config/xsc_utils.mpb:
+        * XSC.mpc:
+        * XSC.mwc:
+        * XSC/Parser.hpp:
+        * XSC/Parser.cpp:
+        * XSC/XSC_BE.mpc:
+        * XSC/XSC_BE_export.h:
+        * XSC/be:
+        * XSC/be/CXX:
+        * XSC/be/CXX/Elements.hpp:
+        * XSC/be/CXX/Elements.cpp:
+        * XSC/be/CXX/Forward.hpp:
+        * XSC/be/CXX/Forward.cpp:
+        * XSC/be/CXX/Generator.cpp:
+        * XSC/be/CXX/Generator.hpp:
+        * XSC/be/CXX/Header.hpp:
+        * XSC/be/CXX/Header.cpp:
+        * XSC/be/CXX/Inline.hpp:
+        * XSC/be/CXX/Inline.cpp:
+        * XSC/be/CXX/ParserHeader.hpp:
+        * XSC/be/CXX/ParserHeader.cpp:
+        * XSC/be/CXX/ParserSource.cpp:
+        * XSC/be/CXX/ParserSource.hpp:
+        * XSC/be/CXX/Source.hpp:
+        * XSC/be/CXX/Source.cpp:
+        * XSC/be/CXX/TraversalHeader.hpp:
+        * XSC/be/CXX/TraversalHeader.cpp:
+        * XSC/be/CXX/TraversalSource.hpp:
+        * XSC/be/CXX/TraversalSource.cpp:
+        * XSC/be/CXX/TypeInfoSource.hpp:
+        * XSC/be/CXX/TypeInfoSource.cpp:
+        * XSC/be/CXX/Validator.cpp:
+        * XSC/be/CXX/Validator.hpp:
+        * XSC/be/CXX/WriterHeader.cpp:
+        * XSC/be/CXX/WriterHeader.hpp:
+        * XSC/be/CXX/WriterSource.cpp:
+        * XSC/be/CXX/WriterSource.hpp:
+        * XSC/be/IDL:
+        * XSC/be/IDL/Declaration.hpp:
+        * XSC/be/IDL/Declaration.cpp:
+        * XSC/be/IDL/Definition.cpp:
+        * XSC/be/IDL/Definition.hpp:
+        * XSC/be/IDL/Elements.cpp:
+        * XSC/be/IDL/Elements.hpp:
+        * XSC/be/IDL/Generator.cpp:
+        * XSC/utils:
+        * XSC/utils/XML_Error_Handler.h:
+        * XSC/utils/XML_Error_Handler.cpp:
+        * XSC/utils/XML_Helper.h:
+        * XSC/utils/XML_Helper_T.cpp:
+        * XSC/utils/XML_Schema_Resolver.h:
+        * XSC/utils/XML_Schema_Resolver.cpp:
+        * XSC/utils/XML_Schema_Resolver_T.cpp:
+        * XSC/utils/XSC_Utils.mpc:
+        * XSC/utils/XSC_Utils_export.h:
+        * XSC/utils/XercesString.h:
+        * XSC/utils/XercesString.cpp:
+        * XSCRT/XSCRT/XSCRT.mpc:
+        * XSCRT/XSCRT/utils/XML_Schema_Resolver_T.h:
+        * XSCRT/XSCRT/utils/XML_Schema_Resolver_T.cpp:
+        * bin:
+        * contrib/Utility.mpc:
+        * lib:
+        * xsc.cpp:
+
+          . Updated XSC to work with Xerces-C 3.0 (Thanks to Will Otte
+            for doing this).
+
+          . Improved the layout of the project. There is still a LOT of
+            work that needs to be done.
+
+          . Created a XSC_Utils project that contains utility project with
+            common files.
+
+        * CXX:
+        * CXX/Elements.hpp:
+        * CXX/Elements.cpp:
+        * CXX/Forward.hpp:
+        * CXX/Forward.cpp:
+        * CXX/Generator.hpp:
+        * CXX/Generator.cpp:
+        * CXX/Header.hpp:
+        * CXX/Header.cpp:
+        * CXX/Inline.hpp:
+        * CXX/Inline.cpp:
+        * CXX/ParserHeader.hpp:
+        * CXX/ParserHeader.cpp:
+        * CXX/ParserSource.cpp:
+        * CXX/ParserSource.hpp:
+        * CXX/Source.cpp:
+        * CXX/Source.hpp:
+        * CXX/TraversalHeader.hpp:
+        * CXX/TraversalHeader.cpp:
+        * CXX/TraversalSource.cpp:
+        * CXX/TraversalSource.hpp:
+        * CXX/TypeInfoSource.hpp:
+        * CXX/TypeInfoSource.cpp:
+        * CXX/Validator.cpp:
+        * CXX/Validator.hpp:
+        * CXX/WriterHeader.hpp:
+        * CXX/WriterHeader.cpp:
+        * CXX/WriterSource.cpp:
+        * CXX/WriterSource.hpp:
+        * CXX/libCXX.mpc:
+        * IDL:
+        * IDL/Declaration.hpp:
+        * IDL/Declaration.cpp:
+        * IDL/Definition.cpp:
+        * IDL/Definition.hpp:
+        * IDL/Elements.cpp:
+        * IDL/Elements.hpp:
+        * IDL/Generator.cpp:
+        * IDL/Generator.hpp:
+        * IDL/libIDL.mpc:
+        * XSC/XML_Schema_Resolver.hpp:
+        * XSC/XML_Schema_Resolver.cpp:
+        * XSC/XercesString.cpp:
+        * XSC/XercesString.hpp:
+        * XSC/libXSC.mpc:
+
+          Removed these files.
+
 Tue Dec  2 18:11:58 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSC.mpc:
 
-	  . Updated the install name of the XSC binary.
+          . Updated the install name of the XSC binary.
 
 Thu Nov  6 03:31:55 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 

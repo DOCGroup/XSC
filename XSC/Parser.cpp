@@ -2,23 +2,16 @@
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
 // cvs-id    : $Id$
 
-#include <XSC/Parser.hpp>
-#include <XSC/SemanticGraph.hpp>
-#include <XSC/Traversal.hpp>
-
-#include <xercesc/util/XMLUniDefs.hpp>
-#include <xercesc/util/XMLString.hpp>
-
-#include <xercesc/validators/common/Grammar.hpp>
-#include <xercesc/validators/schema/XSDDOMParser.hpp>
-
-#include <xercesc/sax/InputSource.hpp>
-#include <xercesc/framework/LocalFileInputSource.hpp>
-#include <xercesc/framework/Wrapper4DOMInputSource.hpp>
-
+#include "Parser.hpp"
+#include "SemanticGraph.hpp"
+#include "Traversal.hpp"
+#include "xercesc/util/XMLUniDefs.hpp"
+#include "xercesc/util/XMLString.hpp"
+#include "xercesc/validators/common/Grammar.hpp"
+#include "xercesc/validators/schema/XSDDOMParser.hpp"
 #include "boost/scoped_array.hpp"
-
-#include "XML_Schema_Resolver.hpp"
+#include "utils/XML_Schema_Resolver.h"
+#include "utils/XML_Helper.h"
 
 #include <cstdlib>  // std::wcstombs
 #include <memory>   // std::auto_ptr
@@ -41,7 +34,7 @@ namespace XSC
 
   string const xsd = L"http://www.w3.org/2001/XMLSchema";
   string const xmi = L"http://www.omg.org/XMI";
-  
+
   namespace
   {
     class NotNamespace {};
@@ -104,9 +97,9 @@ namespace XSC
                 ns_name = i.context ().get<string> ("type-ns-name");
                 uq_name = i.context ().get<string> ("type-uq-name");
 
-                schema_.new_edge<Belongs> (i, 
-                                           resolve<SemanticGraph::Type> (ns_name, 
-                                                                         uq_name, 
+                schema_.new_edge<Belongs> (i,
+                                           resolve<SemanticGraph::Type> (ns_name,
+                                                                         uq_name,
                                                                          schema_));
 
                 i.context ().remove ("type-ns-name");
@@ -117,8 +110,8 @@ namespace XSC
                 ns_name = i.context ().get<string> ("instance-ns-name");
                 uq_name = i.context ().get<string> ("instance-uq-name");
 
-                SemanticGraph::Instance& ref (resolve<SemanticGraph::Instance> (ns_name, 
-                                                                                uq_name, 
+                SemanticGraph::Instance& ref (resolve<SemanticGraph::Instance> (ns_name,
+                                                                                uq_name,
                                                                                 schema_));
 
                 if (ref.typed ())
@@ -159,8 +152,8 @@ namespace XSC
                 ns_name = c.context ().get<string> ("type-ns-name");
                 uq_name = c.context ().get<string> ("type-uq-name");
 
-                schema_.new_edge<Inherits> (c, resolve<SemanticGraph::Type> (ns_name, 
-                                                                             uq_name, 
+                schema_.new_edge<Inherits> (c, resolve<SemanticGraph::Type> (ns_name,
+                                                                             uq_name,
                                                                              schema_));
 
                 c.context ().remove ("type-ns-name");
@@ -257,13 +250,13 @@ namespace XSC
 
   Parser::
   Parser (bool trace, const std::vector <fs::path> &include_paths)
-    : root_schema_ (0), 
-      cur_schema_ (0), 
-      qualify_attribute_ (false), 
+    : root_schema_ (0),
+      cur_schema_ (0),
+      qualify_attribute_ (false),
       qualify_element_ (false)
   {
     trace_ = trace;
-    
+
     this->include_paths_.resize (include_paths.size ());
     std::copy (include_paths.begin (),
                include_paths.end (),
@@ -321,18 +314,18 @@ namespace XSC
       s.new_edge<Names> (ns, s.new_node<Id> (), L"ID");
       s.new_edge<Names> (ns, s.new_node<IdRef> (), L"IDREF");
     }
-    
+
     // Supported XMI features
     {
       Schema &s (rs->new_node<Schema> ());
       rs->new_edge<Implies> (*rs, s, fs::path ("XMI.xsd"));
       Namespace &ns (s.new_node<Namespace> ());
-      
+
       s.new_edge<Names> (s, ns, xmi);
-      
+
       s.new_edge<Names> (ns, s.new_node<String> (), L"href");
     }
-    
+
     // Parse.
     //
     if (DOMDocument* d  = dom (uri))
@@ -451,20 +444,20 @@ namespace XSC
 
         if (name == L"annotation");
         else if (name == L"import")
-          import (e); 
-        else if (name == L"include") 
+          import (e);
+        else if (name == L"include")
           include (e);
         else if (name == L"group")
           group (e);
-        else if (name == L"simpleType") 
-          simple_type (e); 
-        else if (name == L"complexType") 
+        else if (name == L"simpleType")
+          simple_type (e);
+        else if (name == L"complexType")
           complex_type (e);
-        else if (name == L"element") 
+        else if (name == L"element")
           element (e, true);
-        else if (name == L"attributeGroup") 
+        else if (name == L"attributeGroup")
           attribute_group (e, true);
-        else if (name == L"attribute") 
+        else if (name == L"attribute")
           attribute (e, true);
         else wcerr << "unexpected top-level element: " << name << endl;
       }
@@ -474,18 +467,18 @@ namespace XSC
     qualify_attribute_ = old_qa;
     qualify_element_ = old_qe;
   }
-  
+
   void Parser::
   import (XML::Element const& i)
   {
     string loc (i[L"schemaLocation"]);
-    
+
     size_t len (std::wcstombs (0, loc.c_str (), 0) + 1);
     scoped_array <char> str (new char[len]);
     std::wcstombs (str.get (), loc.c_str (), len);
-    
+
     fs::path path (str.get ());
-    
+
     // Check to see if we have already parsed this file....
     if (file_map_.find (path) != file_map_.end ()) return;
 
@@ -530,11 +523,11 @@ namespace XSC
         scoped_array <char> str (new char[len]);
         std::wcstombs (str.get (), loc.c_str (), len);
         fs::path path (str.get ());
-    
+
         if (file_map_.find (path) != file_map_.end ()) return;
-    
+
         file_map_[path] = L"not in use right now";
-        
+
         if (trace_) wcout << "including " << path.string ().c_str () << endl;
 
         if (DOMDocument* d  = dom (path))
@@ -560,7 +553,7 @@ namespace XSC
               {
                 root_schema_->new_edge<Includes> (*cur_schema_, s, path);
               }
-            
+
             if (trace_) wcout << "target namespace: " << ns << endl;
 
             Schema* old (cur_schema_);
@@ -602,10 +595,10 @@ namespace XSC
 
         if (trace_) wcout << name << endl;
 
-        if (name == L"all") all (e); 
-        else if (name == L"choice") choice (e); 
-        else if (name == L"sequence") sequence (e); 
-        else  
+        if (name == L"all") all (e);
+        else if (name == L"choice") choice (e);
+        else if (name == L"sequence") sequence (e);
+        else
           {
             wcerr << "expected `all' or `choice' or `sequence' instead of " << name
                   << endl;
@@ -803,9 +796,9 @@ namespace XSC
         string type (r[L"base"]);
         string ns_name (XML::ns_name (r, type));
         string uq_name (XML::uq_name (type));
-        
+
         Type &t (resolve<Type> (ns_name, uq_name, *root_schema_));
-        
+
         if (string name = r.parent ()[L"name"])
           {
             root_schema_->new_edge<Names> (scope (), t, name);
@@ -864,17 +857,17 @@ namespace XSC
 
     string name = e.name ();
 
-    if (trace_) 
+    if (trace_)
       wcout << name << endl;
 
-    if (name == L"group") group (e); 
-    else if (name == L"all") all (e); 
-    else if (name == L"choice") choice (e); 
-    else if (name == L"sequence") sequence (e); 
-    else if (name == L"attributeGroup") attribute_group (e); 
-    else if (name == L"attribute") attribute (e); 
-    else if (name == L"simpleContent") simple_content (e); 
-    else if (name == L"complexContent") complex_content (e); 
+    if (name == L"group") group (e);
+    else if (name == L"all") all (e);
+    else if (name == L"choice") choice (e);
+    else if (name == L"sequence") sequence (e);
+    else if (name == L"attributeGroup") attribute_group (e);
+    else if (name == L"attribute") attribute (e);
+    else if (name == L"simpleContent") simple_content (e);
+    else if (name == L"complexContent") complex_content (e);
     else
       {
         wcerr << "expected `choice' or `sequence' instead of " << name << endl;
@@ -910,8 +903,8 @@ namespace XSC
     this->push (a);
 
     this->annotation ();
-    
-    // The content of the all must be a number of elements.  
+
+    // The content of the all must be a number of elements.
     while (this->more ())
       {
         XML::Element e (this->next ());
@@ -944,10 +937,10 @@ namespace XSC
 
         string name (e.name ());
 
-        if (name == L"group") group (e); 
-        else if (name == L"choice") choice (e); 
-        else if (name == L"sequence") sequence (e); 
-        else if (name == L"element") element (e); 
+        if (name == L"group") group (e);
+        else if (name == L"choice") choice (e);
+        else if (name == L"sequence") sequence (e);
+        else if (name == L"element") element (e);
         else
           {
             wcerr << "expected `choice' or `sequence' or `element' instead of "
@@ -976,10 +969,10 @@ namespace XSC
 
         string name (e.name ());
 
-        if (name == L"group") group (e); 
-        else if (name == L"choice") choice (e); 
-        else if (name == L"sequence") sequence (e); 
-        else if (name == L"element") element (e); 
+        if (name == L"group") group (e);
+        else if (name == L"choice") choice (e);
+        else if (name == L"sequence") sequence (e);
+        else if (name == L"element") element (e);
         else
           {
             wcerr << "expected `choice' or `sequence' or `element' instead of "
@@ -1000,8 +993,8 @@ namespace XSC
     XML::Element e (next ());
     string name (e.name ());
 
-    if (name == L"extension") 
-      simple_content_extension (e); 
+    if (name == L"extension")
+      simple_content_extension (e);
     else
       {
         wcerr << "expected `extension' instead of " << name << endl;
@@ -1037,7 +1030,7 @@ namespace XSC
   void Parser::
   simple_content_extension (XML::Element const& e)
   {
-    if (trace_) 
+    if (trace_)
       wcout << "extension base: " << fq_name (e, e[L"base"]) << endl;
 
     set_type<Inherits> (e[L"base"], e, dynamic_cast<Complex&> (scope ()));
@@ -1074,8 +1067,8 @@ namespace XSC
 
         string name (e.name ());
 
-        if (name == L"group") group (e); 
-        else if (name == L"all") all (e); 
+        if (name == L"group") group (e);
+        else if (name == L"all") all (e);
         else if (name == L"choice") choice (e);
         else if (name == L"sequence") sequence (e);
         else if (name == L"attribute") attribute (e);
@@ -1093,27 +1086,27 @@ namespace XSC
   {
     unsigned long min (1);
     unsigned long max (1);
-    
+
     if (e[L"minOccurs"])
       {
-	string value = e[L"minOccurs"];
-	std::wistringstream istr (value);
+  string value = e[L"minOccurs"];
+  std::wistringstream istr (value);
 
-	istr >> min;
+  istr >> min;
       }
 
     if (e[L"maxOccurs"])
     {
       if (e[L"maxOccurs"] == L"unbounded")
         max = std::numeric_limits <unsigned long>::max ();
-      else 
-	{
-	  string value (e[L"maxOccurs"]);
-	  std::wistringstream istr (value);
+      else
+  {
+    string value (e[L"maxOccurs"]);
+    std::wistringstream istr (value);
 
-	  istr >> max;
-	}
-    } 
+    istr >> max;
+  }
+    }
 
     bool qualified (global ? true : qualify_element_);
 
@@ -1138,7 +1131,7 @@ namespace XSC
           }
         else
           {
-            // Looks like an anonymous type. We need to append the 
+            // Looks like an anonymous type. We need to append the
             // anonymous type's suffix to the name of the previous
             // element.
             push (e);
@@ -1151,16 +1144,16 @@ namespace XSC
                 XML::Element e (next ());
 
                 string anon_name (e.name ());
-                
-                if (trace_) 
+
+                if (trace_)
                   wcout << anon_name << endl;
 
                 Type* t (0);
 
-                if (anon_name == L"simpleType") 
-                  t = simple_type (e); 
+                if (anon_name == L"simpleType")
+                  t = simple_type (e);
                 else if (anon_name == L"complexType")
-                  t = complex_type (e, name); 
+                  t = complex_type (e, name);
                 else
                   {
                     wcerr << "expected `simpleType' or `complexType' instead of "
@@ -1255,13 +1248,13 @@ namespace XSC
       }
   }
 
-  
+
   void Parser::
   attribute_group (XML::Element const &a, bool global)
   {
     string ref (a[L"ref"]);
     string name (a[L"name"]);
-    
+
     if (ref.empty ())
       {
         if (name.empty ())
@@ -1269,27 +1262,27 @@ namespace XSC
             std::wcerr << "error: attribute group has both empty name and ref values." << std::endl;
             return;
           }
-        
+
         // Attribute group definition
         Scope &node (root_schema_->new_node<Scope> ());
         root_schema_->new_edge <Names> (scope (), node, name);
-        
+
         push_scope (node);
         push (a);
 
         annotation ();
-        
+
         while (more ())
           {
             XML::Element e (next ());
             string ch_name (e.name ());
-            
+
             if (trace_) wcout << ch_name << endl;
             if (ch_name == L"attribute") attribute (e);
             else if (ch_name == L"attributeGroup") attribute_group (e);
             else std::wcerr << "error: expected attribute child, got " << name << " instead." << endl;
-          } 
-        
+          }
+
         pop ();
         pop_scope ();
       }
@@ -1297,20 +1290,20 @@ namespace XSC
       { // Refering to an already declared attribute group.
         string uq_name (XML::uq_name (ref));
         string ns_name (XML::ns_name (a, ref));
-        
+
         try
           {
             Scope& s (resolve<Scope> (ns_name, uq_name, *root_schema_));
-            
+
             for (Scope::NamesIterator i (s.names_begin ());
                  i != s.names_end (); ++i)
               {
                 Attribute &prot (dynamic_cast <Attribute &> ((*i)->named ()));
-                
+
                 Attribute &attr (root_schema_->new_node<Attribute> (prot.optional (),
                                                                    prot.qualified ()));
                 root_schema_->new_edge<Names> (scope (), attr, prot.name ());
-                
+
                 // Set the attributes type
                 if (prot.typed ())
                   root_schema_->new_edge<Belongs> (attr, prot.type ());
@@ -1347,11 +1340,11 @@ namespace XSC
                 Attribute &attr_ref (resolve<Attribute> (ns_name, uq_name, *root_schema_));
                 Attribute &attr (root_schema_->new_node<Attribute> (attr_ref.optional (),
                                                                     attr_ref.qualified ()));
-                
+
                 string norm_name (normalize (ref));
-                
+
                 root_schema_->new_edge<Names> (scope (), attr, norm_name);
-                
+
                 if (attr_ref.typed ())
                   root_schema_->new_edge<Belongs> (attr, attr_ref.type ());
                 else
@@ -1366,7 +1359,7 @@ namespace XSC
                 wcerr << "unable to resolve name `" << uq_name
                       << "' inside namespace `" << ns_name << "'" << endl;
               }
-            
+
             return;
           }
 
@@ -1506,104 +1499,27 @@ namespace XSC
         //
         XMLPlatformUtils::Initialize();
 
-        // Instantiate the DOM parser.
-        //
-        XMLCh const gLS[] = {chLatin_L, chLatin_S, chNull };
+        XSC::XML::XML_Error_Handler err;
+        XSC::XML::NoOp_Resolver noop;
+        XSC::XML::XML_Schema_Resolver<> resolver (noop);
 
-        // Get an implementation of the Load-Store (LS) interface.
-        //
-        DOMImplementationLS* impl 
-          (static_cast<DOMImplementationLS*>
-           (DOMImplementationRegistry::getDOMImplementation(gLS)));
+        XSC::XML::XML_Helper<XSC::XML::XML_Schema_Resolver <>,
+          XSC::XML::XML_Error_Handler> helper (resolver, err);
 
-        // Create a DOMBuilder.
-        //
-        DOMBuilder* parser 
-          (impl->createDOMBuilder(DOMImplementationLS::MODE_SYNCHRONOUS, 0));
-
-        // Discard comment nodes in the document.
-        //
-        parser->setFeature (XMLUni::fgDOMComments, false);
-
-        // Disable datatype normalization. The XML 1.0 attribute value
-        // normalization always occurs though.
-        //
-        parser->setFeature (XMLUni::fgDOMDatatypeNormalization, true);
-
-        // Do not create EntityReference nodes in the DOM tree. No
-        // EntityReference nodes will be created, only the nodes
-        // Corresponding to their fully expanded substitution text will be
-        // created.
-        //
-        parser->setFeature (XMLUni::fgDOMEntities, false);
-
-        // Perform Namespace processing.
-        //
-        parser->setFeature (XMLUni::fgDOMNamespaces, true);
-
-        // Perform Validation
-        //
-        //parser->setFeature (XMLUni::fgDOMValidation, true);
-
-        // Do not include ignorable whitespace in the DOM tree.
-        //
-        parser->setFeature (XMLUni::fgDOMWhitespaceInElementContent, false);
-
-        // Enable the parser's schema support.
-        //
-        parser->setFeature (XMLUni::fgXercesSchema, true);
-
-        // Enable full schema constraint checking, including checking which
-        // may be time-consuming or memory intensive. Currently, particle
-        // unique attribution constraint checking and particle derivation
-        // restriction checking are controlled by this option.
-        //
-        parser->setFeature (XMLUni::fgXercesSchemaFullChecking, true);
-
-        // The parser will treat validation error as fatal and will exit.
-        //
-        parser->setFeature (XMLUni::fgXercesValidationErrorAsFatal, true);
-
-        ErrorHandler eh;
-        parser->setErrorHandler(&eh);
-      
-        Schema_Resolver sr (this->include_paths_);
-        parser->setEntityResolver (&sr);
-      
         std::string uri (tu.string ());
-      
-        parser->loadGrammar (uri.c_str (), Grammar::SchemaGrammarType);
 
-        if (eh.failed ())
-          {
-            std::cerr << "Encountered an error when loading grammar" << endl;
-            parser->release();
-            return 0;
-          }
+        DOMDocument *doc (helper.create_dom (uri.c_str ()));
 
-        XSDDOMParser* xsd_parser 
-          (new (XMLPlatformUtils::fgMemoryManager) XSDDOMParser ());
-
-        xsd_parser->setValidationScheme (XercesDOMParser::Val_Never);
-        xsd_parser->setDoNamespaces (true);
-        
-        XMLCh* file_name (XMLString::transcode (uri.c_str ()));
-        DOMInputSource *input (sr.resolveEntity (0, file_name, 0));
-        Wrapper4DOMInputSource input_wrapper (input);
-        
-        xsd_parser->parse (input_wrapper);
-        XMLString::release (&file_name);
-        DOMDocument* doc (xsd_parser->getDocument());
-
-        parser->release();
+        if (err.getErrors ())
+          return 0;
 
         return doc;
       }
-    catch (Xerces::DOMException const& e)
+    catch (Xerces::DOMException const & e)
       {
         wcerr << "caught DOMException: " << e.code << endl;
       }
-    catch (Xerces::XMLException const& e)
+    catch (Xerces::XMLException const & )
       {
         wcerr << "caught XMLException" << endl;
       }

@@ -1,0 +1,17 @@
+// $Id$
+
+project (XSC_Utils) : xsc_common {
+  sharedname   = XSC_Utils
+  dynamicflags += XSC_UTILS_BUILD_DLL
+
+  Source_Files {
+    XercesString.cpp
+    XML_Error_Handler.cpp
+    XML_Schema_Resolver.cpp
+  }
+
+  Template_Files {
+    XML_Helper_T.cpp
+    XML_Schema_Resolver_T.cpp
+  }
+}

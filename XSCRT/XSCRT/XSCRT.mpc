@@ -1,16 +1,10 @@
 // $Id$
 
-project (XSCRT) : xerces, xsc_common {
+project (XSCRT) : xerces3, xsc_utils, xsc_common {
   sharedname = XSCRT
   after     += libXSC
 
   includes  += $(XSC_ROOT) $(XSC_ROOT)/XSCRT
-
-  specific (vc6, vc7, vc71, vc8, vc9, nmake) {
-    libs += XSCs
-  } else {
-    libs += XSC
-  }
 
   dynamicflags += XSCRT_HAS_DLL XSCRT_BUILD_DLL
   staticflags  += XSCRT_AS_STATIC_LIBS

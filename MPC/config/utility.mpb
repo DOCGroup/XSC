@@ -1,0 +1,8 @@
+// $Id$
+
+project {
+  after += Utility
+  libs  += Utilitys
+
+  includes += $(XSC_ROOT)/contrib/utility
+}

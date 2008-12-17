@@ -7,15 +7,11 @@
 #include <vector>
 
 #include "boost/program_options.hpp"
-
-#include <CCF/CompilerElements/FileSystem.hpp>
-
-#include <XSC/Parser.hpp>
-
-#include <CXX/Validator.hpp>
-#include <CXX/Generator.hpp>
-
-#include <IDL/Generator.hpp>
+#include "CCF/CompilerElements/FileSystem.hpp"
+#include "XSC/Parser.hpp"
+#include "XSC/be/CXX/Validator.hpp"
+#include "XSC/be/CXX/Generator.hpp"
+#include "XSC/be/IDL/Generator.hpp"
 
 using namespace XSC;
 
@@ -109,7 +105,7 @@ int main (int argc, char* argv[])
     po::options_description hidden_desc ("Hidden Options");
     po::options_description cxx_desc ("CXX Backend Options");
     po::options_description idl_desc ("IDL Backend Options");
-    
+
     hidden_desc.add_options ()
       ("input-file", po::value <std::string>  (), "Input schema");
 
@@ -120,7 +116,7 @@ int main (int argc, char* argv[])
 
     // Parse the command-line options.
     po::variables_map vm;
-    
+
     try
       {
         po::options_description all_options;
@@ -128,10 +124,10 @@ int main (int argc, char* argv[])
         all_options.add (hidden_desc);
         all_options.add (cxx_desc);
         all_options.add (idl_desc);
-        
+
         po::positional_options_description p;
         p.add ("input-file", 1);
-        
+
         po::store (po::command_line_parser (argc, argv).
                    options(all_options).positional(p).run (), vm);
         po::notify (vm);
@@ -167,22 +163,22 @@ int main (int argc, char* argv[])
         basic_desc.add (cxx_desc);
       else if (backend == "idl")
         basic_desc.add (idl_desc);
-      
+
       std::cerr << basic_desc;
 
       return 0;
     }
-    
+
     // process search paths
     typedef std::vector <std::string> SearchPaths;
 
     Parser::Paths search_paths;
     search_paths.push_back (fs::path ());
-    
+
     if (vm.count ("search-path"))
       {
         const SearchPaths &search_path_strings (vm["search-path"].as <SearchPaths> ());
-        
+
         for (SearchPaths::const_iterator i = search_path_strings.begin ();
              i != search_path_strings.end ();
              ++i)
@@ -198,7 +194,7 @@ int main (int argc, char* argv[])
               }
           }
       }
-    
+
     if (backend != "cxx" && backend != "idl")
       {
         wcerr << "unknown backend: " << backend.c_str () << endl;
@@ -207,7 +203,7 @@ int main (int argc, char* argv[])
       }
 
     const std::string argument (vm["input-file"].as<std::string> ());
-    
+
 
     if (argument == "")
     {
@@ -222,7 +218,7 @@ int main (int argc, char* argv[])
     ErrorDetector detector (wcerr);
 
     fs::path tu (argument.c_str ());
-    
+
     Parser parser (vm.count ("trace"), search_paths);
     auto_ptr <SemanticGraph::Schema> s (parser.parse (tu));
 
@@ -241,7 +237,7 @@ int main (int argc, char* argv[])
       {
         return 1;
       }
-      
+
       CXX_Generator cxx;
       cxx.generate (vm, *s, tu);
     }

@@ -66,6 +66,30 @@ namespace XSCRT
     }
 
     ///////////////////////////////////////////////////////////////////////////
+    // Static_Resolver_T
+
+    template <typename T>
+    Static_Resolver_T <T>::Static_Resolver_T (const T * path)
+      : path_ (path)
+    {
+    }
+
+    template <typename T>
+    Static_Resolver_T <T>::Static_Resolver_T (const Static_Resolver_T <T> & res)
+      : path_ (res.path_)
+    {
+    }
+
+    template <typename T>
+    XMLCh * Static_Resolver_T <T>::operator () (const XMLCh * const,
+                                                const XMLCh * const systemId,
+                                                const XMLCh * const) const
+    {
+      XSC::XStr path (this->path_);
+      return  path.release ();
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
     // xml_schema_resolver
 
     template <typename T>

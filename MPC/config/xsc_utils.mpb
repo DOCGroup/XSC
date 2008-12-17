@@ -1,0 +1,6 @@
+// $Id$
+
+project {
+  after += XSC_Utils
+  libs  += XSC_Utils
+}

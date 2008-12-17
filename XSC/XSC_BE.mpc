@@ -1,0 +1,21 @@
+//$Id$
+
+project (XSC_BE): boost_filesystem, utility, xsc_utils, xsc_common {
+  sharedname = XSC_BE
+
+  dynamicflags += XSC_BE_BUILD_DLL
+
+  includes += $(XSC_ROOT)/contrib
+
+  Source_Files {
+    .
+
+    Traversal {
+      ./Traversal
+    }
+
+    SemanticGraph {
+      ./SemanticGraph
+    }
+  }
+}

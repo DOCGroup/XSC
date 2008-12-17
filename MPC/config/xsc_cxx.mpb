@@ -1,7 +1,7 @@
 // $Id$
 
 project : xsc_base {
-  Modify_Custom(XSC) {
+  Modify_Custom (XSC) {
     automatic         = 1
     commandflags     += --backend cxx
     source_outputext  = .cpp,
