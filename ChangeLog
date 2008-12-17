@@ -1,3 +1,16 @@
+Wed Dec 17 21:00:00 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * docs:
+
+          Changed the name of the /Documentation folder to /docs
+
+        * Documentation:
+        * Documentation/DesignNotes:
+        * Documentation/ISSUES:
+        * Documentation/index.html:
+
+          Removed these files.
+
 Wed Dec 17 20:40:12 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * MPC/config/utility.mpb:
