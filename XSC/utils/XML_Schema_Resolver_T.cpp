@@ -32,14 +32,14 @@ namespace XSC
     template<typename Resolver>
     InputSource *
     XML_Schema_Resolver<Resolver>::resolveEntity (const XMLCh *const publicId,
-                                                    const XMLCh *const systemId)
+                                                  const XMLCh *const systemId)
     {
       XStr path = resolver_ (publicId, systemId);
       if (path.begin () == 0)
         return 0;
 
       // Ownership of these objects is given to other people.
-      return /*new Wrapper4InputSource*/ (new LocalFileInputSource (path));
+      return new LocalFileInputSource (path);
     }
   }
 }

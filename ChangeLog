@@ -1,3 +1,21 @@
+Thu Dec 18 09:26:26 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * MPC/config/xscrt.mpb:
+        * XSC/utils/XML_Schema_Resolver_T.cpp:
+        * XSCRT/XSCRT/XSCRT.mpc:
+        * XSCRT/XSCRT/utils/File_Reader_T.cpp:
+        * XSCRT/XSCRT/utils/Reader_T.h:
+        * XSCRT/XSCRT/utils/Reader_T.cpp:
+
+          . Fixed compilation errors related to upgrading to Xerces-C 3.0
+
+        * XSCRT/XSCRT/utils/Console_Error_Handler.h:
+        * XSCRT/XSCRT/utils/Console_Error_Handler.cpp:
+        * XSCRT/XSCRT/utils/XML_Schema_Resolver_T.h:
+        * XSCRT/XSCRT/utils/XML_Schema_Resolver_T.cpp:
+
+          Removed these files.
+
 Wed Dec 17 21:00:00 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * docs:

@@ -10,7 +10,7 @@ project (XSCRT) : xerces3, xsc_utils, xsc_common {
   staticflags  += XSCRT_AS_STATIC_LIBS
 
   Source_Files {
-    utils/Console_Error_Handler.cpp
+
   }
 
   Template_Files {
@@ -25,7 +25,6 @@ project (XSCRT) : xerces3, xsc_utils, xsc_common {
     utils/Reader_T.cpp
     utils/Writer_T.cpp
     utils/Reader_Writer_Base_T.cpp
-    utils/XML_Schema_Resolver_T.cpp
   }
 
   Inline_Files {

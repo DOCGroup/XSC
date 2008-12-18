@@ -12,12 +12,10 @@ namespace utils
 template <typename T, typename CHAR_TYPE>
 Reader_T <T, CHAR_TYPE>::
 Reader_T (typename reader_function <T>::result_type reader)
-: parser_ (0),
+: parser_ (new xercesc::XercesDOMParser ()),
   reader_ (reader)
 {
-  // Create an DOMBuilder from the implementation.
-  this->parser_ =
-    this->impl_->createDOMBuilder (xercesc::DOMImplementationLS::MODE_SYNCHRONOUS, 0);
+
 }
 
 //
@@ -43,9 +41,9 @@ void Reader_T <T, CHAR_TYPE>::operator >>= (T & entity) const
 // parser
 //
 template <typename T, typename CHAR_TYPE>
-xercesc::DOMBuilder * const Reader_T <T, CHAR_TYPE>::parser (void)
+xercesc::XercesDOMParser * Reader_T <T, CHAR_TYPE>::operator -> (void)
 {
-  return this->parser_;
+  return this->parser_.get ();
 }
 
 }

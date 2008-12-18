@@ -14,6 +14,9 @@
 #define _XSCRT_READER_T_H_
 
 #include "Reader_Writer_Base_T.h"
+#include "xercesc/util/XercesDefs.hpp"
+#include "xercesc/parsers/XercesDOMParser.hpp"
+#include <memory>
 
 namespace XSCRT
 {
@@ -62,7 +65,7 @@ public:
    *
    * @return            Pointer to the parser.
    */
-  xercesc::DOMBuilder * const parser (void);
+  xercesc::XercesDOMParser * operator -> (void);
 
 protected:
   /**
@@ -73,7 +76,7 @@ protected:
   Reader_T (typename reader_function <T>::result_type reader);
 
   /// DOM parser for the reader.
-  xercesc::DOMBuilder * parser_;
+  std::auto_ptr <xercesc::XercesDOMParser> parser_;
 
   /// The entity read from the document.
   typename reader_function <T>::result_type reader_;

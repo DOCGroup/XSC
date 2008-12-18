@@ -1,9 +1,6 @@
 // $Id$
 
-#include "xercesc/framework/LocalFileInputSource.hpp"
-#include "xercesc/framework/Wrapper4InputSource.hpp"
-#include "XSC/XercesString.hpp"
-#include <memory>
+#include "XSC/utils/XercesString.h"
 
 namespace XSCRT
 {
@@ -35,17 +32,10 @@ File_Reader_T <T, CHAR_TYPE>::~File_Reader_T (void)
 template <typename T, typename CHAR_TYPE>
 bool File_Reader_T <T, CHAR_TYPE>::read (const CHAR_TYPE * filename)
 {
-  using namespace xercesc;
-
-  // Open the file for reading.
-  std::auto_ptr <LocalFileInputSource>
-    input (new LocalFileInputSource (XSC::XStr (filename)));
-
-  Wrapper4InputSource wrapper (input.get ());
-  input.release ();
-
   // Parse the specified file.
-  this->document_ = this->parser_->parse (wrapper);
+  this->parser_->parse (filename);
+  this->document_ = this->parser_->adoptDocument ();
+
   return this->document_ != 0;
 }
 
