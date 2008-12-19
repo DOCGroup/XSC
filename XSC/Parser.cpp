@@ -1436,10 +1436,10 @@ namespace XSC
       }
   }
 
-  // Xerces DOoM.
+  // Xerces DOM.
   //
   //
-  std::wostream&
+  std::wostream &
   operator<< (std::wostream& o, XMLCh const* str)
   {
     char* s (Xerces::XMLString::transcode (str));
@@ -1450,53 +1450,7 @@ namespace XSC
     return o;
   }
 
-  class ErrorHandler : public  Xerces::DOMErrorHandler
-  {
-  public:
-    ErrorHandler ()
-      : failed_ (false)
-    {
-    }
-
-    virtual bool
-    handleError (Xerces::DOMError const& e)
-    {
-      wcerr << e.getLocation()->getURI() << ':'
-            << e.getLocation()->getLineNumber() << '.'
-            << e.getLocation()->getColumnNumber();
-
-      switch (e.getSeverity())
-        {
-        case Xerces::DOMError::DOM_SEVERITY_WARNING:
-          {
-            wcerr << " warning: ";
-            break;
-          }
-        default:
-          {
-            wcerr << " error: ";
-            failed_ = true;
-            break;
-          }
-        }
-
-      wcerr << e.getMessage() << endl;
-
-      return true;
-    }
-
-    bool
-    failed () const
-    {
-      return failed_;
-    }
-
-  private:
-    bool failed_;
-  };
-
-  DOMDocument* Parser::
-  dom (fs::path const& tu)
+  DOMDocument* Parser::dom (fs::path const& tu)
   {
     try
       {
