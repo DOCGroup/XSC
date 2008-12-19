@@ -1436,20 +1436,6 @@ namespace XSC
       }
   }
 
-  // Xerces DOM.
-  //
-  //
-  std::wostream &
-  operator<< (std::wostream& o, XMLCh const* str)
-  {
-    char* s (Xerces::XMLString::transcode (str));
-
-    o << s;
-
-    Xerces::XMLString::release (&s); // idiot?
-    return o;
-  }
-
   DOMDocument* Parser::dom (fs::path const& tu)
   {
     try
