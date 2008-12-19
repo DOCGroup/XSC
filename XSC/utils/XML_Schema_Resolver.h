@@ -59,9 +59,9 @@ namespace XSC
      */
     struct NoOp_Resolver
     {
-      const XMLCh* operator() (const XMLCh *const,
-                               const XMLCh *const systemId) const
-      { return systemId; };
+      InputSource * operator() (const XMLCh *const,
+                                const XMLCh *const systemId) const
+      { return 0; };
     };
 
     /**
@@ -72,27 +72,49 @@ namespace XSC
     {
       Basic_Resolver (const char *path);
 
-      XMLCh* operator() (const XMLCh *const publicId,
-                         const XMLCh *const systemId) const;
+      InputSource * operator () (const XMLCh *const publicId,
+                                 const XMLCh *const systemId) const;
+    private:
       XStr path_;
+    };
+
+    struct XSC_UTILS_Export URL_Resolver
+    {
+      URL_Resolver (const char *url);
+
+      InputSource * operator() (const XMLCh *const publicId,
+                                const XMLCh *const systemId) const;
+    private:
+      XStr url_;
+    };
+
+    struct XSC_UTILS_Export Path_Resolver
+    {
+      Path_Resolver (void);
+
+      Path_Resolver (std::vector <std::string> & paths);
+
+      void insert (const char *path);
+
+      InputSource * operator() (const XMLCh *const publicId,
+                                const XMLCh *const systemId) const;
+
+    private:
+      std::vector <XStr> paths_;
     };
 
     /**
      * @class Environment_Resolver
      * @brief Resolves a schema location from a path from an environment variable.
      */
-    struct XSC_UTILS_Export Environment_Resolver
+    struct XSC_UTILS_Export Environment_Resolver :
+      public Path_Resolver
     {
       Environment_Resolver (const char *variable = "",
                             const char *path = "./");
 
-      void add_path (const char *variable,
-                     const char *path);
-
-      XMLCh* operator() (const XMLCh *const publicId,
-                         const XMLCh *const systemId) const;
-
-      std::vector <XStr> paths_;
+      void insert (const char *variable,
+                   const char *path);
     };
   }
 }

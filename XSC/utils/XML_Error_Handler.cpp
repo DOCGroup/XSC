@@ -25,34 +25,45 @@ namespace XSC
 
     void XML_Error_Handler::warning(const SAXParseException& toCatch)
     {
-      XStr file (toCatch.getSystemId ());
-      XStr msg (toCatch.getMessage ());
+      char * file = xercesc::XMLString::transcode (toCatch.getSystemId ());
+      char * msg = xercesc::XMLString::transcode (toCatch.getMessage ());
 
       std::cerr << "Warning: " << file << ':' << toCatch.getLineNumber ()
                 << ':' << toCatch.getColumnNumber () << " - "
                 << msg << std::endl;
+
+      xercesc::XMLString::release (&file);
+      xercesc::XMLString::release (&msg);
     }
 
     void XML_Error_Handler::error(const SAXParseException& toCatch)
     {
-      XStr file (toCatch.getSystemId ());
-      XStr msg (toCatch.getMessage ());
+      char * file = xercesc::XMLString::transcode (toCatch.getSystemId ());
+      char * msg = xercesc::XMLString::transcode (toCatch.getMessage ());
 
       std::cerr << "Error: " << file << ':' << toCatch.getLineNumber ()
                 << ':' << toCatch.getColumnNumber () << " - "
                 << msg << std::endl;
+
       this->errors_ = true;
+
+      xercesc::XMLString::release (&file);
+      xercesc::XMLString::release (&msg);
     }
 
     void XML_Error_Handler::fatalError(const SAXParseException& toCatch)
     {
-      XStr file (toCatch.getSystemId ());
-      XStr msg (toCatch.getMessage ());
+      char * file = xercesc::XMLString::transcode (toCatch.getSystemId ());
+      char * msg = xercesc::XMLString::transcode (toCatch.getMessage ());
 
       std::cerr << "Fatal Error: " << file << ':' << toCatch.getLineNumber ()
                 << ':' << toCatch.getColumnNumber () << " - "
                 << msg << std::endl;
+
       this->errors_ = true;
+
+      xercesc::XMLString::release (&file);
+      xercesc::XMLString::release (&msg);
     }
 
     void XML_Error_Handler::resetErrors()

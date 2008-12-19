@@ -350,6 +350,7 @@ namespace XSC
         pop_scope ();
 
         root_schema_ = cur_schema_ = 0;
+        d->release ();
       }
 
     //@@ don't need this in case of an error
@@ -507,6 +508,8 @@ namespace XSC
 
         pop_scope ();
         cur_schema_ = old;
+
+        d->release ();
       }
     else
       wcerr << "error: Unable to successfully parse " << path.string ().c_str ();
@@ -563,6 +566,8 @@ namespace XSC
             schema (root);
             pop_scope ();
             cur_schema_ = old;
+
+            d->release ();
           }
         else
           {
@@ -1498,22 +1503,87 @@ namespace XSC
         // Initialize Xerces runtime
         //
         XMLPlatformUtils::Initialize();
+        XercesDOMParser parser;
 
-        XSC::XML::XML_Error_Handler err;
-        XSC::XML::NoOp_Resolver noop;
-        XSC::XML::XML_Schema_Resolver<> resolver (noop);
+        // Discard comment nodes in the document.
+        //
+        parser.setCreateCommentNodes (false);
 
-        XSC::XML::XML_Helper<XSC::XML::XML_Schema_Resolver <>,
-          XSC::XML::XML_Error_Handler> helper (resolver, err);
+        // Disable datatype normalization. The XML 1.0 attribute value
+        // normalization always occurs though.
+        //
+        //parser->setFeature (XMLUni::fgDOMDatatypeNormalization, true);
 
-        std::string uri (tu.string ());
+        // Do not create EntityReference nodes in the DOM tree. No
+        // EntityReference nodes will be created, only the nodes
+        // Corresponding to their fully expanded substitution text will be
+        // created.
+        //
+        parser.setCreateEntityReferenceNodes (false);
 
-        DOMDocument *doc (helper.create_dom (uri.c_str ()));
+        // Perform Namespace processing.
+        //
+        parser.setDoNamespaces (true);
 
-        if (err.getErrors ())
+        // Perform Validation
+        //
+        //parser.setValidationScheme (true);
+
+        // Do not include ignorable whitespace in the DOM tree.
+        //
+        parser.setIncludeIgnorableWhitespace (false);
+
+        // Enable the parser's schema support.
+        //
+        parser.setDoSchema (true);
+
+        // Enable full schema constraint checking, including checking which
+        // may be time-consuming or memory intensive. Currently, particle
+        // unique attribution constraint checking and particle derivation
+        // restriction checking are controlled by this option.
+        //
+        parser.setValidationSchemaFullChecking (true);
+
+        // The parser will treat validation error as fatal and will exit.
+        //
+        parser.setValidationConstraintFatal (true);
+
+        // Setup the error handler.
+        XSC::XML::XML_Error_Handler eh;
+        parser.setErrorHandler (&eh);
+
+        // Setup the entity resolver.
+        XSC::XML::Path_Resolver path_resolver;
+
+        for (std::vector <fs::path>::const_iterator iter = this->include_paths_.begin ();
+             iter != this->include_paths_.end ();
+             ++ iter)
+        {
+          path_resolver.insert (iter->string ().c_str ());
+        }
+
+        XSC::XML::XML_Schema_Resolver <XSC::XML::Path_Resolver> resolver (path_resolver);
+        parser.setEntityResolver (&resolver);
+
+        // Load the grammer and validate it.
+        std::string uri = tu.string ();
+        parser.loadGrammar (uri.c_str (), Grammar::SchemaGrammarType);
+
+        if (eh.getErrors ())
+        {
+          std::cerr << "encountered an error when loading grammar ["
+                    << uri << "]" << endl;
           return 0;
+        }
 
-        return doc;
+        // Now, let's parse the XSD file. Since we made it this far, then
+        // we can consider the .xsd file valid and can disable schema validation.
+        xercesc::XSDDOMParser xsd_parser;
+        xsd_parser.setValidationScheme (XercesDOMParser::Val_Never);
+        xsd_parser.setDoNamespaces (true);
+
+        xsd_parser.parse (uri.c_str ());
+        return xsd_parser.adoptDocument ();
       }
     catch (Xerces::DOMException const & e)
       {

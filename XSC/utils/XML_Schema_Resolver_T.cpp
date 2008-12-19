@@ -2,15 +2,6 @@
 #ifndef XML_SCHEMA_RESOLVER_TPP
 #define XML_SCHEMA_RESOLVER_TPP
 
-#include "XML_Schema_Resolver.h"
-#include "XercesString.h"
-#include "xercesc/framework/LocalFileInputSource.hpp"
-#include "xercesc/framework/Wrapper4InputSource.hpp"
-
-using xercesc::Wrapper4InputSource;
-using xercesc::LocalFileInputSource;
-
-
 namespace XSC
 {
   namespace XML
@@ -34,12 +25,13 @@ namespace XSC
     XML_Schema_Resolver<Resolver>::resolveEntity (const XMLCh *const publicId,
                                                   const XMLCh *const systemId)
     {
-      XStr path = resolver_ (publicId, systemId);
-      if (path.begin () == 0)
-        return 0;
+      return this->resolver_ (publicId, systemId);
+      //XStr path = resolver_ (publicId, systemId);
+      //if (path.begin () == 0)
+      //  return 0;
 
-      // Ownership of these objects is given to other people.
-      return new LocalFileInputSource (path);
+      //// Ownership of these objects is given to other people.
+      //return new LocalFileInputSource (path);
     }
   }
 }

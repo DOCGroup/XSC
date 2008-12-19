@@ -4,55 +4,60 @@
 #include "XercesString.h"
 #include "xercesc/util/PlatformUtils.hpp"
 #include "xercesc/util/XercesDefs.hpp"
-#include <iostream>
+#include "xercesc/framework/LocalFileInputSource.hpp"
+#include "xercesc/framework/URLInputSource.hpp"
+#include "ace/Env_Value_T.h"
 
 namespace XSC
 {
   namespace XML
   {
+    ///////////////////////////////////////////////////////////////////////////
+    // class Basic_Resolver
+
     Basic_Resolver::Basic_Resolver (const char *path)
       : path_ (path)
     {
     }
 
-    XMLCh *
-    Basic_Resolver::operator() (const XMLCh *const,
+    InputSource *
+    Basic_Resolver::operator() (const XMLCh *const publicId,
                                 const XMLCh *const systemId) const
     {
       XStr path (path_);
       path.append (systemId);
-      return path.release ();
+
+      return new xercesc::LocalFileInputSource (path);
     }
 
-    Environment_Resolver::Environment_Resolver (const char *variable,
-                                                const char *relpath)
+    ///////////////////////////////////////////////////////////////////////////
+    // class Path_Resolver
+
+    Path_Resolver::Path_Resolver (void)
     {
-      xercesc::XMLPlatformUtils::Initialize();
-      this->add_path (variable, relpath);
+
     }
 
-    using xercesc::XMLPlatformUtils;
-
-    void
-    Environment_Resolver::add_path (const char *variable,
-                                    const char *relpath)
-    {/*
-      ACE_Env_Value <const char *> path_env (variable,
-                                                  ACE_TEXT(""));
-
-      XStr xpath (path_env);
-      XStr xrelpath (relpath);
-
-      xpath.append (xrelpath);
-
-      paths_.push_back (xpath);*/
-    }
-
-    XMLCh *
-    Environment_Resolver::operator() (const XMLCh *const,
-                                      const XMLCh *const systemId) const
+    Path_Resolver::Path_Resolver (std::vector <std::string> & paths)
     {
-      for (std::vector<XStr>::const_iterator i = this->paths_.begin ();
+      for (std::vector <std::string>::const_iterator iter = paths.begin ();
+           iter != paths.end ();
+           ++ iter)
+      {
+        this->paths_.push_back (iter->c_str ());
+      }
+    }
+
+    void Path_Resolver::insert (const char * path)
+    {
+      this->paths_.push_back (path);
+    }
+
+    InputSource *
+    Path_Resolver::operator() (const XMLCh *const,
+                               const XMLCh *const systemId) const
+    {
+      for (std::vector <XStr>::const_iterator i = this->paths_.begin ();
            i != this->paths_.end ();
            ++i)
         {
@@ -64,10 +69,43 @@ namespace XSC
           if (file != 0)
             {
               XMLPlatformUtils::closeFile (file);
-              return path.release ();
+              return new xercesc::LocalFileInputSource (path);
             }
         }
+
       return 0;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // class Environment_Resolver
+
+    Environment_Resolver::Environment_Resolver (const char *variable,
+                                                const char *relpath)
+    {
+      this->insert (variable, relpath);
+    }
+
+    void
+    Environment_Resolver::insert (const char *variable, const char *relpath)
+    {
+      ACE_Env_Value <const char *> path (variable, "");
+      std::string xrelpath = std::string (path) + std::string (relpath);
+      Path_Resolver::insert (xrelpath.c_str ());
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    // class URL_Resolver
+
+    URL_Resolver::URL_Resolver (const char * url)
+      : url_ (url)
+    {
+    }
+
+    InputSource * URL_Resolver::operator() (const XMLCh *const publicId,
+                                            const XMLCh *const systemId) const
+    {
+      xercesc::XMLURL url (this->url_, systemId);
+      return new xercesc::URLInputSource (url);
     }
   }
 }

@@ -134,10 +134,6 @@ namespace XSC
 
       try
         {
-          /*<<<<<<< .mine
-          std::auto_ptr<XercesDOMParser> parser
-            (new xercesc::XercesDOMParser ());
-            =======*/
           if (this->parser_.get () == 0)
             this->parser_.reset ((new xercesc::XercesDOMParser ()));
 

@@ -1,3 +1,27 @@
+Fri Dec 19 04:02:00 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * MPC/config/xsc_be.mpb:
+        * MPC/config/xsc_static.mpb:
+        * contrib/Utility.mpc:
+        * XSC/XSC_BE.mpc:
+
+          . Fixed compilation errors on Windows related to linking against
+            the wrong runtime libraries for static/dynamic projects.
+
+        * XSC.mpc:
+        * XSC/Parser.cpp:
+        * XSC/utils/XML_Error_Handler.cpp:
+        * XSC/utils/XML_Helper_T.cpp:
+        * XSC/utils/XML_Schema_Resolver.h:
+        * XSC/utils/XML_Schema_Resolver.cpp:
+        * XSC/utils/XML_Schema_Resolver_T.cpp:
+        * XSC/utils/XSC_Utils.mpc:
+        * XSC/utils/XercesString.cpp:
+
+          . The previous update of XSC compile with Xerces-C 3.0., however,
+            it crashed while generating object models. This commit fixes
+            the fatal bug(s) from the previous commit.
+
 Thu Dec 18 09:26:26 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * MPC/config/xscrt.mpb:

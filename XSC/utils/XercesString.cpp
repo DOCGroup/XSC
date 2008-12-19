@@ -9,15 +9,15 @@ namespace XSC
 {
 
   XStr::XStr (const char* str)
-    : _wstr(0)
+    : _wstr (0)
   {
-    _wstr = XMLString::transcode (str);
+    this->_wstr = XMLString::transcode (str);
   }
 
   XStr::XStr (XMLCh *wstr)
-    : _wstr(wstr)
+    : _wstr (0)
   {
-
+    this->_wstr = XMLString::replicate (wstr);
   }
 
   XStr::XStr (const XMLCh* wstr)
@@ -36,6 +36,7 @@ namespace XSC
   {
     if (&rhs == this)
       return *this;
+
     XStr temp (rhs);
 
     std::swap (this->_wstr, temp._wstr);
@@ -60,20 +61,31 @@ namespace XSC
 
   bool XStr::append(const XMLCh *tail)
   {
-    int iTailLen = XMLString::stringLen(tail);
-    int iWorkLen = XMLString::stringLen(_wstr);
-    XMLCh *result = new XMLCh[ iWorkLen + iTailLen + 1 ];
+    using namespace xercesc;
+
+    int iTailLen = XMLString::stringLen (tail);
+    int iWorkLen = XMLString::stringLen (this->_wstr);
+    size_t length = iWorkLen + iTailLen + 1;
+
+    XMLCh * result =
+      (XMLCh *) XMLPlatformUtils::fgMemoryManager->allocate (length * sizeof (XMLCh));
+
     bool bOK = result != 0;
+
     if (bOK)
       {
         XMLCh *target = result;
-        XMLString::moveChars(target, _wstr, iWorkLen);
+
+        XMLString::moveChars (target, this->_wstr, iWorkLen);
         target += iWorkLen;
-        XMLString::moveChars(target, tail, iTailLen);
+
+        XMLString::moveChars (target, tail, iTailLen);
         target += iTailLen;
+
         *target++ = 0;
-        XMLString::release(&_wstr);
-        _wstr = result;
+
+        XMLString::release (&this->_wstr);
+        this->_wstr = result;
       }
     return bOK;
   }
