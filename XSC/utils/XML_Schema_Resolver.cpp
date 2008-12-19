@@ -64,7 +64,7 @@ namespace XSC
           XStr path (*i);
           path.append(systemId);
 
-          xercesc::FileHandle file (XMLPlatformUtils::openFile (path));
+          FileHandle file (XMLPlatformUtils::openFile (path));
 
           if (file != 0)
             {

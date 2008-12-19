@@ -38,8 +38,6 @@ namespace XSC
       : public virtual EntityResolver
     {
     public:
-      XML_Schema_Resolver (void);
-
       XML_Schema_Resolver (Resolver &resolver);
 
       /// This function is called by the Xerces infrastructure to
@@ -48,6 +46,7 @@ namespace XSC
                                            const XMLCh *const systemId);
 
     private:
+      XML_Schema_Resolver (void);
       XML_Schema_Resolver (XML_Schema_Resolver<Resolver> &);
 
       Resolver &resolver_;

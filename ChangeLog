@@ -1,3 +1,16 @@
+Fri Dec 19 17:34:35 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * MPC/config/xsc_common.mpb:
+        * XSC/utils/XML_Schema_Resolver.h:
+        * XSC/utils/XML_Schema_Resolver.cpp:
+        * XSC/utils/XML_Schema_Resolver_T.cpp:
+        * XSCRT/XSCRT/Parser.hpp:
+        * XSCRT/XSCRT/XSCRT.mpc:
+
+          Reverted XSC back to Xerces-C 2.8, however, XSC is able to build
+          with Xerces-C 3.0. To build it with XSC, you need to change the
+          base projects from xerces -> xerces3.
+
 Fri Dec 19 04:08:02 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSC/Parser.cpp:

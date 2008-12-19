@@ -6,11 +6,11 @@ namespace XSC
 {
   namespace XML
   {
-    template<typename Resolver>
-    XML_Schema_Resolver<Resolver>::XML_Schema_Resolver (void)
-      : resolver_ ()
-    {
-    }
+    //template<typename Resolver>
+    //XML_Schema_Resolver<Resolver>::XML_Schema_Resolver (void)
+    //  : resolver_ ()
+    //{
+    //}
 
     template<typename Resolver>
     XML_Schema_Resolver<Resolver>::XML_Schema_Resolver (Resolver &res)
@@ -26,12 +26,6 @@ namespace XSC
                                                   const XMLCh *const systemId)
     {
       return this->resolver_ (publicId, systemId);
-      //XStr path = resolver_ (publicId, systemId);
-      //if (path.begin () == 0)
-      //  return 0;
-
-      //// Ownership of these objects is given to other people.
-      //return new LocalFileInputSource (path);
     }
   }
 }

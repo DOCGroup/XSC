@@ -1,6 +1,6 @@
 // $Id$
 
-project : vcwarnings, xerces3 {
+project : vcwarnings, xerces {
   libout = $(XSC_ROOT)/lib
   dllout = $(XSC_ROOT)/lib
 

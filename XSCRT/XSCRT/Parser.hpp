@@ -8,6 +8,8 @@
 #include <string>
 
 #include <XSCRT/XML.hpp>
+#include <typeinfo>
+#include <iostream>
 
 namespace XSCRT
 {
@@ -30,8 +32,12 @@ namespace XSCRT
     XML::Element<C>
     next_element ()
     {
+      xercesc::DOMNode * node = e_->item (ei_++);
+      std::cerr << typeid (node).name () << std::endl
+                << typeid (*node).name () << std::endl;
+
       return XML::Element<C> (
-        dynamic_cast<xercesc::DOMElement*> (e_->item (ei_++)));
+        dynamic_cast<xercesc::DOMElement*> (node));
     }
 
     bool
