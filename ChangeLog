@@ -1,3 +1,16 @@
+Sat Dec 20 09:27:36 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * MPC/config/xscrt.mpb:
+        * XSC.mpc:
+        * XSC/Parser.hpp:
+        * XSCRT/XSCRT/Parser.hpp:
+
+          Reverted the code back to Xerces-C 2.x
+
+        * XSCRT/XSCRT/utils/Writer_T.cpp:
+
+          Fixed compilation errors.
+
 Fri Dec 19 17:34:35 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * MPC/config/xsc_common.mpb:

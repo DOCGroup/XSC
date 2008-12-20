@@ -1,6 +1,6 @@
 // $Id$
 
-project : xerces3, xsc_utils, xsc_be {
+project : xerces, xsc_utils {
   requires += xscrt
 
   includes += $(XSC_ROOT) $(XSC_ROOT)/XSCRT
@@ -13,9 +13,6 @@ project : xerces3, xsc_utils, xsc_be {
 
   specific (vc7, vc71, vc8, vc9, vc10, nmake) {
     compile_flags += /wd4800
-
-    //Debug::ignore_default_library_names += LIBCMTD
-    //Release::ignore_default_library_names += LIBCMT
 
     libs += XSC_BEs
   } else {

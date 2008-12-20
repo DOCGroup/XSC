@@ -206,7 +206,9 @@ namespace XSC
                bool use_default)
     {
       XMLCh* p (transcode (ns));
-      XMLCh const* xns (e.dom_element ()->lookupPrefix (p/*, use_default*/));
+
+      // The following line needs to change for 3.0
+      XMLCh const* xns (e.dom_element ()->lookupNamespacePrefix (p, use_default));
       string prefix (xns ? transcode (xns) : string (L""));
       delete[] p;
       return prefix;

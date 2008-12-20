@@ -1,6 +1,6 @@
 // $Id$
 
-#include "XSC/XercesString.hpp"
+#include "XSC/utils/XercesString.h"
 
 namespace XSCRT
 {
