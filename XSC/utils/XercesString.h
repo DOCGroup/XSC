@@ -26,6 +26,8 @@ namespace XSC
 
     XStr& operator= (const XStr& rhs);
 
+    XStr& operator= (const char * rhs);
+
     ~XStr();
 
     const XMLCh* begin() const;

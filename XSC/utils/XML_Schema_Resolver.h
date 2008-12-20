@@ -69,10 +69,15 @@ namespace XSC
      */
     struct XSC_UTILS_Export Basic_Resolver
     {
+      Basic_Resolver (void);
+
       Basic_Resolver (const char *path);
 
       InputSource * operator () (const XMLCh *const publicId,
                                  const XMLCh *const systemId) const;
+
+      void path (const char * path);
+
     private:
       XStr path_;
     };

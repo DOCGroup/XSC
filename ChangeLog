@@ -1,3 +1,16 @@
+Sat Dec 20 17:27:51 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * XSC/utils/XML_Schema_Resolver.h:
+        * XSC/utils/XML_Schema_Resolver.cpp:
+
+          . Update the Basic_Resolver to allow setting of the path after
+            it has been constructed and installed in the resolver.
+
+        * XSC/utils/XercesString.h:
+        * XSC/utils/XercesString.cpp:
+
+          . Implemented the assignment operator for 'const char *'.
+
 Sat Dec 20 09:27:36 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * MPC/config/xscrt.mpb:

@@ -43,6 +43,13 @@ namespace XSC
     return *this;
   }
 
+  XStr& XStr::operator= (const char * rhs)
+  {
+    XStr temp (rhs);
+    std::swap (this->_wstr, temp._wstr);
+    return *this;
+  }
+
   XStr::~XStr ()
   {
     if (_wstr)

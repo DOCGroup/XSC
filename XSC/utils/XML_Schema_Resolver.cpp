@@ -15,9 +15,18 @@ namespace XSC
     ///////////////////////////////////////////////////////////////////////////
     // class Basic_Resolver
 
+    Basic_Resolver::Basic_Resolver (void)
+    {
+    }
+
     Basic_Resolver::Basic_Resolver (const char *path)
       : path_ (path)
     {
+    }
+
+    void Basic_Resolver::path (const char *path)
+    {
+      this->path_ = path;
     }
 
     InputSource *
