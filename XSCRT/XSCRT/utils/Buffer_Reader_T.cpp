@@ -2,7 +2,7 @@
 
 #include "xercesc/framework/MemBufInputSource.hpp"
 #include "xercesc/framework/Wrapper4InputSource.hpp"
-#include "XSC/XercesString.hpp"
+#include "XSC/utils/XercesString.h"
 #include <memory>
 
 namespace XSCRT
@@ -40,14 +40,14 @@ bool Buffer_Reader_T <T, CHAR_TYPE>::read (const char * buffer, size_t size)
   using namespace xercesc;
 
   // Open the file for reading.
-  std::auto_ptr <MemBufInputSource>
-    input (new MemBufInputSource (reinterpret_cast <const XMLByte * const> (buffer), size, this->fake_id_));
+  MemBufInputSource input (reinterpret_cast <const XMLByte * const> (buffer),
+                           size,
+                           this->fake_id_);
 
-  Wrapper4InputSource wrapper (input.get ());
-  input.release ();
+  this->parser_->parse (input);
 
-  // Parse the specified file.
-  this->document_ = this->parser_->parse (wrapper);
+  // Get the document.
+  this->document_ = this->parser_->adoptDocument ();
   return this->document_ != 0;
 }
 

@@ -14,7 +14,7 @@
 #define _XSCRT_BUFFER_READER_T_H_
 
 #include "Reader_T.h"
-#include "XSC/XercesString.hpp"
+#include "XSC/utils/XercesString.h"
 
 namespace XSCRT
 {
