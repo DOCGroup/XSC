@@ -304,6 +304,11 @@ namespace XMLSchema
     {
     }
 
+    virtual ~IdentityProvider (void)
+    {
+
+    }
+
     virtual bool
     before (XSCRT::IdentityProvider const& y) const
     {
@@ -328,7 +333,7 @@ namespace XMLSchema
     typedef typename NCName<C>::Base__ Base__;
 
   public:
-    ~ID()
+    virtual ~ID()
     {
       unregister_id ();
     }

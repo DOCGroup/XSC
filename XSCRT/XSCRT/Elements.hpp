@@ -61,18 +61,22 @@ namespace XSCRT
   {
     virtual bool
     before (IdentityProvider const&) const = 0;
+
+    virtual ~IdentityProvider (void)
+    {
+
+    }
   };
 
   class Type
   {
   public:
-    virtual
-    ~Type ()
+    virtual ~Type (void)
     {
     }
 
   protected:
-    Type ()
+    Type (void)
         : container_ (0)
     {
     }

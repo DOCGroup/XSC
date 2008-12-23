@@ -59,7 +59,7 @@ namespace XSC
     struct NoOp_Resolver
     {
       InputSource * operator() (const XMLCh *const,
-                                const XMLCh *const systemId) const
+                                const XMLCh *const) const
       { return 0; };
     };
 
