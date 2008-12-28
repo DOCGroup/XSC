@@ -1,8 +1,6 @@
 // $Id$
 
 project : xerces, xsc_utils {
-  requires += xscrt
-  
   includes += $(XSC_ROOT) $(XSC_ROOT)/XSCRT
   libpaths += $(XSC_ROOT)/lib
 

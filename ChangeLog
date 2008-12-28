@@ -1,15 +1,21 @@
+Sun Dec 28 08:15:19 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * MPC/config/xscrt.mpb:
+
+	  . Removed the 'xscrt' features requirement.
+
 Tue Dec 23 18:37:13 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * MPC/config/utility.mpb:
 
-	  . Inserted block to include the correct libraries on non-Windows
-	    systems.
+          . Inserted block to include the correct libraries on non-Windows
+            systems.
 
         * XSC/utils/XML_Schema_Resolver.h:
         * XSCRT/XMLSchema/Types.hpp:
         * XSCRT/XSCRT/Elements.hpp:
 
-	  . Fixed compile warnings on non-Windows systems.
+          . Fixed compile warnings on non-Windows systems.
 
 Tue Dec 23 18:25:03 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
