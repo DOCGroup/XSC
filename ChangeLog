@@ -1,8 +1,22 @@
+Sun Jan 11 03:09:11 UTC 2009  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * XSC.mwc:
+        * XSC/XSC.mpc:
+        * XSC/xsc.cpp:
+
+          . Moved the remaining source files and project into the XSC
+            subdirectory.
+
+        * XSC.mpc:
+        * xsc.cpp:
+
+          Removed these files.
+
 Sun Dec 28 08:15:19 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * MPC/config/xscrt.mpb:
 
-	  . Removed the 'xscrt' features requirement.
+          . Removed the 'xscrt' features requirement.
 
 Tue Dec 23 18:37:13 UTC 2008  James H. Hill  <hillj@isis.vanderbilt.edu>
 

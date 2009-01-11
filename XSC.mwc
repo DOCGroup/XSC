@@ -12,6 +12,5 @@ workspace (XSC) {
   }
 
   XSC/utils
-  XSC.mpc
-  XSCRT
+  XSC/XSC.mpc
 }
