@@ -18,6 +18,14 @@
 #include <iostream>
 #include <sstream>
 
+#if defined (min)
+#undef min
+#endif
+
+#if defined (max)
+#undef max
+#endif
+
 using std::wcout;
 using std::wcerr;
 using std::endl;
@@ -164,8 +172,8 @@ namespace XSC
                 ns_name = c.context ().get<string> ("group-ns-name");
                 uq_name = c.context ().get<string> ("group-uq-name");
 
-                unsigned long min (c.context ().get<unsigned long> ("group-min")),
-                  max (c.context ().get<unsigned long> ("group-max"));
+                unsigned long grp_min (c.context ().get<unsigned long> ("group-min"));
+                unsigned long grp_max (c.context ().get<unsigned long> ("group-max"));
 
                 Scope& scope (resolve<Scope> (ns_name, uq_name, schema_));
 
@@ -176,8 +184,8 @@ namespace XSC
                   {
                     Element& prot (dynamic_cast<Element&> ((*i)->named ()));
 
-                    Element& e (schema_.new_node<Element> (min == 0 ? min : prot.min (),
-                                                           max == 0 ? max : prot.max (),
+                    Element& e (schema_.new_node<Element> (grp_min == 0 ? grp_min : prot.min (),
+                                                           grp_max == 0 ? grp_max : prot.max (),
                                                            prot.qualified ()));
 
                     schema_.new_edge<Names> (c, e, prot.name ());
@@ -1493,7 +1501,7 @@ namespace XSC
         parser.setErrorHandler (&eh);
 
         // Setup the entity resolver.
-        XSC::XML::Path_Resolver path_resolver;
+        XSC::XML::Path_Resolver < > path_resolver;
 
         for (std::vector <fs::path>::const_iterator iter = this->include_paths_.begin ();
              iter != this->include_paths_.end ();
@@ -1502,7 +1510,9 @@ namespace XSC
           path_resolver.insert (iter->string ().c_str ());
         }
 
-        XSC::XML::XML_Schema_Resolver <XSC::XML::Path_Resolver> resolver (path_resolver);
+        XSC::XML::XML_Schema_Resolver <
+          XSC::XML::Path_Resolver < > > resolver (path_resolver);
+
         parser.setEntityResolver (&resolver);
 
         // Load the grammer and validate it.

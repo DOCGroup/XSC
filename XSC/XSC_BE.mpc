@@ -1,6 +1,6 @@
 //$Id$
 
-project (XSC_BE): boost_filesystem, utility, xsc_utils, xsc_static, xsc_common {
+project (XSC_BE): acelib, boost_filesystem, utility, xsc_utils, xsc_static, xsc_common {
   sharedname = XSC_BE
 
   dynamicflags += XSC_BE_BUILD_DLL

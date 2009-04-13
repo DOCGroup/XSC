@@ -7,11 +7,10 @@ project (XSC_Utils) : acelib, xsc_common {
   Source_Files {
     XercesString.cpp
     XML_Error_Handler.cpp
-    XML_Schema_Resolver.cpp
   }
 
   Template_Files {
     XML_Helper_T.cpp
-    XML_Schema_Resolver_T.cpp
+    XML_Schema_Resolver.cpp
   }
 }

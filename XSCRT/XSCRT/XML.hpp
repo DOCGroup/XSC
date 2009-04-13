@@ -6,9 +6,8 @@
 #define XSCRT_XML_HPP
 
 #include <string>
-
-#include <xercesc/dom/DOM.hpp>
-#include <xercesc/util/XMLString.hpp>
+#include "xercesc/dom/DOM.hpp"
+#include "xercesc/util/XMLString.hpp"
 
 //@@ VC6
 #if defined (_MSC_VER) && (_MSC_VER < 1300)
@@ -125,7 +124,7 @@ namespace XSCRT
       {
         *ir = static_cast<XMLCh>(s[i]);
         //std::wcerr << s[i] << "->" << *ir << std::endl;
-	//std::wcerr << s[i];
+  //std::wcerr << s[i];
       }
       //std::wcerr << std::endl;
 

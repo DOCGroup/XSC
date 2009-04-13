@@ -207,8 +207,11 @@ namespace XSC
     {
       XMLCh* p (transcode (ns));
 
-      // The following line needs to change for 3.0
+#if XERCES_VERSION_MAJOR == 3
+      XMLCh const* xns (e.dom_element ()->lookupPrefix (p));
+#else
       XMLCh const* xns (e.dom_element ()->lookupNamespacePrefix (p, use_default));
+#endif
       string prefix (xns ? transcode (xns) : string (L""));
       delete[] p;
       return prefix;

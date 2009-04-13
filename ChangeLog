@@ -1,3 +1,20 @@
+Mon Apr 13 21:59:24 UTC 2009  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * XSC/Parser.cpp:
+        * XSC/Parser.hpp:
+        * XSC/XSC_BE.mpc:
+        * XSC/utils/XML_Schema_Resolver.h:
+        * XSC/utils/XML_Schema_Resolver.cpp:
+        * XSC/utils/XSC_Utils.mpc:
+        * XSCRT/XSCRT/XML.hpp:
+        * default.features:
+
+          . Added support for both xerces2 and xerces3.
+
+        * XSC/utils/XML_Schema_Resolver_T.cpp:
+
+          Removed this file.
+
 Sun Jan 11 03:09:11 UTC 2009  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSC.mwc:

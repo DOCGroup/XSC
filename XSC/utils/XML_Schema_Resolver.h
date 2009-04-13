@@ -67,24 +67,50 @@ namespace XSC
      * @class Basic_Resolver
      * @brief Resolves a schema location from a fixed path.
      */
-    struct XSC_UTILS_Export Basic_Resolver
+    template <typename CHAR = char>
+    struct Basic_Resolver
     {
+      /// Type definition of the char type.
+      typedef CHAR char_type;
+
+      /// Defualt consturctor.
       Basic_Resolver (void);
 
-      Basic_Resolver (const char *path);
+      /**
+       * Initailizing constructor
+       *
+       * @param[in]       path          Path for resolving XSD files
+       */
+      Basic_Resolver (const CHAR * path);
 
+      /**
+       * Input source for the schema definition in question
+       *
+       * @param[in]       publicId      Public Id of the definition
+       * @param[in]       systemId      System Id of the definition
+       */
       InputSource * operator () (const XMLCh *const publicId,
                                  const XMLCh *const systemId) const;
 
-      void path (const char * path);
+      /**
+       * Update the path of the definitions
+       *
+       * @param[in]       path          New path
+       */
+      void path (const CHAR * path);
 
     private:
+      /// Path for resolving schema definitions
       XStr path_;
     };
 
-    struct XSC_UTILS_Export URL_Resolver
+    /**
+     * @struct URL_Resolver
+     */
+    template <typename CHAR = char>
+    struct URL_Resolver
     {
-      URL_Resolver (const char *url);
+      URL_Resolver (const CHAR *url);
 
       InputSource * operator() (const XMLCh *const publicId,
                                 const XMLCh *const systemId) const;
@@ -92,13 +118,19 @@ namespace XSC
       XStr url_;
     };
 
-    struct XSC_UTILS_Export Path_Resolver
+    /**
+     * @struct Path_Resolver
+     */
+    template <typename CHAR = char>
+    struct Path_Resolver
     {
+      typedef std::vector <std::basic_string <CHAR> > path_type;
+
       Path_Resolver (void);
 
-      Path_Resolver (std::vector <std::string> & paths);
+      Path_Resolver (const path_type & paths);
 
-      void insert (const char *path);
+      void insert (const CHAR *path);
 
       InputSource * operator() (const XMLCh *const publicId,
                                 const XMLCh *const systemId) const;
@@ -109,20 +141,25 @@ namespace XSC
 
     /**
      * @class Environment_Resolver
-     * @brief Resolves a schema location from a path from an environment variable.
+     *
+     * Resolves a schema location from a path from an environment variable.
      */
-    struct XSC_UTILS_Export Environment_Resolver :
-      public Path_Resolver
+    template <typename CHAR = char>
+    struct Environment_Resolver :
+      public Path_Resolver <CHAR>
     {
-      Environment_Resolver (const char *variable = "",
-                            const char *path = "./");
+      /**
+       * Initializing constructor.
+       */
+      Environment_Resolver (const CHAR * variable = ACE_TEXT (""),
+                            const CHAR * path = ACE_TEXT ("./"));
 
-      void insert (const char *variable,
-                   const char *path);
+      void insert (const CHAR * variable,
+                   const CHAR * path);
     };
   }
 }
 
-#include "XML_Schema_Resolver_T.cpp"
+#include "XML_Schema_Resolver.cpp"
 
 #endif /*  CIAO_XML_SCHEMA_RESOLVER_H */
