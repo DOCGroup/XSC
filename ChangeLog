@@ -1,3 +1,11 @@
+Wed Apr 15 03:54:36 UTC 2009  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * XSC/utils/XML_Helper_T.cpp:
+        * XSC/utils/XML_Schema_Resolver.h:
+        * XSC/utils/XML_Schema_Resolver.cpp:
+
+	  . Fixed compilation errors on non-Windows systems.
+
 Mon Apr 13 21:59:24 UTC 2009  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSC/Parser.cpp:

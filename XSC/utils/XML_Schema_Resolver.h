@@ -14,6 +14,7 @@
 #include "XercesString.h"
 #include "XML_Error_Handler.h"
 #include "xercesc/sax/EntityResolver.hpp"
+#include "ace/ace_wchar.h"
 #include <vector>
 #include <string>
 

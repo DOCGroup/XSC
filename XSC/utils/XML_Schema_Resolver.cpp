@@ -72,7 +72,7 @@ namespace XSC
     template <typename CHAR>
     Path_Resolver <CHAR>::Path_Resolver (const path_type & paths)
     {
-      for (path_type::const_iterator iter = paths.begin ();
+      for (typename path_type::const_iterator iter = paths.begin ();
            iter != paths.end ();
            ++ iter)
       {
@@ -130,7 +130,7 @@ namespace XSC
         std::basic_string <CHAR> (path) +
         std::basic_string <CHAR> (relpath);
 
-      Path_Resolver::insert (xrelpath.c_str ());
+      Path_Resolver <CHAR>::insert (xrelpath.c_str ());
     }
 
     ///////////////////////////////////////////////////////////////////////////
