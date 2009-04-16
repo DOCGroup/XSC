@@ -125,7 +125,9 @@ namespace XSC
     template <typename CHAR = char>
     struct Path_Resolver
     {
-      typedef std::vector <std::basic_string <CHAR> > path_type;
+      typedef std::basic_string <CHAR> string_type;
+
+      typedef std::vector <typename string_type> path_type;
 
       Path_Resolver (void);
 
@@ -137,7 +139,8 @@ namespace XSC
                                 const XMLCh *const systemId) const;
 
     private:
-      std::vector <XStr> paths_;
+      /// Paths to search for schema definitions.
+      path_type paths_;
     };
 
     /**

@@ -63,6 +63,33 @@ namespace XSC
     ///////////////////////////////////////////////////////////////////////////
     // class Path_Resolver
 
+    struct Path_Resolver_Functor
+    {
+      Path_Resolver_Functor (const XMLCh *const systemId)
+        : systemId_ (systemId)
+      {
+
+      }
+
+      template <typename T>
+      bool operator () (T item)
+      {
+        XStr path (item.c_str ());
+        path.append (this->systemId_);
+
+        FileHandle file (XMLPlatformUtils::openFile (path));
+        bool retval = 0 != file ? true : false;
+
+        if (retval)
+          XMLPlatformUtils::closeFile (file);
+
+        return retval;
+      }
+
+    private:
+      const XMLCh *const systemId_;
+    };
+
     template <typename CHAR>
     Path_Resolver <CHAR>::Path_Resolver (void)
     {
@@ -71,13 +98,9 @@ namespace XSC
 
     template <typename CHAR>
     Path_Resolver <CHAR>::Path_Resolver (const path_type & paths)
+    : paths_ (paths)
     {
-      for (typename path_type::const_iterator iter = paths.begin ();
-           iter != paths.end ();
-           ++ iter)
-      {
-        this->paths_.push_back (iter->c_str ());
-      }
+
     }
 
     template <typename CHAR>
@@ -91,21 +114,17 @@ namespace XSC
     Path_Resolver <CHAR>::operator() (const XMLCh *const,
                                       const XMLCh *const systemId) const
     {
-      for (std::vector <XStr>::const_iterator i = this->paths_.begin ();
-           i != this->paths_.end ();
-           ++i)
-        {
-          XStr path (*i);
-          path.append(systemId);
+      typename path_type::const_iterator iter =
+        std::find_if (this->paths_.begin (),
+                      this->paths_.end (),
+                      Path_Resolver_Functor (systemId));
 
-          FileHandle file (XMLPlatformUtils::openFile (path));
-
-          if (file != 0)
-            {
-              XMLPlatformUtils::closeFile (file);
-              return new xercesc::LocalFileInputSource (path);
-            }
-        }
+      if (iter != this->paths_.end ())
+      {
+        XStr path (iter->c_str ());
+        path.append (systemId);
+        return new xercesc::LocalFileInputSource (path);
+      }
 
       return 0;
     }
