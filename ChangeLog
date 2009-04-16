@@ -1,3 +1,10 @@
+Thu Apr 16 18:33:45 UTC 2009  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * XSC/utils/XML_Schema_Resolver.h:
+        * XSC/utils/XML_Schema_Resolver.cpp:
+
+	  . Bug fix for the bug that was not fixed below.
+
 Thu Apr 16 18:13:01 UTC 2009  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSC/utils/XML_Schema_Resolver.h:

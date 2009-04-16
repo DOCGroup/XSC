@@ -127,7 +127,7 @@ namespace XSC
     {
       typedef std::basic_string <CHAR> string_type;
 
-      typedef std::vector <typename string_type> path_type;
+      typedef std::vector <string_type> path_type;
 
       Path_Resolver (void);
 

@@ -74,6 +74,9 @@ namespace XSC
       template <typename T>
       bool operator () (T item)
       {
+        if (item.empty ())
+          return false;
+
         XStr path (item.c_str ());
         path.append (this->systemId_);
 
