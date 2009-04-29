@@ -288,7 +288,7 @@ namespace
     virtual void
     traverse (Type& c)
     {
-      string name (id (name_));
+      string name ((this->name_ != L"") ? id(name_) : id (c.name ()));
 
       os << "// " << name << endl
          << "//" << endl

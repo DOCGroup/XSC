@@ -293,15 +293,18 @@ namespace
     virtual void
     traverse (Type& e)
     {
+      string name ((this->name_ != L"") ? name_ : id (e.name ()));
       string type (type_name (e));
+      
+      if (name == L"") name = L"BAD NAME";
 
-      os << "struct " << name_ << " : Traversal::" << name_ << ", " << endl
+      os << "struct " << name << " : Traversal::" << name << ", " << endl
          << "virtual ::XSCRT::Writer< " << char_type << " >"
          << "{";
 
       // c-tor
       //
-      os << name_ << " (" << xml_element_type << "&);"
+      os << name << " (" << xml_element_type << "&);"
          << endl;
 
       // Non-const traverse for Borland
@@ -319,7 +322,7 @@ namespace
          << endl;
 
       os << "protected:" << endl
-         << name_ << " ();"
+         << name << " ();"
          << "};";
     }
 

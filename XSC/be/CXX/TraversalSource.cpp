@@ -101,7 +101,7 @@ namespace
            << "{"
            << "// VC6 anathema strikes again" << endl
            << "//" << endl
-           << fq_name (e) << "_iterator "
+           << fq_name (e, L"", false) << "_iterator "
            << "b (o.begin_" << name << "()), "
            << "e (o.end_" << name << "());"
            << endl
@@ -134,7 +134,7 @@ namespace
            << "{"
            << "// VC6 anathema strikes again" << endl
            << "//" << endl
-           << fq_name (e) << "_const_iterator "
+           << fq_name (e, L"", false) << "_const_iterator "
            << "b (o.begin_" << name << "()), "
            << "e (o.end_" << name << "());"
            << endl

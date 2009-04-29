@@ -791,7 +791,7 @@ namespace XSC
 
             push_scope (node);
 
-            for (enumeration (e); more (); enumeration (next ()));
+            for (enumeration (e); more (); enumeration (next ())) {}
 
             pop_scope ();
 
@@ -936,11 +936,36 @@ namespace XSC
   void Parser::
   choice (XML::Element const& c)
   {
+    if (trace_) wcout << "choice" << endl;
+
     // Establish cardinality.
     // All choice elements have a min cardinality of 0
-    push_cardinality (0,
-                      c[L"maxOccurs"] && c[L"maxOccurs"] != L"1" ? 0 : max ());
-
+    if (c[L"maxOccurs"])
+      {
+	if (c[L"maxOccurs"] == L"unbounded")
+	  {
+	    push_cardinality (0, std::numeric_limits <unsigned long>::max ());
+	  }
+	else 
+	  {
+	    string value (c[L"maxOccurs"]);
+	    std::wistringstream istr (value);
+	    unsigned long max;
+	    istr >> max;
+	    push_cardinality (0, max);
+	  }
+      }
+    else
+      push_cardinality (0,
+			c[L"maxOccurs"] && c[L"maxOccurs"] != L"1" ? 0 : max ());
+    
+    if (c[L"maxOccurs"] && c[L"maxOccurs"] != L"1")
+      {
+	if (trace_) wcout << "choice cardinality is more than one" << endl;
+      }
+    else
+      if (trace_) wcout << "choice cardinality is one" << endl;
+	
 
     push (c);
 
@@ -1097,15 +1122,15 @@ namespace XSC
   void Parser::
   element (XML::Element const& e, bool global)
   {
-    unsigned long min (1);
-    unsigned long max (1);
+    unsigned long min (this->min ());
+    unsigned long max (this->max ());
 
     if (e[L"minOccurs"])
       {
-  string value = e[L"minOccurs"];
-  std::wistringstream istr (value);
-
-  istr >> min;
+	string value = e[L"minOccurs"];
+	std::wistringstream istr (value);
+	
+	istr >> min;
       }
 
     if (e[L"maxOccurs"])
@@ -1113,14 +1138,14 @@ namespace XSC
       if (e[L"maxOccurs"] == L"unbounded")
         max = std::numeric_limits <unsigned long>::max ();
       else
-  {
-    string value (e[L"maxOccurs"]);
-    std::wistringstream istr (value);
-
-    istr >> max;
-  }
+	{
+	  string value (e[L"maxOccurs"]);
+	  std::wistringstream istr (value);
+	  
+	  istr >> max;
+	}
     }
-
+    
     bool qualified (global ? true : qualify_element_);
 
     if (string form = e[L"form"])
@@ -1355,8 +1380,7 @@ namespace XSC
                                                                     attr_ref.qualified ()));
 
                 string norm_name (normalize (ref));
-
-                root_schema_->new_edge<Names> (scope (), attr, norm_name);
+                root_schema_->new_edge<Names> (scope (), attr, uq_name);
 
                 if (attr_ref.typed ())
                   root_schema_->new_edge<Belongs> (attr, attr_ref.type ());

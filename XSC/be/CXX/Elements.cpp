@@ -75,7 +75,7 @@ xs_ns_name (SemanticGraph::Nameable& n)
 }
 
 string Context::
-fq_name (SemanticGraph::Nameable& n, string const& nss)
+fq_name (SemanticGraph::Nameable& n, string const& nss, bool mangle)
 {
   using namespace SemanticGraph;
 
@@ -103,11 +103,17 @@ fq_name (SemanticGraph::Nameable& n, string const& nss)
   else
   {
     r += L"::";
+    
+    string name;
+
+    if (mangle)
+      name = id (n.name ());
+    else name = n.name ();
 
     if (n.named ())
-      r += id (n.name ());
+      r += name;
     else
-      r += anon_prefix_ + id (n.name ()) + anon_suffix_;
+      r += anon_prefix_ + name + anon_suffix_;
   }
 
   return r;

@@ -117,7 +117,7 @@ namespace
            << scope << "::" << name << "_iterator " << scope << "::" << endl
            << "begin_" << name << " ()"
            << "{"
-           << "return " << name << "_.begin ();"
+           << "return " << id(name) << "_.begin ();"
            << "}";
 
         // end_typename
@@ -126,7 +126,7 @@ namespace
            << scope << "::" << name << "_iterator " << scope << "::" << endl
            << "end_" << name << " ()"
            << "{"
-           << "return " << name << "_.end ();"
+           << "return " << id(name) << "_.end ();"
            << "}";
 
         // begin_typename const
@@ -134,7 +134,7 @@ namespace
            << scope << "::" << name << "_const_iterator " << scope << "::" << endl
            << "begin_" << name << " () const"
            << "{"
-           << "return " << name << "_.begin ();"
+           << "return " << id(name) << "_.begin ();"
            << "}";
 
         // end_typename const
@@ -142,7 +142,7 @@ namespace
            << scope << "::" << name << "_const_iterator " << scope << "::" << endl
            << "end_" << name << " () const"
            << "{"
-           << "return " << name << "_.end ();"
+           << "return " << id(name) << "_.end ();"
            << "}";
 
         // add_typename
@@ -156,24 +156,24 @@ namespace
             os << "if (" << name << "_.capacity () < " << name << "_.size () + 1)"
                << "{"
                << "::std::vector< " << type << " > v;"
-               << "v.reserve (" << name << "_.size () + 1);"
+               << "v.reserve (" << id(name) << "_.size () + 1);"
                << endl
-               << "for (" << name << "_iterator i = " << name << "_.begin ();"
-               << "i != " << name << "_.end (); ++i)"
+               << "for (" << name << "_iterator i = " << id(name) << "_.begin ();"
+               << "i != " << id(name) << "_.end (); ++i)"
                << "{"
                << type << "& t = *i;"
                << "t.container (0);"
                << "v.push_back (t);"
                << "v.back ().container (this);"
                << "}"
-               << name << "_.swap (v);"
+               << id(name) << "_.swap (v);"
                << "}"
-               << name << "_.push_back (e);"
-               << name << "_.back ().container (this);";
+               << id(name) << "_.push_back (e);"
+               << id(name) << "_.back ().container (this);";
           }
         else
           {
-            os << name << "_.push_back (e);";
+            os << id(name) << "_.push_back (e);";
           }
         os << "}";
 
@@ -183,7 +183,7 @@ namespace
            << "size_t " << scope << "::" << endl
            << "count_" << name << "(void) const"
            << "{"
-           << "return " << name << "_.size ();"
+           << "return " << id(name) << "_.size ();"
            << "}";
 
       }
@@ -949,7 +949,7 @@ namespace
         {
           // sequence
           //
-          os << name << "_ = s." << name << "_;"
+          os << id(name) << "_ = s." << id(name) << "_;"
              << std::endl;
 
           //os << name << "_.clear ();";

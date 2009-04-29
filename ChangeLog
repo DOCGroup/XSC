@@ -1,9 +1,25 @@
+Wed Apr 29 02:30:23 UTC 2009  William R. Otte  <wotte@dre.vanderbilt.edu>
+
+        * XSC/Parser.cpp:
+        * XSC/Parser.hpp:
+        * XSC/be/CXX/Elements.cpp:
+        * XSC/be/CXX/Elements.hpp:
+        * XSC/be/CXX/Header.cpp:
+        * XSC/be/CXX/Inline.cpp:
+        * XSC/be/CXX/TraversalHeader.cpp:
+        * XSC/be/CXX/TraversalSource.cpp:
+        * XSC/be/CXX/TypeInfoSource.cpp:
+        * XSC/be/CXX/WriterHeader.cpp:
+        * XSC/be/CXX/WriterSource.cpp:
+
+	  Bugfixes to generate working code for CIAO.
+	
 Thu Apr 16 18:33:45 UTC 2009  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSC/utils/XML_Schema_Resolver.h:
         * XSC/utils/XML_Schema_Resolver.cpp:
 
-	  . Bug fix for the bug that was not fixed below.
+          . Bug fix for the bug that was not fixed below.
 
 Thu Apr 16 18:13:01 UTC 2009  James H. Hill  <hillj@isis.vanderbilt.edu>
 

@@ -324,11 +324,12 @@ namespace
     virtual void
     traverse (Type& e)
     {
+      string name ((this->name_ != L"") ? name_: id (e.name ()));
       string type (type_name (e));
 
       os << "typedef" << endl
          << "::XMLSchema::Traversal::Traverser< " << type << " >" << endl
-         << name_ << ";"
+	 << name << ";"
          << endl;
     }
 

@@ -142,7 +142,7 @@ protected:
  
 protected:
   string
-  fq_name (SemanticGraph::Nameable& n, string const& ns_suffix = L"");
+  fq_name (SemanticGraph::Nameable& n, string const& ns_suffix = L"", bool mangle = true);
 
 private:
   void

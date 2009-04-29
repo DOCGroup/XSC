@@ -126,11 +126,13 @@ namespace
     virtual void
     traverse (Type& e)
     {
-      os << "struct " << name_ << "TypeInfoInitializer"
+      string name ((this->name_ != L"") ? name_ : id (e.name ()));
+
+      os << "struct " << name << "TypeInfoInitializer"
          << "{"
-         << name_ << "TypeInfoInitializer ()"
+         << name << "TypeInfoInitializer ()"
          << "{"
-         << "::XSCRT::TypeId id (typeid (" << id (name_) << "));"
+         << "::XSCRT::TypeId id (typeid (" << id (name) << "));"
          << "::XSCRT::ExtendedTypeInfo nf (id);"
          << endl
          << "nf.add_base (::XSCRT::ExtendedTypeInfo::Access::public_, "
@@ -140,7 +142,7 @@ namespace
          << "::std::make_pair (id, nf));"
          << "}"
          << "};"
-         << name_ << "TypeInfoInitializer " << name_ << "TypeInfoInitializer_;"
+         << name << "TypeInfoInitializer " << name << "TypeInfoInitializer_;"
          << endl;
     }
 

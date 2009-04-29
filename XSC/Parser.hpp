@@ -126,9 +126,7 @@ namespace XSC
       Element
       parent () const
       {
-        std::wcout << "c8" << std::endl;
         return dynamic_cast<Xerces::DOMElement*>(e_->getParentNode ());
-        std::wcout << "/c8" << std::endl;
       }
 
     public:

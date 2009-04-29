@@ -172,6 +172,7 @@ namespace
       os << "// " << name << endl
          << "// " << endl
          << "public:" << endl;
+      
 
       if (c.max () != 1)
       {
@@ -195,7 +196,7 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os <<  container << "< " << type << " > " << name << "_;";
+        os <<  container << "< " << type << " > " << id(name) << "_;";
       }
       else if (c.min () == 0)
       {
