@@ -1,3 +1,18 @@
+Tue May  5 17:25:37 UTC 2009  William R. Otte  <wotte@dre.vanderbilt.edu>
+
+        * Examples/Recursive:
+        * Examples/Recursive/recursive.xsd:
+
+	  Example testing support for recursive types. 
+	
+        * XSC/Traversal/Complex.cpp:
+        * XSC/be/CXX/Header.cpp:
+        * XSC/be/CXX/Inline.cpp:
+        * XSC/be/CXX/Source.cpp:
+        * XSC/be/CXX/TraversalSource.cpp:
+        * XSCRT/XMLSchema/Types.hpp:
+        * XSCRT/XSCRT/Elements.hpp:
+
 Wed Apr 29 02:30:23 UTC 2009  William R. Otte  <wotte@dre.vanderbilt.edu>
 
         * XSC/Parser.cpp:
@@ -12,8 +27,8 @@ Wed Apr 29 02:30:23 UTC 2009  William R. Otte  <wotte@dre.vanderbilt.edu>
         * XSC/be/CXX/WriterHeader.cpp:
         * XSC/be/CXX/WriterSource.cpp:
 
-	  Bugfixes to generate working code for CIAO.
-	
+          Bugfixes to generate working code for CIAO.
+
 Thu Apr 16 18:33:45 UTC 2009  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * XSC/utils/XML_Schema_Resolver.h:

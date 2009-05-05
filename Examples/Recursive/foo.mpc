@@ -1,0 +1,5 @@
+project : xscrt {
+  Source_Files {
+    recursive.cpp
+  }
+}

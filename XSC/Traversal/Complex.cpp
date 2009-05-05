@@ -58,7 +58,7 @@ namespace XSC
                               &InterfaceTemplate::comma,
                               c*/);
 	
-	      inherits_post (c);
+	inherits_post (c);
       }
       else
       {

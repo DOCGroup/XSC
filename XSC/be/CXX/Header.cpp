@@ -95,7 +95,7 @@ namespace
           container = L"::std::list";
 
         os << comma () 
-           << container << "< " << type << " > const& "
+           << container << "< " << type << "::_ptr > const& "
            << name << "__";
       }
     }
@@ -178,10 +178,10 @@ namespace
       {
         // sequence
         //
-        os << "typedef " << container  << "< " << type << " >::iterator "
+        os << "typedef " << container  << "< " << type << "::_ptr >::iterator "
            << name << "_iterator;";
 
-        os << "typedef " << container << "< " << type << " >::const_iterator "
+        os << "typedef " << container << "< " << type << "::_ptr >::const_iterator "
            << name << "_const_iterator;";
 
         os << name << "_iterator begin_" << name << " ();";
@@ -189,14 +189,14 @@ namespace
         os << name << "_const_iterator begin_" << name << " () const;";
         os << name << "_const_iterator end_" << name << " () const;";
 
-        os << "void add_" << name << " (" << type << " const& );";
+        os << "void add_" << name << " (" << type << "::_ptr const& );";
 
         os << "size_t count_" << name << " (void) const;";
 
         os << endl
            << "protected:" << endl;
 
-        os <<  container << "< " << type << " > " << id(name) << "_;";
+	os <<  container << "< " << type << "::_ptr > " << id(name) << "_;";
       }
       else if (c.min () == 0)
       {
@@ -340,15 +340,23 @@ namespace
     }
 
     virtual void
-    inherits_none (Type &)
+    inherits_none (Type &c)
     {
       os << " : public ::XSCRT::Type"
          << "{"
         //         << "//@@ VC6 anathema" << endl
          << "typedef ::XSCRT::Type Base;"
          << endl;
+      os << "typedef ACE_Refcounted_Auto_Ptr < " << c.name () << ", ACE_Null_Mutex > _ptr;"
+	 << endl;
     }
-
+    
+    virtual void
+    inherits_post (Type &c)
+    {
+      os << "typedef ACE_Refcounted_Auto_Ptr < " << c.name () << ", ACE_Null_Mutex > _ptr;"
+	 << endl;
+    }
     // Helper function to determine if read/write & >> and <<
     // operators need to be generated. Here are the cases where
     // the operators are generated:
@@ -805,6 +813,9 @@ generate_header (Context& ctx,
   ctx.os << "#include \"XMLSchema/Types.hpp\"" << endl
          << endl;
   
+  ctx.os << "#include \"ace/Refcounted_Auto_Ptr.h\"" << endl
+	 << "#include \"ace/Null_Mutex.h\"" << endl << endl;
+
   // -- Include CDR Type headers if cdr generation is
   // enabled
   if (ctx.cdr_reader_generation_enabled () ||

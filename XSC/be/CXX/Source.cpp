@@ -48,7 +48,7 @@ namespace
       {
         // sequence
         //
-        os << type << " t (e);"
+        os << type << "::_ptr t (new " << type << " (e));"
            << "add_" << name << " (t);";
       }
       else if (c.min () == 0)

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.w3.org/2001/XMLSchema XMLSchema.xsd"
+            xmlns:rec="http://www.example.com/Recursive"
+            targetNamespace="http://www.example.com/Recursive">
+
+  <xsd:complexType name="Element">
+    <xsd:sequence>
+      <xsd:element name="value" type="xsd:string" maxOccurs="unbounded" />
+      <xsd:element name="long" type="xsd:long" maxOccurs="unbounded" />
+      <xsd:element name="el" type="rec:Element" minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+
+  <xsd:element name="el" type="rec:Element"/>
+
+</xsd:schema>

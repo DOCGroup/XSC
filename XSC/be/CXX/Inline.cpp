@@ -148,14 +148,14 @@ namespace
         // add_typename
         os << i
            << "void " << scope << "::" << endl
-           << "add_" << name << " (" << type << " const& e)"
+           << "add_" << name << " (" << type << "::_ptr const& e)"
            << "{";
 
         if (ra_sequence)
           {
             os << "if (" << name << "_.capacity () < " << name << "_.size () + 1)"
                << "{"
-               << "::std::vector< " << type << " > v;"
+               << "::std::vector< " << type << "::_ptr > v;"
                << "v.reserve (" << id(name) << "_.size () + 1);"
                << endl
                << "for (" << name << "_iterator i = " << id(name) << "_.begin ();"
@@ -318,7 +318,7 @@ namespace
           container = L"::std::list";
 
         os << comma ()
-           << container << "< " << type << " > const& "
+           << container << "< " << type << "::_ptr > const& "
            << name << "__";
       }
     }
