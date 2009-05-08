@@ -1,10 +1,16 @@
+Fri May  8 18:50:50 UTC 2009  William R. Otte  <wotte@dre.vanderbilt.edu>
+
+        * XSC/Parser.hpp:
+
+          Added a couple newlines.
+        
 Tue May  5 17:25:37 UTC 2009  William R. Otte  <wotte@dre.vanderbilt.edu>
 
         * Examples/Recursive:
         * Examples/Recursive/recursive.xsd:
 
-	  Example testing support for recursive types. 
-	
+          Example testing support for recursive types.
+
         * XSC/Traversal/Complex.cpp:
         * XSC/be/CXX/Header.cpp:
         * XSC/be/CXX/Inline.cpp:
