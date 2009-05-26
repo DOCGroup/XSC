@@ -1,9 +1,17 @@
+Tue May 26 20:13:38 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
+
+        * XSC/XSC.mpc:
+
+	  . Removed the boost_system base project since it was breaking
+	    builds on Ubuntu. Hopefully, this does not break builds on
+	    other non-Windows platforms.
+
 Fri May  8 18:50:50 UTC 2009  William R. Otte  <wotte@dre.vanderbilt.edu>
 
         * XSC/Parser.hpp:
 
           Added a couple newlines.
-        
+
 Tue May  5 17:25:37 UTC 2009  William R. Otte  <wotte@dre.vanderbilt.edu>
 
         * Examples/Recursive:

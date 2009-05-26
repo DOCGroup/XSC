@@ -1,6 +1,6 @@
 //$Id$
 
-project (xsc) : boost_system, xsc_utils, xsc_be, xerces {
+project (xsc) : xsc_utils, xsc_be, xerces {
   exename   = xsc
   install   = $(XSC_ROOT)/bin
 
