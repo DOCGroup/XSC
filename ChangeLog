@@ -1,10 +1,18 @@
+Wed May 27 13:41:07 UTC 2009  James H. Hill  <hillj@isis.vanderbilt.edu>
+
+        * contrib/Utility.mpc:
+
+	  . Since we are building XSC on top of ACE, we can remove the 
+	    UTILITY_ROOT environment variable and just use the one 
+	    directly in ACE.
+
 Tue May 26 20:13:38 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
 
         * XSC/XSC.mpc:
 
-	  . Removed the boost_system base project since it was breaking
-	    builds on Ubuntu. Hopefully, this does not break builds on
-	    other non-Windows platforms.
+          . Removed the boost_system base project since it was breaking
+            builds on Ubuntu. Hopefully, this does not break builds on
+            other non-Windows platforms.
 
 Fri May  8 18:50:50 UTC 2009  William R. Otte  <wotte@dre.vanderbilt.edu>
 

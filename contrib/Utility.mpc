@@ -2,10 +2,10 @@
 
 project (Utility) : xsc_static, xsc_common {
   staticname  = Utility
-  includes   += $(UTILITY_ROOT)
+  includes   += $(ACE_ROOT)/contrib/utility
 
   Source_Files {
-    $(UTILITY_ROOT)/Utility/Introspection/Object.cpp
-    $(UTILITY_ROOT)/Utility/Introspection/TypeId.cpp
+    $(ACE_ROOT)/contrib/utility/Utility/Introspection/Object.cpp
+    $(ACE_ROOT)/contrib/utility/Utility/Introspection/TypeId.cpp
   }
 }
