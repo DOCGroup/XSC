@@ -1,10 +1,16 @@
+Wed May 27 13:44:10 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
+
+        * contrib:
+
+          . Removed the external dependency on utilities located in ACE.
+
 Wed May 27 13:41:07 UTC 2009  James H. Hill  <hillj@isis.vanderbilt.edu>
 
         * contrib/Utility.mpc:
 
-	  . Since we are building XSC on top of ACE, we can remove the 
-	    UTILITY_ROOT environment variable and just use the one 
-	    directly in ACE.
+          . Since we are building XSC on top of ACE, we can remove the
+            UTILITY_ROOT environment variable and just use the one
+            directly in ACE.
 
 Tue May 26 20:13:38 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
 
