@@ -53,7 +53,7 @@ public:
    */
   void operator <<= (const T & entity);
 
-  xercesc::DOMWriter * const writer (void);
+  xercesc::DOMLSSerializer * const writer (void);
 
 protected:
   /**
@@ -65,7 +65,7 @@ protected:
 
   typename writer_function <T>::result_type writer_;
 
-  xercesc::DOMWriter * dom_writer_;
+  xercesc::DOMLSSerializer * dom_writer_;
 };
 
 }

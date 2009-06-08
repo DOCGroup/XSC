@@ -1,3 +1,14 @@
+Mon Jun  8 23:16:48 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
+
+        * XSCRT/XSCRT/XML.hpp:
+        * XSCRT/XSCRT/utils/Buffer_Writer_T.h:
+        * XSCRT/XSCRT/utils/Buffer_Writer_T.cpp:
+        * XSCRT/XSCRT/utils/Writer_T.h:
+        * XSCRT/XSCRT/utils/Writer_T.cpp:
+
+          . Fixed build errors with using the writer template with
+            Xerces 3.x
+
 Wed May 27 13:44:10 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
 
         * contrib:

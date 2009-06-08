@@ -61,6 +61,8 @@ public:
 
 private:
   std::auto_ptr <xercesc::MemBufFormatTarget> target_;
+
+  std::auto_ptr <xercesc::DOMLSOutput> output_;
 };
 
 }

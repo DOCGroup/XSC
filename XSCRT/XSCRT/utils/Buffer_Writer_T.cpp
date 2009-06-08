@@ -17,7 +17,8 @@ Buffer_Writer_T (const CHAR_TYPE * ns,
 : Writer_T <T, CHAR_TYPE> (ns, root, writer),
   target_ (new xercesc::MemBufFormatTarget ())
 {
-
+  this->output_.reset (((DOMImplementationLS*)this->impl_)->createLSOutput ());
+  this->output_->setByteStream (this->target_.get ());
 }
 
 //
@@ -37,21 +38,13 @@ bool Buffer_Writer_T <T, CHAR_TYPE>::write (char * buffer, size_t & size)
 {
   // Get the size of the XML document.
   size_t copy_n = this->get_buffer_size ();
-//  std::cout << "SIZE in Writer = " << copy_n << std::endl;
 
   if (copy_n > size)
     return false;
 
-//  std::cout << "buffer size =  " << ACE_OS::strlen(buffer) << std::endl;
-//  std::cout << "getRawBuffer size =  " << this->target_->getRawBuffer () << std::endl;
-  
   // Copy the buffer, and set the size.
   ::memcpy (buffer, this->target_->getRawBuffer (), copy_n);
-
-  
-
   size = copy_n;
-
   return true;
 }
 
@@ -66,7 +59,7 @@ void Buffer_Writer_T <T, CHAR_TYPE>::operator <<= (const T & entity)
 
   // Now, save the XML document into an internal buffer.
   if (this->dom_writer_)
-    this->dom_writer_->writeNode (this->target_.get (), *this->document_);
+    this->dom_writer_->write (this->document_, this->output_.get ());
 }
 
 //

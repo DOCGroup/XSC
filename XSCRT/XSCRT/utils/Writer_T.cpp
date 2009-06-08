@@ -23,7 +23,8 @@ Writer_T (const CHAR_TYPE * ns,
     this->impl_->createDocument (XSC::XStr (ns), XSC::XStr (root), 0);
 
   // Create a DOMWriter for this writer.
-  this->dom_writer_ = this->impl_->createDOMWriter ();
+  this->dom_writer_ =
+    ((xercesc::DOMImplementationLS *)this->impl_)->createLSSerializer ();
 }
 
 //
@@ -50,7 +51,7 @@ void Writer_T <T, CHAR_TYPE>::operator <<= (const T & entity)
 // writer
 //
 template <typename T,  typename CHAR_TYPE>
-xercesc::DOMWriter * const Writer_T <T, CHAR_TYPE>::writer (void)
+xercesc::DOMLSSerializer * const Writer_T <T, CHAR_TYPE>::writer (void)
 {
   return this->dom_writer_;
 }
