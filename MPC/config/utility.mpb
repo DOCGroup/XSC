@@ -9,5 +9,5 @@ project {
     libs += Utility
   }
 
-  includes += $(XSC_ROOT)/contrib/utility
+  includes += $(ACE_ROOT)/contrib/utility
 }

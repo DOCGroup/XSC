@@ -48,7 +48,7 @@ namespace
       {
         // sequence
         //
-        os << type << "::_ptr t (new " << type << " (e));"
+        os << "ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex >  t (new " << type << " (e));"
            << "add_" << name << " (t);";
       }
       else if (c.min () == 0)

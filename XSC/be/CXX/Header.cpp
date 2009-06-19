@@ -95,7 +95,7 @@ namespace
           container = L"::std::list";
 
         os << comma () 
-           << container << "< " << type << "::_ptr > const& "
+           << container << "< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > > const& "
            << name << "__";
       }
     }
@@ -178,10 +178,10 @@ namespace
       {
         // sequence
         //
-        os << "typedef " << container  << "< " << type << "::_ptr >::iterator "
+        os << "typedef " << container  << "< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > >::iterator "
            << name << "_iterator;";
 
-        os << "typedef " << container << "< " << type << "::_ptr >::const_iterator "
+        os << "typedef " << container << "< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > >::const_iterator "
            << name << "_const_iterator;";
 
         os << name << "_iterator begin_" << name << " ();";
@@ -189,14 +189,14 @@ namespace
         os << name << "_const_iterator begin_" << name << " () const;";
         os << name << "_const_iterator end_" << name << " () const;";
 
-        os << "void add_" << name << " (" << type << "::_ptr const& );";
+        os << "void add_" << name << " ( ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > const& );";
 
         os << "size_t count_" << name << " (void) const;";
 
         os << endl
            << "protected:" << endl;
 
-	os <<  container << "< " << type << "::_ptr > " << id(name) << "_;";
+	os <<  container << "< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > > " << id(name) << "_;";
       }
       else if (c.min () == 0)
       {
@@ -347,14 +347,16 @@ namespace
         //         << "//@@ VC6 anathema" << endl
          << "typedef ::XSCRT::Type Base;"
          << endl;
-      os << "typedef ACE_Refcounted_Auto_Ptr < " << c.name () << ", ACE_Null_Mutex > _ptr;"
+      os << "public:" << endl
+         << "typedef ACE_Refcounted_Auto_Ptr < " << c.name () << ", ACE_Null_Mutex > _ptr;"
 	 << endl;
     }
     
     virtual void
     inherits_post (Type &c)
     {
-      os << "typedef ACE_Refcounted_Auto_Ptr < " << c.name () << ", ACE_Null_Mutex > _ptr;"
+      os << "public:" << endl
+         << "typedef ACE_Refcounted_Auto_Ptr < " << c.name () << ", ACE_Null_Mutex > _ptr;"
 	 << endl;
     }
     // Helper function to determine if read/write & >> and <<

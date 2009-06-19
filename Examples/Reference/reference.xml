@@ -1,0 +1,6 @@
+<elements>
+  <ele ref="element-1">
+    <value>My Value</value>
+  </ele>
+  <ref idref="element-1" />
+</elements>

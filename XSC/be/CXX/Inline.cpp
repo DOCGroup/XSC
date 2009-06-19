@@ -148,14 +148,14 @@ namespace
         // add_typename
         os << i
            << "void " << scope << "::" << endl
-           << "add_" << name << " (" << type << "::_ptr const& e)"
+           << "add_" << name << " (ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex >  const& e)"
            << "{";
 
         if (ra_sequence)
           {
             os << "if (" << name << "_.capacity () < " << name << "_.size () + 1)"
                << "{"
-               << "::std::vector< " << type << "::_ptr > v;"
+               << "::std::vector< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > > v;"
                << "v.reserve (" << id(name) << "_.size () + 1);"
                << endl
                << "for (" << name << "_iterator i = " << id(name) << "_.begin ();"
@@ -318,7 +318,7 @@ namespace
           container = L"::std::list";
 
         os << comma ()
-           << container << "< " << type << "::_ptr > const& "
+           << container << "< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > > const& "
            << name << "__";
       }
     }

@@ -1,3 +1,21 @@
+Fri Jun 19 11:33:19 UTC 2009  William R. Otte  <wotte@dre.vanderbilt.edu>
+
+        * Examples/Reference:
+        * Examples/Reference/reference.xml:
+        * Examples/Reference/reference.xsd:
+
+          Example of idrefs. 
+        
+        * MPC/config/utility.mpb:
+
+          Compile fix. 
+        
+        * XSC/be/CXX/Header.cpp:
+        * XSC/be/CXX/Inline.cpp:
+        * XSC/be/CXX/Source.cpp:
+
+          Errata that I forgot to check in from the refcounted ptr fix. 
+        
 Mon Jun  8 23:16:48 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
 
         * XSCRT/XSCRT/XML.hpp:

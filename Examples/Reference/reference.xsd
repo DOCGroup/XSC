@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://www.w3.org/2001/XMLSchema XMLSchema.xsd"
+            xmlns:ref="http://www.example.com/Reference"
+            targetNamespace="http://www.example.com/Reference">
+  
+  <xsd:complexType name="Element">
+    <xsd:sequence>
+      <xsd:element name="value" type="xsd:string" maxOccurs="unbounded" />
+    </xsd:sequence>
+    <xsd:attribute name="ref" type="xsd:ID" />
+  </xsd:complexType>
+  
+  <xsd:complexType name="FooBarBaz">
+    <xsd:attribute name="idref" type="xsd:IDREF" />
+  </xsd:complexType>
+  
+  <xsd:complexType name="Elements">
+    <xsd:sequence>
+      <xsd:element name="ele" type="ref:Element" maxOccurs="unbounded" />
+      <xsd:element name="ref" type="ref:FooBarBaz" minOccurs="0" maxOccurs="unbounded" />
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:element name="elements" type="ref:Elements" />
+</xsd:schema>
