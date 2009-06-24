@@ -520,7 +520,7 @@ namespace
          << id (name) << " (" << fq_name (t) << " const& s, xercesc::DOMDocument* d)"
          << "{"
          << xml_element_type << " e (d->getDocumentElement ());"
-         << "if (e.name () != " << L << "\"" << name << "\")"
+         << "if (e.name () != " << L << "ACE_TEXT (\"" << name << "\"))"
          << "{"
          << "throw 1;"
          << "}";

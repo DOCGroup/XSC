@@ -31,7 +31,7 @@ namespace
          << id (name) << " (xercesc::DOMDocument const* d)"
          << "{"
          << xml_element_type << " e (d->getDocumentElement ());"
-         << "if (e.name () == " << L << "\"" << name << "\")"
+         << "if (e.name () == " << L << "ACE_TEXT (\"" << name << "\"))"
          << "{"
          << type << " r (e);"
          << "return r;"
