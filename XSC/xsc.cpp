@@ -1,6 +1,29 @@
-// file      : xsc.cpp
-// author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
+// -*- C++ -*-
+
+//=============================================================================
+/**
+ * @file    xsc.cpp
+ *
+ * XSC main source file.  Takes in command line arguments and an XML Schema and 
+ * outputs a C++ class hierarchy that will allow for parsing and interaction of XML 
+ * documents that match the supplied schema.
+ * 
+ * XSC Basic Run :
+ * 1. Creates and stores program options.
+ * 2. Parses Command Line Arguments.
+ * 3. Creates parser and schema (builds semantic graph).
+ * 4. Depending on backend cmd line options, creates appropriate
+ *    Generator object.
+ * 5. Generates output files.
+ * 6. Program will return an error under the following conditions:
+ *    (a)An input file is not supplied (*.xsd)
+ *    (b)An incorrect program option is entered at the command line.
+ *    (c)An error occurs during the parsing of the supplied schema.
+ * 
+ * @author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
+ * cvs-id    : $Id$
+ */
+//=============================================================================
 
 #include <memory> // std::auto_ptr
 #include <iostream>
@@ -20,6 +43,13 @@ using std::endl;
 using std::auto_ptr;
 
 wchar_t const* const version = L"0.0.8";
+
+ /**
+ * @class ErrorDetector
+ *
+ * @brief A class that is used to make XSC signal error conditions
+ *  by return value.
+ */
 
 class ErrorDetector : public std::wstreambuf
 {
@@ -70,9 +100,11 @@ private:
 
 namespace po = boost::program_options;
 
-//
-// init_basic_commandline_description
-//
+ /**
+ * @init_basic_commandline_description
+ *
+ * @brief Adds default program options to the commandline options.
+ */
 void init_basic_commandline_description (po::options_description &desc)
 {
   desc.add_options ()
@@ -106,11 +138,15 @@ int main (int argc, char* argv[])
     po::options_description cxx_desc ("CXX Backend Options");
     po::options_description idl_desc ("IDL Backend Options");
 
+    //Adds "input-file" as a hidden program option
     hidden_desc.add_options ()
       ("input-file", po::value <std::string>  (), "Input schema");
 
+    //Adds basic program options to basic_desc
     init_basic_commandline_description (basic_desc);
 
+    //Adds CXX and IDL program options to the option descriptions
+    //for each respective backend.
     CXX_Generator::options (cxx_desc);
     IDL::Generator::options (idl_desc);
 
@@ -119,6 +155,8 @@ int main (int argc, char* argv[])
 
     try
       {
+        //Add all initialized program options to
+        //"all_options"
         po::options_description all_options;
         all_options.add (basic_desc);
         all_options.add (hidden_desc);
@@ -128,6 +166,7 @@ int main (int argc, char* argv[])
         po::positional_options_description p;
         p.add ("input-file", 1);
 
+        //Parses command line options
         po::store (po::command_line_parser (argc, argv).
                    options(all_options).positional(p).run (), vm);
         po::notify (vm);
@@ -153,9 +192,12 @@ int main (int argc, char* argv[])
 
     std::string backend ("");
 
+    //If present, get the backend cmd line option
     if (vm.count ("backend"))
       backend = vm["backend"].as <std::string> ();
 
+    //Display program options if "--help" is entered
+    //on the command line.
     if (vm.count ("help"))
     {
       // @todo: add positional argument.
@@ -217,9 +259,12 @@ int main (int argc, char* argv[])
     //
     ErrorDetector detector (wcerr);
 
+    //"tu" is set to the schema path provided in the command line.
     fs::path tu (argument.c_str ());
 
     Parser parser (vm.count ("trace"), search_paths);
+
+    //File is parsed and loaded into the Semantic Graph::Schema (s)
     auto_ptr <SemanticGraph::Schema> s (parser.parse (tu));
 
     if (detector.error ())
@@ -238,12 +283,20 @@ int main (int argc, char* argv[])
         return 1;
       }
 
+      //Create a CXX Generator object.
       CXX_Generator cxx;
+
+      //Generate the output based on the Schema (created from the 
+      //parsing of the provided schema)
       cxx.generate (vm, *s, tu);
     }
     else if (backend == "idl")
     {
+      //Create an IDL Generator object
       IDL::Generator idl;
+
+      //Generate the output based on the Schema (created from the 
+      //parsing of the provided schema)
       idl.generate (vm, *s, tu);
     }
 
