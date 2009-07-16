@@ -240,8 +240,22 @@ namespace XSCRT
       return 0;
     }
 
+    //Get and set methods for the idref_ data member
+    Type* get_idref (void) 
+    { 
+      return this->idref_;
+    }
+
+    void set_idref (Type* new_idref)
+    {
+      this->idref_ = new_idref;
+      return;
+    }
 
   private:
+    //Data member to handle ID and IDREF attributes
+    Type* idref_;
+
     Type* container_;
 
     struct IdentityComparator
