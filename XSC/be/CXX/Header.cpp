@@ -5,6 +5,8 @@
 #include "Header.hpp"
 #include "Elements.hpp"
 
+#include <string>
+
 #include "XSC/SemanticGraph.hpp"
 #include "XSC/Traversal.hpp"
 
@@ -162,6 +164,12 @@ namespace
       string name (c.name ());
       string type (type_name (c));
 
+      //Check if the type is an IDREF
+      int idref_ptr = 0;
+      std::wstring idref_str (L"::XMLSchema::IDREF<");
+      idref_ptr = type.find(idref_str);
+
+
       string container;
 
       if (this->generate_ra_sequences_)
@@ -207,6 +215,12 @@ namespace
         // os << type << "& " << id (name) << " ();";  // Lets just have one mutator
         os << "void " << id (name) << " (" << type << " const& );";
 
+        //Added for IDREF case
+        if (idref_ptr != std::string::npos)
+        {
+           os << "::XSCRT::Type* " << id (name) << "_ptr ();\n";
+        }
+
         os << endl
            << "protected:" << endl;
 
@@ -219,6 +233,12 @@ namespace
         os << type << " const& " << id (name) << " () const;";
         // os << type << "& " << id (name) << " ();"; // Lets just have one mutator.
         os << "void " << id (name) << " (" << type << " const& );";
+
+        //Added for IDREF case
+        if (idref_ptr != std::string::npos)
+        {
+           os << "::XSCRT::Type* " << id (name) << "_ptr ( void );\n";
+        }
 
         os << endl
            << "protected:" << endl;
@@ -258,6 +278,11 @@ namespace
       string name (a.name ());
       string type (type_name (a));
 
+      //Check if the type is an IDREF
+      int idref_ptr = 0;
+      std::wstring idref_str (L"::XMLSchema::IDREF<");
+      idref_ptr = type.find(idref_str);
+
       os << "// " << name << endl
          << "// " << endl
          << "public:" << endl;
@@ -269,6 +294,12 @@ namespace
         os << type << " const& " << id (name) << " () const;";
         os << type << "& " << id (name) << " ();";
         os << "void " << id (name) << " (" << type << " const& );";
+        
+        //Added for IDREF case
+        if (idref_ptr != std::string::npos)
+        {
+           os << "::XSCRT::Type* " << id (name) << "_ptr ();\n";
+        }
 
         os << endl
            << "protected:" << endl;
@@ -280,6 +311,12 @@ namespace
         os << type << " const& " << id (name) << " () const;";
         os << type << "& " << id (name) << " ();";
         os << "void " << id (name) << " (" << type << " const& );";
+        
+        //Added for IDREF case
+        if (idref_ptr != std::string::npos)
+        {
+           os << "::XSCRT::Type* " << id (name) << "_ptr ( void );\n";
+        }
 
         os << endl
            << "protected:" << endl;
@@ -812,18 +849,23 @@ generate_header (Context& ctx,
   else
     ctx.os << "#include <list>" << endl;
 
+  //Added 
   ctx.os << "#include \"XMLSchema/Types.hpp\"" << endl
-         << endl;
+         << "#include \"XMLSchema/id_map.hpp\"" << endl;
   
   ctx.os << "#include \"ace/Refcounted_Auto_Ptr.h\"" << endl
-	 << "#include \"ace/Null_Mutex.h\"" << endl << endl;
+	 << "#include \"ace/Null_Mutex.h\"" << endl 
+     << "#include \"ace/TSS_T.h\""<< endl 
+     << "#include \"ace/Singleton.h\"" << endl << endl;
 
   // -- Include CDR Type headers if cdr generation is
   // enabled
   if (ctx.cdr_reader_generation_enabled () ||
       ctx.cdr_writer_generation_enabled ())
     ctx.os << "#include \"XMLSchema/CDR_Types.hpp\"" << endl
-     << endl;
+           << "#include \"id_map.hpp\"" << endl
+           << "#include \"ace/TSS_T.h\""<< endl
+           << endl;
 
   Traversal::Schema traverser;
 
