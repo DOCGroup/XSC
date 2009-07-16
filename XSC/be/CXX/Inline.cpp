@@ -5,6 +5,8 @@
 #include "Inline.hpp"
 #include "Elements.hpp"
 
+#include <string>
+
 #include "XSC/SemanticGraph.hpp"
 #include "XSC/Traversal.hpp"
 
@@ -37,6 +39,11 @@ namespace
       string type (type_name (e));
       bool ra_sequence (this->generate_ra_sequences_);
 
+      //Check if the type is an IDREF
+      int idref_ptr = 0;
+      std::wstring idref_str (L"::XMLSchema::IDREF<");
+      idref_ptr = type.find(idref_str);
+
       os << "// " << scope << endl
          << "// " << endl;
 
@@ -57,6 +64,16 @@ namespace
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
+
+        //Return referenced item if an IDREF
+        if (idref_ptr != std::string::npos)
+        {
+           os << "::XSCRT::Type* " << scope << "::" << endl
+              << id (name) << "_ptr ()\n" 
+              << "{"
+              << "return this->get_idref();\n"
+              << "}\n";
+        }
         /* Lets just have one accessor. WRO
         os << i
            << type << "& " << scope << "::" << endl
@@ -99,6 +116,15 @@ namespace
            << "return *" << id (name) << "_;"
            << "}";
         */
+        if (idref_ptr != std::string::npos)
+        {
+           os << "::XSCRT::Type* " << scope << "::" << endl
+              << id (name) << "_ptr ()\n" 
+              << "{"
+              << "return this->get_idref();\n"
+              << "}\n";
+        }
+
         os << i
            << "void " << scope << "::" << endl
            << id (name) << " (" << type << " const& e)"
@@ -198,6 +224,11 @@ namespace
       os << "// " << scope << endl
          << "// " << endl;
 
+      //Check if the type is an IDREF
+      int idref_ptr = 0;
+      std::wstring idref_str (L"::XMLSchema::IDREF<");
+      idref_ptr = type.find(idref_str);
+
       if (a.optional ())
       {
         os << i
@@ -220,6 +251,16 @@ namespace
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
+
+        //Return a pointer to the referenced item
+        if (idref_ptr != std::string::npos)
+        {
+           os << "::XSCRT::Type* " << scope << "::" << endl
+              << id (name) << "_ptr ()\n" 
+              << "{"
+              << "return this->get_idref();\n"
+              << "}\n";
+        }
 
         os << i
            << "void " << scope << "::" << endl
@@ -252,6 +293,16 @@ namespace
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
+
+        //Return a pointer to the referenced item
+        if (idref_ptr != std::string::npos)
+        {
+           os << "::XSCRT::Type* " << scope << "::" << endl
+              << id (name) << "_ptr ()\n" 
+              << "{"
+              << "return this->get_idref();\n"
+              << "}\n";
+        }
 
         os << i
            << "void " << scope << "::" << endl
