@@ -11,6 +11,7 @@
 #include "CCF/CodeGenerationKit/Regex.hpp"
 
 #include <ctype.h>
+#include <string>
 
 #if defined (_WINDOWS)
 # if defined (min)
@@ -41,7 +42,7 @@ namespace
 
       //@@ need to use FQ-names.
       //
-      os << "if (n == " << L << "ACE_TEXT (\"" << name << "\"))"
+      os << "if (n == " << L << "\"" << name << "\")"
          << "{";
 
       if (c.max () != 1)
@@ -67,6 +68,30 @@ namespace
            << id (name) << "_->container (this);";
       }
 
+      //Check if idref or id is the type
+      int idref_ptr = 0;
+      int id_ptr = 0;
+      std::wstring idref_str (L"::XMLSchema::IDREF<");
+      std::wstring id_str (L"::XMLSchema::ID<");
+      idref_ptr = type.find(idref_str);
+      id_ptr = type.find(id_str);
+
+      if (idref_ptr != string::npos)
+      {
+        os <<"(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_idref((*"
+           << id(name) << "_).id(), dynamic_cast<XSCRT::Type*> (this));\n";
+        //os << "ID_Map::instance()->add_idref((*" << id(name) <<
+        //"_).id(), dynamic_cast<XSCRT::Type*> (this));\n";
+      }
+      else if (id_ptr != string::npos)
+      {
+        os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_id(*"
+           << id(name) << "_, dynamic_cast<XSCRT::Type*> (this));";
+        //os << "ID_Map::instance()->add_id(*" << id(name) <<
+        //"_, dynamic_cast<XSCRT::Type*> (this));\n";
+      }
+
+
       os <<"}"
          << "else ";
     }
@@ -87,7 +112,7 @@ namespace
 
       //@@ need to use FQ-names.
       //
-      os << "if (n == " << L << "ACE_TEXT (\"" << name << "\"))"
+      os << "if (n == " << L << "\"" << name << "\")"
          << "{";
 
       if (a.optional ())
@@ -100,6 +125,29 @@ namespace
         os << id (name) << "_ = ::std::auto_ptr< " << type << " > (" <<
           "new " << type << " (a));"
            << id (name) << "_->container (this);";
+      }
+
+      //Check if idref or id is the type
+      int idref_ptr = 0;
+      int id_ptr = 0;
+      std::wstring idref_str (L"::XMLSchema::IDREF<");
+      std::wstring id_str (L"::XMLSchema::ID<");
+      idref_ptr = type.find(idref_str);
+      id_ptr = type.find(id_str);
+      
+      if (idref_ptr != string::npos)
+      {
+        os <<"(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_idref((*"
+           << id(name) << "_).id(), dynamic_cast<XSCRT::Type*> (this));\n";
+        //os << "ID_Map::instance()->add_idref((*" << id(name) <<
+        //"_).id(), dynamic_cast<XSCRT::Type*> (this));\n";
+      }
+      else if (id_ptr != string::npos)
+      {
+        //os << "ID_Map::instance()->add_id(*" << id(name) <<
+        //"_, dynamic_cast<XSCRT::Type*> (this));\n";
+        os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_id(*"
+           << id(name) << "_, dynamic_cast<XSCRT::Type*> (this));";
       }
 
       os << "}"
@@ -1209,7 +1257,7 @@ namespace
     {
       string name (e.name ());
 
-      os << "if (v == " << L << "ACE_TEXT (\"" << name << "\")) v_ = " << id (name) << "_l;"
+      os << "if (v == " << L << "\"" << name << "\") v_ = " << id (name) << "_l;"
          << "else ";
     }
   };
