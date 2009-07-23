@@ -78,10 +78,18 @@ namespace
 
       if (idref_ptr != string::npos)
       {
-        os <<"(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_idref((*"
-           << id(name) << "_).id(), dynamic_cast<XSCRT::Type*> (this));\n";
-        //os << "ID_Map::instance()->add_idref((*" << id(name) <<
-        //"_).id(), dynamic_cast<XSCRT::Type*> (this));\n";
+        if (c.max() != 1)
+        {
+          //If there are more than one, then the last added IDREF is added to the ID_Map
+          os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_idref("
+             << id(name) << "_.back()->id(), dynamic_cast<XSCRT::Type*> (this));\n";
+        }
+        else
+        {
+          //If there is only one, then the idref gets added to the id_map
+          os <<"(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_idref((*"
+             << id(name) << "_).id(), dynamic_cast<XSCRT::Type*> (this));\n";
+        }
       }
       else if (id_ptr != string::npos)
       {
