@@ -71,7 +71,9 @@ namespace
            os << "::XSCRT::Type* " << scope << "::" << endl
               << id (name) << "_ptr ()\n" 
               << "{"
-              << "return this->get_idref();\n"
+              << "  std::basic_string<wchar_t> temp (" 
+              << id (name) << "().id());"
+              << "return this->get_idref(temp);\n"
               << "}\n";
         }
         /* Lets just have one accessor. WRO
@@ -121,7 +123,9 @@ namespace
            os << "::XSCRT::Type* " << scope << "::" << endl
               << id (name) << "_ptr ()\n" 
               << "{"
-              << "return this->get_idref();\n"
+              << "  std::basic_string<wchar_t> temp (" 
+              << id (name) << "().id());"
+              << "return this->get_idref(temp);\n"
               << "}\n";
         }
 
@@ -258,7 +262,9 @@ namespace
            os << "::XSCRT::Type* " << scope << "::" << endl
               << id (name) << "_ptr ()\n" 
               << "{"
-              << "return this->get_idref();\n"
+              << "  std::basic_string<wchar_t> temp (" 
+              << id (name) << "().id());"
+              << "return this->get_idref(temp);\n"
               << "}\n";
         }
 
@@ -300,7 +306,9 @@ namespace
            os << "::XSCRT::Type* " << scope << "::" << endl
               << id (name) << "_ptr ()\n" 
               << "{"
-              << "return this->get_idref();\n"
+              << "  std::basic_string<wchar_t> temp (" 
+              << id (name) << "().id());"
+              << "return this->get_idref(temp);\n"
               << "}\n";
         }
 
