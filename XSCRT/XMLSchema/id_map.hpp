@@ -84,7 +84,6 @@
     {
       if (obj_ref)
       {
-        //this->idref_map_[idref] = obj_ref;
         this->idref_map_.insert(std::pair<XMLSchema::NCName<wchar_t>, XSCRT::Type*>(idref, obj_ref));
       }
       else 
@@ -108,11 +107,14 @@
            idref_iterator != this->idref_map_.end();
            ++idref_iterator)
       {
+        //Find the ID that matches the IDREF element
         id_iterator = this->id_map_.find(idref_iterator->first);
         if (id_iterator != this->id_map_.end())
         {
-          //Author Types::idref_ is set to the book.
-          idref_iterator->second->set_idref(id_iterator->second);
+          //Add the IDREF identifier and the reference to the 
+          //identified object
+          std::basic_string<wchar_t> temp_id = id_iterator->first;
+          idref_iterator->second->set_idref(temp_id, id_iterator->second);
         }
         else
         {
