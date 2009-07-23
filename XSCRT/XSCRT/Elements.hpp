@@ -240,21 +240,31 @@ namespace XSCRT
       return 0;
     }
 
-    //Get and set methods for the idref_ data member
-    Type* get_idref (void) 
-    { 
-      return this->idref_;
+    //Get and set methods for the idref_map_ data member
+    Type* get_idref (std::basic_string<wchar_t> name)
+    {
+      std::map<std::basic_string<wchar_t>, XSCRT::Type*>::iterator i = 
+          this->idref_map_.find(name);
+      if (i != idref_map_.end())
+      {
+        return i->second;
+      }
+      else
+      {
+        std::cout << "IDREF not found." << std::endl;
+      }
     }
 
-    void set_idref (Type* new_idref)
+    void set_idref (std::basic_string<wchar_t> name, Type* new_idref)
     {
-      this->idref_ = new_idref;
+      this->idref_map_.insert(std::pair<std::basic_string<wchar_t>,Type*>(name, new_idref));
       return;
     }
 
   private:
-    //Data member to handle ID and IDREF attributes
-    Type* idref_;
+
+    //Data member to handle unbounded IDREF attributes and elements
+    std::map<std::basic_string<wchar_t>, XSCRT::Type*> idref_map_;
 
     Type* container_;
 
