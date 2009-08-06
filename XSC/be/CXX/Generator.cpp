@@ -42,6 +42,13 @@ namespace
   }
 }
 
+ /**
+ * @CXX_Generator::options
+ *
+ * @brief Adds CXX Generator specific options to the supplied program
+ *  options object.
+ */
+
 void CXX_Generator::
 options (po::options_description& d)
 {
@@ -112,9 +119,17 @@ options (po::options_description& d)
     ;
 }
 
+ /**
+ * @CXX_Generator::generate
+ *
+ * @brief Creates the all output files (header, source, parser header, and
+ *  parser source).
+ */
+
 void CXX_Generator::
 generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path)
 {
+  //Name is the actual file name.
   std::string name (file_path.leaf ());
 
   std::string hxx_suffix (vm["cxx-header-suffix"].as<std::string> ());
@@ -126,14 +141,19 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   std::string cxx_expr (vm["cxx-source-regex"].as<std::string> ());
 
 
+  //Output file names are named <name>.<suffix>
   std::string hxx_name (regex::perl_s (name, hxx_expr) + hxx_suffix);
   std::string ixx_name (regex::perl_s (name, ixx_expr) + ixx_suffix);
   std::string cxx_name (regex::perl_s (name, cxx_expr) + cxx_suffix);
 
+  //File handlers are created for each file name
   fs::path hxx_path (hxx_name);
   fs::path ixx_path (ixx_name);
   fs::path cxx_path (cxx_name);
 
+  //Files are opened for output.  Note that the inline
+  //file is only opened IF the inline_ value is true (otherwise
+  //the file is ignored).
   fs::wofstream hxx (hxx_path, std::ios_base::out);
   fs::wofstream ixx;
   fs::wofstream cxx (cxx_path, std::ios_base::out);
@@ -145,6 +165,8 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
     return;
   }
 
+
+  //Boolean value set to the "cxx-generate-inline" option value
   bool inline_ (vm.count ("cxx-generate-inline"));
 
   if (inline_)
@@ -168,6 +190,8 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
 
   // Banner.
   //
+  //Takes in the name of a "banner" file.  This banner, if it exists, will
+  //be inserted at the head of the output files.
   {
     using namespace std;
 
@@ -203,6 +227,8 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
           return;
         }
 
+        //If the banner is not empty, put the text into the 
+        //header file.
         hxx << b.rdbuf ();
       }
       else if (banner.is_open ())
@@ -228,7 +254,9 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
                 << endl;
           return;
         }
-
+        //If the banner is not empty, put the text into the 
+        //inline file (if an inline file has been specified in the 
+        //program options).
         ixx << b.rdbuf ();
       }
       else if (banner.is_open ())
@@ -254,6 +282,8 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
               return;
             }
 
+          //If the banner is not empty, put the text into the 
+          //source file.
           cxx << b.rdbuf ();
         }
       else if (banner.is_open ())

@@ -37,6 +37,8 @@ namespace
     {
       string name (e.name ());
       string type (type_name (e));
+      string char_typ (this->char_type);
+
       bool ra_sequence (this->generate_ra_sequences_);
 
       //Check if the type is an IDREF
@@ -71,9 +73,9 @@ namespace
            os << "::XSCRT::Type* " << scope << "::" << endl
               << id (name) << "_ptr ()\n" 
               << "{"
-              << "  std::basic_string<wchar_t> temp (" 
+              << "  std::basic_string<" << char_type << "> temp (" 
               << id (name) << "().id());"
-              << "return this->get_idref(temp);\n"
+              << "return this->get_idref(temp.c_str());\n"
               << "}\n";
         }
         /* Lets just have one accessor. WRO
@@ -123,9 +125,9 @@ namespace
            os << "::XSCRT::Type* " << scope << "::" << endl
               << id (name) << "_ptr ()\n" 
               << "{"
-              << "  std::basic_string<wchar_t> temp (" 
+              << "  std::basic_string<" << char_type << "> temp (" 
               << id (name) << "().id());"
-              << "return this->get_idref(temp);\n"
+              << "return this->get_idref(temp.c_str());\n"
               << "}\n";
         }
 
@@ -174,6 +176,15 @@ namespace
            << "{"
            << "return " << id(name) << "_.end ();"
            << "}";
+
+        // add_IDREF access method
+        if (idref_ptr != std::string::npos)
+        {
+           os << "XSCRT::Type* " << scope << "::" << name << "_ptr ( std::basic_string<" << char_type << "> idref )"
+              << "{"
+              << "  return this->get_idref(idref.c_str());"
+              << "}";
+        }
 
         // add_typename
         os << i
@@ -262,9 +273,9 @@ namespace
            os << "::XSCRT::Type* " << scope << "::" << endl
               << id (name) << "_ptr ()\n" 
               << "{"
-              << "  std::basic_string<wchar_t> temp (" 
+              << "  std::basic_string<" << char_type << "> temp (" 
               << id (name) << "().id());"
-              << "return this->get_idref(temp);\n"
+              << "return this->get_idref(temp.c_str());\n"
               << "}\n";
         }
 
@@ -306,9 +317,9 @@ namespace
            os << "::XSCRT::Type* " << scope << "::" << endl
               << id (name) << "_ptr ()\n" 
               << "{"
-              << "  std::basic_string<wchar_t> temp (" 
+              << "  std::basic_string<" << char_type << "> temp (" 
               << id (name) << "().id());"
-              << "return this->get_idref(temp);\n"
+              << "return this->get_idref(temp.c_str());\n"
               << "}\n";
         }
 

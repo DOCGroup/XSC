@@ -34,7 +34,7 @@ namespace
          <<  "//specific storage\n"
          <<  "ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());\n\n"
          << xml_element_type << " e (d->getDocumentElement ());"
-         << "if (e.name () == " << L << "\"" << name << "\")"
+         << "if (e.name () == ACE_TEXT(\"" << name << "\"))"
          << "{"
          << type << " r (e);\n"
          << "(*TSS_ID_Map)->resolve_idref();\n"

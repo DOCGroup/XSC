@@ -9,6 +9,7 @@
 #include "XSC/Traversal.hpp"
 
 #include "CCF/CodeGenerationKit/Regex.hpp"
+//#include "ace/ace_wchar.h"
 
 #include <ctype.h>
 #include <string>
@@ -36,13 +37,14 @@ namespace
     {
       string name (c.name ());
       string type (type_name (c));
+      string char_type (this->char_type);
 
       //@@ can I get rid of the temporary?
       //
 
       //@@ need to use FQ-names.
       //
-      os << "if (n == " << L << "\"" << name << "\")"
+      os << "if (n == ACE_TEXT(\"" << name << "\"))"
          << "{";
 
       if (c.max () != 1)
@@ -73,6 +75,8 @@ namespace
       int id_ptr = 0;
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       std::wstring id_str (L"::XMLSchema::ID<");
+      std::wstring wchar_t_compare (L"wchar_t");
+      std::wstring char_compare (L"char");
       idref_ptr = type.find(idref_str);
       id_ptr = type.find(id_str);
 
@@ -80,23 +84,90 @@ namespace
       {
         if (c.max() != 1)
         {
+          if (this->char_type == char_compare)
+          {
+            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_CHAR_TO_TCHAR (" << id(name);
+            os << "_.back()->id().c_str()));\n";
+          }
+          else if (this->char_type == wchar_t_compare)
+          {
+            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_WCHAR_TO_TCHAR (" << id(name);
+            os << "_.back()->id().c_str()));\n";
+          }
+          else
+          {
+            os << "std::basic_string<ACE_TCHAR> temp (" << id(name);
+            os << "_.back()->id().c_str());\n";
+          }
+          
           //If there are more than one, then the last added IDREF is added to the ID_Map
-          os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_idref("
-             << id(name) << "_.back()->id(), dynamic_cast<XSCRT::Type*> (this));\n";
+          os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_idref("
+             << "temp, dynamic_cast<XSCRT::Type*> (this));\n";
+             //<< id(name) << "_.back()->id().c_str(), dynamic_cast<XSCRT::Type*> (this));\n";
         }
         else
         {
+          if (this->char_type == char_compare)
+          {
+            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_CHAR_TO_TCHAR ((*" << id(name);
+            os << "_).id().c_str()));\n";
+          }
+          else if (this->char_type == wchar_t_compare)
+          {
+            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name);
+            os << "_).id().c_str()));\n";
+          }
+          else
+          {
+            os << "std::basic_string<ACE_TCHAR> temp ((*" << id(name);
+            os << "_).id().c_str());\n";
+          }
           //If there is only one, then the idref gets added to the id_map
-          os <<"(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_idref((*"
-             << id(name) << "_).id(), dynamic_cast<XSCRT::Type*> (this));\n";
+          os <<"(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_idref("
+             << "temp, dynamic_cast<XSCRT::Type*> (this));\n";
+             //<< id(name) << "_).id().c_str(), dynamic_cast<XSCRT::Type*> (this));\n";
         }
       }
       else if (id_ptr != string::npos)
       {
-        os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_id(*"
-           << id(name) << "_, dynamic_cast<XSCRT::Type*> (this));";
-        //os << "ID_Map::instance()->add_id(*" << id(name) <<
-        //"_, dynamic_cast<XSCRT::Type*> (this));\n";
+        if (c.max() == 1)
+        {
+          if (this->char_type == char_compare)
+          {
+            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_CHAR_TO_TCHAR ((*" << id(name) << "_).c_str()));";
+          }
+          else if (this->char_type == wchar_t_compare)
+          {
+            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name) << "_).c_str()));";
+          }
+          else 
+          {
+             os << "std::basic_string<" << this->char_type << "> temp ((*" << id(name) << "_).c_str());";
+          }
+             os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_id(temp"
+              << ", dynamic_cast<XSCRT::Type*> (this));";
+        }
+        else 
+        {
+          if (this->char_type == char_compare)
+          {
+            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_CHAR_TO_TCHAR (" << id(name);
+            os << "_.back()->c_str()));\n";
+          }
+          else if (this->char_type == wchar_t_compare)
+          {
+            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_WCHAR_TO_TCHAR (" << id(name);
+            os << "_.back()->c_str()));\n";
+          }
+          else 
+          {
+            os << "std::basic_string<" << this->char_type <<"> temp (" << id(name);
+            os << "_.back()->c_str());\n";
+          }
+             os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_id(temp"
+              << ", dynamic_cast<XSCRT::Type*> (this));";
+
+        }
       }
 
 
@@ -140,22 +211,56 @@ namespace
       int id_ptr = 0;
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       std::wstring id_str (L"::XMLSchema::ID<");
+      std::wstring wchar_t_compare (L"wchar_t");
+      std::wstring char_compare (L"char");
       idref_ptr = type.find(idref_str);
       id_ptr = type.find(id_str);
-      
       if (idref_ptr != string::npos)
       {
+        if (this->char_type == char_compare)
+        {
+          os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_CHAR_TO_TCHAR ((*" << id(name);
+          os << "_).id().c_str()));\n";
+        }
+        else if (this->char_type == wchar_t_compare)
+        {
+          os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name);
+          os << "_).id().c_str()));\n";
+        }
+        else
+        {
+          os << "std::basic_string<ACE_TCHAR> temp ((*" << id(name);
+          os << "_).id().c_str());\n";
+        }
+          //If there is only one, then the idref gets added to the id_map
+          os <<"(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_idref("
+             << "temp, dynamic_cast<XSCRT::Type*> (this));\n";
+             //<< id(name) << "_).id().c_str(), dynamic_cast<XSCRT::Type*> (this));\n";
+      }
+      /*if (idref_ptr != string::npos)
+      {
         os <<"(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_idref((*"
-           << id(name) << "_).id(), dynamic_cast<XSCRT::Type*> (this));\n";
+           << id(name) << "_).id().c_str(), dynamic_cast<XSCRT::Type*> (this));\n";
         //os << "ID_Map::instance()->add_idref((*" << id(name) <<
         //"_).id(), dynamic_cast<XSCRT::Type*> (this));\n";
       }
+      */
       else if (id_ptr != string::npos)
       {
-        //os << "ID_Map::instance()->add_id(*" << id(name) <<
-        //"_, dynamic_cast<XSCRT::Type*> (this));\n";
-        os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_id(*"
-           << id(name) << "_, dynamic_cast<XSCRT::Type*> (this));";
+        if (this->char_type == char_compare)
+        {
+          os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_CHAR_TO_TCHAR ((*" << id(name) << "_).c_str()));";
+        }
+        else if (this->char_type == wchar_t_compare)
+        {
+            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name) << "_).c_str()));";
+        }
+        else 
+        {
+           os << "std::basic_string<" << this->char_type << "> temp ((*" << id(name) << "_).c_str());";
+        }
+           os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_id(temp"
+              << ", dynamic_cast<XSCRT::Type*> (this));";
       }
 
       os << "}"

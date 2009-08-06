@@ -163,6 +163,7 @@ namespace
     {
       string name (c.name ());
       string type (type_name (c));
+      string char_type (this->char_type);
 
       //Check if the type is an IDREF
       int idref_ptr = 0;
@@ -198,7 +199,7 @@ namespace
         os << name << "_const_iterator end_" << name << " () const;";
 
         os << "void add_" << name << " ( ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > const& );";
-
+        os << "XSCRT::Type* " << name << "_ptr ( std::basic_string<" << char_type <<"> idref );";
         os << "size_t count_" << name << " (void) const;";
 
         os << endl
@@ -843,6 +844,7 @@ generate_header (Context& ctx,
                  SemanticGraph::Schema& schema)
 {
   ctx.os << "#include <memory>" << endl;
+  ctx.os << "#include <string>" << endl;
 
   if (ctx.generate_ra_sequences ())
     ctx.os << "#include <vector>" << endl;
@@ -856,6 +858,7 @@ generate_header (Context& ctx,
   ctx.os << "#include \"ace/Refcounted_Auto_Ptr.h\"" << endl
 	 << "#include \"ace/Null_Mutex.h\"" << endl 
      << "#include \"ace/TSS_T.h\""<< endl 
+     << "#include \"ace/ace_wchar.h\"" << endl
      << "#include \"ace/Singleton.h\"" << endl << endl;
 
   // -- Include CDR Type headers if cdr generation is
