@@ -8,6 +8,7 @@
 #include <map>
 #include <string>
 #include <sstream>
+#include "ace/ace_wchar.h"
 // #include <iostream> //@@ tmp
 
 #include <XSCRT/Parser.hpp>
@@ -72,6 +73,7 @@ namespace XSCRT
   class Type
   {
   public:
+
     virtual ~Type (void)
     {
     }
@@ -241,30 +243,47 @@ namespace XSCRT
     }
 
     //Get and set methods for the idref_map_ data member
-    Type* get_idref (std::basic_string<wchar_t> name)
+    Type* get_idref (const char* name)
     {
-      std::map<std::basic_string<wchar_t>, XSCRT::Type*>::iterator i = 
-          this->idref_map_.find(name);
+      std::basic_string<ACE_TCHAR> name_string (ACE_TEXT_CHAR_TO_TCHAR(name));
+      std::map<std::basic_string<ACE_TCHAR>, XSCRT::Type*>::iterator i = 
+          this->idref_map_.find(name_string);
       if (i != idref_map_.end())
       {
         return i->second;
       }
       else
       {
-        std::cout << "IDREF not found." << std::endl;
+        return 0;
       }
     }
 
-    void set_idref (std::basic_string<wchar_t> name, Type* new_idref)
+    Type* get_idref (const wchar_t *name)
     {
-      this->idref_map_.insert(std::pair<std::basic_string<wchar_t>,Type*>(name, new_idref));
+      std::basic_string<ACE_TCHAR> name_string (ACE_TEXT_WCHAR_TO_TCHAR(name));
+      std::map<std::basic_string<ACE_TCHAR>, XSCRT::Type*>::iterator i = 
+          this->idref_map_.find(name_string);
+      if (i != idref_map_.end())
+      {
+        return i->second;
+      }
+      else
+      {
+        return 0;
+      }
+    }
+
+
+    void set_idref (std::basic_string<ACE_TCHAR> name, Type* new_idref)
+    {
+      this->idref_map_.insert(std::pair<std::basic_string<ACE_TCHAR>,Type*>(name, new_idref));
       return;
     }
 
   private:
 
     //Data member to handle unbounded IDREF attributes and elements
-    std::map<std::basic_string<wchar_t>, XSCRT::Type*> idref_map_;
+    std::map<std::basic_string<ACE_TCHAR>, XSCRT::Type*> idref_map_;
 
     Type* container_;
 
