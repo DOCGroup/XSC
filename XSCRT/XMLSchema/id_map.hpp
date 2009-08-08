@@ -28,7 +28,7 @@
 
 //The ID_Map is a Thread Specific Storage element.
 #include "ace/TSS_T.h"
-
+#include "ace/ace_wchar.h"
 
  /**
  * @class ID_Map
@@ -42,8 +42,8 @@
 
     //Trait to allow for ease of thread specific storage.
     typedef ACE_TSS<ID_Map> TSS_ID_Map;
-    typedef std::multimap<XMLSchema::NCName<wchar_t>, XSCRT::Type*>::iterator idref_iterator;
-    typedef std::map<XMLSchema::ID<wchar_t>, XSCRT::Type*>::iterator id_iterator;
+    typedef std::map<std::basic_string<ACE_TCHAR>, XSCRT::Type*>::iterator id_iterator;
+    typedef std::multimap<std::basic_string<ACE_TCHAR>, XSCRT::Type*>::iterator idref_iterator;
 
     //Exception Classes
     //NULL_PTR_Entry thrown when a NULL PTR is added to the
@@ -66,7 +66,7 @@
     }
 
     //Add an ID to the ID map
-    void add_id (XMLSchema::ID<wchar_t> id, XSCRT::Type *obj_ref)
+    void add_id (std::basic_string<ACE_TCHAR> id, XSCRT::Type *obj_ref)
     {
       if (obj_ref)
       {
@@ -80,11 +80,11 @@
     }
 
     //Add an IDREF to the IDREF map
-    void add_idref (XMLSchema::NCName<wchar_t> idref, XSCRT::Type *obj_ref)
+    void add_idref (std::basic_string<ACE_TCHAR> idref, XSCRT::Type *obj_ref)
     {
       if (obj_ref)
       {
-        this->idref_map_.insert(std::pair<XMLSchema::NCName<wchar_t>, XSCRT::Type*>(idref, obj_ref));
+          this->idref_map_.insert(std::pair<std::basic_string<ACE_TCHAR>, XSCRT::Type*>(idref, obj_ref));
       }
       else 
       {
@@ -92,7 +92,6 @@
       }
       return;
     }
-
 
     //Sets the referencing elements XSCRT::Type::idref_ to point to the 
     //referenced element.
@@ -113,7 +112,7 @@
         {
           //Add the IDREF identifier and the reference to the 
           //identified object
-          std::basic_string<wchar_t> temp_id = id_iterator->first;
+          std::basic_string<ACE_TCHAR> temp_id = id_iterator->first;
           idref_iterator->second->set_idref(temp_id, id_iterator->second);
         }
         else
@@ -128,8 +127,8 @@
     //         ID attribute
     //idref_map_: multimap that maps the IDREF string to the 
     //            element with the IDREF attribute
-    std::map<XMLSchema::ID<wchar_t>, XSCRT::Type*> id_map_;
-    std::multimap<XMLSchema::NCName<wchar_t>, XSCRT::Type*> idref_map_;
+    std::map<std::basic_string<ACE_TCHAR>, XSCRT::Type*> id_map_;
+    std::multimap<std::basic_string<ACE_TCHAR>, XSCRT::Type*> idref_map_;
   };
 
 #endif /* _ID_MAP_HPP */
