@@ -44,6 +44,9 @@
     typedef ACE_TSS<ID_Map> TSS_ID_Map;
     typedef std::map<std::basic_string<ACE_TCHAR>, XSCRT::Type*>::iterator id_iterator;
     typedef std::multimap<std::basic_string<ACE_TCHAR>, XSCRT::Type*>::iterator idref_iterator;
+    typedef std::map<std::basic_string<ACE_TCHAR>, XSCRT::Type*> ID_MAP;
+    typedef std::multimap<std::basic_string<ACE_TCHAR>, XSCRT::Type*> IDREF_MAP;
+
 
     //Exception Classes
     //NULL_PTR_Entry thrown when a NULL PTR is added to the
@@ -70,7 +73,7 @@
     {
       if (obj_ref)
       {
-        this->id_map_[id] = obj_ref;
+        this->id_map_.insert (ID_MAP::value_type(id, obj_ref));
       }
       else
       {
@@ -84,7 +87,7 @@
     {
       if (obj_ref)
       {
-          this->idref_map_.insert(std::pair<std::basic_string<ACE_TCHAR>, XSCRT::Type*>(idref, obj_ref));
+          this->idref_map_.insert (IDREF_MAP::value_type(idref, obj_ref));
       }
       else 
       {
@@ -127,8 +130,8 @@
     //         ID attribute
     //idref_map_: multimap that maps the IDREF string to the 
     //            element with the IDREF attribute
-    std::map<std::basic_string<ACE_TCHAR>, XSCRT::Type*> id_map_;
-    std::multimap<std::basic_string<ACE_TCHAR>, XSCRT::Type*> idref_map_;
+    ID_MAP id_map_;
+    IDREF_MAP idref_map_;
   };
 
 #endif /* _ID_MAP_HPP */
