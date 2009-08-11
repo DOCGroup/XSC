@@ -54,7 +54,7 @@ options (po::options_description& d)
 {
 
   d.add_options ()
-    ("cxx-char-type", po::value<std::string> ()->default_value ("wchar_t"),
+    ("cxx-char-type", po::value<std::string> ()->default_value ("ACE_TCHAR"),
      "Generate code using provided character type instead of wchar_t.")
     ("cxx-generate-writer-types",
      "Generate code for serializing documents back to DOM.")
