@@ -3,7 +3,7 @@
 project : boost_filesystem, boost_regex, boost_program_options, utility, xsc_static, xsc_common {
   after += XSC_BE
 
-  specific (vc6, vc71, vc8, vc9, vc10, nmake) {
+  specific (prop:microsoft) {
     libs += XSC_BEs
   } else {
     libs += XSC_BE

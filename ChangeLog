@@ -1,3 +1,13 @@
+Wed Aug 12 15:14:19 UTC 2009  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * MPC/config/utility.mpb
+        * MPC/config/vcwarnings.mpb
+        * MPC/config/xsc_be.mpb
+        * MPC/config/xsc_static.mpb
+        * MPC/config/xscrt.mpb
+        * XSC/XSC.mpc
+          Use prop:microsoft to make these files easier to maintain
+
 Wed Aug 12 15:11:19 UTC 2009  Johnny Willemsen  <jwillemsen@remedy.nl>
 
         * XSCRT/XMLSchema/id_map.hpp:

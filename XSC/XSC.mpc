@@ -9,7 +9,7 @@ project (xsc) : xsc_utils, xsc_be, xerces {
   after    += libXSC libCXX libIDL
   includes += .
 
-  specific (vc6, vc7, vc71, vc8, vc9, vc10, nmake) {
+  specific (prop:microsoft) {
    libs += CXXs IDLs
   } else {
    libs += CXX IDL

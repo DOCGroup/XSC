@@ -3,7 +3,7 @@
 project {
   after += Utility
 
-  specific (vc6, vc7, vc71, vc8, vc9, vc10, nmake) {
+  specific (prop:microsoft) {
     libs += Utilitys
   } else {
     libs += Utility
