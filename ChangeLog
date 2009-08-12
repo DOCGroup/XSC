@@ -1,9 +1,14 @@
+Wed Aug 12 15:11:19 UTC 2009  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * XSCRT/XMLSchema/id_map.hpp:
+          Added missing Id tag
+
 Mon Aug  3 19:24:19 UTC 2009  William R. Otte  <wotte@dre.vanderbilt.edu>
 
         * contrib/Utility.mpc:
 
 	  utility no longer under ACE.
-	
+
 Sun Jun 21 21:22:20 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
 
         * contrib:
