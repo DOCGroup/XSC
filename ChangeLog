@@ -1,3 +1,9 @@
+Thu Aug 13 10:31:29 UTC 2009  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * XSCRT/XSCRT/Elements.hpp:
+          Removed vc6 support and added the needed compiler checks to
+          compile with all compilers
+
 Wed Aug 12 15:14:19 UTC 2009  Johnny Willemsen  <jwillemsen@remedy.nl>
 
         * MPC/config/utility.mpb
