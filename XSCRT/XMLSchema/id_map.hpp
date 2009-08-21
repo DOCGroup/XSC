@@ -97,6 +97,19 @@
       return;
     }
 
+    void resolve_single_idref (std::basic_string<ACE_TCHAR> idref, ::XSCRT::Type * element)
+    {
+       ID_Map::id_iterator id_iterator = this->id_map_.find(idref);
+       if (id_iterator != this->id_map_.end())
+       {
+         element->set_idref(idref, id_iterator->second);
+       }
+       else
+       {
+          throw Unresolved_IDREF();
+       }
+    }
+
     //Sets the referencing elements XSCRT::Type::idref_ to point to the
     //referenced element.
     //Note: The pointer is of type "XSCRT::Type*"
