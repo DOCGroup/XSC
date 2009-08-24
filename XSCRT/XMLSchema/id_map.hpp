@@ -56,7 +56,18 @@
 
     //Unresolved_IDREF thrown when there are IDREF's in the
     //XML document.
-    class Unresolved_IDREF {};
+    class Unresolved_IDREF {
+      public:
+        Unresolved_IDREF(std::basic_string<ACE_TCHAR> &message) : message(message)
+        {}
+        ~Unresolved_IDREF(){}
+        std::basic_string<ACE_TCHAR> get_message ( void ) 
+        {
+          return message;
+        }
+       private:
+         std::basic_string<ACE_TCHAR> message;
+    };
 
     //Only a default constructor and destructor are needed
     //Constructor
@@ -106,7 +117,7 @@
        }
        else
        {
-          throw Unresolved_IDREF();
+          throw Unresolved_IDREF(idref);
        }
     }
 
@@ -134,7 +145,8 @@
         }
         else
         {
-          throw Unresolved_IDREF();
+          std::basic_string<ACE_TCHAR> temp (idref_iterator->first);
+          throw Unresolved_IDREF(temp);
         }
       }
     }
