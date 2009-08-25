@@ -132,10 +132,13 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   //Name is the actual file name.
   std::string name (file_path.leaf ());
 
+  //Stores file suffixes (defaults are .hpp, ipp, and cpp)
   std::string hxx_suffix (vm["cxx-header-suffix"].as<std::string> ());
   std::string ixx_suffix (vm["cxx-inline-suffix"].as<std::string> ());
   std::string cxx_suffix (vm["cxx-source-suffix"].as<std::string> ());
 
+  //Specifies a regular expression of the form pattern/replacement
+  //when constructing the file names.
   std::string hxx_expr (vm["cxx-header-regex"].as<std::string> ());
   std::string ixx_expr (vm["cxx-inline-regex"].as<std::string> ());
   std::string cxx_expr (vm["cxx-source-regex"].as<std::string> ());
@@ -393,6 +396,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
       }
   }
 
+  //Program options are fed into the Context
   {
     ::Context ctx (hxx, char_type, export_symbol, nsm);
 
@@ -406,6 +410,8 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
     // Add additional information to the context:
     ctx.generate_ra_sequences (ra_sequences);
 
+
+  //Generate output files
     generate_forward (ctx, schema);
     generate_header (ctx, schema); //@@ move expr to ctx
 
