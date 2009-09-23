@@ -1,8 +1,15 @@
+Wed Sep 23 03:17:02 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
+
+        * MPC/config/utility.mpb:
+
+          Utility is no longer distributed with ACE. It is now located
+          in the contrib/ directory for XSC.
+
 Wed Sep 23 03:12:05 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
 
         * MPC/config/xscrt.mpb:
 
-          . Added ACE as a base project to fix compile/link errors.
+          Added ACE as a base project to fix compile/link errors.
 
 Fri Aug 14 10:12:29 UTC 2009  Johnny Willemsen  <jwillemsen@remedy.nl>
 
