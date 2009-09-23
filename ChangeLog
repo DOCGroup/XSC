@@ -1,3 +1,9 @@
+Wed Sep 23 03:12:05 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
+
+        * MPC/config/xscrt.mpb:
+
+          . Added ACE as a base project to fix compile/link errors.
+
 Fri Aug 14 10:12:29 UTC 2009  Johnny Willemsen  <jwillemsen@remedy.nl>
 
         * tools/Config_Handlers/XSCRT/Elements.hpp:
@@ -28,7 +34,7 @@ Mon Aug  3 19:24:19 UTC 2009  William R. Otte  <wotte@dre.vanderbilt.edu>
 
         * contrib/Utility.mpc:
 
-	  utility no longer under ACE.
+          utility no longer under ACE.
 
 Sun Jun 21 21:22:20 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
 
