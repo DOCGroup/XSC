@@ -70,16 +70,18 @@ namespace
         //Return referenced item if an IDREF
         if (idref_ptr != std::string::npos)
         {
-           os << "::XSCRT::Type* " << scope << "::get_" 
-              << id (name) << "_ptr ()\n" 
+           os << i
+              << "::XSCRT::Type* " << scope << "::get_"
+              << id (name) << "_ptr ()\n"
               << "{"
-              << "  std::basic_string<" << char_type << "> temp (" 
+              << "  std::basic_string<" << char_type << "> temp ("
               << id (name) << "().id());"
               << "return this->get_idref(temp.c_str());\n"
               << "}\n";
 
-           os << "void " << scope << "::set_" 
-              << id (name) << "_ptr (std::basic_string<ACE_TCHAR> idref)\n" 
+           os << i
+              << "void " << scope << "::set_"
+              << id (name) << "_ptr (std::basic_string<ACE_TCHAR> idref)\n"
               << "{"
               << "  ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());"
               << "  (*TSS_ID_Map)->resolve_single_idref(idref, this);"
@@ -129,16 +131,18 @@ namespace
         */
         if (idref_ptr != std::string::npos)
         {
-           os << "::XSCRT::Type* " << scope << "::get_"
-              << id (name) << "_ptr ()\n" 
+           os << i
+              << "::XSCRT::Type* " << scope << "::get_"
+              << id (name) << "_ptr ()\n"
               << "{"
-              << "  std::basic_string<" << char_type << "> temp (" 
+              << "  std::basic_string<" << char_type << "> temp ("
               << id (name) << "().id());"
               << "return this->get_idref(temp.c_str());\n"
               << "}\n";
 
-           os << "void " << scope << "::set_"
-              << id (name) << "_ptr (std::basic_string<ACE_TCHAR> idref)\n" 
+           os << i
+              << "void " << scope << "::set_"
+              << id (name) << "_ptr (std::basic_string<ACE_TCHAR> idref)\n"
               << "{"
               << "  ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());"
               << "  (*TSS_ID_Map)->resolve_single_idref(idref, this);"
@@ -194,13 +198,16 @@ namespace
         // add IDREF access method
         if (idref_ptr != std::string::npos)
         {
-           os << "XSCRT::Type* " << scope << "::get_" << name << "_ptr ( std::basic_string<" << char_type << "> idref )"
+           os << i
+              << "XSCRT::Type* " << scope << "::get_" << name
+              << "_ptr ( std::basic_string<" << char_type << "> idref )"
               << "{"
               << "  return this->get_idref(idref.c_str());"
               << "}";
 
-           os << "void " << scope << "::set_"
-              << id (name) << "_ptr (std::basic_string<ACE_TCHAR> idref)\n" 
+           os << i
+              << "void " << scope << "::set_"
+              << id (name) << "_ptr (std::basic_string<ACE_TCHAR> idref)\n"
               << "{"
               << "  ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());"
               << "  (*TSS_ID_Map)->resolve_single_idref(idref, this);"
@@ -291,16 +298,18 @@ namespace
         //Return a pointer to the referenced item
         if (idref_ptr != std::string::npos)
         {
-           os << "::XSCRT::Type* " << scope << "::get_"
-              << id (name) << "_ptr ()\n" 
+           os << i
+              << "::XSCRT::Type* " << scope << "::get_"
+              << id (name) << "_ptr ()\n"
               << "{"
-              << "  std::basic_string<" << char_type << "> temp (" 
+              << "  std::basic_string<" << char_type << "> temp ("
               << id (name) << "().id());"
               << "return this->get_idref(temp.c_str());\n"
               << "}\n";
 
-           os << "void " << scope << "::set_"
-              << id (name) << "_ptr (std::basic_string<ACE_TCHAR> idref)\n" 
+           os << i
+              << "void " << scope << "::set_"
+              << id (name) << "_ptr (std::basic_string<ACE_TCHAR> idref)\n"
               << "{"
               << "  ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());"
               << "  (*TSS_ID_Map)->resolve_single_idref(idref, this);"
@@ -343,16 +352,18 @@ namespace
         //Return a pointer to the referenced item
         if (idref_ptr != std::string::npos)
         {
-           os << "::XSCRT::Type* " << scope << "::get_"
-              << id (name) << "_ptr ()\n" 
+           os << i
+              << "::XSCRT::Type* " << scope << "::get_"
+              << id (name) << "_ptr ()\n"
               << "{"
-              << "  std::basic_string<" << char_type << "> temp (" 
+              << "  std::basic_string<" << char_type << "> temp ("
               << id (name) << "().id());"
               << "return this->get_idref(temp.c_str());\n"
               << "}\n";
 
-           os << "void " << scope << "::set_"
-              << id (name) << "_ptr (std::basic_string<ACE_TCHAR> idref)\n" 
+           os << i
+              << "void " << scope << "::set_"
+              << id (name) << "_ptr (std::basic_string<ACE_TCHAR> idref)\n"
               << "{"
               << "  ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());"
               << "  (*TSS_ID_Map)->resolve_single_idref(idref, this);"

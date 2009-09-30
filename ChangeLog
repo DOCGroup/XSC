@@ -1,3 +1,10 @@
+Wed Sep 30 02:27:06 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
+
+        * XSC/be/CXX/Inline.cpp:
+
+          The C++ backend was not generating 'inline' keyword for the
+          set_*_ptr () and get_*_ptr () method.
+
 Wed Sep 23 03:17:02 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
 
         * MPC/config/utility.mpb:
