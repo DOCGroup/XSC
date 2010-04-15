@@ -2,6 +2,6 @@
 
 project {
   specific (prop:microsoft) {
-    compile_flags += /wd4290 /wd4800 /wd4250 /wd4355 /wd4251 /wd4275
+    DisableSpecificWarnings += 4290 4800 4250 4355 4251 4275
   }
 }

@@ -8,7 +8,7 @@ project : acelib, xerces, xsc_utils {
   staticflags  += XSCRT_AS_STATIC_LIBS
 
   specific (prop:microsoft) {
-    compile_flags += /wd4800
+    DisableSpecificWarnings += 4800
 
     libs += XSC_BEs
   } else {
