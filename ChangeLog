@@ -1,3 +1,9 @@
+Thu Apr 15 06:53:06 UTC 2010  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+	* MPC/config/vcwarnings.mpb:
+	* MPC/config/xscrt.mpb:
+          Updated disabling of msvc warnings
+
 Wed Sep 30 02:27:06 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
 
         * XSC/be/CXX/Inline.cpp:
