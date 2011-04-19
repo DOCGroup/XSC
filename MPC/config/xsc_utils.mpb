@@ -1,6 +1,6 @@
 // $Id$
 
-project {
+project : xsc_common {
   after += XSC_Utils
   libs  += XSC_Utils
 }
