@@ -14,7 +14,7 @@ namespace XSC
   class XSC_UTILS_Export XStr
   {
   public:
-    XStr() : _wstr(0L) { };
+    XStr (void);
 
     XStr (const char* str);
 
@@ -44,16 +44,28 @@ namespace XSC
 
     XMLCh operator [] (const int i) const;
 
-    operator const XMLCh* () const { return _wstr; };
+    operator const XMLCh* () const { return wstr_; };
 
     XMLCh * release (void);
 
+    /// Get the C string version of the XercesString.
+    const char * c_str (void);
+
   private:
+    /// Internal representation
+    XMLCh* wstr_;
 
-    XMLCh* _wstr; // Internal representation
-
+    /// The C string version of the XercesString.
+    char * cstr_;
   };
-
 }
+
+XSC_UTILS_Export bool operator == (const XSC::XStr & lhs, const XSC::XStr & rhs);
+XSC_UTILS_Export bool operator == (const XMLCh * lhs, const XSC::XStr & rhs);
+XSC_UTILS_Export bool operator == (const XSC::XStr & lhs, const XMLCh * rhs);
+
+XSC_UTILS_Export bool operator != (const XSC::XStr & lhs, const XSC::XStr & rhs);
+XSC_UTILS_Export bool operator != (const XMLCh * lhs, const XSC::XStr & rhs);
+XSC_UTILS_Export bool operator != (const XSC::XStr & lhs, const XMLCh * rhs);
 
 #endif /* _XERCESSTRING_H */
