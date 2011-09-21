@@ -10,4 +10,5 @@ project {
   }
 
   includes += $(XSC_ROOT)/contrib/utility
+  libpaths += $(XSC_ROOT)/contrib/utility
 }

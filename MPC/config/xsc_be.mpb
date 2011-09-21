@@ -9,13 +9,3 @@ project : boost_filesystem, boost_regex, boost_program_options, utility, xsc_sta
     libs += XSC_BE
   }
 }
-
-feature (externals) {
-  includes += $(XSC_ROOT)/contrib \
-              $(XSC_ROOT)/contrib/utility
-}
-
-feature (!externals) {
-  includes += $(CCF_ROOT) \
-              $(UTILITY_ROOT)
-}

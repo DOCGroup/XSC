@@ -1,9 +1,20 @@
+Wed Sep 21 05:29:26 UTC 2011  James H. Hill  <hillj at cs dot iupui dot edu>
+
+        * MPC/config/ccf_root.mpb:
+        * MPC/config/utility.mpb:
+        * MPC/config/xsc_be.mpb:
+        * XSC/be/CXX/libCXX.mpc:
+        * XSC/be/IDL/libIDL.mpc:
+
+	  Fixed build errors related to removing the CCF_ROOT
+	  environment variable.
+
 Wed Sep 21 04:47:13 UTC 2011  James H. Hill  <hillj at cs dot iupui dot edu>
 
         * XSC/XSC_BE.mpc:
         * XSC/utils/XSC_Utils.mpc:
 
-	  Removed dependency on ACE library.
+          Removed dependency on ACE library.
 
 Sat Jun  4 16:53:53 UTC 2011  James H. Hill  <hillj at cs dot iupui dot edu>
 

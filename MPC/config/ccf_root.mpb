@@ -1,0 +1,13 @@
+// $Id$
+
+project {
+  specific {
+    CCF_ROOT = $(XSC_ROOT)/contrib/CCF
+  }
+
+  verbatim (gnuace, top) {
+    CCF_ROOT = $(XSC_ROOT)/contrib/CCF
+  }
+
+  includes += $(XSC_ROOT)/contrib
+}
