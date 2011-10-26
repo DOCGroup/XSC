@@ -1,3 +1,9 @@
+Wed Oct 26 16:53:50 UTC 2011  James H. Hill  <hillj at cs dot iupui dot edu>
+
+        * MPC/config/xscrt.mpb:
+        
+          Updated the dependencies.
+
 Wed Sep 21 05:29:26 UTC 2011  James H. Hill  <hillj at cs dot iupui dot edu>
 
         * MPC/config/ccf_root.mpb:
@@ -6,8 +12,8 @@ Wed Sep 21 05:29:26 UTC 2011  James H. Hill  <hillj at cs dot iupui dot edu>
         * XSC/be/CXX/libCXX.mpc:
         * XSC/be/IDL/libIDL.mpc:
 
-	  Fixed build errors related to removing the CCF_ROOT
-	  environment variable.
+          Fixed build errors related to removing the CCF_ROOT
+          environment variable.
 
 Wed Sep 21 04:47:13 UTC 2011  James H. Hill  <hillj at cs dot iupui dot edu>
 

@@ -7,10 +7,12 @@ project : acelib, xerces, xsc_utils {
   dynamicflags += XSCRT_HAS_DLL
   staticflags  += XSCRT_AS_STATIC_LIBS
 
+  after += XSC_BE
+
   specific (prop:microsoft) {
     DisableSpecificWarnings += 4800
 
-    libs += XSC_BEs
+    libs  += XSC_BEs
   } else {
     libs += XSC_BE
   }
