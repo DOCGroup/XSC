@@ -4,6 +4,7 @@ project (XSC_BE): acedefaults, boost_filesystem, utility, xsc_utils, xsc_static,
   sharedname = XSC_BE
 
   dynamicflags += XSC_BE_BUILD_DLL
+  macros       += 'BOOST_FILESYSTEM_VERSION=2'
 
   includes += $(XSC_ROOT)/contrib
 
