@@ -1,6 +1,6 @@
 // $Id$
 
-project : boost_filesystem, boost_regex, boost_program_options, utility, xsc_static, xsc_common {
+project : ccf_root, boost_filesystem, boost_regex, boost_program_options, utility, xsc_static, xsc_common {
   after += XSC_BE
 
   specific (prop:microsoft) {

@@ -1,7 +1,15 @@
+Fri Dec 23 18:06:53 UTC 2011  James H. Hill  <hillj at cs dot iupui dot edu>
+
+        * MPC/config/xsc_be.mpb:
+        * XSC/be/CXX/libCXX.mpc:
+        * XSC/be/IDL/libIDL.mpc:
+
+          Fixed compilation errors related to project specification.
+
 Wed Oct 26 16:53:50 UTC 2011  James H. Hill  <hillj at cs dot iupui dot edu>
 
         * MPC/config/xscrt.mpb:
-        
+
           Updated the dependencies.
 
 Wed Sep 21 05:29:26 UTC 2011  James H. Hill  <hillj at cs dot iupui dot edu>

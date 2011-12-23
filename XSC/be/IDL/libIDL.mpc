@@ -1,9 +1,9 @@
 //$Id$
 
-project (libIDL) : ccf_root, xsc_be {
+project (libIDL) : xsc_be {
   staticname = IDL
 
   Source_Files {
-	  .
+    .
   }
 }

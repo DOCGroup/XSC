@@ -1,9 +1,9 @@
 //$Id$
 
-project(libCXX) : ccf_root, boost_filesystem, xsc_be {
+project(libCXX) : boost_filesystem, xsc_be {
   staticname = CXX
 
   Source_Files {
-	  .
+    .
   }
 }
