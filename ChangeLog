@@ -1,3 +1,10 @@
+Wed May  2 05:12:20 UTC 2012  Dennis Feiock <dfeiock at iupui dot edu>
+
+        * MPC/config/xsc_be.mpb:
+
+          Added boost_system base project to fix compilation errors
+          with Boost 1.48.0
+
 Fri Dec 23 18:19:52 UTC 2011  James H. Hill  <hillj at cs dot iupui dot edu>
 
         * MPC/config/xsc_be.mpb:
