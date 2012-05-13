@@ -1,3 +1,8 @@
+Sun May 13 12:46:15 UTC 2012  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * XSC/XSC_BE.mpc:
+          XSC does't use ACE
+
 Wed May  2 05:12:20 UTC 2012  Dennis Feiock <dfeiock at iupui dot edu>
 
         * MPC/config/xsc_be.mpb:
