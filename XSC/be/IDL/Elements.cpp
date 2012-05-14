@@ -316,7 +316,7 @@ namespace IDL
 
   namespace
   {
-    const wchar_t* idl2_keywordsK[] = {
+    const wchar_t* idl2_keywords[] = {
       L"abstract",
       L"any",
       L"attribute",
