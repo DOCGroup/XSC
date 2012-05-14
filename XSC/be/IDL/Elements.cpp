@@ -316,7 +316,7 @@ namespace IDL
 
   namespace
   {
-    wchar_t* idl2_keywords[] = {
+    const wchar_t* idl2_keywordsK[] = {
       L"abstract",
       L"any",
       L"attribute",
@@ -371,7 +371,7 @@ namespace IDL
       L"wstring"
     };
 
-    wchar_t* idl3_keywords[] = {
+    const wchar_t* idl3_keywords[] = {
       L"component",
       L"consumes",
       L"emits",
@@ -386,7 +386,7 @@ namespace IDL
       L"uses"
     };
 
-    wchar_t* cxx_keywords[] = {
+    const wchar_t* cxx_keywords[] = {
       L"int"
     };
 
