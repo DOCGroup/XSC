@@ -1,6 +1,6 @@
 // $Id$
 
-project (XSC_Utils) : acedefaults, xsc_common {
+project (XSC_Utils) : xsc_common {
   sharedname   = XSC_Utils
   dynamicflags += XSC_UTILS_BUILD_DLL
 

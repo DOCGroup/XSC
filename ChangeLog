@@ -1,3 +1,8 @@
+Mon May 14 14:00:54 UTC 2012  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * XSC/utils/XSC_Utils.mpc:
+          XSC does't use ACE
+
 Sun May 13 12:46:15 UTC 2012  Johnny Willemsen  <jwillemsen@remedy.nl>
 
         * XSC/XSC_BE.mpc:
