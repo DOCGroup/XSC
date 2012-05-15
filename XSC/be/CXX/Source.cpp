@@ -99,7 +99,7 @@ namespace
             os << "std::basic_string<ACE_TCHAR> temp (" << id(name);
             os << "_.back()->id().c_str());\n";
           }
-          
+
           //If there are more than one, then the last added IDREF is added to the ID_Map
           os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_idref("
              << "temp, dynamic_cast<XSCRT::Type*> (this));\n";
@@ -140,14 +140,14 @@ namespace
           {
             os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name) << "_).c_str()));";
           }
-          else 
+          else
           {
              os << "std::basic_string<" << this->char_type << "> temp ((*" << id(name) << "_).c_str());";
           }
              os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_id(temp"
               << ", dynamic_cast<XSCRT::Type*> (this));";
         }
-        else 
+        else
         {
           if (this->char_type == char_compare)
           {
@@ -159,7 +159,7 @@ namespace
             os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_WCHAR_TO_TCHAR (" << id(name);
             os << "_.back()->c_str()));\n";
           }
-          else 
+          else
           {
             os << "std::basic_string<" << this->char_type <<"> temp (" << id(name);
             os << "_.back()->c_str());\n";
@@ -191,7 +191,7 @@ namespace
 
       //@@ need to use FQ-names.
       //
-      os << "if (n == " << L << "\"" << name << "\")"
+      os << "if (n == ACE_TEXT(" << L << "\"" << name << "\"))"
          << "{";
 
       if (a.optional ())
@@ -255,7 +255,7 @@ namespace
         {
             os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name) << "_).c_str()));";
         }
-        else 
+        else
         {
            os << "std::basic_string<" << this->char_type << "> temp ((*" << id(name) << "_).c_str());";
         }
@@ -1085,7 +1085,7 @@ namespace
     virtual void
     traverse (Type& c)
     {
-      if (c.named ()) 
+      if (c.named ())
         name = id (c.name ());
 
       if (!name.empty ())
@@ -1252,7 +1252,7 @@ namespace
 
     Traversal::Names names_elements_;
     Traversal::Names names_attributes_;
-  
+
     Element element_;
     Attribute attribute_;
 

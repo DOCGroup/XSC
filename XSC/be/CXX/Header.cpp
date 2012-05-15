@@ -96,7 +96,7 @@ namespace
         else
           container = L"::std::list";
 
-        os << comma () 
+        os << comma ()
            << container << "< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > > const& "
            << name << "__";
       }
@@ -181,7 +181,7 @@ namespace
       os << "// " << name << endl
          << "// " << endl
          << "public:" << endl;
-      
+
 
       if (c.max () != 1)
       {
@@ -298,7 +298,7 @@ namespace
         os << type << " const& " << id (name) << " () const;";
         os << type << "& " << id (name) << " ();";
         os << "void " << id (name) << " (" << type << " const& );";
-        
+
         //Added for IDREF case
         if (idref_ptr != std::string::npos)
         {
@@ -316,7 +316,7 @@ namespace
         os << type << " const& " << id (name) << " () const;";
         os << type << "& " << id (name) << " ();";
         os << "void " << id (name) << " (" << type << " const& );";
-        
+
         //Added for IDREF case
         if (idref_ptr != std::string::npos)
         {
@@ -362,7 +362,7 @@ namespace
     {
       // We need to get the name of the element. The name would
       // be already set if it was an anonymous type.
-      if (c.named ()) 
+      if (c.named ())
         name = id (c.name ());
 
       // We only continue if we have a valid name.
@@ -392,9 +392,9 @@ namespace
          << endl;
       os << "public:" << endl
          << "typedef ACE_Refcounted_Auto_Ptr < " << c.name () << ", ACE_Null_Mutex > _ptr;"
-	 << endl;
+         << endl;
     }
-    
+
     virtual void
     inherits_post (Type &c)
     {
@@ -612,12 +612,12 @@ namespace
 
       os << id (e.name ()) << "_l";
     }
-    
+
     void reset (void)
     {
       first_ = true;
     }
-    
+
   private:
     /// Controls how commas are printed in the enumeration list.
     bool first_;
@@ -639,7 +639,7 @@ namespace
     virtual void
     traverse (Type& e)
     {
-      if (e.named ()) 
+      if (e.named ())
         name = id (e.name ());
 
       os << "class " << ex << name << " : public ::XSCRT::Type"
@@ -664,7 +664,7 @@ namespace
 
       os << "enum Value"
          << "{";
-      
+
       label_.reset ();
       names (e, names_labels_);
 
@@ -698,26 +698,26 @@ namespace
         os << "// read " << endl
            << "//" << endl;
         reader = 1;
-        
+
         os << "public:" << endl;
         os << "static bool " << endl
            << "read_" << name
            << " (::XMLSchema::CDR_InputStream &,"
            << endl;
-        
+
         for (size_t j =0; j < name.length () + 5; j++)
           os << " ";
-        
+
         os << " ::XMLSchema::cdr_arg_traits < " << name
            << " >::inout_type);" << endl;
       }
-      
+
       // CDR Extraction Operators
       if (this->cdr_writer_generation_enabled ())
         {
           if (!reader)
             os << "public:" << endl;
-          
+
           os << "// write " << endl
              << "//" << endl
              << "bool" << endl
@@ -725,12 +725,12 @@ namespace
              << " (::XMLSchema::CDR_OutputStream &) const;"
              << endl;
         }
-      
+
       leave_scope ();
-      
+
       // End of class
       os << "};";
-      
+
       os << "bool " << ex
          << "operator== (" << name << " const &a, " << name << " const &b);"
          << endl;
@@ -745,7 +745,7 @@ namespace
            << endl
            << "             ::XMLSchema::cdr_arg_traits < "
            << name << " >::inout_type);";
-      
+
       if (this->cdr_writer_generation_enabled ())
         os << "extern bool" << endl
            << "operator << (::XMLSchema::CDR_OutputStream &,"
@@ -758,7 +758,7 @@ namespace
   private:
     string name;
     string ex;
-    
+
     Enumerator enumerator_;
     Traversal::Names names_enumerators_;
 
@@ -856,13 +856,13 @@ generate_header (Context& ctx,
   else
     ctx.os << "#include <list>" << endl;
 
-  //Added 
+  //Added
   ctx.os << "#include \"XMLSchema/Types.hpp\"" << endl
          << "#include \"XMLSchema/id_map.hpp\"" << endl;
-  
+
   ctx.os << "#include \"ace/Refcounted_Auto_Ptr.h\"" << endl
-	 << "#include \"ace/Null_Mutex.h\"" << endl 
-     << "#include \"ace/TSS_T.h\""<< endl 
+	 << "#include \"ace/Null_Mutex.h\"" << endl
+     << "#include \"ace/TSS_T.h\""<< endl
      << "#include \"ace/ace_wchar.h\"" << endl
      << "#include \"ace/Singleton.h\"" << endl << endl;
 
