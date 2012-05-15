@@ -4,8 +4,6 @@ project (xsc) : xsc_utils, xsc_be, xerces {
   exename   = xsc
   install   = $(XSC_ROOT)/bin
 
-  requires += exceptions
-
   after    += libXSC libCXX libIDL
   includes += .
 
