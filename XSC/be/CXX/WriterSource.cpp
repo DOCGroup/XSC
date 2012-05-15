@@ -52,8 +52,8 @@ namespace
            << name << "_pre (Type const&)"
            << "{"
            << "push_ (" << xml_element_type << " (" <<
-          L << '"' << name << '"' << ", " <<
-          (q ? L + L'"' + ns + L'"' + L", " : L"") <<
+          L << L" (\"" << name << L"\")" << ", " <<
+          (q ? L + L"\"" + ns + L"\"" + L", " : L"") <<
           "top_ ()));"
            << "}";
 
@@ -83,7 +83,7 @@ namespace
            << id (name) << " (Type const& o)"
            << "{"
            << "push_ (" << xml_element_type << " (" <<
-          L << '"' << name << '"' << ", " <<
+          L << L" (\"" << name << L"\")" << ", " <<
           (q ? L + L'"' + ns + L'"' + L", " : L"") <<
           "top_ ()));"
            << "Traversal::" << scope << "::" << id (name) << " (o);"
@@ -270,7 +270,7 @@ namespace
       string type (type_name (e));
 
       os << "if (o == " << type << "::" << id (name) << ") " <<
-        "s = " << L << '"' << name << '"' << ";"
+        "s = " << L << " (\"" << name << "\")" << ";"
          << "else ";
     }
   };

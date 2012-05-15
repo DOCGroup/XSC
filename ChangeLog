@@ -1,3 +1,10 @@
+Tue May 15 19:19:38 UTC 2012  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * XSC/be/CXX/Source.cpp:
+        * XSC/be/CXX/WriterSource.cpp:
+          Try to get the regeneration of the DAnCE config handlers working
+          again
+
 Tue May 15 19:06:36 UTC 2012  Johnny Willemsen  <jwillemsen@remedy.nl>
 
         * XSC/be/CXX/Elements.hpp:

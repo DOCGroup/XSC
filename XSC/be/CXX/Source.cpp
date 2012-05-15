@@ -1370,7 +1370,7 @@ namespace
     {
       string name (e.name ());
 
-      os << "if (v == " << L << "\"" << name << "\") v_ = " << id (name) << "_l;"
+      os << "if (v == " << L << " (\"" << name << "\")) v_ = " << id (name) << "_l;"
          << "else ";
     }
   };
