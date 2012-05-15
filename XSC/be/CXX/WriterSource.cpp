@@ -110,9 +110,9 @@ namespace
          << id (name) << " (Type const& o)"
          << "{"
          << xml_attribute_type << " a (" <<
-        L << '"' << name << '"' << ", " <<
-        (q ? L + L'"' + ns + L'"' + L", " : L"") <<
-        L << '"' << '"' << ", " << "top_ ());"
+        L << L" (\"" << name << L"\")" << ", " <<
+        (q ? L + L" (\"" + ns + L"\")" + L", " : L"") <<
+        L << L" (\"" << L"\")" << ", " << "top_ ());"
          << "attr_ (&a);"
          << "Traversal::" << scope << "::" << id (name) << " (o);"
          << "attr_ (0);"
@@ -520,7 +520,7 @@ namespace
          << id (name) << " (" << fq_name (t) << " const& s, xercesc::DOMDocument* d)"
          << "{"
          << xml_element_type << " e (d->getDocumentElement ());"
-         << "if (e.name () != " << L << "ACE_TEXT (\"" << name << "\"))"
+         << "if (e.name () != " << L << " (\"" << name << "\"))"
          << "{"
          << "throw 1;"
          << "}";

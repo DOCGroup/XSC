@@ -44,7 +44,7 @@ namespace
 
       //@@ need to use FQ-names.
       //
-      os << "if (n == ACE_TEXT(\"" << name << "\"))"
+      os << "if (n == \"" << name << "\")"
          << "{";
 
       if (c.max () != 1)
@@ -191,7 +191,7 @@ namespace
 
       //@@ need to use FQ-names.
       //
-      os << "if (n == ACE_TEXT(" << L << "\"" << name << "\"))"
+      os << "if (n == " << L << " (\"" << name << "\"))"
          << "{";
 
       if (a.optional ())

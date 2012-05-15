@@ -83,7 +83,7 @@ fq_name (SemanticGraph::Nameable& n, string const& nss, bool mangle)
 
   Scope& s (n.scope ());
 
-  if (!dynamic_cast<Schema*> (&s)) 
+  if (!dynamic_cast<Schema*> (&s))
     r = fq_name (s, nss);
 
   if (SemanticGraph::Namespace* ns =
@@ -103,7 +103,7 @@ fq_name (SemanticGraph::Nameable& n, string const& nss, bool mangle)
   else
   {
     r += L"::";
-    
+
     string name;
 
     if (mangle)
@@ -319,7 +319,7 @@ type_name (SemanticGraph::Type& t, string const& nss)
 
     return r;
   }
-  else 
+  else
     return anon_prefix_ + id (t.name ()) + anon_suffix_;
 }
 
@@ -363,7 +363,7 @@ type_name (SemanticGraph::Instance& i, string const& nss)
 
 namespace
 {
-  wchar_t* keywords[] = {
+  const wchar_t* keywords[] = {
     L"asm",
     L"auto",
     L"bool",

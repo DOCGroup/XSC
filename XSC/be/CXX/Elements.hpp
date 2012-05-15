@@ -44,11 +44,11 @@ public:
         xml_element_type (xml_element_type_),
         xml_attribute_type (xml_attribute_type_),
         char_type_ (char_type__),
-        L_ (char_type == L"wchar_t" ? L"L" : L""),
-        string_type_ (L"::std::basic_string< " + char_type + L" >"),
-        parser_type_ (L"::XSCRT::Parser< " + char_type + L" >"),
-        xml_element_type_ (L"::XSCRT::XML::Element< " + char_type + L" >"),
-        xml_attribute_type_ (L"::XSCRT::XML::Attribute< " + char_type + L" >"),
+        L_ (),
+        string_type_ (),
+        parser_type_ (),
+        xml_element_type_ (),
+        xml_attribute_type_ (),
         hxx_expr_ (),
         hxx_expr (hxx_expr_),
         hxx_suffix_ (),
@@ -65,6 +65,22 @@ public:
         cdr_writer_generation_ (0),
         generate_ra_sequences_ (false)
   {
+    if (char_type == L"wchar_t")
+      {
+        L_ = L"wchar_t";
+      }
+    else if (char_type == L"ACE_TCHAR")
+      {
+        L_ = L"ACE_TEXT";
+      }
+    else
+      {
+        L_ = L"";
+      }
+    string_type_ = L"::std::basic_string< " + char_type + L" >";
+    parser_type_ = L"::XSCRT::Parser< " + char_type + L" >";
+    xml_element_type_ = L"::XSCRT::XML::Element< " + char_type + L" >";
+    xml_attribute_type_ = L"::XSCRT::XML::Attribute< " + char_type + L" >";
   }
 
 protected:
@@ -101,7 +117,7 @@ protected:
     update_scope ();
   }
 
-  size_t 
+  size_t
   scope_depth (void)
   {
     return scope_stack.size ();
@@ -139,7 +155,7 @@ protected:
 
   string
   type_name (SemanticGraph::Type& t, string const& ns_suffix = L"");
- 
+
 protected:
   string
   fq_name (SemanticGraph::Nameable& n, string const& ns_suffix = L"", bool mangle = true);
@@ -240,7 +256,7 @@ private:
   string parser_type_;
   string xml_element_type_;
   string xml_attribute_type_;
-  
+
   std::string hxx_expr_;
 
 public:
@@ -248,7 +264,7 @@ public:
 
 private:
   std::string hxx_suffix_;
-  
+
 public:
   std::string &hxx_suffix;
 

@@ -45,11 +45,11 @@ namespace IDL
           xml_element_type (xml_element_type_),
           xml_attribute_type (xml_attribute_type_),
           char_type_ (char_type__),
-          L_ (char_type == L"wchar_t" ? L"L" : L""),
-          string_type_ (L"::std::basic_string< " + char_type + L" >"),
-          parser_type_ (L"::XSCRT::Parser< " + char_type + L" >"),
-          xml_element_type_ (L"::XSCRT::XML::Element< " + char_type + L" >"),
-          xml_attribute_type_ (L"::XSCRT::XML::Attribute< " + char_type + L" >"),
+          L_ (),
+          string_type_ (),
+          parser_type_ (),
+          xml_element_type_ (),
+          xml_attribute_type_ (),
           scope_stack (scope_stack_),
           anon_prefix_ (anon_prefix),
           anon_suffix_ (anon_suffix),
@@ -57,6 +57,22 @@ namespace IDL
           ns_suffix_ (ns_suffix__),
           ns_mapping_ (ns_mapping)
     {
+      if (char_type == L"wchar_t")
+        {
+          L_ = L"wchar_t";
+        }
+      else if (char_type == L"ACE_TCHAR")
+        {
+          L_ = L"ACE_TEXT";
+        }
+      else
+        {
+          L_ = L"";
+        }
+      string_type_ = L"::std::basic_string< " + char_type + L" >";
+      parser_type_ = L"::XSCRT::Parser< " + char_type + L" >";
+      xml_element_type_ = L"::XSCRT::XML::Element< " + char_type + L" >";
+      xml_attribute_type_ = L"::XSCRT::XML::Attribute< " + char_type + L" >";
     }
 
   protected:
