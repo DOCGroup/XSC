@@ -1,3 +1,9 @@
+Wed May 16 18:46:50 UTC 2012  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * XSC/be/CXX/Inline.cpp:
+          Prevent for self assignment, also fixes warning in the generated
+          code
+
 Wed May 16 16:33:59 UTC 2012  William R. Otte  <wotte@dre.vanderbilt.edu>
 
         * XSC/be/CXX/Header.cpp:

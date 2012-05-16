@@ -591,12 +591,15 @@ namespace
       os << i
          << scope << "& " << scope << "::" << endl
          << "operator= (" << type << " const& s)"
+         << "{"
+         << "if (&s != this)"
          << "{";
 
       inherits (c, assign_base_);
       names (c, assign_member_);
 
-      os << "return *this;"
+      os << "}"
+         << "return *this;"
          << "}";
 
       os << endl;
