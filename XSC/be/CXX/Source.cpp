@@ -568,11 +568,11 @@ namespace
     read_pointer_type (string &element_name, string &type)
     {
       os << "stream >> " << element_name << "_tmp;"
-   << "std::auto_ptr < " << type << "::CDR_Type__ > "
-   << "auto_" << element_name << " (" << element_name << "_tmp);"
-   << type << " " << element_name << " (" << element_name
-   << "_tmp);"
-   << endl;
+         << "std::auto_ptr < " << type << "::CDR_Type__ > "
+         << "auto_" << element_name << " (" << element_name << "_tmp);"
+         << type << " " << element_name << " (" << element_name
+         << "_tmp);"
+         << endl;
     }
 
     /*
@@ -583,9 +583,9 @@ namespace
     read_complex_type (string &element_name, string &type)
     {
       os << "stream >> " << element_name << ";"
-   << "std::auto_ptr < " << type << " > "
-   << "auto_" << element_name << " (" << element_name << ");"
-   << endl;
+         << "std::auto_ptr < " << type << " > "
+         << "auto_" << element_name << " (" << element_name << ");"
+         << endl;
     }
 
     /*
@@ -602,14 +602,14 @@ namespace
     read_simple_type (string &element_name, string &type)
     {
       if (type == L"::XMLSchema::boolean")
-  os << "stream.read_boolean (" << element_name
-     << "_tmp);";
+        os << "stream.read_boolean (" << element_name
+           << "_tmp);";
       else
-  os << "stream >> " << element_name << "_tmp;";
+        os << "stream >> " << element_name << "_tmp;";
 
       os << type << " " << element_name << " ("
-   << element_name << "_tmp);"
-   << endl;
+         << element_name << "_tmp);"
+         << endl;
     }
 
     void
@@ -622,16 +622,16 @@ namespace
       bool pointer_semantics = read_type_as_pointer (type);
 
       if (pointer_semantics)
-  os << type << "::CDR_Type__ *" << element_name << "_tmp (0)"
-     << ";" ;
+        os << type << "::CDR_Type__ *" << element_name << "_tmp (0)"
+           << ";" ;
       else
-  os << type << "::CDR_Type__ " << element_name << "_tmp"
-   << ";" ;
+        os << type << "::CDR_Type__ " << element_name << "_tmp"
+           << ";" ;
 
       if (pointer_semantics)
-  read_pointer_type (element_name, type);
+        read_pointer_type (element_name, type);
       else
-  read_simple_type (element_name, type);
+        read_simple_type (element_name, type);
 
       this->type_name_list_.push_back (element_name);
     }
@@ -642,7 +642,7 @@ namespace
       // Read the boolean value and then
       // read the attribute
       os << "bool " << element_name << "_p;"
-   << "stream.read_boolean (" << element_name << "_p);";
+         << "stream.read_boolean (" << element_name << "_p);";
 
       // For an optional attribute; declare it first
       // Again bear in mind that even for simple types
