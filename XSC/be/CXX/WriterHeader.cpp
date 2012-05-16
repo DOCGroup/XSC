@@ -263,7 +263,7 @@ namespace
     }
 
     virtual void
-    post (Type& c)
+    post (Type& )
     {
       os << "protected:" << endl
          << name_ << " ();"
@@ -295,7 +295,7 @@ namespace
     {
       string name ((this->name_ != L"") ? name_ : id (e.name ()));
       string type (type_name (e));
-      
+
       if (name == L"") name = L"BAD NAME";
 
       os << "struct " << name << " : Traversal::" << name << ", " << endl

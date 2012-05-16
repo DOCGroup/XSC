@@ -166,7 +166,7 @@ namespace
       string char_type (this->char_type);
 
       //Check if the type is an IDREF
-      int idref_ptr = 0;
+      size_t idref_ptr = 0;
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       idref_ptr = type.find(idref_str);
 
@@ -283,7 +283,7 @@ namespace
       string type (type_name (a));
 
       //Check if the type is an IDREF
-      int idref_ptr = 0;
+      size_t idref_ptr = 0;
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       idref_ptr = type.find(idref_str);
 
@@ -843,7 +843,7 @@ namespace
     std::string expr_;
   };
 }
-se
+
 void
 generate_header (Context& ctx,
                  SemanticGraph::Schema& schema)

@@ -47,7 +47,7 @@ namespace
     virtual void
     traverse (Type& c)
     {
-      if (c.named ()) 
+      if (c.named ())
         name_ = id (c.name ());
 
       if (!name_.empty ())
@@ -80,7 +80,7 @@ namespace
     }
 
     virtual void
-    inherits_none (Type& c)
+    inherits_none (Type& )
     {
       os << "nf.add_base (::XSCRT::ExtendedTypeInfo::Access::public_, "
          << "false, typeid (::XSCRT::Type));";
@@ -105,9 +105,9 @@ namespace
 
   private:
     string name_;
-    
+
     Base base_;
-    
+
     Traversal::Inherits inherits_;
 
     Traversal::Names names_anonymous_;
