@@ -1,3 +1,11 @@
+Wed May 16 11:56:25 UTC 2012  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * XSC/be/CXX/Header.cpp:
+        * XSC/be/CXX/WriterSource.cpp:
+        * XSCRT/XSCRT/Elements.hpp:
+        * contrib/CCF/CodeGenerationKit/Regex.hpp:
+          Fixes to the generated code
+
 Tue May 15 19:19:38 UTC 2012  Johnny Willemsen  <jwillemsen@remedy.nl>
 
         * XSC/be/CXX/Source.cpp:

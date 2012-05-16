@@ -52,8 +52,8 @@ namespace
            << name << "_pre (Type const&)"
            << "{"
            << "push_ (" << xml_element_type << " (" <<
-          L << L" (\"" << name << L"\")" << ", " <<
-          (q ? L + L"\"" + ns + L"\"" + L", " : L"") <<
+          L << L"(\"" << name << L"\")" << ", " <<
+          (q ? L + L"(\"" + ns + L"\")" + L", " : L"") <<
           "top_ ()));"
            << "}";
 
@@ -83,8 +83,8 @@ namespace
            << id (name) << " (Type const& o)"
            << "{"
            << "push_ (" << xml_element_type << " (" <<
-          L << L" (\"" << name << L"\")" << ", " <<
-          (q ? L + L'"' + ns + L'"' + L", " : L"") <<
+          L << L"(\"" << name << L"\")" << ", " <<
+          (q ? L + L"(\"" + ns + L"\")" + L", " : L"") <<
           "top_ ()));"
            << "Traversal::" << scope << "::" << id (name) << " (o);"
            << "pop_ ();"

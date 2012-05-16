@@ -400,7 +400,7 @@ namespace
     {
       os << "public:" << endl
          << "typedef ACE_Refcounted_Auto_Ptr < " << c.name () << ", ACE_Null_Mutex > _ptr;"
-	 << endl;
+         << endl;
     }
     // Helper function to determine if read/write & >> and <<
     // operators need to be generated. Here are the cases where
