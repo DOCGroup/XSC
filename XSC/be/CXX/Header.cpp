@@ -206,7 +206,7 @@ namespace
         os << endl
            << "protected:" << endl;
 
-	os <<  container << "< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > > " << id(name) << "_;";
+        os <<  container << "< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > > " << id(name) << "_;";
       }
       else if (c.min () == 0)
       {
@@ -843,7 +843,7 @@ namespace
     std::string expr_;
   };
 }
-
+se
 void
 generate_header (Context& ctx,
                  SemanticGraph::Schema& schema)

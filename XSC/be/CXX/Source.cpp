@@ -864,20 +864,20 @@ namespace
 
       if (e.max () != 1)
       {
-  // Sequence: Read sequences after creating
-  // the element
-  // Safe hack: Memory not managed by container.
-  // released elsewhere. So this is safe
-  this->complex_list_.push_back (&e);
+        // Sequence: Read sequences after creating
+        // the element
+        // Safe hack: Memory not managed by container.
+        // released elsewhere. So this is safe
+        this->complex_list_.push_back (&e);
       }
       else if (e.min () == 0)
       {
-  this->optional_element_list_.push_back (&e);
+        this->optional_element_list_.push_back (&e);
       }
       else
       {
-  // Read a generic type
-  read_generic_type (e,0);
+        // Read a generic type
+        read_generic_type (e,0);
       }
     }
 
