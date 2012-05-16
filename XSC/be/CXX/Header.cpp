@@ -391,7 +391,7 @@ namespace
          << "typedef ::XSCRT::Type Base;"
          << endl;
       os << "public:" << endl
-         << "typedef ACE_Refcounted_Auto_Ptr < " << c.name () << ", ACE_Null_Mutex > _ptr;"
+         << "typedef ACE_Refcounted_Auto_Ptr < " << type_name (c) << ", ACE_Null_Mutex > _ptr;"
          << endl;
     }
 
@@ -399,7 +399,7 @@ namespace
     inherits_post (Type &c)
     {
       os << "public:" << endl
-         << "typedef ACE_Refcounted_Auto_Ptr < " << c.name () << ", ACE_Null_Mutex > _ptr;"
+         << "typedef ACE_Refcounted_Auto_Ptr < " << type_name(c) << ", ACE_Null_Mutex > _ptr;"
          << endl;
     }
     // Helper function to determine if read/write & >> and <<
