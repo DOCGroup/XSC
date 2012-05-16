@@ -946,7 +946,7 @@ namespace XSC
 	  {
 	    push_cardinality (0, std::numeric_limits <unsigned long>::max ());
 	  }
-	else 
+	else
 	  {
 	    string value (c[L"maxOccurs"]);
 	    std::wistringstream istr (value);
@@ -958,14 +958,14 @@ namespace XSC
     else
       push_cardinality (0,
 			c[L"maxOccurs"] && c[L"maxOccurs"] != L"1" ? 0 : max ());
-    
+
     if (c[L"maxOccurs"] && c[L"maxOccurs"] != L"1")
       {
 	if (trace_) wcout << "choice cardinality is more than one" << endl;
       }
     else
       if (trace_) wcout << "choice cardinality is one" << endl;
-	
+
 
     push (c);
 
@@ -1056,7 +1056,11 @@ namespace XSC
     XML::Element e (next ());
     string name (e.name ());
 
-    if (name == L"extension") complex_content_extension (e); else
+    if (name == L"extension")
+      {
+        complex_content_extension (e);
+      }
+    else
       {
         wcerr << "expected `extension' instead of " << name << endl;
         return;
@@ -1129,7 +1133,7 @@ namespace XSC
       {
 	string value = e[L"minOccurs"];
 	std::wistringstream istr (value);
-	
+
 	istr >> min;
       }
 
@@ -1141,11 +1145,11 @@ namespace XSC
 	{
 	  string value (e[L"maxOccurs"]);
 	  std::wistringstream istr (value);
-	  
+
 	  istr >> max;
 	}
     }
-    
+
     bool qualified (global ? true : qualify_element_);
 
     if (string form = e[L"form"])
