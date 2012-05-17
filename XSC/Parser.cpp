@@ -834,8 +834,26 @@ namespace XSC
   {
     // todo
     wcerr << "complex content restriction is not supported yet" << endl;
-    return 0;
+
+    Type* rv (0);
+
+    push (r);
+
+    annotation ();
+
+//     if (more ())
+//       {
+//         XML::Element e (next ());
+//
+//         string base1 (fq_name (e, e[L"base"]));
+//           wcout << "restriction base: " << base1 << endl;
+//       }
+
+    pop ();
+
+    return rv;
   }
+
   void Parser::
   enumeration (XML::Element const& e)
   {
@@ -953,30 +971,29 @@ namespace XSC
     // All choice elements have a min cardinality of 0
     if (c[L"maxOccurs"])
       {
-	if (c[L"maxOccurs"] == L"unbounded")
-	  {
-	    push_cardinality (0, std::numeric_limits <unsigned long>::max ());
-	  }
-	else
-	  {
-	    string value (c[L"maxOccurs"]);
-	    std::wistringstream istr (value);
-	    unsigned long max;
-	    istr >> max;
-	    push_cardinality (0, max);
-	  }
+        if (c[L"maxOccurs"] == L"unbounded")
+          {
+            push_cardinality (0, std::numeric_limits <unsigned long>::max ());
+          }
+        else
+          {
+            string value (c[L"maxOccurs"]);
+            std::wistringstream istr (value);
+            unsigned long max;
+            istr >> max;
+            push_cardinality (0, max);
+          }
       }
     else
       push_cardinality (0,
-			c[L"maxOccurs"] && c[L"maxOccurs"] != L"1" ? 0 : max ());
+        c[L"maxOccurs"] && c[L"maxOccurs"] != L"1" ? 0 : max ());
 
     if (c[L"maxOccurs"] && c[L"maxOccurs"] != L"1")
       {
-	if (trace_) wcout << "choice cardinality is more than one" << endl;
+        if (trace_) wcout << "choice cardinality is more than one" << endl;
       }
     else
       if (trace_) wcout << "choice cardinality is one" << endl;
-
 
     push (c);
 
