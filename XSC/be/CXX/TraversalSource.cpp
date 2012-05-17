@@ -486,7 +486,7 @@ namespace
     }
 
     virtual void
-    post (Type& c)
+    post (Type&)
     {
       // string name (id (name_));
 

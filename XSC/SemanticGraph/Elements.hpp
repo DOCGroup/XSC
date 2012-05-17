@@ -106,7 +106,7 @@ namespace XSC
       }
 
 
-      // This is a bunch of experimantal sink functions that allow
+      // This is a bunch of experimental sink functions that allow
       // extensions in the form of one-way edges (see Executor stuff
       // in CIDL for example).
       //
@@ -200,7 +200,7 @@ namespace XSC
       Scope* scope_;
       Nameable* named_;
       Name_ name_;
-      bool anonymous_;      
+      bool anonymous_;
     };
 
 

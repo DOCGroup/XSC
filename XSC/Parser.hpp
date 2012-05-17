@@ -261,7 +261,10 @@ namespace XSC
     simple_type (XML::Element const&);
 
     SemanticGraph::Type*
-    restriction (XML::Element const&);
+    simple_content_restriction (XML::Element const&);
+
+    SemanticGraph::Type*
+    complex_content_restriction (XML::Element const&);
 
     void
     enumeration (XML::Element const&);

@@ -745,7 +745,11 @@ namespace XSC
 
     string name (e.name ());
 
-    if (name == L"restriction") r = restriction (e); else
+    if (name == L"restriction")
+      {
+        r = simple_content_restriction (e);
+      }
+    else
       {
         wcerr << "expected `restriction' instead of " << name
               << endl;
@@ -757,7 +761,7 @@ namespace XSC
   }
 
   Type* Parser::
-  restriction (XML::Element const& r)
+  simple_content_restriction (XML::Element const& r)
   {
     Type* rv (0);
 
@@ -825,6 +829,12 @@ namespace XSC
     return rv;
   }
 
+  Type* Parser::
+  complex_content_restriction (XML::Element const& r)
+  {
+    // todo
+    return 0;
+  }
   void Parser::
   enumeration (XML::Element const& e)
   {
@@ -1032,7 +1042,9 @@ namespace XSC
     string name (e.name ());
 
     if (name == L"extension")
-      simple_content_extension (e);
+      {
+        simple_content_extension (e);
+      }
     else
       {
         wcerr << "expected `extension' instead of " << name << endl;
