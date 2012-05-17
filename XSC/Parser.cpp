@@ -833,6 +833,7 @@ namespace XSC
   complex_content_restriction (XML::Element const& r)
   {
     // todo
+    wcerr << "complex content restriction is not supported yet" << endl;
     return 0;
   }
   void Parser::
@@ -1071,6 +1072,10 @@ namespace XSC
     if (name == L"extension")
       {
         complex_content_extension (e);
+      }
+    else if (name == L"restriction")
+      {
+        complex_content_restriction (e);
       }
     else
       {
