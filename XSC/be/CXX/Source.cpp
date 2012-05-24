@@ -71,8 +71,8 @@ namespace
       }
 
       //Check if idref or id is the type
-      int idref_ptr = 0;
-      int id_ptr = 0;
+      string::size_type idref_ptr = 0;
+      string::size_type id_ptr = 0;
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       std::wstring id_str (L"::XMLSchema::ID<");
       std::wstring wchar_t_compare (L"wchar_t");
@@ -207,8 +207,8 @@ namespace
       }
 
       //Check if idref or id is the type
-      int idref_ptr = 0;
-      int id_ptr = 0;
+      string::size_type idref_ptr = 0;
+      string::size_type id_ptr = 0;
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       std::wstring id_str (L"::XMLSchema::ID<");
       std::wstring wchar_t_compare (L"wchar_t");
