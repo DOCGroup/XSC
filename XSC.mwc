@@ -11,6 +11,7 @@ workspace (XSC) {
     XSC/be
   }
 
+  $(ACE_ROOT)/ace/ace.mpc
   XSC/utils
   XSC/XSC.mpc
 }
