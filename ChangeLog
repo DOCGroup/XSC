@@ -1,3 +1,11 @@
+Thu May 24 06:05:57 UTC 2012  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * XSC.mwc:
+          Added the ace library to this workspace
+
+        * XSC/utils/XSC_Utils.mpc:
+          Added acelib again, the template code uses ace very minimal
+
 Thu May 24 05:58:54 UTC 2012  Johnny Willemsen  <jwillemsen@remedy.nl>
 
         * default.features:
