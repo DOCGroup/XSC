@@ -1,3 +1,9 @@
+Thu May 24 06:45:06 UTC 2012  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * XSC/Parser.cpp:
+        * XSC/Parser.hpp:
+          Fixed argument not used warnings
+
 Thu May 24 06:40:02 UTC 2012  Johnny Willemsen  <jwillemsen@remedy.nl>
 
         * XSC/be/CXX/Inline.cpp:

@@ -203,7 +203,11 @@ namespace XSC
     string
     ns_prefix (Element const& e,
                string const& ns,
-               bool use_default)
+               bool
+#if XERCES_VERSION_MAJOR != 3
+                    use_default
+#endif
+               )
     {
       XMLCh* p (transcode (ns));
 

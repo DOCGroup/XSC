@@ -1326,7 +1326,7 @@ namespace XSC
 
 
   void Parser::
-  attribute_group (XML::Element const &a, bool global)
+  attribute_group (XML::Element const &a, bool)
   {
     string ref (a[L"ref"]);
     string name (a[L"name"]);
