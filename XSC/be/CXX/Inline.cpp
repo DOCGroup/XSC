@@ -42,7 +42,7 @@ namespace
       bool ra_sequence (this->generate_ra_sequences_);
 
       //Check if the type is an IDREF
-      int idref_ptr = 0;
+      std::string::size_type idref_ptr = 0;
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       idref_ptr = type.find(idref_str);
 
@@ -268,7 +268,7 @@ namespace
          << "// " << endl;
 
       //Check if the type is an IDREF
-      int idref_ptr = 0;
+      std::string::size_type idref_ptr = 0;
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       idref_ptr = type.find(idref_str);
 
@@ -295,7 +295,7 @@ namespace
            << "return *" << id (name) << "_;"
            << "}";
 
-        //Return a pointer to the referenced item
+        // Return a pointer to the referenced item
         if (idref_ptr != std::string::npos)
         {
            os << i
