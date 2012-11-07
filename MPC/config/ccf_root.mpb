@@ -2,12 +2,12 @@
 
 project {
   specific {
-    CCF_ROOT = $(XSC_ROOT)/contrib/CCF
+    CCF_ROOT = $(XSC_ROOT)/contrib/CCF/CCF/CCF
   }
 
   verbatim (gnuace, top) {
-    CCF_ROOT = $(XSC_ROOT)/contrib/CCF
+    CCF_ROOT = $(XSC_ROOT)/contrib/CCF/CCF/CCF
   }
 
-  includes += $(XSC_ROOT)/contrib
+  includes += $(XSC_ROOT)/contrib/CCF/CCF
 }

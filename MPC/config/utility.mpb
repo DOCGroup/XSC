@@ -9,6 +9,6 @@ project {
     libs += Utility
   }
 
-  includes += $(XSC_ROOT)/contrib/utility
-  libpaths += $(XSC_ROOT)/contrib/utility
+  includes += $(XSC_ROOT)/contrib/CCF/utility
+  libpaths += $(XSC_ROOT)/contrib/CCF/utility
 }

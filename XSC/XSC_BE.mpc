@@ -6,7 +6,7 @@ project (XSC_BE): acelib, boost_filesystem, utility, xsc_utils, xsc_static, xsc_
   dynamicflags += XSC_BE_BUILD_DLL
   macros       += 'BOOST_FILESYSTEM_VERSION=2'
 
-  includes += $(XSC_ROOT)/contrib
+  includes += $(XSC_ROOT)/contrib/CCF/CCF
 
   Source_Files {
     .
