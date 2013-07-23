@@ -327,7 +327,7 @@ namespace XSC
         if (begin != end)
         {
           names_pre (s);
-          iterate_and_traverse (begin, end, this->edge_traverser ());
+          this->iterate_and_traverse (begin, end, this->edge_traverser ());
           names_post (s);
         }
         else
@@ -339,7 +339,7 @@ namespace XSC
       virtual void
       names (T& s, EdgeDispatcherBase& d)
       {
-        iterate_and_traverse (s.names_begin (), s.names_end (), d);
+        this->iterate_and_traverse (s.names_begin (), s.names_end (), d);
       }
 
       virtual void

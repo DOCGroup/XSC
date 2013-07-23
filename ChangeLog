@@ -1,3 +1,16 @@
+Tue Jul 23 09:42:03 UTC 2013  Johnny Willemsen  <jwillemsen@remedy.nl>
+
+        * XSC/Traversal/Elements.hpp:
+        * XSC/be/CXX/Generator.cpp:
+        * XSC/be/CXX/Header.cpp:
+        * XSC/be/CXX/TraversalHeader.cpp:
+        * XSC/be/CXX/TypeInfoSource.cpp:
+        * XSC/be/CXX/WriterHeader.cpp:
+        * XSC/be/IDL/Generator.cpp:
+        * XSC/xsc.cpp:
+          Fixes to get XSC compiling with gcc 4.7 and also update the
+          generated includes to point now to ACE
+
 Thu May 24 13:23:42 UTC 2012  Johnny Willemsen  <jwillemsen@remedy.nl>
 
         * XSC/XSC_BE.mpc:

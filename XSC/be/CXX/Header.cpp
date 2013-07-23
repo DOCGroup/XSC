@@ -857,11 +857,11 @@ generate_header (Context& ctx,
     ctx.os << "#include <list>" << endl;
 
   //Added
-  ctx.os << "#include \"XMLSchema/Types.hpp\"" << endl
-         << "#include \"XMLSchema/id_map.hpp\"" << endl;
+  ctx.os << "#include \"ace/XML_Utils/XMLSchema/Types.hpp\"" << endl
+         << "#include \"ace/XML_Utils/XMLSchema/id_map.hpp\"" << endl;
 
   ctx.os << "#include \"ace/Refcounted_Auto_Ptr.h\"" << endl
-	 << "#include \"ace/Null_Mutex.h\"" << endl
+   << "#include \"ace/Null_Mutex.h\"" << endl
      << "#include \"ace/TSS_T.h\""<< endl
      << "#include \"ace/ace_wchar.h\"" << endl
      << "#include \"ace/Singleton.h\"" << endl << endl;
@@ -870,8 +870,8 @@ generate_header (Context& ctx,
   // enabled
   if (ctx.cdr_reader_generation_enabled () ||
       ctx.cdr_writer_generation_enabled ())
-    ctx.os << "#include \"XMLSchema/CDR_Types.hpp\"" << endl
-           << "#include \"id_map.hpp\"" << endl
+    ctx.os << "#include \"ace/XML_Utils/XMLSchema/CDR_Types.hpp\"" << endl
+           << "#include \"ace/XML_Utils/XMLSchema/id_map.hpp\"" << endl
            << "#include \"ace/TSS_T.h\""<< endl
            << endl;
 

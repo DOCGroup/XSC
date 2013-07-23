@@ -329,7 +329,7 @@ namespace
 
       os << "typedef" << endl
          << "::XMLSchema::Traversal::Traverser< " << type << " >" << endl
-	 << name << ";"
+   << name << ";"
          << endl;
     }
 
@@ -407,7 +407,7 @@ namespace
 void
 generate_traversal_header (Context& ctx, SemanticGraph::Schema& schema)
 {
-  ctx.os << "#include \"XMLSchema/Traversal.hpp\"" << endl
+  ctx.os << "#include \"ace/XML_Utils/XMLSchema/Traversal.hpp\"" << endl
          << endl;
 
   Traversal::Schema traverser;

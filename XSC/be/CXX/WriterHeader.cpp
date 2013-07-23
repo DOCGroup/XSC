@@ -427,7 +427,7 @@ namespace
 void
 generate_writer_header (Context& ctx, SemanticGraph::Schema& schema)
 {
-  ctx.os << "#include \"XMLSchema/Writer.hpp\"" << endl
+  ctx.os << "#include \"ace/XML_Utils/XMLSchema/Writer.hpp\"" << endl
          << endl;
 
   {

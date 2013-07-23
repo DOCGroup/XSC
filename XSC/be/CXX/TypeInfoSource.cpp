@@ -222,7 +222,7 @@ namespace
 void
 generate_type_info_source (Context& ctx, SemanticGraph::Schema& schema)
 {
-  ctx.os << "#include \"XMLSchema/TypeInfo.hpp\"" << endl
+  ctx.os << "#include \"ace/XML_Utils/XMLSchema/TypeInfo.hpp\"" << endl
          << endl;
 
   Traversal::Schema traverser;

@@ -4,10 +4,10 @@
 /**
  * @file    xsc.cpp
  *
- * XSC main source file.  Takes in command line arguments and an XML Schema and 
- * outputs a C++ class hierarchy that will allow for parsing and interaction of XML 
+ * XSC main source file.  Takes in command line arguments and an XML Schema and
+ * outputs a C++ class hierarchy that will allow for parsing and interaction of XML
  * documents that match the supplied schema.
- * 
+ *
  * XSC Basic Run :
  * 1. Creates and stores program options.
  * 2. Parses Command Line Arguments.
@@ -19,7 +19,7 @@
  *    (a)An input file is not supplied (*.xsd)
  *    (b)An incorrect program option is entered at the command line.
  *    (c)An error occurs during the parsing of the supplied schema.
- * 
+ *
  * @author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
  * cvs-id    : $Id$
  */
@@ -30,6 +30,7 @@
 #include <vector>
 
 #include "boost/program_options.hpp"
+#include "boost/exception/all.hpp"
 #include "CCF/CompilerElements/FileSystem.hpp"
 #include "XSC/Parser.hpp"
 #include "XSC/be/CXX/Validator.hpp"
@@ -286,7 +287,7 @@ int main (int argc, char* argv[])
       //Create a CXX Generator object.
       CXX_Generator cxx;
 
-      //Generate the output based on the Schema (created from the 
+      //Generate the output based on the Schema (created from the
       //parsing of the provided schema)
       cxx.generate (vm, *s, tu);
     }
@@ -295,17 +296,22 @@ int main (int argc, char* argv[])
       //Create an IDL Generator object
       IDL::Generator idl;
 
-      //Generate the output based on the Schema (created from the 
+      //Generate the output based on the Schema (created from the
       //parsing of the provided schema)
       idl.generate (vm, *s, tu);
     }
 
     return 0;
   }
-  catch (boost::bad_any_cast &)
+  catch (const boost::bad_any_cast &)
     {
       wcerr << "Bad program option" << endl;
     }
+//   catch (const boost::exception &ex)
+//     {
+//       std::cerr << boost::diagnostic_information (ex);
+//       wcerr << "Exception " << endl;
+//     }
   catch (...)
   {
     wcerr << "caught unknown exception" << endl;

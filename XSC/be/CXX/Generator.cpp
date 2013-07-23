@@ -230,7 +230,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
           return;
         }
 
-        //If the banner is not empty, put the text into the 
+        //If the banner is not empty, put the text into the
         //header file.
         hxx << b.rdbuf ();
       }
@@ -257,8 +257,8 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
                 << endl;
           return;
         }
-        //If the banner is not empty, put the text into the 
-        //inline file (if an inline file has been specified in the 
+        //If the banner is not empty, put the text into the
+        //inline file (if an inline file has been specified in the
         //program options).
         ixx << b.rdbuf ();
       }
@@ -285,7 +285,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
               return;
             }
 
-          //If the banner is not empty, put the text into the 
+          //If the banner is not empty, put the text into the
           //source file.
           cxx << b.rdbuf ();
         }
@@ -335,7 +335,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
 
   // Default mapping.
   //
-  nsm.push_back (L"#^.* (.*?/)??"L"(([a-zA-Z_]\\w*)(/[a-zA-Z_]\\w*)*)$#$2#");
+  nsm.push_back (L"#^.* (.*?/)??" L"(([a-zA-Z_]\\w*)(/[a-zA-Z_]\\w*)*)$#$2#");
 
   if (vm.count ("cxx-namespace-regex"))
     {

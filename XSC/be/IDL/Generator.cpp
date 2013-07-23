@@ -131,10 +131,8 @@ namespace IDL
 
     Context::NamespaceMapping nsm;
 
-
     // Default mapping.
-    //
-    nsm.push_back (L"#^.* (.*?/)??"L"(([a-zA-Z_]\\w*)(/[a-zA-Z_]\\w*)*)$#$2#");
+    nsm.push_back (L"#^.* (.*?/)??" L"(([a-zA-Z_]\\w*)(/[a-zA-Z_]\\w*)*)$#$2#");
 
     // Custom mappings.
     //
