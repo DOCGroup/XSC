@@ -1,6 +1,6 @@
 // file      : CXX/Source.cxx
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
+// cvs-id    : $Id: Source.cpp 169 2012-05-24 06:40:26Z johnnyw $
 
 #include "Source.hpp"
 #include "Elements.hpp"
@@ -41,10 +41,23 @@ namespace
 
       //@@ can I get rid of the temporary?
       //
+      string compare_name;
+      if (char_type == L"wchar_t")
+        {
+          compare_name = L"L\"" + name + L"\"";
+        }
+      else if (char_type == L"ACE_TCHAR")
+        {
+          compare_name = L"ACE_TEXT(\"" + name + L"\")";
+        }
+      else
+        {
+          compare_name = L"\"" + name + L"\"";
+        }
 
       //@@ need to use FQ-names.
       //
-      os << "if (n == \"" << name << "\")"
+      os << "if (n == " << compare_name << ")"
          << "{";
 
       if (c.max () != 1)
