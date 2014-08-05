@@ -5,4 +5,9 @@ project {
     Release::runtime_library = 2
     Debug::runtime_library = 3
   }
+
+  specific (vc11) {
+    Release::runtime_library = MultiThreadedDLL
+    Debug::runtime_library = MultiThreadedDebugDLL
+  }
 }
