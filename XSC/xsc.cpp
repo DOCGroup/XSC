@@ -228,7 +228,11 @@ int main (int argc, char* argv[])
           {
             try
               {
+#if BOOST_FILESYSTEM_VERSION == 2
                 search_paths.push_back (fs::path (*i, fs::native));
+#else
+                search_paths.push_back (fs::path (*i));
+#endif
               }
             catch (...)
               {
