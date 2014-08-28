@@ -68,7 +68,11 @@ namespace IDL
   void Generator::
   generate (po::variables_map const& vm, Schema& schema, fs::path const& in_path)
   {
+#if BOOST_FILESYSTEM_VERSION == 2
     std::string in_name (in_path.leaf ());
+#else
+    std::string in_name (in_path.filename ().string ());
+#endif
 
     std::string suffix (vm["idl-file-suffix"].as<std::string> ());
 

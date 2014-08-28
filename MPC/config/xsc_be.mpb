@@ -2,7 +2,6 @@
 
 project : ccf_root, boost_filesystem, boost_system, boost_regex, boost_program_options, utility, xsc_static, xsc_common {
   after  += XSC_BE
-  macros += 'BOOST_FILESYSTEM_VERSION=2'
 
   specific (prop:microsoft) {
     libs += XSC_BEs

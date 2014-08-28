@@ -130,7 +130,11 @@ void CXX_Generator::
 generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path)
 {
   //Name is the actual file name.
+#if BOOST_FILESYSTEM_VERSION == 2
   std::string name (file_path.leaf ());
+#else
+  std::string name (file_path.filename ().string ());
+#endif
 
   //Stores file suffixes (defaults are .hpp, ipp, and cpp)
   std::string hxx_suffix (vm["cxx-header-suffix"].as<std::string> ());

@@ -1,0 +1,11 @@
+lib/
+
+.obj/
+.shobj/
+.depend.*
+Makefile*
+GNUMakefile*
+lib*
+
+*~
+
