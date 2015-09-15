@@ -9,3 +9,10 @@ lib*
 
 *~
 
+# Visual Studio files
+
+*.vcxproj*
+Static_Debug/
+Static_Release/
+Debug/
+Release/
