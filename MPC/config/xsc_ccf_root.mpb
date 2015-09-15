@@ -1,0 +1,9 @@
+project {
+  specific {
+    CCF_ROOT = $(XSC_ROOT)/contrib/CCF/CCF
+  }
+
+  verbatim (gnuace, top) {
+    CCF_ROOT = $(XSC_ROOT)/contrib/CCF/CCF
+  }
+}
