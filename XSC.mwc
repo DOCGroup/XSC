@@ -19,5 +19,6 @@ workspace (XSC) {
                -include $XSC_ROOT/contrib/CCF/CCF/MPC/config
 
     $(XSC_ROOT)/contrib/CCF/CCF/CCF/CodeGenerationKit
+    $(XSC_ROOT)/contrib/CCF/utility
   }
 }

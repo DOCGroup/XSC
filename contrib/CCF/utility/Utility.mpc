@@ -1,0 +1,9 @@
+project (Utility) : xsc_static, xsc_common {
+  staticname  = Utility
+  includes   += .
+
+  Source_Files {
+    Utility/Introspection/Object.cpp
+    Utility/Introspection/TypeId.cpp
+  }
+}
