@@ -1,0 +1,17 @@
+﻿Build started 9/15/2015 9:38:08 AM.
+     1>Project "E:\proj\vc11\XSC\contrib\CCF\CCF\CCF\CodeGenerationKit\CodeGenerationKit.vcxproj" on node 3 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files\Microsoft Visual Studio 11.0\VC\BIN\CL.exe /c /IE:\proj\vc11\\boost\include\1_56 /IE:\proj\vc11\\boost\. /I..\..\..\..\..\contrib\CCF\CCF /I..\..\..\..\..\contrib\CCF\CCF\CCF /ZI /nologo /W3 /WX- /Od /Oy- /D _DEBUG /D WIN32 /D _WINDOWS /D _CRT_NONSTDC_NO_WARNINGS /Gm- /EHsc /RTC1 /MTd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"Static_Debug\CodeGenerationKit\I386\\" /Fd"Static_Debug\CodeGenerationKit\I386\vc110.pdb" /Gd /TP /analyze- /errorReport:prompt /wd4290 /wd4800 /wd4250 /wd4355 /wd4996 CommandLine.cpp CommandLineParser.cpp
+         CommandLine.cpp
+         CommandLineParser.cpp
+         Generating Code...
+       Lib:
+         C:\Program Files\Microsoft Visual Studio 11.0\VC\BIN\Lib.exe /OUT:"..\CodeGenerationKitsd.lib" /LIBPATH:. /LIBPATH:E:\proj\vc11\\boost\lib /LIBPATH:..\..\..\..\..\contrib\CCF\CCF\CCF /NOLOGO Static_Debug\CodeGenerationKit\I386\CommandLine.obj
+         Static_Debug\CodeGenerationKit\I386\CommandLineParser.obj
+     1>CommandLine.obj : warning LNK4221: This object file does not define any previously undefined public symbols, so it will not be used by any link operation that consumes this library
+         CodeGenerationKit.vcxproj -> E:\proj\vc11\XSC\contrib\CCF\CCF\CCF\CodeGenerationKit\..\CodeGenerationKitsd.lib
+     1>Done Building Project "E:\proj\vc11\XSC\contrib\CCF\CCF\CCF\CodeGenerationKit\CodeGenerationKit.vcxproj" (Build target(s)).
+
+Build succeeded.
+
+Time Elapsed 00:00:01.75

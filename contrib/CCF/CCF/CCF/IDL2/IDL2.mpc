@@ -1,0 +1,15 @@
+//$Id$
+
+project(IDL2): ccf_common {
+  sharedname =
+  staticname = IDL2
+  libout = ..
+
+  Source_Files {
+    .
+    ./SemanticGraph
+    ./Traversal
+    ./SemanticAction
+    ./SemanticAction/Impl
+  }
+}

@@ -1,0 +1,51 @@
+Fri Oct 14 19:34:17 UTC 2011  James H. Hill  <hillj at cs dot iupui dot edu>
+
+        * MPC/config/codegenerationkit.mpb:
+
+          Removed this file.
+
+Fri Oct 14 18:25:38 UTC 2011  James H. Hill  <hillj at cs dot iupui dot edu>
+
+        * MPC/config/ccf_common.mpb:
+
+          Removed configuration values dependent on ACE_ROOT.
+
+        * MPC/config/codegenerationkit.mpb:
+
+          Base project for using the code generation kit.
+
+Mon Feb 21 16:25:55 UTC 2011  James H. Hill  <hillj@cs.iupui.edu>
+
+        * CCF/CodeGenerationKit/IndentationBuffer.hpp:
+
+          Removed throw () specification on method declaration.
+
+Mon Dec 20 22:42:59 UTC 2010  James H. Hill  <hillj at cs dot iupui dot edu>
+
+        * CCF/CodeGenerationKit/IndentationCxx.hpp:
+
+          Cleaned up the implementation and add more comments.
+
+          Bug fix where the formatting failed if a string literal contained
+          a char literal.
+
+Mon Oct  4 20:13:59 UTC 2010  James H. Hill  <hillj at cs dot iupui dot edu>
+
+        * MPC/config/ccf_common.mpb:
+
+          Removed the exceptions base project.
+
+Sun Aug  2 18:27:35 UTC 2009  James H. Hill  <hillj@dre.vanderbilt.edu>
+
+        * CCF/CIDL/CIDL.mpc:
+        * CCF/CodeGenerationKit/CodeGenerationKit.mpc:
+        * CCF/CompilerElements/CompilerElements.mpc:
+        * CCF/IDL2/IDL2.mpc:
+        * CCF/IDL3/IDL3.mpc:
+        * MPC:
+        * MPC/config:
+        * MPC/config/ccf_common.mpb:
+
+          Switched the 'cidlc' base project to 'ccm_common' since CIDLC
+          is disfunct and CCF is being used for more general purpose
+          projects.

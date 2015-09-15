@@ -1,0 +1,7 @@
+//$Id$
+
+project (CodeGenerationKit): ccf_common {
+  sharedname =
+  staticname = CodeGenerationKit
+  libout = ..
+}

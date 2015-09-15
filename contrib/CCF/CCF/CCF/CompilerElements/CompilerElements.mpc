@@ -1,0 +1,7 @@
+//$Id$
+
+project(CompilerElements): ccf_common {
+  sharedname =
+  staticname = CompilerElements
+  libout = ..
+}
