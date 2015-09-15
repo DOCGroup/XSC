@@ -9,10 +9,13 @@ lib*
 
 *~
 
-# Visual Studio files
+# Visual Studio and Windows files
 
 *.vcxproj*
 Static_Debug/
 Static_Release/
 Debug/
 Release/
+*.obj
+*.lib
+*.dll
