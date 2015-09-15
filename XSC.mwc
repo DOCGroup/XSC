@@ -6,7 +6,6 @@ workspace (XSC) {
   static {
     cmdline += -static
 
-    contrib/Utility.mpc
     XSC/XSC_BE.mpc
     XSC/be
   }
@@ -14,4 +13,11 @@ workspace (XSC) {
   $(ACE_ROOT)/ace/ace.mpc
   XSC/utils
   XSC/XSC.mpc
+
+  exclude (wix, !gnuace) {
+    cmdline += -static -base xsc_ccf_root \
+               -include $XSC_ROOT/contrib/CCF/CCF/MPC/config
+
+    $(XSC_ROOT)/contrib/CCF/CCF/CCF/CodeGenerationKit
+  }
 }
