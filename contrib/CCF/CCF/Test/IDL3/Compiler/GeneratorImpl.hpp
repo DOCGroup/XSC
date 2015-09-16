@@ -1,6 +1,5 @@
 // file      : Test/IDL3/Compiler/GeneratorImpl.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef TEST_IDL3_COMPILER_GENERATOR_IMPL_HPP
 #define TEST_IDL3_COMPILER_GENERATOR_IMPL_HPP

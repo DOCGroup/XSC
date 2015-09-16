@@ -1,6 +1,5 @@
 // file      : CCF/IDL3/SemanticGraph/EventType.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL3_SEMANTIC_GRAPH_EVENT_TYPE_HPP
 #define CCF_IDL3_SEMANTIC_GRAPH_EVENT_TYPE_HPP

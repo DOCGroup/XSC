@@ -1,6 +1,5 @@
 // Xerces DOoM ;-).
 //
-//
 
 #include <xercesc/dom/DOM.hpp>
 

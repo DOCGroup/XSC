@@ -1,6 +1,5 @@
 // file      : CCF/Example/ComponentDeploymentDescriptor/Traversal.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CDD_TRAVERSAL_HPP
 #define CDD_TRAVERSAL_HPP

@@ -1,6 +1,5 @@
 // file      : CCF/CodeGenerationKit/CommandLine.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef COMMAND_LINE_HPP
 #define COMMAND_LINE_HPP
@@ -119,23 +118,23 @@ public:
       return not_found_value;
     }
   }
-  
-  bool 
+ 
+  bool
   get_all_values (std::string name, std::vector<std::string> &values)
   {
     Options::iterator i (options.begin ());
-    
-    while ((i = std::find_if (i, 
-                              options.end (), 
+   
+    while ((i = std::find_if (i,
+                              options.end (),
                               OptionNamePredicat (name))) != options.end ())
       {
         values.push_back (i->value ());
         ++i;
       }
-    
+   
     return values.size () != 0;
   }
-  
+ 
   struct Option
   {
     Option (std::string const& name)

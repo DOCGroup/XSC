@@ -1,6 +1,5 @@
 // file      : CCF/CodeGenerationKit/IndentationCxx.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_CODE_GENERATION_KIT_INDENTATION_CXX_HPP
 #define CCF_CODE_GENERATION_KIT_INDENTATION_CXX_HPP

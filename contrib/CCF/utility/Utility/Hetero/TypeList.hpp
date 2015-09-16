@@ -43,4 +43,3 @@ namespace Utility
 }
 
 #endif  // UTILITY_HETERO_TYPE_LIST_HPP
-//$Id$

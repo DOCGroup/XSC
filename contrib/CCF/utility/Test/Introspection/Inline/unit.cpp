@@ -5,4 +5,3 @@
 
 #include "Utility/Introspection/Introspection.hpp"
 
-//$Id$

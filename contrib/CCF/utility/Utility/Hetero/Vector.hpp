@@ -44,4 +44,3 @@ namespace Utility
 }
 
 #endif  // UTILITY_HETERO_VECTOR_HPP
-//$Id$

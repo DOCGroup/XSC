@@ -109,4 +109,3 @@ main ()
     cerr << "typing error" << endl;
   }
 }
-//$Id$

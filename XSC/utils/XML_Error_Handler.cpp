@@ -1,5 +1,3 @@
-// $Id$
-
 #include "XML_Error_Handler.h"
 #include "xercesc/util/XMLString.hpp"
 #include "xercesc/dom/DOMLocator.hpp"

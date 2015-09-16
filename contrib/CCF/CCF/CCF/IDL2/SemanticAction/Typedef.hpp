@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/Typedef.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_SEMANTIC_ACTION_TYPEDEF_HPP
 #define CCF_IDL2_SEMANTIC_ACTION_TYPEDEF_HPP
@@ -18,7 +17,7 @@ namespace CCF
         virtual ~Typedef ()
         {
         }
-        
+       
         virtual void
         pre (KeywordPtr const& id) = 0;
 

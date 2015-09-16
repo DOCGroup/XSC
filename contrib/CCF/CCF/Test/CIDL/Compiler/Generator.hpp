@@ -1,6 +1,5 @@
 // file      : Test/CIDL/Compiler/Generator.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef TEST_CIDL_COMPILER_GENERATOR_HPP
 #define TEST_CIDL_COMPILER_GENERATOR_HPP

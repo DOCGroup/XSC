@@ -32,7 +32,7 @@ namespace Utility
       SystemException;
 
       typedef ExH::Logic::DescriptiveException Exception;
-      
+     
     public:
       virtual void
       add_ref () const = 0;
@@ -77,4 +77,3 @@ namespace Utility
 
 #endif  // UTILITY_REFERENCE_COUNTING_INTERFACE_HPP
 
-//$Id$

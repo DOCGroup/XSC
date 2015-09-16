@@ -24,7 +24,7 @@ namespace Recursive
     typedef ACE_Refcounted_Auto_Ptr < Element, ACE_Null_Mutex > _ptr;
 
     // value
-    // 
+    //
     public:
     typedef ::std::list< ::XMLSchema::string< wchar_t >::_ptr >::iterator value_iterator;
     typedef ::std::list< ::XMLSchema::string< wchar_t >::_ptr >::const_iterator value_const_iterator;
@@ -39,7 +39,7 @@ namespace Recursive
     ::std::list< ::XMLSchema::string< wchar_t >::_ptr > value_;
 
     // long
-    // 
+    //
     public:
     typedef ::std::list< ::XMLSchema::long_::_ptr >::iterator long_iterator;
     typedef ::std::list< ::XMLSchema::long_::_ptr >::const_iterator long_const_iterator;
@@ -54,7 +54,7 @@ namespace Recursive
     ::std::list< ::XMLSchema::long_::_ptr > long__;
 
     // el
-    // 
+    //
     public:
     typedef ::std::list< ::Recursive::Element::_ptr >::iterator el_iterator;
     typedef ::std::list< ::Recursive::Element::_ptr >::const_iterator el_const_iterator;
@@ -205,13 +205,13 @@ namespace Recursive
 {
   namespace Writer
   {
-    struct Element : Traversal::Element, 
+    struct Element : Traversal::Element,
     virtual ::XSCRT::Writer< wchar_t >
     {
       typedef ::Recursive::Element Type;
       Element (::XSCRT::XML::Element< wchar_t >&);
 
-      virtual void 
+      virtual void
       traverse (Type &o)
       {
         this->traverse (const_cast <Type const &> (o));
@@ -220,7 +220,7 @@ namespace Recursive
       virtual void
       traverse (Type const&);
 
-      virtual void 
+      virtual void
       value_pre (Type &o)
       {
         this->value_pre (const_cast <Type const &> (o));
@@ -229,7 +229,7 @@ namespace Recursive
       virtual void
       value_pre (Type const&);
 
-      virtual void 
+      virtual void
       value_next (Type &o)
       {
         this->value_next (const_cast <Type const &> (o));
@@ -238,7 +238,7 @@ namespace Recursive
       virtual void
       value_next (Type const&);
 
-      virtual void 
+      virtual void
       value_post (Type &o)
       {
         this->value_post (const_cast <Type const &> (o));
@@ -247,7 +247,7 @@ namespace Recursive
       virtual void
       value_post (Type const&);
 
-      virtual void 
+      virtual void
       long_pre (Type &o)
       {
         this->long_pre (const_cast <Type const &> (o));
@@ -256,7 +256,7 @@ namespace Recursive
       virtual void
       long_pre (Type const&);
 
-      virtual void 
+      virtual void
       long_next (Type &o)
       {
         this->long_next (const_cast <Type const &> (o));
@@ -265,7 +265,7 @@ namespace Recursive
       virtual void
       long_next (Type const&);
 
-      virtual void 
+      virtual void
       long_post (Type &o)
       {
         this->long_post (const_cast <Type const &> (o));
@@ -274,7 +274,7 @@ namespace Recursive
       virtual void
       long_post (Type const&);
 
-      virtual void 
+      virtual void
       el_pre (Type &o)
       {
         this->el_pre (const_cast <Type const &> (o));
@@ -283,7 +283,7 @@ namespace Recursive
       virtual void
       el_pre (Type const&);
 
-      virtual void 
+      virtual void
       el_next (Type &o)
       {
         this->el_next (const_cast <Type const &> (o));
@@ -292,7 +292,7 @@ namespace Recursive
       virtual void
       el_next (Type const&);
 
-      virtual void 
+      virtual void
       el_post (Type &o)
       {
         this->el_post (const_cast <Type const &> (o));

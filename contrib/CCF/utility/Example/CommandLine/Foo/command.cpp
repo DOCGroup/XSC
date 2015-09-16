@@ -85,4 +85,3 @@ main ()
   if (std::cin) cerr << c1 << endl;
   else cerr << "*failed" << endl;
 }
-//$Id$

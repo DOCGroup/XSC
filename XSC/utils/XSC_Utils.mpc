@@ -1,5 +1,3 @@
-// $Id$
-
 project (XSC_Utils) : acelib, xsc_common {
   sharedname   = XSC_Utils
   dynamicflags += XSC_UTILS_BUILD_DLL

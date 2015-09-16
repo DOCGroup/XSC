@@ -1,6 +1,5 @@
 // file      : CCF/Example/ComponentDeploymentDescriptor/SyntaxTree.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CDD_SYNTAX_TREE_HPP
 #define CDD_SYNTAX_TREE_HPP

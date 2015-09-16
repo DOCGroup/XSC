@@ -1,6 +1,5 @@
 // file      : CXX/TraversalHeader.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CXX_TRAVERSAL_HEADER_HXX
 #define CXX_TRAVERSAL_HEADER_HXX

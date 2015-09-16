@@ -246,4 +246,3 @@ namespace Utility
 #include "Utility/hetero/map.tpp"
 
 #endif  // UTILITY_HETERO_MAP_HPP
-//$Id$

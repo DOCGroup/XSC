@@ -1,10 +1,6 @@
-// $Id$
-
 //=============================================================================
 /**
  * @file            Writer_T.h
- *
- * $Id$
  *
  * @author          James H. Hill
  */
@@ -35,7 +31,6 @@ struct writer_function
 
 /**
  * @class Writer_T
- *
  *
  */
 template <typename T, typename CHAR_TYPE = char>

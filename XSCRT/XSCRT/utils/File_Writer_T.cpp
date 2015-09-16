@@ -1,5 +1,3 @@
-// $Id$
-
 #include "xercesc/framework/LocalFileFormatTarget.hpp"
 
 namespace XSCRT

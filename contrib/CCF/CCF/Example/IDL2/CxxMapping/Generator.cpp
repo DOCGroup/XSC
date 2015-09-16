@@ -1,6 +1,5 @@
 // file      : Example/IDL2/CxxMapping/Generator.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "Generator.hpp"
 #include "GeneratorImpl.hpp"

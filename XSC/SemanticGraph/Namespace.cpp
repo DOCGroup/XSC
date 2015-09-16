@@ -1,6 +1,5 @@
 // file      : XSC/SemanticGraph/Namespace.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include <XSC/SemanticGraph/Namespace.hpp>
 

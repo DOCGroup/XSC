@@ -1,6 +1,5 @@
 // file      : XSC/SemanticGraph/Element.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef XSC_SEMANTIC_GRAPH_ELEMENT_HXX
 #define XSC_SEMANTIC_GRAPH_ELEMENT_HXX
@@ -35,13 +34,13 @@ namespace XSC
       {
         return this->qualified_;
       }
-      
+     
       bool
       href () const
       {
         return this->href_;
       }
-      
+     
     protected:
       friend class Graph<Node, Edge>;
 
@@ -58,10 +57,10 @@ namespace XSC
       unsigned long max_;
       /// ?
       bool qualified_;
-      
+     
       /// true if this element can be specified using an xmi href reference
       bool href_;
-      
+     
     };
   }
 }

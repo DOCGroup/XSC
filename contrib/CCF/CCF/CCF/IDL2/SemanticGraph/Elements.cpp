@@ -1,12 +1,11 @@
 // file      : CCF/IDL2/SemanticGraph/Elements.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "CCF/IDL2/SemanticGraph/Elements.hpp"
 
 #include <ostream>
 
-// This file has no dependency on ACE, thus we turn 
+// This file has no dependency on ACE, thus we turn
 // all ACE_OS checks off
 // FUZZ: disable check_for_lack_ACE_OS
 
@@ -651,7 +650,6 @@ namespace CCF
   }
 }
 
-//
 //
 std::ostream&
 operator<< (std::ostream& os, CCF::IDL2::SemanticGraph::Path const& path)

@@ -1,6 +1,5 @@
 // file      : XSC/Traversal/Attribute.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef XSC_TRAVERSAL_ATTRIBUTE_HPP
 #define XSC_TRAVERSAL_ATTRIBUTE_HPP

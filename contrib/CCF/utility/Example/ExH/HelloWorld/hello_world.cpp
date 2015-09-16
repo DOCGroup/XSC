@@ -139,4 +139,3 @@ main ()
     std::abort ();
   }
 }
-//$Id$

@@ -1,6 +1,5 @@
 // file      : CCF/CompilerElements/PreprocessorToken.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_COMPILER_ELEMENTS_PREPROCESSOR_TOKEN_HPP
 #define CCF_COMPILER_ELEMENTS_PREPROCESSOR_TOKEN_HPP

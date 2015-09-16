@@ -1,6 +1,5 @@
 // file      : CCF/CodeGenerationKit/CommandLineDescriptor.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef COMMAND_LINE_DESCRIPTOR_H
 #define COMMAND_LINE_DESCRIPTOR_H

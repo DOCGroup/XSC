@@ -154,4 +154,3 @@ namespace Traversal
 }
 
 #endif  // TRAVERSAL_HPP
-//$Id$

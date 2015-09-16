@@ -99,4 +99,3 @@ namespace Utility
 
 #endif  // UTILITY_REFERENCE_COUNTING_STRICT_PTR_HPP
 
-//$Id$

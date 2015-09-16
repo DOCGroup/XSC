@@ -21,8 +21,8 @@ namespace Utility
       class DescriptiveException : public virtual Exception
       {
       public:
-        typedef Exception Base; 
-        
+        typedef Exception Base;
+       
         explicit
         DescriptiveException (char const* description) throw ();
 
@@ -62,4 +62,3 @@ namespace Utility
 #include "Utility/ExH/Logic/DescriptiveException.tpp"
 
 #endif  // UTILITY_EX_H_LOGIC_DESCRIPTIVE_EXCEPTION_HPP
-//$Id$

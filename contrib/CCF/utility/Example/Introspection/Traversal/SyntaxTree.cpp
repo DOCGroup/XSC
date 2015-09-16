@@ -116,4 +116,3 @@ namespace SyntaxTree
   static_type_info () { return interface_def_; }
 
 }
-//$Id$

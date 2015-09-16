@@ -44,4 +44,3 @@ namespace Utility
 #include "Utility/Introspection/Object.ipp"
 
 #endif  // UTILITY_INTROSPECTION_OBJECT_HPP
-//$Id$

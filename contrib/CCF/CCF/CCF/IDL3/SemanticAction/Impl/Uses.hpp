@@ -1,6 +1,5 @@
 // file      : CCF/IDL3/SemanticAction/Impl/Uses.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL3_SEMANTIC_ACTION_IMPL_USES_HPP
 #define CCF_IDL3_SEMANTIC_ACTION_IMPL_USES_HPP

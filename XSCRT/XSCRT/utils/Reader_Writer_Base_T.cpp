@@ -1,4 +1,4 @@
-// $Id$
+// 
 
 #include "xercesc/util/XMLUniDefs.hpp"
 

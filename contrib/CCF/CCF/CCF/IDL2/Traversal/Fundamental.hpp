@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/Traversal/Fundamental.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_TRAVERSAL_FUNDAMENTAL_HPP
 #define CCF_IDL2_TRAVERSAL_FUNDAMENTAL_HPP

@@ -26,4 +26,3 @@ namespace Utility
 #endif  // UTILITY_EX_H_SYSTEM_EXCEPTION_HPP
 
 
-//$Id$

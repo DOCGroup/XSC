@@ -1,6 +1,5 @@
 // file      : XSC/Traversal/Elements.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "XSC/Traversal/Elements.hpp"
 

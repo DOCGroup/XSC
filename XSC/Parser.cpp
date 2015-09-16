@@ -1,6 +1,5 @@
 // file      : XSC/Parser.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "Parser.hpp"
 #include "SemanticGraph.hpp"

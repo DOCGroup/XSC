@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticGraph/Exception.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "CCF/IDL2/SemanticGraph/Exception.hpp"
 

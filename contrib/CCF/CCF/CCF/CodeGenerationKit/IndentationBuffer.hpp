@@ -1,6 +1,5 @@
 // file      : CCF/CodeGenerationKit/IndentationBuffer.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_CODE_GENERATION_KIT_INDENTATION_BUFFER_HPP
 #define CCF_CODE_GENERATION_KIT_INDENTATION_BUFFER_HPP
@@ -15,7 +14,7 @@ namespace Indentation
   class Buffer
   {
   public:
-    
+   
     typedef ExH::Logic::DescriptiveException Exception;
 
     class EndOfStream_ {};

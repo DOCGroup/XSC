@@ -1,9 +1,7 @@
 // file      : CCF/Test/IDL3/Compiler/test.idl
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 // Component
-//
 //
 
 module ComponentTest
@@ -30,7 +28,6 @@ module ComponentTest
 
 // Consumes
 //
-//
 module ConsumesTest
 {
   eventtype E
@@ -45,7 +42,6 @@ module ConsumesTest
 
 
 // Emits
-//
 //
 module EmitsTest
 {
@@ -62,7 +58,6 @@ module EmitsTest
 
 // EventType (incomplete)
 //
-//
 module EventTypeTest
 {
   eventtype E
@@ -72,7 +67,6 @@ module EventTypeTest
 
 
 // Home
-//
 //
 module HomeTest
 {
@@ -104,7 +98,6 @@ module HomeTest
 
 // HomeFactory
 //
-//
 module HomeFactoryTest
 {
   component A
@@ -119,7 +112,6 @@ module HomeFactoryTest
 
 
 // Provides
-//
 //
 module ProvidesTest
 {
@@ -136,7 +128,6 @@ module ProvidesTest
 
 // Publishes
 //
-//
 module PublishesTest
 {
   eventtype E
@@ -151,7 +142,6 @@ module PublishesTest
 
 
 // Uses
-//
 //
 module UsesTest
 {

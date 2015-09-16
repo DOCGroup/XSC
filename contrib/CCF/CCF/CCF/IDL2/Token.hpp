@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/Token.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_TOKEN_HPP
 #define CCF_IDL2_TOKEN_HPP

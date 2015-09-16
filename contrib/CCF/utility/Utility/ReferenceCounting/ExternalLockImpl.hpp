@@ -57,4 +57,3 @@ namespace Utility
 
 #endif  // UTILITY_REFERENCE_COUNTING_EXTERNAL_LOCK_IMPL_HPP
 
-//$Id$

@@ -1,6 +1,5 @@
 // file      : CCF/CIDL/SemanticGraph/Executor.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_CIDL_SEMANTIC_GRAPH_EXECUTOR_HPP
 #define CCF_CIDL_SEMANTIC_GRAPH_EXECUTOR_HPP

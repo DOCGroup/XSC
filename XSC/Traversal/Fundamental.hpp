@@ -1,6 +1,5 @@
 // file      : XSC/Traversal/Fundamental.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef XSC_TRAVERSAL_FUNDAMENTAL_HPP
 #define XSC_TRAVERSAL_FUNDAMENTAL_HPP
@@ -23,7 +22,7 @@ namespace XSC
     typedef
     Node<SemanticGraph::AnySimpleType>
     AnySimpleType;
-    
+   
     typedef
     Node<SemanticGraph::AnyUri>
     anyURI;

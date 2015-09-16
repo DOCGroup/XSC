@@ -92,4 +92,3 @@ namespace SyntaxTree
 }
 
 #endif  // SYNTAX_TREE_HPP
-//$Id$

@@ -1,6 +1,5 @@
 // file      : XSC/Traversal/Complex.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "XSC/Traversal/Complex.hpp"
 
@@ -35,13 +34,13 @@ namespace XSC
     {
       Type::InheritsIterator b (c.inherits_begin ()), e (c.inherits_end ());
 
-      if (b != e) 
+      if (b != e)
         iterate_and_traverse (b, e, d);
 
       else return false;
 
       return true;
-    }   
+    }  
 
     void Complex::
     inherits (Type& c)

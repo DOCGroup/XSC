@@ -1,6 +1,5 @@
 // file      : XSC/SemanticGraph/Attribute.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include <XSC/SemanticGraph/Attribute.hpp>
 

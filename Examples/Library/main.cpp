@@ -35,7 +35,7 @@ void Xerces_Interface (std::string const funct)
 {
   if (funct == "init")
   {
-    try 
+    try
     {
       xercesc::XMLPlatformUtils::Initialize();
       std::cout << "\n Xerces Initialized.\n";
@@ -51,7 +51,7 @@ void Xerces_Interface (std::string const funct)
   }
 }
 
-//Gets a document in the form of a string from 
+//Gets a document in the form of a string from
 //the user.
 void get_doc_name (std::string &xml_document)
 {
@@ -62,7 +62,7 @@ void get_doc_name (std::string &xml_document)
 
 //Returns a buffer from a given file name.
 //Note: Should throw an exception if a file isn't
-//  opened (currently allows the buff to not be 
+//  opened (currently allows the buff to not be
 //  initialized)
 void get_buff (std::string file_name, char * &buffer)
 {
@@ -96,10 +96,10 @@ int main (int argc, char *argv[])
 
   try
   {
-    
+   
     //Initialize the Xerces Interface
     Xerces_Interface("init");
-    
+   
     //Create the Xerces Parser
     xercesc::XercesDOMParser *parser = new xercesc::XercesDOMParser();
 
@@ -121,7 +121,7 @@ int main (int argc, char *argv[])
     parser->setDoSchema(true);
     parser->setValidationSchemaFullChecking(true);
     parser->setValidationConstraintFatal(false);
-    
+   
     //Create the DOMDocument that will hold the tree.
     xercesc::DOMDocument *doc = 0;
 
@@ -129,9 +129,9 @@ int main (int argc, char *argv[])
     get_doc_name(xml_document);
     get_buff(xml_document, buffer);
 
-    //Parse the file in xml_document and store the 
+    //Parse the file in xml_document and store the
     //DOMDocument in doc.
-    parser->parse(xml_document.c_str()); 
+    parser->parse(xml_document.c_str());
     doc = parser->getDocument();
 
     Lib::Library const& my_library = Lib::reader::library(doc);
@@ -152,7 +152,7 @@ int main (int argc, char *argv[])
          if ((*a).get()->recommends_p())
          {
            std::wcerr << L"Recommends ";
-           Lib::Book *temp_book = 
+           Lib::Book *temp_book =
                      dynamic_cast<Lib::Book*> ((*a).get()->recommends_ptr());
            std::wcerr << temp_book->title() << std::endl;
            std::wcerr << L"Recommends ID: " << ((*a).get()->recommends()).id() << std::endl;

@@ -130,7 +130,6 @@ main (int argc, char* argv[])
 
 //
 //
-//
 int
 version ()
 {
@@ -139,7 +138,6 @@ version ()
 }
 
 
-//
 //
 //
 int
@@ -181,4 +179,3 @@ help (int argc, char* argv[])
 
   return 0;
 }
-//$Id$

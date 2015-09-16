@@ -94,4 +94,3 @@ namespace Utility
 
 #endif  // UTILITY_REFERENCE_COUNTING_DEFAULT_IMPL_HPP
 
-//$Id$

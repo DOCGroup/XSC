@@ -1,6 +1,5 @@
 // file      : CXX/TraversalSource.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CXX_TRAVERSAL_SOURCE_HXX
 #define CXX_TRAVERSAL_SOURCE_HXX

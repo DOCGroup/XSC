@@ -21,4 +21,3 @@ namespace Utility
 #include "Utility/ExH/Converter.tpp"
 
 #endif  // UTILITY_EX_H_CONVERTER_HPP
-//$Id$

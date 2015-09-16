@@ -1,5 +1,3 @@
-// $Id$
-
 project (XSCRT) : xerces, xsc_utils, xsc_common {
   sharedname = XSCRT
   after     += libXSC

@@ -1,6 +1,5 @@
 // file      : CCF/CIDL/Traversal/Elements.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_CIDL_TRAVERSAL_ELEMENTS_HPP
 #define CCF_CIDL_TRAVERSAL_ELEMENTS_HPP

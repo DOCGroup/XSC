@@ -1,5 +1,3 @@
-//$Id$
-
 project(IDL3): ccf_common {
   sharedname =
   staticname = IDL3

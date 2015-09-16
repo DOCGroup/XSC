@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticGraph/IntExpression.cpp
 // author    : Boris Kolpackov <boris@kolpackov.net>
-// cvs-id    : $Id$
 
 #include "CCF/IDL2/SemanticGraph/IntExpression.hpp"
 

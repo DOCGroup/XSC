@@ -1,5 +1,3 @@
-//$Id$
-
 project (XSC_BE): acelib, boost_filesystem, utility, xsc_utils, xsc_static, xsc_common {
   sharedname = XSC_BE
 

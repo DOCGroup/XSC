@@ -1,6 +1,5 @@
 // file      : Test/IDL2/Compiler/driver.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "CCF/CompilerElements/Context.hpp"
 #include "CCF/CompilerElements/FileSystem.hpp"

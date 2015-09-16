@@ -23,7 +23,6 @@ namespace
 
 // ErrorHandler
 //
-//
 
 ErrorHandler::
 ErrorHandler ()

@@ -1,6 +1,5 @@
 // file      : CXX/ParserHeader.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "ParserHeader.hpp"
 #include "Elements.hpp"

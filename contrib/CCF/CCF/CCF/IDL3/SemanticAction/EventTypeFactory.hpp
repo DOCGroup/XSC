@@ -1,6 +1,5 @@
 // file      : CCF/IDL3/SemanticAction/EventTypeFactory.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL3_SEMANTIC_ACTION_EVENT_TYPE_FACTORY_HPP
 #define CCF_IDL3_SEMANTIC_ACTION_EVENT_TYPE_FACTORY_HPP
@@ -18,7 +17,7 @@ namespace CCF
         virtual ~EventTypeFactory ()
         {
         }
-        
+       
         virtual void
         name (SimpleIdentifierPtr const& id) = 0;
 

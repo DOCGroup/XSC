@@ -5,4 +5,3 @@
 
 #include "Utility/ReferenceCounting/ReferenceCounting.hpp"
 
-//$Id$

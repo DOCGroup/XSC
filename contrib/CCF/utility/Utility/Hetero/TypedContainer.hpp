@@ -54,4 +54,3 @@ namespace Utility
 }
 
 #endif  // UTILITY_HETERO_TYPED_CONTAINER_HPP
-//$Id$

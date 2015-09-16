@@ -83,4 +83,3 @@ namespace Utility
 }
 
 #endif  // UTILITY_HETERO_SHELL_HPP
-//$Id$

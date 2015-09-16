@@ -1,6 +1,5 @@
 // file      : XSC/SemanticGraph/Complex.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef XSC_SEMANTIC_GRAPH_COMPLEX_HXX
 #define XSC_SEMANTIC_GRAPH_COMPLEX_HXX

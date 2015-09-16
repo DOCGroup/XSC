@@ -1,6 +1,5 @@
 // file      : CCF/CompilerElements/Preprocessor.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include <deque>
 #include <locale>
@@ -870,7 +869,7 @@ namespace CCF
         // Get first non-space token
         //
         Token
-        ls_get_ns () 
+        ls_get_ns ()
         {
           Token t (ls_get ());
 

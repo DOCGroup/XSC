@@ -1,6 +1,5 @@
 // file      : XSCRT/ExtendedTypeInfo.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef XSCRT_EXTENDED_TYPE_INFO_HPP
 #define XSCRT_EXTENDED_TYPE_INFO_HPP
@@ -36,7 +35,7 @@ namespace XSCRT
     friend std::ostream&
     operator << (std::ostream& os, TypeId const& t);
     */
-    
+   
   public:
     char const*
     name () const
@@ -162,8 +161,8 @@ namespace XSCRT
   {
     ExtendedTypeInfoMap::const_iterator i (
       extended_type_info_map ().find (tid));
-    
-    if (i == extended_type_info_map ().end ()) 
+   
+    if (i == extended_type_info_map ().end ())
       throw NotAvailable ();
 
     return i->second;

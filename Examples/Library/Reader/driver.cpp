@@ -1,6 +1,5 @@
 // file      : XSC/Examples/Library/driver.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include <iostream>
 

@@ -1,6 +1,5 @@
 // file      : Test/CIDL/Compiler/Generator.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "Generator.hpp"
 #include "GeneratorImpl.hpp"

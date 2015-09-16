@@ -5,4 +5,3 @@
 
 #include "Utility/Synch/Policy/Null.hpp"
 
-//$Id$

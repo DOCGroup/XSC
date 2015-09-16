@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/Impl/Const.hpp
 // author    : Boris Kolpackov <boris@kolpackov.net>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_SEMANTIC_ACTION_IMPL_CONST_HPP
 #define CCF_IDL2_SEMANTIC_ACTION_IMPL_CONST_HPP

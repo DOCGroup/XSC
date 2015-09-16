@@ -1,6 +1,5 @@
 // file      : CCF/CIDL/SemanticAction/Impl/HomeExecutor.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_CIDL_SEMANTIC_ACTION_IMPL_HOME_EXECUTOR_HPP
 #define CCF_CIDL_SEMANTIC_ACTION_IMPL_HOME_EXECUTOR_HPP

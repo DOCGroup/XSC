@@ -1,6 +1,5 @@
 // file      : IDL/Definition.cxx
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "Definition.hpp"
 #include "Elements.hpp"

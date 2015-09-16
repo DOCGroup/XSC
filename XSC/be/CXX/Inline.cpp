@@ -1,6 +1,5 @@
 // file      : CXX/Inline.cxx
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "Inline.hpp"
 #include "Elements.hpp"

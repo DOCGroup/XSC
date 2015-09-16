@@ -23,4 +23,3 @@ namespace Utility
 #include "Utility/ExH/StringStreamConverter.ipp"
 
 #endif  // UTILITY_EX_H_STRING_STREAM_CONVERTER_HPP
-//$Id$

@@ -1,6 +1,5 @@
 // file      : XSC/SemanticGraph/Enumeration.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef XSC_SEMANTIC_GRAPH_ENUMERATION_HPP
 #define XSC_SEMANTIC_GRAPH_ENUMERATION_HPP

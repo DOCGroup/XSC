@@ -1,6 +1,5 @@
 // file      : CCF/CIDL/SemanticGraph/Composition.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "CCF/CIDL/SemanticGraph/Composition.hpp"
 

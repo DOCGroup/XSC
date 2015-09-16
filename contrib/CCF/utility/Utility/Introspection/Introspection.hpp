@@ -11,4 +11,3 @@
 #include "Utility/Introspection/Object.hpp"
 
 #endif  // UTILITY_INTROSPECTION_INTROSPECTION_HPP
-//$Id$

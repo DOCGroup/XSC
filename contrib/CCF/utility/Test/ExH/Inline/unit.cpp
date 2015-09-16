@@ -5,4 +5,3 @@
 
 #include "Utility/ExH/ExH.hpp"
 
-//$Id$

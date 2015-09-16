@@ -1,5 +1,3 @@
-//$Id$
-
 #include "XML_Helper.h"
 #include "XML_Error_Handler.h"
 #include "XML_Schema_Resolver.h"

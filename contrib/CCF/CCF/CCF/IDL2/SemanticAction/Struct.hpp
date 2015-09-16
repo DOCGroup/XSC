@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/Struct.hpp
 // author    : Jeff Parsons <j.parsons@vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_SEMANTIC_ACTION_STRUCT_HPP
 #define CCF_IDL2_SEMANTIC_ACTION_STRUCT_HPP
@@ -18,7 +17,7 @@ namespace CCF
         virtual ~Struct ()
         {
         }
-        
+       
         virtual void
         begin_def (SimpleIdentifierPtr const& id) = 0;
 

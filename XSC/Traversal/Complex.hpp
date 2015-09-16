@@ -1,6 +1,5 @@
 // file      : XSC/Traversal/Complex.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef XSC_TRAVERSAL_COMPLEX_HPP
 #define XSC_TRAVERSAL_COMPLEX_HPP
@@ -40,9 +39,9 @@ namespace XSC
 
       virtual void
       post (Type&);
-      
+     
       // Generate
-      // read/write operations for 
+      // read/write operations for
       // reading and writing complex
       // types
       virtual void

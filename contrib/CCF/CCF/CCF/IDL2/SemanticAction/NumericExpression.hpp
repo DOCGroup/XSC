@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/NumericExpression.hpp
 // author    : Boris Kolpackov <boris@kolpackov.net>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_SEMANTIC_ACTION_NUMERIC_EXPRESSION_HPP
 #define CCF_IDL2_SEMANTIC_ACTION_NUMERIC_EXPRESSION_HPP
@@ -18,7 +17,7 @@ namespace CCF
         virtual ~NumericExpression ()
         {
         }
-        
+       
         virtual void
         flush () = 0;
 

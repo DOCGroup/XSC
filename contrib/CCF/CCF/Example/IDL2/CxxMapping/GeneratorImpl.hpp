@@ -1,6 +1,5 @@
 // file      : Example/IDL2/CxxMapping/GeneratorImpl.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef EXAMPLE_IDL2_CXX_MAPPING_GENERATOR_IMPL_HPP
 #define EXAMPLE_IDL2_CXX_MAPPING_GENERATOR_IMPL_HPP

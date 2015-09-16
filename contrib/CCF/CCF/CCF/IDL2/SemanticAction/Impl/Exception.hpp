@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/Impl/Exception.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_SEMANTIC_ACTION_IMPL_EXCEPTION_HPP
 #define CCF_IDL2_SEMANTIC_ACTION_IMPL_EXCEPTION_HPP

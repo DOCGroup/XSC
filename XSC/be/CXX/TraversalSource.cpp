@@ -1,6 +1,5 @@
 // file      : CXX/TraversalSource.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "TraversalSource.hpp"
 #include "Elements.hpp"

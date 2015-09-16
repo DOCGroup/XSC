@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/Impl/Typedef.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_SEMANTIC_ACTION_IMPL_TYPEDEF_HPP
 #define CCF_IDL2_SEMANTIC_ACTION_IMPL_TYPEDEF_HPP

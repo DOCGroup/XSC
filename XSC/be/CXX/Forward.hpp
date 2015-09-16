@@ -1,6 +1,5 @@
 // file      : CXX/Forward.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CXX_FORWARD_HXX
 #define CXX_FORWARD_HXX

@@ -1,5 +1,3 @@
-// $Id$
-
 project : acelib, xerces, xsc_utils {
   includes += $(XSC_ROOT) $(XSC_ROOT)/XSCRT
   libpaths += $(XSC_ROOT)/lib

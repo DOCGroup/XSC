@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/Impl/ValueTypeMember.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "CCF/IDL2/SemanticAction/Impl/ValueTypeMember.hpp"
 
@@ -11,7 +10,7 @@
 using std::cerr;
 using std::endl;
 
-// This file has no dependency on ACE, thus we turn 
+// This file has no dependency on ACE, thus we turn
 // all ACE_OS checks off
 // FUZZ: disable check_for_lack_ACE_OS
 

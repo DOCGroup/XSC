@@ -1,5 +1,5 @@
 // -*- C++ -*-
-// $Id$
+// 
 
 //=============================================================================
 /**
@@ -61,7 +61,7 @@
         Unresolved_IDREF(std::basic_string<ACE_TCHAR> &message) : message(message)
         {}
         ~Unresolved_IDREF(){}
-        std::basic_string<ACE_TCHAR> get_message ( void ) 
+        std::basic_string<ACE_TCHAR> get_message ( void )
         {
           return message;
         }

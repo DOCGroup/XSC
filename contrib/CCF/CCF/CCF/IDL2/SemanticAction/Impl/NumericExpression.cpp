@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/Impl/NumericExpression.cpp
 // author    : Boris Kolpackov <boris@kolpackov.net>
-// cvs-id    : $Id$
 
 #include "CCF/IDL2/SemanticAction/Impl/NumericExpression.hpp"
 
