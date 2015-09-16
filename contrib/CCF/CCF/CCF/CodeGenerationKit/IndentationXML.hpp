@@ -1,7 +1,6 @@
 // file      : CCF/CodeGenerationKit/IndentationXML.hpp
 // author    : Diego Sevilla Ruiz <dsevilla@ditec.um.es>
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_CODE_GENERATION_KIT_INDENTATION_XML_HPP
 #define CCF_CODE_GENERATION_KIT_INDENTATION_XML_HPP

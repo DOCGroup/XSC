@@ -19,4 +19,3 @@
 
 #endif  // UTILITY_EX_H_EX_H_HPP
 
-//$Id$

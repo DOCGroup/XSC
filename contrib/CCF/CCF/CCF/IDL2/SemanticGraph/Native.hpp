@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticGraph/Native.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_SEMANTIC_GRAPH_NATIVE_HPP
 #define CCF_IDL2_SEMANTIC_GRAPH_NATIVE_HPP

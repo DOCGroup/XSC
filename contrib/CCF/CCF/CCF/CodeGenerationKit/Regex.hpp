@@ -1,6 +1,5 @@
 // file      : CCF/CodeGenerationKit/Regex.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_RUNTIME_REGEX_HPP
 #define CCF_RUNTIME_REGEX_HPP

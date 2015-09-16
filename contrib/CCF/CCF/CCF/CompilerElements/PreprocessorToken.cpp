@@ -1,6 +1,5 @@
 // file      : CCF/CompilerElements/PreprocessorToken.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "CCF/CompilerElements/PreprocessorToken.hpp"
 
@@ -34,7 +33,7 @@ namespace CCF
 
 
       unsigned long Token::
-      line () const 
+      line () const
       {
         if (*this == eos) throw EOS ();
 

@@ -5,15 +5,15 @@
  * @file    Generator.hpp
  *
  * CXX Backend Generator.hpp.  This file generates the output
- *   C++ files and class structure dictated by the DOMDocument 
+ *   C++ files and class structure dictated by the DOMDocument
  *   parsed from the ".xsd" passed into xsc.exe.
- * 
+ *
  *    CXX_Generator::options : Initializes the program options
  *    for the cxx generator.
- * 
- *    CXX_Generator::generate : Generates the output C++ files 
+ *
+ *    CXX_Generator::generate : Generates the output C++ files
  *    and class structures.
- * 
+ *
  * XSC Basic Run step 5:
  * (a) Read in program option variables.
  * (b) Create file handlers.
@@ -22,10 +22,10 @@
  * (e) Instantiate Context from the program options.
  * (f) Generate C++ files based on the output names and suffixes from
  *     the command line.
- * 
+ *
  * file      : CXX/Generator.hpp
  * author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
- * cvs-id    : $Id$
+ * cvs-id    :
 **/
 
 #ifndef CXX_GENERATOR_HPP

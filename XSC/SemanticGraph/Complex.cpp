@@ -1,6 +1,5 @@
 // file      : XSC/SemanticGraph/Complex.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include <XSC/SemanticGraph/Complex.hpp>
 
@@ -10,7 +9,7 @@ namespace XSC
   {
     using Introspection::TypeInfo;
     using Introspection::Access;
-    
+   
     namespace
     {
       TypeInfo
@@ -21,10 +20,10 @@ namespace XSC
         ti.add_base (Access::PUBLIC, true, Scope::static_type_info ());
         return ti;
       }
-      
+     
       TypeInfo complex_ (complex_init_ ());
     }
-    
+   
     TypeInfo const& Complex::
     static_type_info () { return complex_; }
   }

@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticGraph/Struct.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "CCF/IDL2/SemanticGraph/Struct.hpp"
 #include "CCF/IDL2/SemanticGraph/Member.hpp"

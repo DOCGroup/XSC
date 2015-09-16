@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/Impl/Native.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "CCF/IDL2/SemanticGraph/Native.hpp"
 #include "CCF/IDL2/SemanticAction/Impl/Native.hpp"

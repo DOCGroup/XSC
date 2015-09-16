@@ -58,4 +58,3 @@ struct D : virtual B, C
 };
 
 #endif  // HIERARCHY_HPP
-//$Id$

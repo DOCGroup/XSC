@@ -94,4 +94,3 @@ namespace Utility
 #include "Utility/ReferenceCounting/SmartPtr.tpp"
 
 #endif  // UTILITY_REFERENCE_COUNTING_SMART_PTR_HPP
-//$Id$

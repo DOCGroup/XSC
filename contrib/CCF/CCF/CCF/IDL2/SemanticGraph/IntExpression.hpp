@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticGraph/IntExpression.hpp
 // author    : Boris Kolpackov <boris@kolpackov.net>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_SEMANTIC_GRAPH_INT_EXPRESSION_HPP
 #define CCF_IDL2_SEMANTIC_GRAPH_INT_EXPRESSION_HPP

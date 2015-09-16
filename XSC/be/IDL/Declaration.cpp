@@ -1,6 +1,5 @@
 // file      : IDL/Declaration.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "Declaration.hpp"
 #include "Elements.hpp"

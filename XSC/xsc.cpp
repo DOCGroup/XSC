@@ -21,7 +21,7 @@
  *    (c)An error occurs during the parsing of the supplied schema.
  *
  * @author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
- * cvs-id    : $Id$
+ * cvs-id    :
  */
 //=============================================================================
 

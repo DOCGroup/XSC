@@ -51,4 +51,3 @@ namespace Utility
 #include "Utility/Synch/Policy/Null.ipp"
 
 #endif  // UTILITY_SYNCH_POLICY_NULL_HPP
-//$Id$

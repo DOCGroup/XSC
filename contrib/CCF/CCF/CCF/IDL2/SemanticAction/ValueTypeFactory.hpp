@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/ValueTypeFactory.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_SEMANTIC_ACTION_VALUE_TYPE_FACTORY_HPP
 #define CCF_IDL2_SEMANTIC_ACTION_VALUE_TYPE_FACTORY_HPP
@@ -18,7 +17,7 @@ namespace CCF
         virtual ~ValueTypeFactory ()
         {
         }
-        
+       
         virtual void
         name (SimpleIdentifierPtr const& id) = 0;
 

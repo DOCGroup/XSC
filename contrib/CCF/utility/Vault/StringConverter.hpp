@@ -24,4 +24,3 @@ namespace Utility
 
 #endif  // UTILITY_EX_H_STRING_CONVERTER_HPP
 
-//$Id$

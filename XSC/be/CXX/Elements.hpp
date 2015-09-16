@@ -1,6 +1,5 @@
 // file      : CXX/Elements.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CXX_ELEMENTS_HXX
 #define CXX_ELEMENTS_HXX
@@ -21,7 +20,6 @@ typedef std::wstring string;
 
 typedef std::vector<string> NamespaceMapping;
 
-//
 //
 class Context
 {

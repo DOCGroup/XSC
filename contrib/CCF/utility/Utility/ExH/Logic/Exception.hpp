@@ -28,7 +28,7 @@ namespace Utility
       {
       public:
         typedef System::Exception Base;
-        
+       
         virtual
         ~Exception () throw ();
       };
@@ -39,4 +39,3 @@ namespace Utility
 #include "Utility/ExH/Logic/Exception.ipp"
 
 #endif  // UTILITY_EX_H_LOGIC_EXCEPTION_HPP
-//$Id$

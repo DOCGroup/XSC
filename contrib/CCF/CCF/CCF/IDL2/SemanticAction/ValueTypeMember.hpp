@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/ValueTypeMember.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_SEMANTIC_ACTION_VALUE_TYPE_MEMBER_HPP
 #define CCF_IDL2_SEMANTIC_ACTION_VALUE_TYPE_MEMBER_HPP
@@ -18,7 +17,7 @@ namespace CCF
         virtual ~ValueTypeMember ()
         {
         }
-        
+       
         virtual void
         begin_private () = 0;
 

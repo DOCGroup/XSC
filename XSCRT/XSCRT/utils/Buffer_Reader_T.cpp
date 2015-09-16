@@ -1,5 +1,3 @@
-// $Id$
-
 #include "xercesc/framework/MemBufInputSource.hpp"
 #include "xercesc/framework/Wrapper4InputSource.hpp"
 #include "XSC/utils/XercesString.h"

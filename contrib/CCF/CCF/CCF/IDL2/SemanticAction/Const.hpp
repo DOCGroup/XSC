@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/Const.hpp
 // author    : Boris Kolpackov <boris@kolpackov.net>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_SEMANTIC_ACTION_CONST_HPP
 #define CCF_IDL2_SEMANTIC_ACTION_CONST_HPP
@@ -18,7 +17,7 @@ namespace CCF
         virtual ~Const ()
         {
         }
-        
+       
         virtual void
         begin (IdentifierPtr const& type,
                SimpleIdentifierPtr const& name) = 0;

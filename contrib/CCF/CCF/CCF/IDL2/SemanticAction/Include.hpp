@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/Include.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_SEMANTIC_ACTION_INCLUDE_HPP
 #define CCF_IDL2_SEMANTIC_ACTION_INCLUDE_HPP
@@ -18,7 +17,7 @@ namespace CCF
         virtual ~Include ()
         {
         }
-        
+       
         virtual void
         quote (StringLiteralPtr const& sl) = 0;
 

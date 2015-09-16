@@ -1,6 +1,5 @@
 // file      : CCF/IDL3/SemanticAction/HomeFinder.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL3_SEMANTIC_ACTION_HOME_FINDER_HPP
 #define CCF_IDL3_SEMANTIC_ACTION_HOME_FINDER_HPP
@@ -18,7 +17,7 @@ namespace CCF
         virtual ~HomeFinder ()
         {
         }
-        
+       
         virtual void
         name (SimpleIdentifierPtr const& id) = 0;
 

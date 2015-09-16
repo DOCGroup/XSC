@@ -1,5 +1,3 @@
-// $Id$
-
 project : xsc_ccf_root, boost_filesystem, boost_system, boost_regex, boost_program_options, xsc_static, utility, xsc_common {
   after  += XSC_BE
 

@@ -1,6 +1,5 @@
 // file      : CCF/CIDL/Parser.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "CCF/CIDL/Parser.hpp"
 

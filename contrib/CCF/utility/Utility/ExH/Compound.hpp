@@ -17,7 +17,7 @@ namespace Utility
     {
     public:
       typedef _Base Base;
-      
+     
       explicit
       Compound (char const* description) throw ();
 
@@ -46,4 +46,3 @@ namespace Utility
 #include "Utility/ExH/Compound.tpp"
 
 #endif  // UTILITY_EX_H_COMPOUND_HPP
-//$Id$

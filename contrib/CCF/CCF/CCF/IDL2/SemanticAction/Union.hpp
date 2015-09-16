@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/Union.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_SEMANTIC_ACTION_UNION_HPP
 #define CCF_IDL2_SEMANTIC_ACTION_UNION_HPP
@@ -18,7 +17,7 @@ namespace CCF
         virtual ~Union ()
         {
         }
-        
+       
         virtual void
         begin_def (SimpleIdentifierPtr const& id) = 0;
 

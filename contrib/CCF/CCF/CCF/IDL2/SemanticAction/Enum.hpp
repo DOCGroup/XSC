@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/Enum.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_SEMANTIC_ACTION_ENUM_HPP
 #define CCF_IDL2_SEMANTIC_ACTION_ENUM_HPP
@@ -18,7 +17,7 @@ namespace CCF
         virtual ~Enum ()
         {
         }
-        
+       
         virtual void
         begin (SimpleIdentifierPtr const& id) = 0;
 

@@ -4,7 +4,7 @@
 /**
  * @file          Reader_Writer_Base_T.h
  *
- * $Id$
+ * 
  *
  * @author        James H. Hill
  */

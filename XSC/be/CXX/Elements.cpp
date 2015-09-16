@@ -1,6 +1,5 @@
 // file      : CXX/Elements.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "Elements.hpp"
 #include "CCF/CodeGenerationKit/Regex.hpp"
@@ -9,7 +8,6 @@
 #include <sstream>
 
 // Namespace
-//
 //
 
 string Context::
@@ -443,7 +441,6 @@ id (string const& name)
 
 
 // Namespace
-//
 //
 void Namespace::
 pre (Type& n)

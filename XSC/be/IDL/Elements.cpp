@@ -1,6 +1,5 @@
 // file      : IDL/Elements.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "Elements.hpp"
 #include "CCF/CodeGenerationKit/Regex.hpp"

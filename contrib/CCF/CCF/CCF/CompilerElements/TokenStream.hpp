@@ -1,6 +1,5 @@
 // file      : CCF/CompilerElements/TokenStream.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_COMPILER_ELEMENTS_TOKEN_STREAM_HPP
 #define CCF_COMPILER_ELEMENTS_TOKEN_STREAM_HPP
@@ -55,9 +54,9 @@ namespace CCF
       {
         return traits::eof ();
       }
-      
+     
       virtual ~TokenStream ()
-      { 
+      {
       }
     };
 
@@ -68,11 +67,11 @@ namespace CCF
           : is_ (is)
       {
       }
-      
+     
       virtual ~InputStreamAdapter ()
       {
       }
-      
+     
     public:
 
       virtual int_type

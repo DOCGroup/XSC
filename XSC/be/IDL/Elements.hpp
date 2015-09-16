@@ -1,6 +1,5 @@
 // file      : IDL/Elements.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef IDL_ELEMENTS_HXX
 #define IDL_ELEMENTS_HXX

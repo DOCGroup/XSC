@@ -1,6 +1,5 @@
 // file      : CCF/CompilerElements/FileSystem.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_RUNTIME_FILE_SYSTEM_HPP
 #define CCF_RUNTIME_FILE_SYSTEM_HPP

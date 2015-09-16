@@ -1,6 +1,5 @@
 // file      : CCF/Test/CompilerElements/CPP/driver.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include <iostream>
 

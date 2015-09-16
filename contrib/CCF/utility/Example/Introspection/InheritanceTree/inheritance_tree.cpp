@@ -62,4 +62,3 @@ main ()
 
   delete b;
 }
-//$Id$

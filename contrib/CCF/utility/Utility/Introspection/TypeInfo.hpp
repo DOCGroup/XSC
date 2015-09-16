@@ -101,4 +101,3 @@ namespace Utility
 #include "Utility/Introspection/TypeInfo.ipp"
 
 #endif  // UTILITY_INTROSPECTION_TYPE_INFO_HPP
-//$Id$

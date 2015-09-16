@@ -1,6 +1,5 @@
 // file      : CXX/Generator.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "Generator.hpp"
 #include <set>

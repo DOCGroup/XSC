@@ -19,7 +19,7 @@ namespace Utility
       {
       public:
         typedef Exception Base;
-        
+       
         explicit
         DescriptiveException (char const* description) throw ();
 
@@ -62,4 +62,3 @@ namespace Utility
 #include "Utility/ExH/System/DescriptiveException.tpp"
 
 #endif  // UTILITY_EX_H_SYSTEM_DESCRIPTIVE_EXCEPTION_HPP
-//$Id$

@@ -1,6 +1,5 @@
 // file      : XSC/SemanticGraph/Attribute.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef XSC_SEMANTIC_GRAPH_ATTRIBUTE_HXX
 #define XSC_SEMANTIC_GRAPH_ATTRIBUTE_HXX

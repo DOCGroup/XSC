@@ -1,6 +1,5 @@
 // file      : Test/IDL2/SemanticGraph/HandBuilt/Builder.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include <iostream>
 

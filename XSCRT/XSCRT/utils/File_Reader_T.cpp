@@ -1,5 +1,3 @@
-// $Id$
-
 #include "XSC/utils/XercesString.h"
 
 namespace XSCRT

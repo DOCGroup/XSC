@@ -1,6 +1,5 @@
 // file      : CCF/Example/ComponentDeploymentDescriptor/SyntaxTree.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "SyntaxTree.hpp"
 

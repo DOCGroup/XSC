@@ -1,6 +1,5 @@
 // file      : CXX/Forward.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "Forward.hpp"
 #include "Elements.hpp"

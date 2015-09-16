@@ -1,6 +1,5 @@
 // file      : CCF/Example/CIDL/LocalExecutorMapping/ExecutorMappingGenerator.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "ExecutorMappingGenerator.hpp"
 

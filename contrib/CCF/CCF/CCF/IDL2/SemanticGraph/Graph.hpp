@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticGraph/Graph.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef ELEMENT_GRAPH_HPP
 #define ELEMENT_GRAPH_HPP

@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticAction/Exception.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_SEMANTIC_ACTION_EXCEPTION_HPP
 #define CCF_IDL2_SEMANTIC_ACTION_EXCEPTION_HPP
@@ -18,7 +17,7 @@ namespace CCF
         virtual ~Exception ()
         {
         }
-        
+       
         virtual void
         begin (SimpleIdentifierPtr const& id) = 0;
 

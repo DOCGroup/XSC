@@ -1,5 +1,3 @@
-//$Id$
-
 project (libIDL) : xsc_be {
   staticname = IDL
 

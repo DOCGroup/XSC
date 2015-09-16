@@ -1,6 +1,5 @@
 // file      : CCF/CodeGenerationKit/IndentationImplanter.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_CODE_GENERATION_KIT_INDENTATION_IMPLANTER
 #define CCF_CODE_GENERATION_KIT_INDENTATION_IMPLANTER

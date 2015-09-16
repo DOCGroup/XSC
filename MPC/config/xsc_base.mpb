@@ -1,5 +1,3 @@
-// $Id$
-
 project : vcwarnings {
   requires += xsc
 

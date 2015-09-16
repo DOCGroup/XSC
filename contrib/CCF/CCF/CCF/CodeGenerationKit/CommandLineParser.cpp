@@ -1,6 +1,5 @@
 // file      : CCF/CodeGenerationKit/CommandLineParser.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "CCF/CodeGenerationKit/CommandLineParser.hpp"
 

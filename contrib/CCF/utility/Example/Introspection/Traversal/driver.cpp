@@ -90,4 +90,3 @@ main ()
     std::cout << std::endl;
   }
 }
-//$Id$

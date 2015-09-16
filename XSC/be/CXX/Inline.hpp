@@ -1,6 +1,5 @@
 // file      : CXX/Inline.hxx
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CXX_INLINE_HXX
 #define CXX_INLINE_HXX

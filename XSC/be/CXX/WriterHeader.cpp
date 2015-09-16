@@ -1,6 +1,5 @@
 // file      : CXX/WriterHeader.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "WriterHeader.hpp"
 #include "Elements.hpp"

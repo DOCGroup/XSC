@@ -1,6 +1,5 @@
 // file      : IDL/Definition.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef IDL_DEFINITION_HXX
 #define IDL_DEFINITION_HXX

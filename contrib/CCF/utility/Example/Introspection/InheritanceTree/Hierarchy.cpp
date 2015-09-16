@@ -7,7 +7,6 @@
 
 // A
 //
-//
 
 using Introspection::Object;
 using Introspection::Access;
@@ -33,7 +32,6 @@ static_type_info ()
 
 // B
 //
-//
 
 namespace
 {
@@ -55,7 +53,6 @@ static_type_info ()
 }
 
 // C
-//
 //
 
 namespace
@@ -80,7 +77,6 @@ static_type_info ()
 
 // D
 //
-//
 
 namespace
 {
@@ -101,4 +97,3 @@ static_type_info ()
 {
   return d_;
 }
-//$Id$

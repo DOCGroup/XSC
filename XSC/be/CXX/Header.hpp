@@ -1,6 +1,5 @@
 // file      : CXX/Header.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CXX_HEADER_HXX
 #define CXX_HEADER_HXX

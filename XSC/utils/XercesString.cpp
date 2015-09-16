@@ -1,5 +1,3 @@
-// $Id$
-
 #include "XercesString.h"
 #include <ostream>
 

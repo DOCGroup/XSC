@@ -3,13 +3,13 @@
 namespace Recursive
 {
   // Element
-  // 
+  //
 
   Element::
   Element (::std::list< ::XMLSchema::string< wchar_t >::_ptr > const& value__,
            ::std::list< ::XMLSchema::long_::_ptr > const& long___)
-  : 
-  ::XSCRT::Type (), 
+  :
+  ::XSCRT::Type (),
   value_ (value__),
   long__ (long___),
   regulator__ ()
@@ -41,7 +41,7 @@ namespace Recursive
 
 
   // Element
-  // 
+  //
   Element::value_iterator Element::
   begin_value ()
   {
@@ -79,7 +79,7 @@ namespace Recursive
   }
 
   // Element
-  // 
+  //
   Element::long_iterator Element::
   begin_long ()
   {
@@ -117,7 +117,7 @@ namespace Recursive
   }
 
   // Element
-  // 
+  //
   Element::el_iterator Element::
   begin_el ()
   {
@@ -190,7 +190,7 @@ namespace Recursive
         add_el (t);
       }
 
-      else 
+      else
       {
       }
     }

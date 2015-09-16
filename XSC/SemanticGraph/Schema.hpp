@@ -1,6 +1,5 @@
 // file      : XSC/SemanticGraph/Schema.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef XSC_SEMANTIC_GRAPH_SCHEMA_HXX
 #define XSC_SEMANTIC_GRAPH_SCHEMA_HXX

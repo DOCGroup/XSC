@@ -1,6 +1,5 @@
 // file      : XMLSchema/NarrowTypes.idl
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef XML_SCHEMA_NARROW_TYPES_IDL
 #define XML_SCHEMA_NARROW_TYPES_IDL
@@ -10,14 +9,13 @@
 //
 // @@ Use wrapping valuetypes when inheriting from basic type.
 //
-//
 
 module XMLSchema
 {
   abstract valuetype object_
   {
   };
-  
+ 
   typedef octet byte;
   typedef byte unsignedByte;
 
@@ -29,7 +27,7 @@ module XMLSchema
   {
     public int_ value;
   };
-  
+ 
   typedef unsigned long unsignedInt;
 
   typedef long long long_;
@@ -61,10 +59,10 @@ module XMLSchema
   //
   typedef NCName ID;
   typedef NCName IDREF;
+
+
+
  
-
-
-  
   valuetype foo
   {
     boolean bar_p ();

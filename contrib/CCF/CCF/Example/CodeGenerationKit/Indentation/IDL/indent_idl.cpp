@@ -1,6 +1,5 @@
 // file      : CCF/Example/CodeGenerationKit/Indentation/IDL/indent_idl.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "CCF/CodeGenerationKit/IndentationIDL.hpp"
 #include "CCF/CodeGenerationKit/IndentationImplanter.hpp"

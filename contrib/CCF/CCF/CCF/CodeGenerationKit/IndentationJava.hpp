@@ -1,6 +1,5 @@
 // file      : CCF/CodeGenerationKit/IndentationJava.hpp
 // author    : James H. Hill <hillj@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_CODE_GENERATION_KIT_INDENTATION_JAVA_HPP
 #define CCF_CODE_GENERATION_KIT_INDENTATION_JAVA_HPP

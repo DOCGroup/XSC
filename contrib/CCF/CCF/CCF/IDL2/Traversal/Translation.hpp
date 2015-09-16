@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/Traversal/Translation.hpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef CCF_IDL2_TRAVERSAL_TRANSLATION_HPP
 #define CCF_IDL2_TRAVERSAL_TRANSLATION_HPP

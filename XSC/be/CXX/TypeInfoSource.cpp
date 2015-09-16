@@ -1,6 +1,5 @@
 // file      : CXX/TypeInfoSource.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "TypeInfoSource.hpp"
 #include "Elements.hpp"

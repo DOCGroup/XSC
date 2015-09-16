@@ -1,6 +1,5 @@
 // file      : CCF/IDL3/Traversal/Component.cpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include "CCF/IDL3/SemanticGraph/EventType.hpp"
 
