@@ -1,6 +1,5 @@
 // file      : CXX/Source.cxx
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id: Source.cpp 169 2012-05-24 06:40:26Z johnnyw $
 
 #include "Source.hpp"
 #include "Elements.hpp"

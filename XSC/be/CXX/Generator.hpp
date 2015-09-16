@@ -25,7 +25,6 @@
  *
  * file      : CXX/Generator.hpp
  * author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
- * cvs-id    :
 **/
 
 #ifndef CXX_GENERATOR_HPP
