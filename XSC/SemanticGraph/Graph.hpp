@@ -38,7 +38,7 @@ namespace XSC
       template <typename T, typename A0, typename A1, typename A2>
       T&
       new_node (A0 const& a0, A1 const& a1, A2 const& a2);
-     
+
       void
       delete_node (N const& n);
 

@@ -39,7 +39,7 @@ namespace XSC
 
       virtual void
       post (Type&);
-     
+
       // Generate
       // read/write operations for
       // reading and writing complex

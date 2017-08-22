@@ -17,7 +17,7 @@ namespace CCF
         virtual ~Uses ()
         {
         }
-       
+
         virtual void
         multiple () = 0;
 

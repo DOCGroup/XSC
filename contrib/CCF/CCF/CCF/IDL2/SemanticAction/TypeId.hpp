@@ -17,7 +17,7 @@ namespace CCF
         virtual ~TypeId ()
         {
         }
-       
+
         virtual void
         begin (IdentifierPtr const& name, StringLiteralPtr const& id) = 0;
 
@@ -31,7 +31,7 @@ namespace CCF
         virtual ~TypePrefix ()
         {
         }
-       
+
         virtual void
         begin (IdentifierPtr const& name, StringLiteralPtr const& prefix) = 0;
 

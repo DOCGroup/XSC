@@ -32,7 +32,7 @@ namespace Utility
       SystemException;
 
       typedef ExH::Logic::DescriptiveException Exception;
-     
+
     public:
       virtual void
       add_ref () const = 0;

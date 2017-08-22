@@ -17,7 +17,7 @@ namespace CCF
         virtual ~Module ()
         {
         }
-       
+
         virtual void
         begin (SimpleIdentifierPtr const& id) = 0;
 

@@ -19,8 +19,8 @@ namespace IDL
   public:
     static void
     options (boost::program_options::options_description &d);
-   
-   
+
+
     void
     generate (boost::program_options::variables_map const& vm,
               XSC::SemanticGraph::Schema&,

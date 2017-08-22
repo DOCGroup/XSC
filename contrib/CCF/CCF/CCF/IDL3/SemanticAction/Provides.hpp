@@ -17,7 +17,7 @@ namespace CCF
         virtual ~Provides ()
         {
         }
-       
+
         virtual void
         type (IdentifierPtr const& id) = 0;
 

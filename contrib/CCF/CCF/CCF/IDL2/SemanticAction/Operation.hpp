@@ -19,7 +19,7 @@ namespace CCF
         virtual ~Operation ()
         {
         }
-       
+
         virtual void
         one_way () = 0;
 

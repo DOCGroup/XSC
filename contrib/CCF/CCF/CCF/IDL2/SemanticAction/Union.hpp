@@ -17,7 +17,7 @@ namespace CCF
         virtual ~Union ()
         {
         }
-       
+
         virtual void
         begin_def (SimpleIdentifierPtr const& id) = 0;
 

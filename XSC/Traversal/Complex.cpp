@@ -40,7 +40,7 @@ namespace XSC
       else return false;
 
       return true;
-    }  
+    }
 
     void Complex::
     inherits (Type& c)
@@ -56,8 +56,8 @@ namespace XSC
                               *this,
                               &InterfaceTemplate::comma,
                               c*/);
-	
-	inherits_post (c);
+
+  inherits_post (c);
       }
       else
       {

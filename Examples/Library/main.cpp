@@ -96,10 +96,10 @@ int main (int argc, char *argv[])
 
   try
   {
-   
+
     //Initialize the Xerces Interface
     Xerces_Interface("init");
-   
+
     //Create the Xerces Parser
     xercesc::XercesDOMParser *parser = new xercesc::XercesDOMParser();
 
@@ -121,7 +121,7 @@ int main (int argc, char *argv[])
     parser->setDoSchema(true);
     parser->setValidationSchemaFullChecking(true);
     parser->setValidationConstraintFatal(false);
-   
+
     //Create the DOMDocument that will hold the tree.
     xercesc::DOMDocument *doc = 0;
 

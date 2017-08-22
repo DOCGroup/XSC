@@ -17,7 +17,7 @@ namespace CCF
         virtual ~EventTypeFactory ()
         {
         }
-       
+
         virtual void
         name (SimpleIdentifierPtr const& id) = 0;
 

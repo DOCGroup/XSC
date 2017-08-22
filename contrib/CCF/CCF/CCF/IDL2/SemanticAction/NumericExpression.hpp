@@ -17,7 +17,7 @@ namespace CCF
         virtual ~NumericExpression ()
         {
         }
-       
+
         virtual void
         flush () = 0;
 

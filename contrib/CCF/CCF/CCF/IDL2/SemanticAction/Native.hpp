@@ -17,7 +17,7 @@ namespace CCF
         virtual ~Native ()
         {
         }
-       
+
         virtual void
         name (SimpleIdentifierPtr const& id) = 0;
 

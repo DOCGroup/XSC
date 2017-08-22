@@ -1,5 +1,3 @@
-// $Id$
-
 workspace (XSC) {
   cmdline += -include $XSC_ROOT/MPC/config
 

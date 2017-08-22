@@ -17,7 +17,7 @@ namespace CCF
         virtual ~ValueTypeMember ()
         {
         }
-       
+
         virtual void
         begin_private () = 0;
 

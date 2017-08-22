@@ -14,7 +14,7 @@ namespace Indentation
   class Buffer
   {
   public:
-   
+
     typedef ExH::Logic::DescriptiveException Exception;
 
     class EndOfStream_ {};
