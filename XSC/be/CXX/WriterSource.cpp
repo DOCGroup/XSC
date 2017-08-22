@@ -518,7 +518,12 @@ namespace
          << "void" << endl
          << id (name) << " (" << fq_name (t) << " const& s, xercesc::DOMDocument* d)"
          << "{"
-         << xml_element_type << " e (d->getDocumentElement ());"
+         << "xercesc::DOMElement* dom_element = d->getDocumentElement ();"
+         << "if (!dom_element)"
+         << "{"
+         << "throw 1;"
+         << "}"
+         << xml_element_type << " e (dom_element);"
          << "if (e.name () != " << L << " (\"" << name << "\"))"
          << "{"
          << "throw 1;"
