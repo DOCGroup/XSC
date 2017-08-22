@@ -17,7 +17,7 @@ namespace CCF
         virtual ~Const ()
         {
         }
-       
+
         virtual void
         begin (IdentifierPtr const& type,
                SimpleIdentifierPtr const& name) = 0;

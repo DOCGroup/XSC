@@ -22,7 +22,7 @@ namespace XSC
     typedef
     Node<SemanticGraph::AnySimpleType>
     AnySimpleType;
-   
+
     typedef
     Node<SemanticGraph::AnyUri>
     anyURI;

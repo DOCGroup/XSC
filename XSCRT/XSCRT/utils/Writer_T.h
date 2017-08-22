@@ -31,7 +31,6 @@ struct writer_function
 
 /**
  * @class Writer_T
- *
  */
 template <typename T, typename CHAR_TYPE = char>
 class Writer_T : public Reader_Writer_Base_T <T, CHAR_TYPE>

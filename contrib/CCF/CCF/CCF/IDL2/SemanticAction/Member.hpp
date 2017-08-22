@@ -17,7 +17,7 @@ namespace CCF
         virtual ~Member ()
         {
         }
-       
+
         virtual void
         type (IdentifierPtr const& id) = 0;
 

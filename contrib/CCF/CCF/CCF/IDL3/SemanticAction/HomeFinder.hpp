@@ -17,7 +17,7 @@ namespace CCF
         virtual ~HomeFinder ()
         {
         }
-       
+
         virtual void
         name (SimpleIdentifierPtr const& id) = 0;
 

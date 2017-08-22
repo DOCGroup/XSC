@@ -54,7 +54,7 @@ namespace CCF
       {
         return traits::eof ();
       }
-     
+
       virtual ~TokenStream ()
       {
       }
@@ -67,11 +67,11 @@ namespace CCF
           : is_ (is)
       {
       }
-     
+
       virtual ~InputStreamAdapter ()
       {
       }
-     
+
     public:
 
       virtual int_type

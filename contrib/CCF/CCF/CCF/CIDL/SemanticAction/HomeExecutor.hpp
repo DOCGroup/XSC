@@ -17,7 +17,7 @@ namespace CCF
         virtual ~HomeExecutor ()
         {
         }
-       
+
         virtual void
         begin (SimpleIdentifierPtr const& id) = 0;
 

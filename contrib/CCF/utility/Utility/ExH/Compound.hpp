@@ -17,7 +17,7 @@ namespace Utility
     {
     public:
       typedef _Base Base;
-     
+
       explicit
       Compound (char const* description) throw ();
 

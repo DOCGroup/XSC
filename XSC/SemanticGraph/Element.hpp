@@ -34,13 +34,13 @@ namespace XSC
       {
         return this->qualified_;
       }
-     
+
       bool
       href () const
       {
         return this->href_;
       }
-     
+
     protected:
       friend class Graph<Node, Edge>;
 
@@ -57,10 +57,10 @@ namespace XSC
       unsigned long max_;
       /// ?
       bool qualified_;
-     
+
       /// true if this element can be specified using an xmi href reference
       bool href_;
-     
+
     };
   }
 }

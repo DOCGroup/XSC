@@ -19,7 +19,7 @@ namespace Utility
       {
       public:
         typedef Exception Base;
-       
+
         explicit
         DescriptiveException (char const* description) throw ();
 

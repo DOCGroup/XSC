@@ -17,7 +17,7 @@ namespace CCF
         virtual ~Typedef ()
         {
         }
-       
+
         virtual void
         pre (KeywordPtr const& id) = 0;
 

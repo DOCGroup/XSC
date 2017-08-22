@@ -15,19 +15,19 @@ namespace XSC
     {
       virtual void
       traverse (Type&);
-     
+
       virtual void
       pre (Type&);
-     
+
       virtual void
       belongs (Type&, EdgeDispatcherBase&);
-     
+
       virtual void
       belongs (Type&);
-     
+
       virtual void
       name (Type&);
-     
+
       virtual void
       post (Type&);
     };

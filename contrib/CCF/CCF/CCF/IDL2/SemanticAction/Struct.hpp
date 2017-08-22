@@ -17,7 +17,7 @@ namespace CCF
         virtual ~Struct ()
         {
         }
-       
+
         virtual void
         begin_def (SimpleIdentifierPtr const& id) = 0;
 

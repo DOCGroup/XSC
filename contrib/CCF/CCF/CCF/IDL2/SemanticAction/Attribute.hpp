@@ -17,7 +17,7 @@ namespace CCF
         virtual ~Attribute ()
         {
         }
-       
+
         virtual void
         begin_ro () = 0;
 
