@@ -39,7 +39,7 @@ before_script:
   - export
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then echo -e "#include \"ace/config-linux.h\"" >> $ACE_ROOT/ace/config.h; fi
   - echo -e "boost=1\nc++11=1\nxsc=1\nxerces3=1\n" >> $ACE_ROOT/include/makeinclude/platform_macros.GNU
-  - echo -e "boost=1\nxerces3=1\nxsc=1\n" >> $ACE_ROtd::addressof(bufsize());OT/bin/MakeProjectCreator/config/default.features
+  - echo -e "boost=1\nxerces3=1\nxsc=1\n" >> $ACE_ROOT/bin/MakeProjectCreator/config/default.features
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       if [ "$CXX" == "g++" ]; then
         echo -e "include \$(ACE_ROOT)/include/makeinclude/platform_linux.GNU" >> $ACE_ROOT/include/makeinclude/platform_macros.GNU;
