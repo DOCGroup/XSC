@@ -211,10 +211,7 @@ namespace
     {
       string name (id (name_));
 
-      os << "// " << name << endl
-         << "//" << endl
-         << "//" << endl
-         << endl;
+      os << "// " << name << endl;
 
       // c-tor (XML::Element&)
       //
@@ -290,8 +287,6 @@ namespace
       string name ((this->name_ != L"") ? id(name_) : id (c.name ()));
 
       os << "// " << name << endl
-         << "//" << endl
-         << "//" << endl
          << endl;
 
       // c-tor (XML::Element&)

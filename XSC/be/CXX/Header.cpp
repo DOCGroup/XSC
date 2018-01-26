@@ -178,7 +178,6 @@ namespace
         container = L"::std::list";
 
       os << "// " << name << endl
-         << "//" << endl
          << "public:" << endl;
 
 
@@ -287,7 +286,6 @@ namespace
       idref_ptr = type.find(idref_str);
 
       os << "// " << name << endl
-         << "//" << endl
          << "public:" << endl;
 
 
@@ -431,8 +429,7 @@ namespace
 
       if (this->cdr_reader_generation_)
       {
-        os << "// read" << endl
-           << "//" << endl;
+        os << "// read" << endl;
 
         reader = 1;
 
@@ -456,7 +453,6 @@ namespace
           os << "public:" << endl;
 
         os << "// write" << endl
-           << "//" << endl
            << "bool" << endl
            << "write_" << name
            << " (::XMLSchema::CDR_OutputStream &) const;"
@@ -694,8 +690,7 @@ namespace
       bool reader = 0;
       if (this->cdr_reader_generation_)
       {
-        os << "// read" << endl
-           << "//" << endl;
+        os << "// read" << endl;
         reader = 1;
 
         os << "public:" << endl;
@@ -718,7 +713,6 @@ namespace
             os << "public:" << endl;
 
           os << "// write" << endl
-             << "//" << endl
              << "bool" << endl
              << "write_" << name
              << " (::XMLSchema::CDR_OutputStream &) const;"
@@ -782,8 +776,7 @@ namespace
       {
         string name (type_name (e));
 
-        os << "// anonymous type for " /* << scope << "::"*/ << name << endl
-           << "//" << endl;
+        os << "// anonymous type for " /* << scope << "::"*/ << name << endl;
 
         if (dynamic_cast<SemanticGraph::Type*> (&e.scope ()))
         {

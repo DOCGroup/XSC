@@ -45,8 +45,7 @@ namespace
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       idref_ptr = type.find(idref_str);
 
-      os << "// " << scope << endl
-         << "//" << endl;
+      os << "// " << scope << endl;
 
       if (e.min () == 0 && e.max () == 1)
       {
@@ -263,8 +262,7 @@ namespace
       string name (a.name ());
       string type (type_name (a));
 
-      os << "// " << scope << endl
-         << "//" << endl;
+      os << "// " << scope << endl;
 
       //Check if the type is an IDREF
       std::string::size_type idref_ptr = 0;
@@ -531,7 +529,7 @@ namespace
       string type (name);
 
       os << "// " << scope << endl
-         << "//" << endl << endl;
+         << endl;
 
       // c-tor
       //
@@ -907,7 +905,7 @@ namespace
 
             os << name << "_ ("
               << "s." << name << "_.get () ? "
-              << "new " << type << " (*s." << name << "_) : " << "0)," << endl;
+              << "new " << type << " (*s." << name << "_) : " << "nullptr)," << endl;
           }
         else if (e.min () == 1 && e.max () == 1)
           {
@@ -935,7 +933,7 @@ namespace
         {
           os << name << "_ ("
              << "s." << name << "_.get () ? "
-             << "new " << type << " (*s." << name << "_) : " << "0)," << endl;
+             << "new " << type << " (*s." << name << "_) : " << "nullptr)," << endl;
         }
         else
         {
@@ -1152,7 +1150,7 @@ namespace
       string type (type_name (e));
 
       os << "// " << scope << endl
-         << "//" << endl << endl;
+         << endl;
 
       os << i
          << scope << "::Value " << scope << "::" <<  endl
