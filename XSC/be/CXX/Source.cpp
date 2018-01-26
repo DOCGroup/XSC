@@ -1124,7 +1124,6 @@ namespace
       string type (type_name (c));
 
       os << "// " << scope << endl
-         << "//" << endl
          << endl;
 
       os << scope << "::" << endl
@@ -1405,7 +1404,6 @@ namespace
       enter_scope (name);
 
       os << "// " << scope << endl
-         << "//" << endl
          << endl;
 
       // c-tor (Element const&)

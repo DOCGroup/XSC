@@ -206,8 +206,7 @@ namespace
     virtual void
     pre (Type& c)
     {
-      os << "// From " << type_name (c) << endl
-         << "//" << endl;
+      os << "// From " << type_name (c) << endl;
     }
 
   private:
@@ -378,8 +377,7 @@ namespace
       {
         string name (type_name (e));
 
-        os << "// anonymous type for " /* << scope << "::"*/ << name << endl
-           << "//" << endl;
+        os << "// anonymous type for " /* << scope << "::"*/ << name << endl;
 
         if (dynamic_cast<SemanticGraph::Type*> (&e.scope ()))
         {

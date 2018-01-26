@@ -99,7 +99,6 @@ namespace
            << id (name) << " (Type& o)"
            << "{"
            << "// VC6 anathema strikes again" << endl
-           << "//" << endl
            << fq_name (e, L"", false) << "_iterator "
            << "b (o.begin_" << name << "()), "
            << "e (o.end_" << name << "());"
@@ -132,7 +131,6 @@ namespace
            << id (name) << " (Type const& o)"
            << "{"
            << "// VC6 anathema strikes again" << endl
-           << "//" << endl
            << fq_name (e, L"", false) << "_const_iterator "
            << "b (o.begin_" << name << "()), "
            << "e (o.end_" << name << "());"
@@ -440,8 +438,6 @@ namespace
       //enter_scope (name);
 
       os << "// " << scope << endl
-         << "//" << endl
-         << "//" << endl
          << endl;
 
       // traverse (Type&)

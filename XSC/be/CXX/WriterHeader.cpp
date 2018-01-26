@@ -400,8 +400,7 @@ namespace
       {
         string name (type_name (e));
 
-        os << "// anonymous type for " /* << scope << "::"*/ << name << endl
-           << "//" << endl;
+        os << "// anonymous type for " /* << scope << "::"*/ << name << endl;
 
         if (dynamic_cast<SemanticGraph::Type*> (&e.scope ()))
           os << "public:" << endl;
