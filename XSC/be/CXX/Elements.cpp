@@ -230,61 +230,61 @@ namespace
     virtual void
     traverse (SemanticGraph::String&)
     {
-      r = schema_ns () + L"::string< " + char_type + L" >";
+      r = schema_ns () + L"::string<" + char_type + L">";
     }
 
     virtual void
     traverse (SemanticGraph::NormalizedString&)
     {
-      r = schema_ns () + L"::normalizedString< " + char_type + L" >";
+      r = schema_ns () + L"::normalizedString<" + char_type + L">";
     }
 
     virtual void
     traverse (SemanticGraph::Token&)
     {
-      r = schema_ns () + L"::token< " + char_type + L" >";
+      r = schema_ns () + L"::token<" + char_type + L">";
     }
 
     virtual void
     traverse (SemanticGraph::Name&)
     {
-      r = schema_ns () + L"::Name< " + char_type + L" >";
+      r = schema_ns () + L"::Name<" + char_type + L">";
     }
 
     virtual void
     traverse (SemanticGraph::NMTOKEN&)
     {
-      r = schema_ns () + L"::NMTOKEN< " + char_type + L" >";
+      r = schema_ns () + L"::NMTOKEN<" + char_type + L">";
     }
 
     virtual void
     traverse (SemanticGraph::NCName&)
     {
-      r = schema_ns () + L"::NCName< " + char_type + L" >";
+      r = schema_ns () + L"::NCName<" + char_type + L">";
     }
 
     virtual void
     traverse (SemanticGraph::AnyUri&)
     {
-      r = schema_ns () + L"::anyURI< " + char_type + L" >";
+      r = schema_ns () + L"::anyURI<" + char_type + L">";
     }
 
     virtual void
     traverse (SemanticGraph::QName&)
     {
-      r = schema_ns () + L"::QName< " + char_type + L" >";
+      r = schema_ns () + L"::QName<" + char_type + L">";
     }
 
     virtual void
     traverse (SemanticGraph::Id&)
     {
-      r = schema_ns () + L"::ID< " + char_type + L" >";
+      r = schema_ns () + L"::ID<" + char_type + L">";
     }
 
     virtual void
     traverse (SemanticGraph::IdRef&)
     {
-      r = schema_ns () + L"::IDREF< " + char_type + L" >";
+      r = schema_ns () + L"::IDREF<" + char_type + L">";
     }
 
   private:

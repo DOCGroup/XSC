@@ -112,7 +112,11 @@ namespace
         L << L" (\"" << name << L"\")" << ", " <<
         (q ? L + L" (\"" + ns + L"\")" + L", " : L"") <<
         L << L" (\"" << L"\")" << ", " << "top_ ());"
+#if defined (ACE_HAS_CPP11)
          << "attr_ (std::addressof(a));"
+#else
+         << "attr_ (&a);"
+#endif
          << "Traversal::" << scope << "::" << id (name) << " (o);"
          << "attr_ (0);"
          << "}";
@@ -140,7 +144,7 @@ namespace
     virtual void
     traverse (SemanticGraph::IdRef&)
     {
-      os << "::XMLSchema::Writer::IDREF< " << char_type << " >" <<
+      os << "::XMLSchema::Writer::IDREF<" << char_type << ">" <<
         "::traverse (o);";
     }
 
@@ -406,7 +410,7 @@ namespace
     {
       if (check (r))
       {
-        os << "virtual ::XMLSchema::Writer::IDREF< " << char_type << " >, " <<
+        os << "virtual ::XMLSchema::Writer::IDREF<" << char_type << ">, " <<
           endl;
       }
     }
