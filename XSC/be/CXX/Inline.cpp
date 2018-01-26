@@ -894,7 +894,7 @@ namespace
         // constructor. Fix for compile warnings.
         if (! base_class_initialized_)
           {
-            os << "::XSCRT::Type ()," << endl;
+            os << "::XSCRT::Type (s)," << endl;
             base_class_initialized_ = 1;
           }
 
