@@ -53,4 +53,3 @@ before_script:
 script:
   - perl $ACE_ROOT/bin/mwc.pl -type gnuace -workers 2 XSC.mwc
   - make -j 6
-
