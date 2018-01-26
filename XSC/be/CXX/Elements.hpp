@@ -75,7 +75,7 @@ public:
       {
         L_ = L"";
       }
-    string_type_ = L"::std::basic_string< " + char_type + L" >";
+    string_type_ = L"std::basic_string< " + char_type + L" >";
     parser_type_ = L"::XSCRT::Parser< " + char_type + L" >";
     xml_element_type_ = L"::XSCRT::XML::Element< " + char_type + L" >";
     xml_attribute_type_ = L"::XSCRT::XML::Attribute< " + char_type + L" >";
