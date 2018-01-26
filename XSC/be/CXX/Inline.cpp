@@ -46,7 +46,7 @@ namespace
       idref_ptr = type.find(idref_str);
 
       os << "// " << scope << endl
-         << "// " << endl;
+         << "//" << endl;
 
       if (e.min () == 0 && e.max () == 1)
       {
@@ -264,7 +264,7 @@ namespace
       string type (type_name (a));
 
       os << "// " << scope << endl
-         << "// " << endl;
+         << "//" << endl;
 
       //Check if the type is an IDREF
       std::string::size_type idref_ptr = 0;
@@ -531,7 +531,7 @@ namespace
       string type (name);
 
       os << "// " << scope << endl
-         << "// " << endl << endl;
+         << "//" << endl << endl;
 
       // c-tor
       //
@@ -541,9 +541,7 @@ namespace
 
       ctor_args_.traverse (c);
 
-      os << ")" << endl
-         << ": " << endl;
-
+      os << ") :" << endl;
 
       inherits (c, ctor_base_);
 
@@ -636,7 +634,7 @@ namespace
       string type (type_name (c));
 
       if (this->cdr_reader_generation_)
-        os << "bool " << endl
+        os << "bool" << endl
            << "operator >> (::XMLSchema::CDR_InputStream &stream,"
            << endl
            << "             ::XMLSchema::cdr_arg_traits < "
@@ -790,7 +788,7 @@ namespace
         // to inherit from the ::XSCRT::Type base class
         if (! base_class_initialized_)
         {
-          os << "::XSCRT::Type (), " << endl;
+          os << "::XSCRT::Type ()," << endl;
           base_class_initialized_ = 1;
         }
 
@@ -1154,7 +1152,7 @@ namespace
       string type (type_name (e));
 
       os << "// " << scope << endl
-         << "// " << endl << endl;
+         << "//" << endl << endl;
 
       os << i
          << scope << "::Value " << scope << "::" <<  endl
@@ -1189,7 +1187,7 @@ namespace
 
       // CDR Insertion extraction operations if needed
       if (this->cdr_reader_generation_)
-  os << "bool " << endl
+  os << "bool" << endl
      << "operator >> (::XMLSchema::CDR_InputStream &stream,"
      << endl
      << "             ::XMLSchema::cdr_arg_traits < "

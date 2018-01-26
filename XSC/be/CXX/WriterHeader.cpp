@@ -40,7 +40,7 @@ namespace
       if (e.min () == 0 && e.max () == 1)
       {
         // Borland post
-        os << "virtual void " << endl
+        os << "virtual void" << endl
            << id (name)  << " (Type &o)" << endl
            << "{"
            << "this->" << id (name) << " ("
@@ -56,7 +56,7 @@ namespace
       else if (e.min () == 1 && e.max () == 1)
       {
         // Borland post
-        os << "virtual void " << endl
+        os << "virtual void" << endl
            << id (name)  << " (Type &o)" << endl
            << "{"
            << "this->" << id (name) << " ("
@@ -76,7 +76,7 @@ namespace
 
         // Pre
         //
-        os << "virtual void " << endl
+        os << "virtual void" << endl
            << name << "_pre (Type &o)" << endl
            << "{"
            << "this->"  << name << "_pre ("
@@ -91,7 +91,7 @@ namespace
 
         // non-const next
         //
-        os << "virtual void " << endl
+        os << "virtual void" << endl
            << name << "_next (Type &o)" << endl
            << "{"
            << "this->"  << name << "_next ("
@@ -105,7 +105,7 @@ namespace
            << endl;
 
         //  post
-        os << "virtual void " << endl
+        os << "virtual void" << endl
            << name << "_post (Type &o)" << endl
            << "{"
            << "this->" << name << "_post ("
@@ -131,7 +131,7 @@ namespace
       string name (a.name ());
 
       // Borland post
-      os << "virtual void " << endl
+      os << "virtual void" << endl
          << id (name)  << " (Type &o)" << endl
          << "{"
          << "this->" << id (name) << " ("
@@ -229,7 +229,7 @@ namespace
     virtual void
     pre (Type& c)
     {
-      os << "struct " << name_ << " : Traversal::" << scope << ", " << endl;
+      os << "struct " << name_ << " : Traversal::" << scope << "," << endl;
 
       inherits (c, inherits_);
 
@@ -246,7 +246,7 @@ namespace
          << endl;
 
       // Non-const traverse for Borland
-      os << "virtual void " << endl
+      os << "virtual void" << endl
          << "traverse (Type &o)" << endl
          << "{"
          << "this->traverse ("
@@ -297,7 +297,7 @@ namespace
 
       if (name == L"") name = L"BAD NAME";
 
-      os << "struct " << name << " : Traversal::" << name << ", " << endl
+      os << "struct " << name << " : Traversal::" << name << "," << endl
          << "virtual ::XSCRT::Writer< " << char_type << " >"
          << "{";
 
@@ -307,7 +307,7 @@ namespace
          << endl;
 
       // Non-const traverse for Borland
-      os << "virtual void " << endl
+      os << "virtual void" << endl
          << "traverse (Type &o)"
          << "{"
          << "this->traverse ("
@@ -426,7 +426,7 @@ namespace
 void
 generate_writer_header (Context& ctx, SemanticGraph::Schema& schema)
 {
-  ctx.os << "#include \"XMLSchema/Writer.hpp\"" << endl
+  ctx.os << "#include \"ace/XML_Utils/XMLSchema/Writer.hpp\"" << endl
          << endl;
 
   {
