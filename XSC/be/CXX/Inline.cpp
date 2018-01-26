@@ -591,7 +591,7 @@ namespace
          << scope << "& " << scope << "::" << endl
          << "operator= (" << type << " const& s)"
          << "{"
-         << "if (&s != this)"
+         << "if (std::addressof(s) != this)"
          << "{";
 
       inherits (c, assign_base_);
