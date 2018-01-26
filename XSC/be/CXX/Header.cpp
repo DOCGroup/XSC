@@ -178,7 +178,7 @@ namespace
         container = L"::std::list";
 
       os << "// " << name << endl
-         << "// " << endl
+         << "//" << endl
          << "public:" << endl;
 
 
@@ -287,7 +287,7 @@ namespace
       idref_ptr = type.find(idref_str);
 
       os << "// " << name << endl
-         << "// " << endl
+         << "//" << endl
          << "public:" << endl;
 
 
@@ -431,13 +431,13 @@ namespace
 
       if (this->cdr_reader_generation_)
       {
-        os << "// read " << endl
+        os << "// read" << endl
            << "//" << endl;
 
         reader = 1;
 
         os << "public:" << endl;
-        os << "static bool " << endl
+        os << "static bool" << endl
            << "read_" << name
            << " (::XMLSchema::CDR_InputStream &,"
            << endl;
@@ -455,7 +455,7 @@ namespace
         if (!reader)
           os << "public:" << endl;
 
-        os << "// write " << endl
+        os << "// write" << endl
            << "//" << endl
            << "bool" << endl
            << "write_" << name
@@ -694,12 +694,12 @@ namespace
       bool reader = 0;
       if (this->cdr_reader_generation_)
       {
-        os << "// read " << endl
+        os << "// read" << endl
            << "//" << endl;
         reader = 1;
 
         os << "public:" << endl;
-        os << "static bool " << endl
+        os << "static bool" << endl
            << "read_" << name
            << " (::XMLSchema::CDR_InputStream &,"
            << endl;
@@ -717,7 +717,7 @@ namespace
           if (!reader)
             os << "public:" << endl;
 
-          os << "// write " << endl
+          os << "// write" << endl
              << "//" << endl
              << "bool" << endl
              << "write_" << name
@@ -856,8 +856,8 @@ generate_header (Context& ctx,
     ctx.os << "#include <list>" << endl;
 
   //Added
-  ctx.os << "#include \"XMLSchema/Types.hpp\"" << endl
-         << "#include \"XMLSchema/id_map.hpp\"" << endl;
+  ctx.os << "#include \"ace/XML_Utils/XMLSchema/Types.hpp\"" << endl
+         << "#include \"ace/XML_Utils/XMLSchema/id_map.hpp\"" << endl;
 
   ctx.os << "#include \"ace/Refcounted_Auto_Ptr.h\"" << endl
    << "#include \"ace/Null_Mutex.h\"" << endl

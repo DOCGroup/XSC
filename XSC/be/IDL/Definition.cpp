@@ -67,7 +67,7 @@ namespace
       string type (type_name (c));
 
       os << "// " << name << endl
-         << "// " << endl;
+         << "//" << endl;
 
       if (c.max () != 1)
       {
@@ -112,7 +112,7 @@ namespace
       string type (type_name (a));
 
       os << "// " << name << endl
-         << "// " << endl;
+         << "//" << endl;
 
 
       if (a.optional ())

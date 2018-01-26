@@ -1209,7 +1209,7 @@ namespace
 
         // pre
         os << "// write " << name << endl;
-        os << "bool " << endl << name << "::write_" << name
+        os << "bool" << endl << name << "::write_" << name
            << " (::XMLSchema::CDR_OutputStream &stream) const"
            << "{";
 
@@ -1445,7 +1445,7 @@ namespace
       {
   // pre
   os << "// write " << name << endl;
-  os << "bool " << endl << name << "::write_" << name
+  os << "bool" << endl << name << "::write_" << name
      << " (::XMLSchema::CDR_OutputStream &stream) const"
      << "{";
 
@@ -1467,7 +1467,7 @@ namespace
       {
   // pre
   os << "// read " << name << endl;
-  os << "bool " << endl << name << "::read_" << name
+  os << "bool" << endl << name << "::read_" << name
      << " (::XMLSchema::CDR_InputStream &stream, "
      << endl
      << "::XMLSchema::cdr_arg_traits < " << name

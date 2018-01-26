@@ -127,7 +127,7 @@ main ()
     }
     catch (...)
     {
-      cerr << "Caught unknown exception using catch-all handler. " << endl;
+      cerr << "Caught unknown exception using catch-all handler." << endl;
       return -1;
     }
   }
