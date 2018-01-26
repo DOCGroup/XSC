@@ -91,9 +91,9 @@ namespace
         string container;
 
         if (this->generate_ra_sequences_)
-          container = L"::std::vector";
+          container = L"std::vector";
         else
-          container = L"::std::list";
+          container = L"std::list";
 
         os << comma ()
            << container << "< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > > const& "
@@ -173,9 +173,9 @@ namespace
       string container;
 
       if (this->generate_ra_sequences_)
-        container = L"::std::vector";
+        container = L"std::vector";
       else
-        container = L"::std::list";
+        container = L"std::list";
 
       os << "// " << name << endl
          << "public:" << endl;
@@ -225,7 +225,7 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os << "::std::auto_ptr< " << type << " > " << id (name) << "_;";
+        os << "std::auto_ptr< " << type << " > " << id (name) << "_;";
       }
       else
       {
@@ -245,7 +245,7 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os << "::std::auto_ptr< " << type << " > " << id (name) << "_;";
+        os << "std::auto_ptr< " << type << " > " << id (name) << "_;";
       }
 
       os << endl;
@@ -306,7 +306,7 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os << "::std::auto_ptr< " << type << " > " << id (name) << "_;";
+        os << "std::auto_ptr< " << type << " > " << id (name) << "_;";
       }
       else
       {
@@ -324,7 +324,7 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os << "::std::auto_ptr< " << type << " > " << id (name) << "_;";
+        os << "std::auto_ptr< " << type << " > " << id (name) << "_;";
       }
 
       os << endl;
@@ -521,8 +521,7 @@ namespace
 
       // operator=
       //
-      os << name << "&" << endl
-         << "operator= (" << name << " const& s);"
+      os << name << "& operator= (" << name << " const& s);"
          << endl;
 
       os << "private:" << endl

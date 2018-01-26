@@ -90,7 +90,7 @@ namespace
     post (Type& c)
     {
       os << "::XSCRT::extended_type_info_map ().insert ("
-         << "::std::make_pair (id, nf));"
+         << "std::make_pair (id, nf));"
          << "}";
 
       // Go after anonymous types.
@@ -138,7 +138,7 @@ namespace
          << "false, typeid (::XSCRT::Type));"
          << endl
          << "::XSCRT::extended_type_info_map ().insert ("
-         << "::std::make_pair (id, nf));"
+         << "std::make_pair (id, nf));"
          << "}"
          << "};"
          << name << "TypeInfoInitializer " << name << "TypeInfoInitializer_;"

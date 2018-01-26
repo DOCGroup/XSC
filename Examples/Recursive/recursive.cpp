@@ -6,8 +6,8 @@ namespace Recursive
   //
 
   Element::
-  Element (::std::list< ::XMLSchema::string< wchar_t >::_ptr > const& value__,
-           ::std::list< ::XMLSchema::long_::_ptr > const& long___)
+  Element (std::list< ::XMLSchema::string< wchar_t >::_ptr > const& value__,
+           std::list< ::XMLSchema::long_::_ptr > const& long___)
   :
   ::XSCRT::Type (),
   value_ (value__),
@@ -170,7 +170,7 @@ namespace Recursive
     while (p.more_elements ())
     {
       ::XSCRT::XML::Element< wchar_t > e (p.next_element ());
-      ::std::basic_string< wchar_t > n (::XSCRT::XML::uq_name (e.name ()));
+      std::basic_string< wchar_t > n (::XSCRT::XML::uq_name (e.name ()));
 
       if (n == L"value")
       {
@@ -235,7 +235,7 @@ namespace Recursive
         ::XSCRT::ExtendedTypeInfo nf (id);
 
         nf.add_base (::XSCRT::ExtendedTypeInfo::Access::public_, false, typeid (::XSCRT::Type));
-        ::XSCRT::extended_type_info_map ().insert (::std::make_pair (id, nf));
+        ::XSCRT::extended_type_info_map ().insert (std::make_pair (id, nf));
       }
     };
 

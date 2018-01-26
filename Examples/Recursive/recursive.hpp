@@ -26,8 +26,8 @@ namespace Recursive
     // value
     //
     public:
-    typedef ::std::list< ::XMLSchema::string< wchar_t >::_ptr >::iterator value_iterator;
-    typedef ::std::list< ::XMLSchema::string< wchar_t >::_ptr >::const_iterator value_const_iterator;
+    typedef std::list< ::XMLSchema::string< wchar_t >::_ptr >::iterator value_iterator;
+    typedef std::list< ::XMLSchema::string< wchar_t >::_ptr >::const_iterator value_const_iterator;
     value_iterator begin_value ();
     value_iterator end_value ();
     value_const_iterator begin_value () const;
@@ -36,13 +36,13 @@ namespace Recursive
     size_t count_value (void) const;
 
     protected:
-    ::std::list< ::XMLSchema::string< wchar_t >::_ptr > value_;
+    std::list< ::XMLSchema::string< wchar_t >::_ptr > value_;
 
     // long
     //
     public:
-    typedef ::std::list< ::XMLSchema::long_::_ptr >::iterator long_iterator;
-    typedef ::std::list< ::XMLSchema::long_::_ptr >::const_iterator long_const_iterator;
+    typedef std::list< ::XMLSchema::long_::_ptr >::iterator long_iterator;
+    typedef std::list< ::XMLSchema::long_::_ptr >::const_iterator long_const_iterator;
     long_iterator begin_long ();
     long_iterator end_long ();
     long_const_iterator begin_long () const;
@@ -51,13 +51,13 @@ namespace Recursive
     size_t count_long (void) const;
 
     protected:
-    ::std::list< ::XMLSchema::long_::_ptr > long__;
+    std::list< ::XMLSchema::long_::_ptr > long__;
 
     // el
     //
     public:
-    typedef ::std::list< ::Recursive::Element::_ptr >::iterator el_iterator;
-    typedef ::std::list< ::Recursive::Element::_ptr >::const_iterator el_const_iterator;
+    typedef std::list< ::Recursive::Element::_ptr >::iterator el_iterator;
+    typedef std::list< ::Recursive::Element::_ptr >::const_iterator el_const_iterator;
     el_iterator begin_el ();
     el_iterator end_el ();
     el_const_iterator begin_el () const;
@@ -66,11 +66,11 @@ namespace Recursive
     size_t count_el (void) const;
 
     protected:
-    ::std::list< ::Recursive::Element::_ptr > el_;
+    std::list< ::Recursive::Element::_ptr > el_;
 
     public:
-    Element (::std::list< ::XMLSchema::string< wchar_t >::_ptr > const& value__,
-             ::std::list< ::XMLSchema::long_::_ptr > const& long___);
+    Element (std::list< ::XMLSchema::string< wchar_t >::_ptr > const& value__,
+             std::list< ::XMLSchema::long_::_ptr > const& long___);
 
     Element (::XSCRT::XML::Element< wchar_t > const&);
     Element (Element const& s);

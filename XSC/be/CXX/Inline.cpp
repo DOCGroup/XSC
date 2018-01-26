@@ -55,7 +55,7 @@ namespace
            << "bool " << scope << "::" << endl
            << name << "_p () const"
            << "{"
-           << "return " << id (name) << "_.get () != 0;"
+           << "return " << id (name) << "_.get () != nullptr;"
            << "}";
 
         os << i
@@ -103,7 +103,7 @@ namespace
            << "}"
            << "else"
            << "{"
-           << id (name) << "_ = ::std::auto_ptr< " << type << " > (new "
+           << id (name) << "_ = std::auto_ptr< " << type << " > (new "
            << type << " (e));"
            << id (name) << "_->container (this);"
            << "}"
@@ -222,7 +222,7 @@ namespace
           {
             os << "if (" << name << "_.capacity () < " << name << "_.size () + 1)"
                << "{"
-               << "::std::vector< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > > v;"
+               << "std::vector< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > > v;"
                << "v.reserve (" << id(name) << "_.size () + 1);"
                << endl
                << "for (" << name << "_iterator i = " << id(name) << "_.begin ();"
@@ -275,7 +275,7 @@ namespace
            << "bool " << scope << "::" << endl
            << name << "_p () const"
            << "{"
-           << "return " << id (name) << "_.get () != 0;"
+           << "return " << id (name) << "_.get () != nullptr;"
            << "}";
 
         os << i
@@ -324,7 +324,7 @@ namespace
            << "}"
            << "else"
            << "{"
-           << id (name) << "_ = ::std::auto_ptr< " << type << " > (new "
+           << id (name) << "_ = std::auto_ptr< " << type << " > (new "
            << type << " (e));"
            << id (name) << "_->container (this);"
            << "}"
@@ -427,9 +427,9 @@ namespace
         string container;
 
         if (this->generate_ra_sequences_)
-          container = L"::std::vector";
+          container = L"std::vector";
         else
-          container = L"::std::list";
+          container = L"std::list";
 
         os << comma ()
            << container << "< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > > const& "
@@ -534,8 +534,7 @@ namespace
       // c-tor
       //
       os << i
-         << scope << "::" << endl
-         << name << " (";
+         << scope << "::" << name << " (";
 
       ctor_args_.traverse (c);
 
@@ -548,7 +547,7 @@ namespace
       // is commented out since it was producing a bug when complex types
       // extended another complete type.
 
-      //ctor_member__.reset_base_class_initialization ();
+      ctor_member__.reset_base_class_initialization ();
       names (c, ctor_member_);
 
       os << "regulator__ ()"
@@ -561,9 +560,9 @@ namespace
       // copy c-tor
       //
       os << i
-         << scope << "::" << endl
-         << name << " (" << type << " const& s)" << endl
-         << ":" << endl;
+         << scope << "::"
+         << name << " (" << type << " const& s) :" << endl
+         << "::XSCRT::Type (s)," << endl;
 
       // Resets a flag that determines if a Complex Type's
       // copy constructor has inherited from the base XSCRT::Type
@@ -584,8 +583,8 @@ namespace
       // operator=
       //
       os << i
-         << scope << "& " << scope << "::" << endl
-         << "operator= (" << type << " const& s)"
+         << scope << "&" << endl
+         << scope << "::operator= (" << type << " const& s)"
          << "{"
          << "if (std::addressof(s) != this)"
          << "{";
@@ -894,7 +893,6 @@ namespace
         // constructor. Fix for compile warnings.
         if (! base_class_initialized_)
           {
-            os << "::XSCRT::Type (s)," << endl;
             base_class_initialized_ = 1;
           }
 
@@ -1092,7 +1090,7 @@ namespace
         {
           os << "if (s." << name << "_.get ()) "
              << name << " (*(s." << name << "_));"
-             << "else " << name << "_ = ::std::auto_ptr< " << type << " > (0);"
+             << "else " << name << "_ = std::auto_ptr< " << type << " > (0);"
              << endl;
         }
         else
