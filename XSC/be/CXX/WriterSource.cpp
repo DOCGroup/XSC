@@ -112,7 +112,7 @@ namespace
         L << L" (\"" << name << L"\")" << ", " <<
         (q ? L + L" (\"" + ns + L"\")" + L", " : L"") <<
         L << L" (\"" << L"\")" << ", " << "top_ ());"
-         << "attr_ (&a);"
+         << "attr_ (std::addressof(a));"
          << "Traversal::" << scope << "::" << id (name) << " (o);"
          << "attr_ (0);"
          << "}";
