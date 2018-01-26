@@ -165,7 +165,7 @@ namespace
     virtual void
     traverse (SemanticGraph::IdRef&)
     {
-      os << "virtual ::XMLSchema::Writer::IDREF< " << char_type << " >, " <<
+      os << "virtual ::XMLSchema::Writer::IDREF<" << char_type << ">, " <<
         endl;
     }
 

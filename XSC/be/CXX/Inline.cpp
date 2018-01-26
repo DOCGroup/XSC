@@ -10,6 +10,7 @@
 #include "XSC/Traversal.hpp"
 
 #include "CCF/CodeGenerationKit/Regex.hpp"
+#include "ace/config-all.h"
 
 #if defined (_WINDOWS)
 # if defined (min)
@@ -18,6 +19,12 @@
 # if defined (max)
 #   undef max
 # endif
+#endif
+
+#if defined (ACE_HAS_CPP11)
+std::wstring nullptr_string (L"nullptr");
+#else
+std::wstring nullptr_string (L"0");
 #endif
 
 namespace
@@ -55,7 +62,7 @@ namespace
            << "bool " << scope << "::" << endl
            << name << "_p () const"
            << "{"
-           << "return " << id (name) << "_.get () != nullptr;"
+           << "return " << id (name) << "_.get () != " << nullptr_string << ";"
            << "}";
 
         os << i
@@ -275,7 +282,7 @@ namespace
            << "bool " << scope << "::" << endl
            << name << "_p () const"
            << "{"
-           << "return " << id (name) << "_.get () != nullptr;"
+           << "return " << id (name) << "_.get () != " << nullptr_string << ";"
            << "}";
 
         os << i
@@ -586,7 +593,11 @@ namespace
          << scope << "&" << endl
          << scope << "::operator= (" << type << " const& s)"
          << "{"
+#if defined (ACE_HAS_CPP11)
          << "if (std::addressof(s) != this)"
+#else
+         << "if (&s != this)"
+#endif
          << "{";
 
       inherits (c, assign_base_);
@@ -903,7 +914,7 @@ namespace
 
             os << name << "_ ("
               << "s." << name << "_.get () ? "
-              << "new " << type << " (*s." << name << "_) : " << "nullptr)," << endl;
+              << "new " << type << " (*s." << name << "_) : " << nullptr_string << ")," << endl;
           }
         else if (e.min () == 1 && e.max () == 1)
           {
@@ -931,7 +942,7 @@ namespace
         {
           os << name << "_ ("
              << "s." << name << "_.get () ? "
-             << "new " << type << " (*s." << name << "_) : " << "nullptr)," << endl;
+             << "new " << type << " (*s." << name << "_) : " << nullptr_string << ")," << endl;
         }
         else
         {
@@ -1090,7 +1101,7 @@ namespace
         {
           os << "if (s." << name << "_.get ()) "
              << name << " (*(s." << name << "_));"
-             << "else " << name << "_ = std::auto_ptr< " << type << " > (0);"
+             << "else " << name << "_.reset (" << nullptr_string << ");"
              << endl;
         }
         else
