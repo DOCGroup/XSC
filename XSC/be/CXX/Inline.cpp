@@ -222,7 +222,7 @@ namespace
         // add_typename
         os << i
            << "void " << scope << "::" << endl
-           << "add_" << name << " (ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex>  const& e)"
+           << "add_" << name << " (" << scope << "::" << name << "_value_type const& e)"
            << "{";
 
         if (ra_sequence)

@@ -186,27 +186,29 @@ namespace
       {
         // sequence
         //
-        os << "typedef " << container  << "<ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> > "
-           << name << "_type;";
-        os << "typedef " << name << "_type::iterator "
-           << name << "_iterator;";
-        os << "typedef " << name << "_type::const_iterator "
-           << name << "_const_iterator;";
+        os << "typedef ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> " << name << "_value_type;";
+        os << "typedef " << container  << "< " << name << "_value_type> " << name << "_container_type;";
+        os << "typedef " << name << "_container_type::iterator " << name << "_iterator;";
+        os << "typedef " << name << "_container_type::const_iterator " << name << "_const_iterator;";
 
         os << name << "_iterator begin_" << name << " ();";
         os << name << "_iterator end_" << name << " ();";
         os << name << "_const_iterator begin_" << name << " () const;";
         os << name << "_const_iterator end_" << name << " () const;";
 
-        os << "void add_" << name << " (ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> const&);";
-        os << "XSCRT::Type* get_" << name << "_ptr (const std::basic_string<" << char_type <<">& idref);";
-        os << "void set_" << name << "_ptr (const std::basic_string<" << char_type << ">& idref);";
+        os << "void add_" << name << " (" << name << "_value_type const&);";
+        //Return referenced item if an IDREF
+        if (idref_ptr != std::string::npos)
+        {
+          os << "XSCRT::Type* get_" << name << "_ptr (const std::basic_string<" << char_type <<">& idref);";
+          os << "void set_" << name << "_ptr (const std::basic_string<" << char_type << ">& idref);";
+        }
         os << "size_t count_" << name << " () const;";
 
         os << endl
            << "protected:" << endl;
 
-        os << name << "_type " << id(name) << "_;";
+        os << name << "_container_type " << id(name) << "_;";
       }
       else if (c.min () == 0)
       {
