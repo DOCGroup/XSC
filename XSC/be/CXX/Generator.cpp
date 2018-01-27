@@ -456,6 +456,8 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
     ctx.cdr_reader_generation (cdr_reader);
     ctx.cdr_writer_generation (cdr_writer);
 
+    ctx.cpp11 (cpp11);
+
     // Add additional information to the context:
     ctx.generate_ra_sequences (ra_sequences);
 
@@ -477,6 +479,8 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
 
     // Add additional information to the context:
     ctx.generate_ra_sequences (ra_sequences);
+
+    ctx.cpp11 (cpp11);
 
     if (!inline_)
     {

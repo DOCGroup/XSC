@@ -598,17 +598,23 @@ namespace
 
       os << "}";
 
+      std::wstring selfcheck;
+      if (this->cpp11_)
+      {
+        selfcheck = L"if (std::addressof(s) != this)";
+      }
+      else
+      {
+        selfcheck = L"if (&s != this)";
+      }
+
       // operator=
       //
       os << i
          << scope << "&" << endl
          << scope << "::operator= (" << type << " const& s)"
          << "{"
-#if defined (ACE_HAS_CPP11)
-         << "if (std::addressof(s) != this)"
-#else
-         << "if (&s != this)"
-#endif
+         << selfcheck
          << "{";
 
       inherits (c, assign_base_);
