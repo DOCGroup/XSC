@@ -102,6 +102,15 @@ namespace
       string name (a.name ());
       //string scope (id (a.scope ().name ()));
       string ns (xs_ns_name (a));
+      std::wstring attrinit;
+      if (this->cpp11_)
+      {
+        attrinit = L"attr_ (std::addressof(a));";
+      }
+      else
+      {
+        attrinit = L"attr_ (&a)";
+      }
 
       bool q (a.qualified ());
 
@@ -112,11 +121,7 @@ namespace
         L << L" (\"" << name << L"\")" << ", " <<
         (q ? L + L" (\"" + ns + L"\")" + L", " : L"") <<
         L << L" (\"" << L"\")" << ", " << "top_ ());"
-#if defined (ACE_HAS_CPP11)
-         << "attr_ (std::addressof(a));"
-#else
-         << "attr_ (&a);"
-#endif
+         << attrinit
          << "Traversal::" << scope << "::" << id (name) << " (o);"
          << "attr_ (0);"
          << "}";

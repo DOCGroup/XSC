@@ -21,12 +21,6 @@
 # endif
 #endif
 
-#if defined (ACE_HAS_CPP11)
-std::wstring nullptr_string (L"nullptr");
-#else
-std::wstring nullptr_string (L"0");
-#endif
-
 namespace
 {
   struct Member : Traversal::Element,
@@ -56,6 +50,16 @@ namespace
 
       if (e.min () == 0 && e.max () == 1)
       {
+        std::wstring nullptr_string;
+        if (this->cpp11_)
+        {
+          nullptr_string = L"nullptr";
+        }
+        else
+        {
+          nullptr_string = L"0";
+        }
+
         // optional
         //
         os << i
@@ -278,6 +282,15 @@ namespace
 
       if (a.optional ())
       {
+        std::wstring nullptr_string;
+        if (this->cpp11_)
+        {
+          nullptr_string = L"nullptr";
+        }
+        else
+        {
+          nullptr_string = L"0";
+        }
         os << i
            << "bool " << scope << "::" << endl
            << name << "_p () const"
@@ -898,6 +911,15 @@ namespace
       {
         string name (id (e.name ()));
         string type (type_name (e));
+        std::wstring nullptr_string;
+        if (this->cpp11_)
+        {
+          nullptr_string = L"nullptr";
+        }
+        else
+        {
+          nullptr_string = L"0";
+        }
 
         // Call the ::XSCRT::Type () base class
         // constructor. Fix for compile warnings.
@@ -936,6 +958,15 @@ namespace
       {
         string name (id (a.name ()));
         string type (type_name (a));
+        std::wstring nullptr_string;
+        if (this->cpp11_)
+        {
+          nullptr_string = L"nullptr";
+        }
+        else
+        {
+          nullptr_string = L"0";
+        }
 
         if (a.optional ())
         {
@@ -1095,6 +1126,15 @@ namespace
       {
         string name (id (a.name ()));
         string type (type_name (a));
+        std::wstring nullptr_string;
+        if (this->cpp11_)
+        {
+          nullptr_string = L"nullptr";
+        }
+        else
+        {
+          nullptr_string = L"0";
+        }
 
         if (a.optional ())
         {
