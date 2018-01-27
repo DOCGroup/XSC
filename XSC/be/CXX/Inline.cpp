@@ -318,7 +318,6 @@ namespace
               << "  ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());"
               << "  (*TSS_ID_Map)->resolve_single_idref(idref, this);"
               << "}\n";
-
         }
 
         os << i

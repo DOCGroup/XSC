@@ -10,6 +10,7 @@
 #include "XSC/Traversal.hpp"
 
 #include "CCF/CodeGenerationKit/Regex.hpp"
+#include "ace/config-all.h"
 
 #if defined (_WINDOWS)
 # if defined (min)
@@ -199,7 +200,11 @@ namespace
         os << "void add_" << name << " ( ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > const& );";
         os << "XSCRT::Type* get_" << name << "_ptr (const std::basic_string<" << char_type <<">& idref);";
         os << "void set_" << name << "_ptr (const std::basic_string<" << char_type << ">& idref);";
-        os << "size_t count_" << name << " (void) const;";
+        os << "size_t count_" << name << " ("
+#if !defined (ACE_HAS_CPP11)
+           << "void"
+#endif /* !ACE_HAS_CPP11 */
+           << ") const;";
 
         os << endl
            << "protected:" << endl;
