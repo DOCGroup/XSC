@@ -59,8 +59,9 @@ public:
         ns_prefix_ (ns_prefix__),
         ns_suffix_ (ns_suffix__),
         ns_mapping_ (ns_mapping),
-        cdr_reader_generation_ (0),
-        cdr_writer_generation_ (0),
+        cdr_reader_generation_ (false),
+        cdr_writer_generation_ (false),
+        cpp11_ (false),
         generate_ra_sequences_ (false)
   {
     if (char_type == L"wchar_t")
@@ -102,6 +103,7 @@ protected:
         ns_mapping_ (c.ns_mapping_),
         cdr_reader_generation_ (c.cdr_reader_generation_),
         cdr_writer_generation_ (c.cdr_writer_generation_),
+        cpp11_ (c.cpp11_),
         generate_ra_sequences_ (c.generate_ra_sequences_)
   {
   }
@@ -202,14 +204,19 @@ public:
     ns_suffix_ = p;
   }
   void
-  cdr_reader_generation (bool &flag)
+  cdr_reader_generation (bool flag)
   {
     this->cdr_reader_generation_ = flag;
   }
   void
-  cdr_writer_generation (bool &flag)
+  cdr_writer_generation (bool flag)
   {
     this->cdr_writer_generation_ = flag;
+  }
+  void
+  cpp11 (bool flag)
+  {
+    this->cpp11_ = flag;
   }
   bool
   cdr_reader_generation_enabled ()
@@ -220,6 +227,11 @@ public:
   cdr_writer_generation_enabled ()
   {
     return this->cdr_writer_generation_;
+  }
+  bool
+  cpp11 ()
+  {
+    return this->cpp11_;
   }
 
   void
@@ -299,6 +311,8 @@ protected:
   bool cdr_reader_generation_;
   bool cdr_writer_generation_;
 
+  // Generate code depending on C++11 features
+  bool cpp11_;
   bool generate_ra_sequences_;
 };
 

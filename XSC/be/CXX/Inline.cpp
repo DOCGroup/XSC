@@ -10,7 +10,6 @@
 #include "XSC/Traversal.hpp"
 
 #include "CCF/CodeGenerationKit/Regex.hpp"
-#include "ace/config-all.h"
 
 #if defined (_WINDOWS)
 # if defined (min)
@@ -19,12 +18,6 @@
 # if defined (max)
 #   undef max
 # endif
-#endif
-
-#if defined (ACE_HAS_CPP11)
-std::wstring nullptr_string (L"nullptr");
-#else
-std::wstring nullptr_string (L"0");
 #endif
 
 namespace
@@ -56,6 +49,16 @@ namespace
 
       if (e.min () == 0 && e.max () == 1)
       {
+        std::wstring nullptr_string;
+        if (this->cpp11_)
+        {
+          nullptr_string = L"nullptr";
+        }
+        else
+        {
+          nullptr_string = L"0";
+        }
+
         // optional
         //
         os << i
@@ -110,7 +113,7 @@ namespace
            << "}"
            << "else"
            << "{"
-           << id (name) << "_ = std::auto_ptr< " << type << " > (new "
+           << id (name) << "_ = " << scope << "::" << id(name) << "_autoptr_type (new "
            << type << " (e));"
            << id (name) << "_->container (this);"
            << "}"
@@ -222,14 +225,14 @@ namespace
         // add_typename
         os << i
            << "void " << scope << "::" << endl
-           << "add_" << name << " (ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex >  const& e)"
+           << "add_" << name << " (" << scope << "::" << name << "_value_type const& e)"
            << "{";
 
         if (ra_sequence)
           {
             os << "if (" << name << "_.capacity () < " << name << "_.size () + 1)"
                << "{"
-               << "std::vector< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > > v;"
+               << "std::vector<ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> > v;"
                << "v.reserve (" << id(name) << "_.size () + 1);"
                << endl
                << "for (" << name << "_iterator i = " << id(name) << "_.begin ();"
@@ -278,6 +281,15 @@ namespace
 
       if (a.optional ())
       {
+        std::wstring nullptr_string;
+        if (this->cpp11_)
+        {
+          nullptr_string = L"nullptr";
+        }
+        else
+        {
+          nullptr_string = L"0";
+        }
         os << i
            << "bool " << scope << "::" << endl
            << name << "_p () const"
@@ -330,7 +342,7 @@ namespace
            << "}"
            << "else"
            << "{"
-           << id (name) << "_ = std::auto_ptr< " << type << " > (new "
+           << id (name) << "_ = " << scope << "::" << id(name) << "_autoptr_type (new "
            << type << " (e));"
            << id (name) << "_->container (this);"
            << "}"
@@ -438,7 +450,7 @@ namespace
           container = L"std::list";
 
         os << comma ()
-           << container << "< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > > const& "
+           << name << "_container_type const& "
            << name << "__";
       }
     }
@@ -586,17 +598,23 @@ namespace
 
       os << "}";
 
+      std::wstring selfcheck;
+      if (this->cpp11_)
+      {
+        selfcheck = L"if (std::addressof(s) != this)";
+      }
+      else
+      {
+        selfcheck = L"if (&s != this)";
+      }
+
       // operator=
       //
       os << i
          << scope << "&" << endl
          << scope << "::operator= (" << type << " const& s)"
          << "{"
-#if defined (ACE_HAS_CPP11)
-         << "if (std::addressof(s) != this)"
-#else
-         << "if (&s != this)"
-#endif
+         << selfcheck
          << "{";
 
       inherits (c, assign_base_);
@@ -898,6 +916,15 @@ namespace
       {
         string name (id (e.name ()));
         string type (type_name (e));
+        std::wstring nullptr_string;
+        if (this->cpp11_)
+        {
+          nullptr_string = L"nullptr";
+        }
+        else
+        {
+          nullptr_string = L"0";
+        }
 
         // Call the ::XSCRT::Type () base class
         // constructor. Fix for compile warnings.
@@ -936,6 +963,15 @@ namespace
       {
         string name (id (a.name ()));
         string type (type_name (a));
+        std::wstring nullptr_string;
+        if (this->cpp11_)
+        {
+          nullptr_string = L"nullptr";
+        }
+        else
+        {
+          nullptr_string = L"0";
+        }
 
         if (a.optional ())
         {
@@ -1095,6 +1131,15 @@ namespace
       {
         string name (id (a.name ()));
         string type (type_name (a));
+        std::wstring nullptr_string;
+        if (this->cpp11_)
+        {
+          nullptr_string = L"nullptr";
+        }
+        else
+        {
+          nullptr_string = L"0";
+        }
 
         if (a.optional ())
         {

@@ -10,7 +10,6 @@
 #include "XSC/Traversal.hpp"
 
 #include "CCF/CodeGenerationKit/Regex.hpp"
-#include "ace/config-all.h"
 
 #if defined (_WINDOWS)
 # if defined (min)
@@ -97,7 +96,7 @@ namespace
           container = L"std::list";
 
         os << comma ()
-           << container << "< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > > const& "
+           << name << "_container_type const& "
            << name << "__";
       }
     }
@@ -186,30 +185,29 @@ namespace
       {
         // sequence
         //
-        os << "typedef " << container  << "< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > >::iterator "
-           << name << "_iterator;";
-
-        os << "typedef " << container << "< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > >::const_iterator "
-           << name << "_const_iterator;";
+        os << "typedef ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> " << name << "_value_type;";
+        os << "typedef " << container  << "<" << name << "_value_type> " << name << "_container_type;";
+        os << "typedef " << name << "_container_type::iterator " << name << "_iterator;";
+        os << "typedef " << name << "_container_type::const_iterator " << name << "_const_iterator;";
 
         os << name << "_iterator begin_" << name << " ();";
         os << name << "_iterator end_" << name << " ();";
         os << name << "_const_iterator begin_" << name << " () const;";
         os << name << "_const_iterator end_" << name << " () const;";
 
-        os << "void add_" << name << " ( ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > const& );";
-        os << "XSCRT::Type* get_" << name << "_ptr (const std::basic_string<" << char_type <<">& idref);";
-        os << "void set_" << name << "_ptr (const std::basic_string<" << char_type << ">& idref);";
-        os << "size_t count_" << name << " ("
-#if !defined (ACE_HAS_CPP11)
-           << "void"
-#endif /* !ACE_HAS_CPP11 */
-           << ") const;";
+        os << "void add_" << name << " (" << name << "_value_type const&);";
+        //Return referenced item if an IDREF
+        if (idref_ptr != std::string::npos)
+        {
+          os << "XSCRT::Type* get_" << name << "_ptr (const std::basic_string<" << char_type <<">& idref);";
+          os << "void set_" << name << "_ptr (const std::basic_string<" << char_type << ">& idref);";
+        }
+        os << "size_t count_" << name << " () const;";
 
         os << endl
            << "protected:" << endl;
 
-        os <<  container << "< ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > > " << id(name) << "_;";
+        os << name << "_container_type " << id(name) << "_;";
       }
       else if (c.min () == 0)
       {
@@ -229,8 +227,8 @@ namespace
 
         os << endl
            << "protected:" << endl;
-
-        os << "std::auto_ptr< " << type << " > " << id (name) << "_;";
+        os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_autoptr_type;";
+        os << id (name) << "_autoptr_type " << id (name) << "_;";
       }
       else
       {
@@ -250,7 +248,8 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os << "std::auto_ptr< " << type << " > " << id (name) << "_;";
+        os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_autoptr_type;";
+        os << id (name) << "_autoptr_type " << id (name) << "_;";
       }
 
       os << endl;
@@ -311,7 +310,8 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os << "std::auto_ptr< " << type << " > " << id (name) << "_;";
+        os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_autoptr_type;";
+        os << id (name) << "_autoptr_type " << id (name) << "_;";
       }
       else
       {
@@ -329,7 +329,8 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os << "std::auto_ptr< " << type << " > " << id (name) << "_;";
+        os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_autoptr_type;";
+        os << id (name) << "_autoptr_type " << id (name) << "_;";
       }
 
       os << endl;
@@ -393,7 +394,7 @@ namespace
          << "typedef ::XSCRT::Type Base;"
          << endl;
       os << "public:" << endl
-         << "typedef ACE_Refcounted_Auto_Ptr < " << type_name (c) << ", ACE_Null_Mutex > _ptr;"
+         << "typedef ACE_Refcounted_Auto_Ptr < " << type_name (c) << ", ACE_Null_Mutex> _ptr;"
          << endl;
     }
 
@@ -401,7 +402,7 @@ namespace
     inherits_post (Type &c)
     {
       os << "public:" << endl
-         << "typedef ACE_Refcounted_Auto_Ptr < " << type_name(c) << ", ACE_Null_Mutex > _ptr;"
+         << "typedef ACE_Refcounted_Auto_Ptr < " << type_name(c) << ", ACE_Null_Mutex> _ptr;"
          << endl;
     }
     // Helper function to determine if read/write & >> and <<

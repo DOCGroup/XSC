@@ -102,6 +102,15 @@ namespace
       string name (a.name ());
       //string scope (id (a.scope ().name ()));
       string ns (xs_ns_name (a));
+      std::wstring attrinit;
+      if (this->cpp11_)
+      {
+        attrinit = L"attr_ (std::addressof(a));";
+      }
+      else
+      {
+        attrinit = L"attr_ (&a)";
+      }
 
       bool q (a.qualified ());
 
@@ -112,11 +121,7 @@ namespace
         L << L" (\"" << name << L"\")" << ", " <<
         (q ? L + L" (\"" + ns + L"\")" + L", " : L"") <<
         L << L" (\"" << L"\")" << ", " << "top_ ());"
-#if defined (ACE_HAS_CPP11)
-         << "attr_ (std::addressof(a));"
-#else
-         << "attr_ (&a);"
-#endif
+         << attrinit
          << "Traversal::" << scope << "::" << id (name) << " (o);"
          << "attr_ (0);"
          << "}";
@@ -221,7 +226,7 @@ namespace
       //
       os << scope << "::" << endl
          << name << " (" << xml_element_type << "& e)" << endl
-         << ": ::XSCRT::Writer< " << char_type << " > (e)" << endl
+         << ": ::XSCRT::Writer<" << char_type << "> (e)" << endl
          << "{"
          << "}";
 
@@ -297,7 +302,7 @@ namespace
       //
       os << name << "::" << endl
          << name << " (" << xml_element_type << "& e)" << endl
-         << ": ::XSCRT::Writer< " << char_type << " > (e)" << endl
+         << ": ::XSCRT::Writer<" << char_type << "> (e)" << endl
          << "{"
          << "}";
 
@@ -533,12 +538,12 @@ namespace
       WriterBase base (*this);
       base.dispatch (t);
 
-      os << "virtual ::XSCRT::Writer< " << char_type << " >" << endl
+      os << "virtual ::XSCRT::Writer<" << char_type << ">" << endl
          << "{"
          << "W (" << xml_element_type << "& e)" << endl
          << ": ";
 
-      os << "::XSCRT::Writer< " << char_type << " > (e)"
+      os << "::XSCRT::Writer<" << char_type << "> (e)"
          << "{"
          << "}"
          << "};"

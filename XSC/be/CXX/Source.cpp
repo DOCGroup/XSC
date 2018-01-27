@@ -63,7 +63,7 @@ namespace
       {
         // sequence
         //
-        os << "ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex >  t (new " << type << " (e));"
+        os << "ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex>  t (new " << type << " (e));"
            << "add_" << name << " (t);";
       }
       else if (c.min () == 0)
@@ -77,8 +77,7 @@ namespace
       {
         // one
         //
-        os << id (name) << "_ = std::auto_ptr< " << type << " > (" <<
-          "new " << type << " (e));"
+        os << id (name) << "_ = " << scope << "::" << id(name) << "_autoptr_type (new " << type << " (e));"
            << id (name) << "_->container (this);";
       }
 
@@ -213,8 +212,7 @@ namespace
       }
       else
       {
-        os << id (name) << "_ = std::auto_ptr< " << type << " > (" <<
-          "new " << type << " (a));"
+        os << id (name) << "_ = " << scope << "::" << id(name) << "_autoptr_type (new " << type << " (a));"
            << id (name) << "_->container (this);";
       }
 
