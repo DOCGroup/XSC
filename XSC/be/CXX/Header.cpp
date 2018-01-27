@@ -186,10 +186,11 @@ namespace
       {
         // sequence
         //
-        os << "typedef " << container  << "<ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> >::iterator "
+        os << "typedef " << container  << "<ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> > "
+           << name << "_type;";
+        os << "typedef " << name << "_type::iterator "
            << name << "_iterator;";
-
-        os << "typedef " << container << "<ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> >::const_iterator "
+        os << "typedef " << name << "_type::const_iterator "
            << name << "_const_iterator;";
 
         os << name << "_iterator begin_" << name << " ();";
@@ -205,7 +206,7 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os <<  container << "<ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> > " << id(name) << "_;";
+        os << name << "_type " << id(name) << "_;";
       }
       else if (c.min () == 0)
       {
