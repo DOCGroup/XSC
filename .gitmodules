@@ -1,3 +1,0 @@
-[submodule "contrib/CCF"]
-	path = contrib/CCF
-	url = git://git.dre.vanderbilt.edu/xsc/ccf.git
