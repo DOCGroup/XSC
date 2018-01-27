@@ -227,8 +227,16 @@ namespace
 
         os << endl
            << "protected:" << endl;
-        os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_autoptr_type;";
-        os << id (name) << "_autoptr_type " << id (name) << "_;";
+        if (this->cpp11_)
+        {
+          os << "typedef std::unique_ptr< " << type << " > " << id (name) << "_unique_ptr_type;";
+          os << id (name) << "_unique_ptr_type " << id (name) << "_;";
+        }
+        else
+        {
+          os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_auto_ptr_type;";
+          os << id (name) << "_auto_ptr_type " << id (name) << "_;";
+        }
       }
       else
       {
@@ -248,8 +256,16 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_autoptr_type;";
-        os << id (name) << "_autoptr_type " << id (name) << "_;";
+        if (this->cpp11_)
+        {
+          os << "typedef std::unique_ptr< " << type << " > " << id (name) << "_unique_ptr_type;";
+          os << id (name) << "_unique_ptr_type " << id (name) << "_;";
+        }
+        else
+        {
+          os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_auto_ptr_type;";
+          os << id (name) << "_auto_ptr_type " << id (name) << "_;";
+        }
       }
 
       os << endl;
@@ -310,8 +326,16 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_autoptr_type;";
-        os << id (name) << "_autoptr_type " << id (name) << "_;";
+        if (this->cpp11_)
+        {
+          os << "typedef std::unique_ptr< " << type << " > " << id (name) << "_unique_ptr_type;";
+          os << id (name) << "_unique_ptr_type " << id (name) << "_;";
+        }
+        else
+        {
+          os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_auto_ptr_type;";
+          os << id (name) << "_auto_ptr_type " << id (name) << "_;";
+        }
       }
       else
       {
@@ -329,8 +353,16 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_autoptr_type;";
-        os << id (name) << "_autoptr_type " << id (name) << "_;";
+        if (this->cpp11_)
+        {
+          os << "typedef std::unique_ptr< " << type << " > " << id (name) << "_unique_ptr_type;";
+          os << id (name) << "_unique_ptr_type " << id (name) << "_;";
+        }
+        else
+        {
+          os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_auto_ptr_type;";
+          os << id (name) << "_auto_ptr_type " << id (name) << "_;";
+        }
       }
 
       os << endl;
@@ -393,17 +425,23 @@ namespace
         //         << "//@@ VC6 anathema" << endl
          << "typedef ::XSCRT::Type Base;"
          << endl;
-      os << "public:" << endl
-         << "typedef ACE_Refcounted_Auto_Ptr < " << type_name (c) << ", ACE_Null_Mutex> _ptr;"
-         << endl;
+      if (!this->cpp11_)
+      {
+        os << "public:" << endl;
+        os << "typedef ACE_Refcounted_Auto_Ptr < " << type_name (c) << ", ACE_Null_Mutex> _ptr;";
+        os << endl;
+      }
     }
 
     virtual void
     inherits_post (Type &c)
     {
-      os << "public:" << endl
-         << "typedef ACE_Refcounted_Auto_Ptr < " << type_name(c) << ", ACE_Null_Mutex> _ptr;"
-         << endl;
+      if (!this->cpp11_)
+      {
+        os << "public:" << endl;
+        os << "typedef ACE_Refcounted_Auto_Ptr < " << type_name(c) << ", ACE_Null_Mutex> _ptr;";
+        os << endl;
+      }
     }
     // Helper function to determine if read/write & >> and <<
     // operators need to be generated. Here are the cases where
@@ -858,7 +896,7 @@ generate_header (Context& ctx,
          << "#include \"ace/XML_Utils/XMLSchema/id_map.hpp\"" << endl;
 
   ctx.os << "#include \"ace/Refcounted_Auto_Ptr.h\"" << endl
-   << "#include \"ace/Null_Mutex.h\"" << endl
+     << "#include \"ace/Null_Mutex.h\"" << endl
      << "#include \"ace/TSS_T.h\""<< endl
      << "#include \"ace/ace_wchar.h\"" << endl
      << "#include \"ace/Singleton.h\"" << endl << endl;
@@ -871,6 +909,11 @@ generate_header (Context& ctx,
            << "#include \"XMLSchema/id_map.hpp\"" << endl
            << "#include \"ace/TSS_T.h\""<< endl
            << endl;
+
+  if (ctx.cpp11())
+  {
+    ctx.os << "#include \"tao/x11/stddef.h\"" << endl;
+  }
 
   Traversal::Schema traverser;
 

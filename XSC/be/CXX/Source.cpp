@@ -77,8 +77,16 @@ namespace
       {
         // one
         //
-        os << id (name) << "_ = " << scope << "::" << id(name) << "_autoptr_type (new " << type << " (e));"
-           << id (name) << "_->container (this);";
+        if (this->cpp11_)
+        {
+          os << id (name) << "_ = std::make_unique< " << type << "> (e);"
+             << id (name) << "_->container (this);";
+        }
+        else
+        {
+          os << id (name) << "_ = " << scope << "::" << id(name) << "_auto_ptr_type (new " << type << " (e));"
+             << id (name) << "_->container (this);";
+        }
       }
 
       //Check if idref or id is the type
@@ -212,8 +220,16 @@ namespace
       }
       else
       {
-        os << id (name) << "_ = " << scope << "::" << id(name) << "_autoptr_type (new " << type << " (a));"
-           << id (name) << "_->container (this);";
+        if (this->cpp11_)
+        {
+          os << id (name) << "_ = std::make_unique<" << type << "> (a);"
+             << id (name) << "_->container (this);";
+        }
+        else
+        {
+          os << id (name) << "_ = " << scope << "::" << id(name) << "_auto_ptr_type (new " << type << " (a));"
+             << id (name) << "_->container (this);";
+        }
       }
 
       //Check if idref or id is the type
