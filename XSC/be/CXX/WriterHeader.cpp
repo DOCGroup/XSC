@@ -233,7 +233,7 @@ namespace
 
       inherits (c, inherits_);
 
-      os << "virtual ::XSCRT::Writer< " << char_type << " >"
+      os << "virtual ::XSCRT::Writer<" << char_type << ">"
          << "{";
 
       //@@ Should probably be Type__
@@ -242,7 +242,7 @@ namespace
 
       // c-tor
       //
-      os << name_ << " (" << xml_element_type << "&);"
+      os << "explicit " << name_ << " (" << xml_element_type << "&);"
          << endl;
 
       // Non-const traverse for Borland
@@ -298,12 +298,12 @@ namespace
       if (name == L"") name = L"BAD NAME";
 
       os << "struct " << name << " : Traversal::" << name << "," << endl
-         << "virtual ::XSCRT::Writer< " << char_type << " >"
+         << "virtual ::XSCRT::Writer<" << char_type << ">"
          << "{";
 
       // c-tor
       //
-      os << name << " (" << xml_element_type << "&);"
+      os << "explicit " << name << " (" << xml_element_type << "&);"
          << endl;
 
       // Non-const traverse for Borland

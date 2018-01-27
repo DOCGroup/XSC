@@ -221,7 +221,7 @@ namespace
       //
       os << scope << "::" << endl
          << name << " (" << xml_element_type << "& e)" << endl
-         << ": ::XSCRT::Writer< " << char_type << " > (e)" << endl
+         << ": ::XSCRT::Writer<" << char_type << "> (e)" << endl
          << "{"
          << "}";
 
@@ -297,7 +297,7 @@ namespace
       //
       os << name << "::" << endl
          << name << " (" << xml_element_type << "& e)" << endl
-         << ": ::XSCRT::Writer< " << char_type << " > (e)" << endl
+         << ": ::XSCRT::Writer<" << char_type << "> (e)" << endl
          << "{"
          << "}";
 
@@ -533,12 +533,12 @@ namespace
       WriterBase base (*this);
       base.dispatch (t);
 
-      os << "virtual ::XSCRT::Writer< " << char_type << " >" << endl
+      os << "virtual ::XSCRT::Writer<" << char_type << ">" << endl
          << "{"
          << "W (" << xml_element_type << "& e)" << endl
          << ": ";
 
-      os << "::XSCRT::Writer< " << char_type << " > (e)"
+      os << "::XSCRT::Writer<" << char_type << "> (e)"
          << "{"
          << "}"
          << "};"
