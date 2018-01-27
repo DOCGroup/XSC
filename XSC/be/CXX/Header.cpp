@@ -476,7 +476,7 @@ namespace
 
       // c-tor (Element const&)
       //
-      os << name << " (" << xml_element_type << " const&);";
+      os << "explicit " << name << " (" << xml_element_type << " const&);";
 
       // c-tor (Attribute const&)
       //
@@ -511,7 +511,7 @@ namespace
 
       if (r)
       {
-        os << name << " (" << xml_attribute_type << " const&);";
+        os << "explicit " << name << " (" << xml_attribute_type << " const&);";
       }
 
       // copy c-tor
@@ -644,11 +644,11 @@ namespace
 
       // c-tor (Element const&)
       //
-      os << name << " (" << xml_element_type << " const&);";
+      os << "explicit " << name << " (" << xml_element_type << " const&);";
 
       // c-tor (Attribute const&)
       //
-      os << name << " (" << xml_attribute_type << " const&);";
+      os << "explicit " << name << " (" << xml_attribute_type << " const&);";
 
       os << endl;
 
