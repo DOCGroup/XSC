@@ -110,7 +110,7 @@ namespace
            << "}"
            << "else"
            << "{"
-           << id (name) << "_ = std::auto_ptr< " << type << " > (new "
+           << id (name) << "_ = " << scope << "::" << id(name) << "_autoptr_type (new "
            << type << " (e));"
            << id (name) << "_->container (this);"
            << "}"
@@ -330,7 +330,7 @@ namespace
            << "}"
            << "else"
            << "{"
-           << id (name) << "_ = std::auto_ptr< " << type << " > (new "
+           << id (name) << "_ = " << scope << "::" << id(name) << "_autoptr_type (new "
            << type << " (e));"
            << id (name) << "_->container (this);"
            << "}"
@@ -438,7 +438,7 @@ namespace
           container = L"std::list";
 
         os << comma ()
-           << container << "<ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> > const& "
+           << name << "_container_type const& "
            << name << "__";
       }
     }

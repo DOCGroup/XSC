@@ -97,7 +97,7 @@ namespace
           container = L"std::list";
 
         os << comma ()
-           << container << "<ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> > const& "
+           << name << "_container_type const& "
            << name << "__";
       }
     }
@@ -187,7 +187,7 @@ namespace
         // sequence
         //
         os << "typedef ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> " << name << "_value_type;";
-        os << "typedef " << container  << "< " << name << "_value_type> " << name << "_container_type;";
+        os << "typedef " << container  << "<" << name << "_value_type> " << name << "_container_type;";
         os << "typedef " << name << "_container_type::iterator " << name << "_iterator;";
         os << "typedef " << name << "_container_type::const_iterator " << name << "_const_iterator;";
 
@@ -228,8 +228,8 @@ namespace
 
         os << endl
            << "protected:" << endl;
-
-        os << "std::auto_ptr< " << type << " > " << id (name) << "_;";
+        os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_autoptr_type;";
+        os << id (name) << "_autoptr_type " << id (name) << "_;";
       }
       else
       {
@@ -249,7 +249,8 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os << "std::auto_ptr< " << type << " > " << id (name) << "_;";
+        os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_autoptr_type;";
+        os << id (name) << "_autoptr_type " << id (name) << "_;";
       }
 
       os << endl;
@@ -310,7 +311,8 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os << "std::auto_ptr< " << type << " > " << id (name) << "_;";
+        os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_autoptr_type;";
+        os << id (name) << "_autoptr_type " << id (name) << "_;";
       }
       else
       {
@@ -328,7 +330,8 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        os << "std::auto_ptr< " << type << " > " << id (name) << "_;";
+        os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_autoptr_type;";
+        os << id (name) << "_autoptr_type " << id (name) << "_;";
       }
 
       os << endl;

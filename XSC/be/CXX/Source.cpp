@@ -77,8 +77,7 @@ namespace
       {
         // one
         //
-        os << id (name) << "_ = std::auto_ptr< " << type << " > (" <<
-          "new " << type << " (e));"
+        os << id (name) << "_ = " << scope << "::" << id(name) << "_autoptr_type (new " << type << " (e));"
            << id (name) << "_->container (this);";
       }
 
@@ -213,8 +212,7 @@ namespace
       }
       else
       {
-        os << id (name) << "_ = std::auto_ptr< " << type << " > (" <<
-          "new " << type << " (a));"
+        os << id (name) << "_ = " << scope << "::" << id(name) << "_autoptr_type (new " << type << " (a));"
            << id (name) << "_->container (this);";
       }
 
