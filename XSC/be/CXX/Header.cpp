@@ -10,6 +10,7 @@
 #include "XSC/Traversal.hpp"
 
 #include "CCF/CodeGenerationKit/Regex.hpp"
+#include "ace/config-all.h"
 
 #if defined (_WINDOWS)
 # if defined (min)
@@ -197,9 +198,13 @@ namespace
         os << name << "_const_iterator end_" << name << " () const;";
 
         os << "void add_" << name << " ( ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > const& );";
-        os << "XSCRT::Type* get_" << name << "_ptr ( std::basic_string<" << char_type <<"> idref );";
-        os << "void set_" << name << "_ptr (std::basic_string<" << char_type << "> idref );";
-        os << "size_t count_" << name << " (void) const;";
+        os << "XSCRT::Type* get_" << name << "_ptr (const std::basic_string<" << char_type <<">& idref);";
+        os << "void set_" << name << "_ptr (const std::basic_string<" << char_type << ">& idref);";
+        os << "size_t count_" << name << " ("
+#if !defined (ACE_HAS_CPP11)
+           << "void"
+#endif /* !ACE_HAS_CPP11 */
+           << ") const;";
 
         os << endl
            << "protected:" << endl;
@@ -219,7 +224,7 @@ namespace
         if (idref_ptr != std::string::npos)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ();\n";
-           os << "void set_" << id (name) << "_ptr (std::basic_string<" << char_type << "> idref );";
+           os << "void set_" << id (name) << "_ptr (const std::basic_string<" << char_type << ">& idref);";
         }
 
         os << endl
@@ -239,7 +244,7 @@ namespace
         if (idref_ptr != std::string::npos)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ( void );\n";
-           os << "void set_" << id(name) << "_ptr (std::basic_string<" << char_type << "> idref );";
+           os << "void set_" << id(name) << "_ptr (const std::basic_string<" << char_type << ">& idref);";
         }
 
         os << endl
@@ -300,7 +305,7 @@ namespace
         if (idref_ptr != std::string::npos)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ();\n";
-           os << "void set_" << id(name) << "_ptr (std::basic_string<" << char_type << "> idref );";
+           os << "void set_" << id(name) << "_ptr (const std::basic_string<" << char_type << ">& idref);";
         }
 
         os << endl
@@ -318,7 +323,7 @@ namespace
         if (idref_ptr != std::string::npos)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ( void );\n";
-           os << "void set_" << id (name) << "_ptr (std::basic_string<" << char_type << "> idref );";
+           os << "void set_" << id (name) << "_ptr (const std::basic_string<" << char_type << ">& idref);";
         }
 
         os << endl
@@ -476,7 +481,7 @@ namespace
 
       // c-tor (Element const&)
       //
-      os << name << " (" << xml_element_type << " const&);";
+      os << "explicit " << name << " (" << xml_element_type << " const&);";
 
       // c-tor (Attribute const&)
       //
@@ -511,7 +516,7 @@ namespace
 
       if (r)
       {
-        os << name << " (" << xml_attribute_type << " const&);";
+        os << "explicit " << name << " (" << xml_attribute_type << " const&);";
       }
 
       // copy c-tor
@@ -644,11 +649,11 @@ namespace
 
       // c-tor (Element const&)
       //
-      os << name << " (" << xml_element_type << " const&);";
+      os << "explicit " << name << " (" << xml_element_type << " const&);";
 
       // c-tor (Attribute const&)
       //
-      os << name << " (" << xml_attribute_type << " const&);";
+      os << "explicit " << name << " (" << xml_attribute_type << " const&);";
 
       os << endl;
 
