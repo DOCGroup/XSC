@@ -197,8 +197,8 @@ namespace
         os << name << "_const_iterator end_" << name << " () const;";
 
         os << "void add_" << name << " ( ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex > const& );";
-        os << "XSCRT::Type* get_" << name << "_ptr ( std::basic_string<" << char_type <<"> idref );";
-        os << "void set_" << name << "_ptr (std::basic_string<" << char_type << "> idref );";
+        os << "XSCRT::Type* get_" << name << "_ptr (const std::basic_string<" << char_type <<">& idref);";
+        os << "void set_" << name << "_ptr (const std::basic_string<" << char_type << ">& idref);";
         os << "size_t count_" << name << " (void) const;";
 
         os << endl
@@ -219,7 +219,7 @@ namespace
         if (idref_ptr != std::string::npos)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ();\n";
-           os << "void set_" << id (name) << "_ptr (std::basic_string<" << char_type << "> idref );";
+           os << "void set_" << id (name) << "_ptr (const std::basic_string<" << char_type << ">& idref);";
         }
 
         os << endl
@@ -239,7 +239,7 @@ namespace
         if (idref_ptr != std::string::npos)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ( void );\n";
-           os << "void set_" << id(name) << "_ptr (std::basic_string<" << char_type << "> idref );";
+           os << "void set_" << id(name) << "_ptr (const std::basic_string<" << char_type << ">& idref);";
         }
 
         os << endl
@@ -300,7 +300,7 @@ namespace
         if (idref_ptr != std::string::npos)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ();\n";
-           os << "void set_" << id(name) << "_ptr (std::basic_string<" << char_type << "> idref );";
+           os << "void set_" << id(name) << "_ptr (const std::basic_string<" << char_type << ">& idref);";
         }
 
         os << endl
@@ -318,7 +318,7 @@ namespace
         if (idref_ptr != std::string::npos)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ( void );\n";
-           os << "void set_" << id (name) << "_ptr (std::basic_string<" << char_type << "> idref );";
+           os << "void set_" << id (name) << "_ptr (const std::basic_string<" << char_type << ">& idref);";
         }
 
         os << endl

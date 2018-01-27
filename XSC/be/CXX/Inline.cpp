@@ -86,7 +86,7 @@ namespace
 
            os << i
               << "void " << scope << "::set_"
-              << id (name) << "_ptr (std::basic_string<ACE_TCHAR> idref)\n"
+              << id (name) << "_ptr (const std::basic_string<ACE_TCHAR>& idref)\n"
               << "{"
               << "  ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());"
               << "  (*TSS_ID_Map)->resolve_single_idref(idref, this);"
@@ -147,7 +147,7 @@ namespace
 
            os << i
               << "void " << scope << "::set_"
-              << id (name) << "_ptr (std::basic_string<ACE_TCHAR> idref)\n"
+              << id (name) << "_ptr (const std::basic_string<ACE_TCHAR>& idref)\n"
               << "{"
               << "  ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());"
               << "  (*TSS_ID_Map)->resolve_single_idref(idref, this);"
@@ -212,7 +212,7 @@ namespace
 
            os << i
               << "void " << scope << "::set_"
-              << id (name) << "_ptr (std::basic_string<ACE_TCHAR> idref)\n"
+              << id (name) << "_ptr (const std::basic_string<ACE_TCHAR>& idref)\n"
               << "{"
               << "  ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());"
               << "  (*TSS_ID_Map)->resolve_single_idref(idref, this);"
@@ -313,7 +313,7 @@ namespace
 
            os << i
               << "void " << scope << "::set_"
-              << id (name) << "_ptr (std::basic_string<ACE_TCHAR> idref)\n"
+              << id (name) << "_ptr (const std::basic_string<ACE_TCHAR>& idref)\n"
               << "{"
               << "  ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());"
               << "  (*TSS_ID_Map)->resolve_single_idref(idref, this);"
@@ -367,7 +367,7 @@ namespace
 
            os << i
               << "void " << scope << "::set_"
-              << id (name) << "_ptr (std::basic_string<ACE_TCHAR> idref)\n"
+              << id (name) << "_ptr (const std::basic_string<ACE_TCHAR>& idref)\n"
               << "{"
               << "  ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());"
               << "  (*TSS_ID_Map)->resolve_single_idref(idref, this);"

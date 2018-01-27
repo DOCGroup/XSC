@@ -58,7 +58,7 @@
     //XML document.
     class Unresolved_IDREF {
       public:
-        explicit Unresolved_IDREF(std::basic_string<ACE_TCHAR> &message) : message(message)
+        explicit Unresolved_IDREF(const std::basic_string<ACE_TCHAR> &message) : message(message)
         {}
         ~Unresolved_IDREF(){}
         std::basic_string<ACE_TCHAR> get_message ( void )
@@ -81,7 +81,7 @@
     }
 
     //Add an ID to the ID map
-    void add_id (std::basic_string<ACE_TCHAR> id, XSCRT::Type *obj_ref)
+    void add_id (const std::basic_string<ACE_TCHAR>& id, XSCRT::Type *obj_ref)
     {
       if (obj_ref)
       {
@@ -95,7 +95,7 @@
     }
 
     //Add an IDREF to the IDREF map
-    void add_idref (std::basic_string<ACE_TCHAR> idref, XSCRT::Type *obj_ref)
+    void add_idref (const std::basic_string<ACE_TCHAR>& idref, XSCRT::Type *obj_ref)
     {
       if (obj_ref)
       {
@@ -108,7 +108,7 @@
       return;
     }
 
-    void resolve_single_idref (std::basic_string<ACE_TCHAR> idref, ::XSCRT::Type * element)
+    void resolve_single_idref (const std::basic_string<ACE_TCHAR>& idref, ::XSCRT::Type * element)
     {
        ID_Map::id_iterator id_iterator = this->id_map_.find(idref);
        if (id_iterator != this->id_map_.end())
