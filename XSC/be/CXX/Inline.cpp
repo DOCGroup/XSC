@@ -112,10 +112,17 @@ namespace
            << "*" << id (name) << "_ = e;"
            << "}"
            << "else"
-           << "{"
-           << id (name) << "_ = " << scope << "::" << id(name) << "_autoptr_type (new "
-           << type << " (e));"
-           << id (name) << "_->container (this);"
+           << "{";
+
+        if (this->cpp11_)
+        {
+          os << id (name) << "_ = std::make_unique< " << type << "> (e);";
+        }
+        else
+        {
+          os << id (name) << "_ = " << scope << "::" << id(name) << "_auto_ptr_type (new " << type << " (e));";
+        }
+        os << id (name) << "_->container (this);"
            << "}"
            << "}";
       }
@@ -341,10 +348,16 @@ namespace
            << "*" << id (name) << "_ = e;"
            << "}"
            << "else"
-           << "{"
-           << id (name) << "_ = " << scope << "::" << id(name) << "_autoptr_type (new "
-           << type << " (e));"
-           << id (name) << "_->container (this);"
+           << "{";
+        if (this->cpp11_)
+        {
+          os << id (name) << "_ = std::make_unique< " << type << "> (e);";
+        }
+        else
+        {
+          os << id (name) << "_ = " << scope << "::" << id(name) << "_auto_ptr_type (new " << type << " (e));";
+        }
+        os << id (name) << "_->container (this);"
            << "}"
            << "}";
       }
