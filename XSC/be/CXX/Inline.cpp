@@ -10,7 +10,6 @@
 #include "XSC/Traversal.hpp"
 
 #include "CCF/CodeGenerationKit/Regex.hpp"
-#include "ace/config-all.h"
 
 #if defined (_WINDOWS)
 # if defined (min)
