@@ -109,7 +109,7 @@ namespace
       }
       else
       {
-        attrinit = L"attr_ (&a)";
+        attrinit = L"attr_ (&a);";
       }
 
       bool q (a.qualified ());
