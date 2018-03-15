@@ -1,6 +1,5 @@
 // file      : CCF/IDL3/Traversal/Component.tpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 namespace CCF
 {

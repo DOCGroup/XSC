@@ -1,6 +1,5 @@
 // file      : XSC/Traversal/Elements.tpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #ifndef XSC_ELEMENTS_TPP
 #define XSC_ELEMENTS_TPP

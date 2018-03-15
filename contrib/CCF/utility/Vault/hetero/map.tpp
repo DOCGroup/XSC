@@ -9,4 +9,3 @@ namespace Utility
   {
   }
 }
-//$Id$
