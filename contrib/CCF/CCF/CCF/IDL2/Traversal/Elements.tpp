@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/Traversal/Elements.tpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 #include <iostream>
 

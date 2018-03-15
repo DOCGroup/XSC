@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticGraph/Graph.tpp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 namespace CCF
 {
