@@ -39,13 +39,16 @@ namespace
 
       if (e.min () == 0 && e.max () == 1)
       {
-        // Borland post
-        os << "virtual void" << endl
-           << id (name)  << " (Type &o)" << endl
-           << "{"
-           << "this->" << id (name) << " ("
-           << "const_cast <Type const &> (o));" << endl
-           << "}";
+        if (!this->cpp11_)
+        {
+          // Borland post
+          os << "virtual void" << endl
+            << id (name)  << " (Type &o)" << endl
+            << "{"
+            << "this->" << id (name) << " ("
+            << "const_cast <Type const &> (o));" << endl
+            << "}";
+        }
 
         // optional
         //
@@ -55,13 +58,16 @@ namespace
       }
       else if (e.min () == 1 && e.max () == 1)
       {
-        // Borland post
-        os << "virtual void" << endl
-           << id (name)  << " (Type &o)" << endl
-           << "{"
-           << "this->" << id (name) << " ("
-           << "const_cast <Type const &> (o));" << endl
-           << "}";
+        if (!this->cpp11_)
+        {
+          // Borland post
+          os << "virtual void" << endl
+            << id (name)  << " (Type &o)" << endl
+            << "{"
+            << "this->" << id (name) << " ("
+            << "const_cast <Type const &> (o));" << endl
+            << "}";
+        }
 
         // one
         //
@@ -76,12 +82,15 @@ namespace
 
         // Pre
         //
-        os << "virtual void" << endl
-           << name << "_pre (Type &o)" << endl
-           << "{"
-           << "this->"  << name << "_pre ("
-           << "const_cast <Type const &> (o));" << endl
-           << "}";
+        if (!this->cpp11_)
+        {
+          os << "virtual void" << endl
+            << name << "_pre (Type &o)" << endl
+            << "{"
+            << "this->"  << name << "_pre ("
+            << "const_cast <Type const &> (o));" << endl
+            << "}";
+        }
 
         // pre
         //
@@ -91,12 +100,15 @@ namespace
 
         // non-const next
         //
-        os << "virtual void" << endl
-           << name << "_next (Type &o)" << endl
-           << "{"
-           << "this->"  << name << "_next ("
-           << "const_cast <Type const &> (o));" << endl
-           << "}";
+        if (!this->cpp11_)
+        {
+          os << "virtual void" << endl
+            << name << "_next (Type &o)" << endl
+            << "{"
+            << "this->"  << name << "_next ("
+            << "const_cast <Type const &> (o));" << endl
+            << "}";
+        }
 
         // next
         //
@@ -105,12 +117,15 @@ namespace
            << endl;
 
         //  post
-        os << "virtual void" << endl
-           << name << "_post (Type &o)" << endl
-           << "{"
-           << "this->" << name << "_post ("
-           << "const_cast <Type const &> (o));" << endl
-           << "}";
+        if (!this->cpp11_)
+        {
+          os << "virtual void" << endl
+            << name << "_post (Type &o)" << endl
+            << "{"
+            << "this->" << name << "_post ("
+            << "const_cast <Type const &> (o));" << endl
+            << "}";
+        }
 
         // post
         //
@@ -246,13 +261,15 @@ namespace
          << endl;
 
       // Non-const traverse for Borland
-      os << "virtual void" << endl
-         << "traverse (Type &o)" << endl
-         << "{"
-         << "this->traverse ("
-         << "const_cast <Type const &> (o));"
-         << "}";
-
+      if (!this->cpp11_)
+      {
+        os << "virtual void" << endl
+          << "traverse (Type &o)" << endl
+          << "{"
+          << "this->traverse ("
+          << "const_cast <Type const &> (o));"
+          << "}";
+      }
 
       // traverse
       //
@@ -307,12 +324,15 @@ namespace
          << endl;
 
       // Non-const traverse for Borland
-      os << "virtual void" << endl
-         << "traverse (Type &o)"
-         << "{"
-         << "this->traverse ("
-         << "const_cast <Type const &> (o));"
-         << "}";
+      if (!this->cpp11_)
+      {
+        os << "virtual void" << endl
+          << "traverse (Type &o)"
+          << "{"
+          << "this->traverse ("
+          << "const_cast <Type const &> (o));"
+          << "}";
+      }
 
       // traverse
       //
