@@ -232,10 +232,13 @@ namespace
 
       // c-tor ()
       //
-      os << scope << "::" << endl
-         << name << " ()"
-         << "{"
-         << "}";
+      if (!this->cpp11_)
+      {
+        os << scope << "::" << endl
+          << name << " ()"
+          << "{"
+          << "}";
+      }
 
       // traverse
       //
@@ -308,10 +311,13 @@ namespace
 
       // c-tor ()
       //
-      os << name << "::" << endl
-         << name << " ()"
-         << "{"
-         << "}";
+      if (!this->cpp11_)
+      {
+        os << name << "::" << endl
+          << name << " ()"
+          << "{"
+          << "}";
+      }
 
       // traverse
       //

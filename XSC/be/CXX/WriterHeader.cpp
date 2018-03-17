@@ -146,13 +146,15 @@ namespace
       string name (a.name ());
 
       // Borland post
-      os << "virtual void" << endl
-         << id (name)  << " (Type &o)" << endl
-         << "{"
-         << "this->" << id (name) << " ("
-         << "const_cast <Type const &> (o));" << endl
-         << "}";
-
+      if (!this->cpp11_)
+      {
+        os << "virtual void" << endl
+          << id (name)  << " (Type &o)" << endl
+          << "{"
+          << "this->" << id (name) << " ("
+          << "const_cast <Type const &> (o));" << endl
+          << "}";
+      }
 
       os << "virtual void" << endl
          << id (name) << " (Type const&);"
@@ -271,18 +273,21 @@ namespace
           << "}";
       }
 
+      string override_string (this->cpp11_ ? L" override" : L"");
+
       // traverse
       //
       os << "virtual void" << endl
-         << "traverse (Type const&);"
+         << "traverse (Type const&)" << override_string << ";"
          << endl;
     }
 
     virtual void
     post (Type& )
     {
+      string default_string (this->cpp11_ ? L" = default" : L"");
       os << "protected:" << endl
-         << name_ << " ();"
+         << name_ << " ()" << default_string << ";"
          <<"};";
     }
 
@@ -311,6 +316,8 @@ namespace
     {
       string name ((this->name_ != L"") ? name_ : id (e.name ()));
       string type (type_name (e));
+      string override_string (this->cpp11_ ? L" override" : L"");
+      string default_string (this->cpp11_ ? L" = default" : L"");
 
       if (name == L"") name = L"BAD NAME";
 
@@ -337,11 +344,11 @@ namespace
       // traverse
       //
       os << "virtual void" << endl
-         << "traverse (Type const&);"
+         << "traverse (Type const&)" << override_string << ";"
          << endl;
 
       os << "protected:" << endl
-         << name << " ();"
+         << name << " ()" << default_string << ";"
          << "};";
     }
 
