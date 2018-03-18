@@ -70,7 +70,6 @@ namespace XMLSchema
   }
 }
 
-#include <XMLSchema/Traversal.ipp>
 #include <XMLSchema/Traversal.tpp>
 
 #endif  // XMLSCHEMA_TRAVERSAL_HPP

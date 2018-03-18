@@ -1,6 +1,5 @@
 // file      : CCF/IDL2/SemanticGraph/Translation.ipp
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
-// cvs-id    : $Id$
 
 namespace CCF
 {

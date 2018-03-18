@@ -118,5 +118,3 @@ namespace Utility
     */
   }
 }
-
-//$Id$
