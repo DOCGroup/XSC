@@ -79,12 +79,12 @@ namespace XMLSchema
     {
     }
 
-    string (Base__ const& x)
+    explicit string (Base__ const& x)
         : Base__ (x)
     {
     }
 
-    string (C const* x)
+    explicit string (C const* x)
         : Base__ (x)
     {
     }
@@ -109,7 +109,7 @@ namespace XMLSchema
     {
     }
 
-    normalizedString (XSCRT::XML::Element<C> const& e)
+    explicit normalizedString (XSCRT::XML::Element<C> const& e)
         : string<C> (e)
     {
     }
@@ -149,7 +149,7 @@ namespace XMLSchema
     {
     }
 
-    token (XSCRT::XML::Element<C> const& e)
+    explicit token (XSCRT::XML::Element<C> const& e)
         : normalizedString<C> (e)
     {
     }
@@ -268,17 +268,17 @@ namespace XMLSchema
     {
     }
 
-    NCName(XSCRT::XML::Element<C> const& e)
+    explicit NCName(XSCRT::XML::Element<C> const& e)
         : Name<C> (e)
     {
     }
 
-    NCName(XSCRT::XML::Attribute<C> const& a)
+    explicit NCName(XSCRT::XML::Attribute<C> const& a)
         : Name<C> (a)
     {
     }
 
-    NCName(Base__ const& x)
+    explicit NCName(Base__ const& x)
         : Name<C> (x)
     {
     }
@@ -343,12 +343,12 @@ namespace XMLSchema
     {
     }
 
-    ID (XSCRT::XML::Element<C> const& e)
+    explicit ID (XSCRT::XML::Element<C> const& e)
         : NCName<C> (e), id_provider_ (*this)
     {
     }
 
-    ID (XSCRT::XML::Attribute<C> const& a)
+    explicit ID (XSCRT::XML::Attribute<C> const& a)
         : NCName<C> (a), id_provider_ (*this)
     {
     }
@@ -596,7 +596,7 @@ namespace XMLSchema
     {
     }
 
-    anyURI (XSCRT::XML::Attribute<C> const& a)
+    explicit anyURI (XSCRT::XML::Attribute<C> const& a)
         : Base__ (a.value ())
     {
     }
