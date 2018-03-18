@@ -18,7 +18,7 @@ namespace CCF
       {
         struct Include : SemanticAction::Include
         {
-          Include (Context& c);
+          explicit Include (Context& c);
 
           virtual void
           quote (StringLiteralPtr const& sl);

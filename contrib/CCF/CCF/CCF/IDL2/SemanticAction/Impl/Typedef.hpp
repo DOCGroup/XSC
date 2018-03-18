@@ -18,7 +18,7 @@ namespace CCF
       {
         struct Typedef : SemanticAction::Typedef, Base
         {
-          Typedef (Context& c);
+          explicit Typedef (Context& c);
 
           virtual void
           pre (KeywordPtr const& id);

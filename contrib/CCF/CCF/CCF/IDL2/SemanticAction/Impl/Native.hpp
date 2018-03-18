@@ -17,7 +17,7 @@ namespace CCF
       {
         struct Native : SemanticAction::Native, Base
         {
-          Native (Context& c);
+          explicit Native (Context& c);
 
           virtual void
           name (SimpleIdentifierPtr const& id);

@@ -18,7 +18,7 @@ namespace CCF
       {
         struct Attribute : SemanticAction::Attribute, Base
         {
-          Attribute (Context& c);
+          explicit Attribute (Context& c);
 
           virtual void
           begin_ro ();

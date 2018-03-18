@@ -18,7 +18,7 @@ namespace CCF
       {
         struct HomeExecutor : SemanticAction::HomeExecutor, Base
         {
-          HomeExecutor (Context& c);
+          explicit HomeExecutor (Context& c);
 
           virtual void
           begin (SimpleIdentifierPtr const& id);

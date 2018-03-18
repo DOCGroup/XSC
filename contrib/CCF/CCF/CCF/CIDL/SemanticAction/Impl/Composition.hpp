@@ -19,7 +19,7 @@ namespace CCF
         struct Composition : SemanticAction::Composition,
                              ScopeBase<SemanticGraph::Composition>
         {
-          Composition (Context& c);
+          explicit Composition (Context& c);
 
           virtual void
           begin (SimpleIdentifierPtr const& id, Category::Value c);

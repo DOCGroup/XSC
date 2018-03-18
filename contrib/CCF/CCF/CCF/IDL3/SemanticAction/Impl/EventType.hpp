@@ -19,7 +19,7 @@ namespace CCF
         struct EventType : SemanticAction::EventType,
                            ScopeBase<SemanticGraph::EventType>
         {
-          EventType (Context& c);
+          explicit EventType (Context& c);
 
           virtual void
           begin_abstract_def (SimpleIdentifierPtr const& id);

@@ -18,7 +18,7 @@ namespace CCF
       {
         struct Enum : SemanticAction::Enum, Base
         {
-          Enum (Context& c);
+          explicit Enum (Context& c);
 
           virtual void
           begin (SimpleIdentifierPtr const& id);

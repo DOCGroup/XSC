@@ -18,7 +18,7 @@ namespace CCF
       {
         struct NumericExpression : SemanticAction::NumericExpression, Base
         {
-          NumericExpression (Context& c);
+          explicit NumericExpression (Context& c);
 
           virtual void
           flush ();

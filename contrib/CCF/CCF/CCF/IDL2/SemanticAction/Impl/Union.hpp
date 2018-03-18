@@ -18,7 +18,7 @@ namespace CCF
       {
         struct Union : SemanticAction::Union, ScopeBase<SemanticGraph::Union>
         {
-          Union (Context& c);
+          explicit Union (Context& c);
 
           virtual void
           begin_def (SimpleIdentifierPtr const& id);

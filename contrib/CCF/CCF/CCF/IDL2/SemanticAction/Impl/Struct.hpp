@@ -19,7 +19,7 @@ namespace CCF
         struct Struct : SemanticAction::Struct,
                         ScopeBase<SemanticGraph::Struct>
         {
-          Struct (Context& c);
+          explicit Struct (Context& c);
 
           virtual void
           begin_def (SimpleIdentifierPtr const& id);

@@ -18,7 +18,7 @@ namespace CCF
       {
         struct Const : SemanticAction::Const, Base
         {
-          Const (Context& c);
+          explicit Const (Context& c);
 
           virtual void
           begin (IdentifierPtr const& type,

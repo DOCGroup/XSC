@@ -18,7 +18,7 @@ namespace CCF
       {
         struct ValueTypeFactory : SemanticAction::ValueTypeFactory, Base
         {
-          ValueTypeFactory (Context& c);
+          explicit ValueTypeFactory (Context& c);
 
           virtual void
           name (SimpleIdentifierPtr const& id);

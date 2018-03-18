@@ -19,7 +19,7 @@ namespace CCF
         struct Exception : SemanticAction::Exception,
                            ScopeBase<SemanticGraph::Exception>
         {
-          explicit Exception (Context& c);
+          explicit explicit Exception (Context& c);
 
           virtual void
           begin (SimpleIdentifierPtr const& id);

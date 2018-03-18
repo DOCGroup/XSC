@@ -18,7 +18,7 @@ namespace CCF
       {
         struct EventTypeFactory : SemanticAction::EventTypeFactory, Base
         {
-          EventTypeFactory (Context& c);
+          explicit EventTypeFactory (Context& c);
 
           virtual void
           name (SimpleIdentifierPtr const& id);

@@ -21,7 +21,7 @@ namespace CCF
         //
         struct Operation : SemanticAction::Operation, Base
         {
-          Operation (Context& c);
+          explicit Operation (Context& c);
 
           virtual void
           one_way ();

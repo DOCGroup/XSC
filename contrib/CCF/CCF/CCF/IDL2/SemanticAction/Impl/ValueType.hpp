@@ -19,7 +19,7 @@ namespace CCF
         struct ValueType : SemanticAction::ValueType,
                            ScopeBase<SemanticGraph::ValueType>
         {
-          ValueType (Context& c);
+          explicit ValueType (Context& c);
 
           virtual void
           begin_abstract_def (SimpleIdentifierPtr const& id);
