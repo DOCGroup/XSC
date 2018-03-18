@@ -625,7 +625,6 @@ namespace XMLSchema
   };
 }
 
-#include <XMLSchema/Types.ipp>
 #include <XMLSchema/Types.tpp>
 
 #endif  // XMLSCHEMA_TYPES_HPP

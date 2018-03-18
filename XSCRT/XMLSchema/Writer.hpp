@@ -89,7 +89,6 @@ namespace XMLSchema
   }
 }
 
-#include <XMLSchema/Writer.ipp>
 #include <XMLSchema/Writer.tpp>
 
 #endif  // XMLSCHEMA_WRITER_HPP

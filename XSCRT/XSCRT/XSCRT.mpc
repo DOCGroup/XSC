@@ -26,7 +26,6 @@ project (XSCRT) : xerces, xsc_utils, xsc_common {
   }
 
   Inline_Files {
-
   }
 
   Header_Files {
