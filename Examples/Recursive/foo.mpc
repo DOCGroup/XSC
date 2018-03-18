@@ -1,4 +1,18 @@
+project (recursive_xsd_gen): install, xscdefaults {
+  requires += xsc
+
+  custom_only = 1
+
+  XSC_Files {
+    recursive.xsd
+  }
+
+  Source_Files {
+  }
+}
+
 project : xscrt {
+  after += recursive_xsd_gen
   Source_Files {
     recursive.cpp
   }

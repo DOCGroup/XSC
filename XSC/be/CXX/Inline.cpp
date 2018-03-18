@@ -468,7 +468,7 @@ namespace
     traverse (SemanticGraph::Element& e)
     {
       string type (type_name (e));
-      string name (id (e.name ()));
+      string name (e.name ());
 
       if (e.min () == 1 && e.max () == 1)
       {
@@ -485,7 +485,7 @@ namespace
 
         os << comma ()
            << name << "_container_type const& "
-           << name << "__";
+           << id(name) << "__";
       }
     }
 
