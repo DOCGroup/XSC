@@ -18,7 +18,7 @@ namespace CCF
       {
         struct Publishes : SemanticAction::Publishes, Base
         {
-          Publishes (Context& c);
+          explicit Publishes (Context& c);
 
           virtual void
           type (IdentifierPtr const& id);

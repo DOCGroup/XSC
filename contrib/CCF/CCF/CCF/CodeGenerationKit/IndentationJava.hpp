@@ -330,8 +330,6 @@ namespace Indentation
     std::stack<unsigned long> indentation_;
     unsigned long spaces_;
 
-    bool suppress_nl_;
-
     enum Construct
     {
       OTHER,

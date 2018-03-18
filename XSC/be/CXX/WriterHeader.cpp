@@ -413,7 +413,7 @@ namespace
 
   struct AnonymousType : Traversal::Element, protected virtual Context
   {
-    AnonymousType (Context& c)
+    explicit AnonymousType (Context& c)
         : Context (c)
     {
     }

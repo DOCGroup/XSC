@@ -626,7 +626,7 @@ namespace
 
   struct Enumerator : Traversal::Enumerator, protected virtual Context
   {
-    Enumerator (Context& c)
+    explicit Enumerator (Context& c)
         : Context (c)
     {
     }
@@ -642,6 +642,7 @@ namespace
   {
     Label (Context& c)
       : Context (c)
+      , first_ (true)
     {
     }
 
@@ -811,7 +812,7 @@ namespace
 
   struct AnonymousType : Traversal::Element, protected virtual Context
   {
-    AnonymousType (Context& c)
+    explicit AnonymousType (Context& c)
         : Context (c)
     {
     }

@@ -421,9 +421,6 @@ namespace Indentation
     /// Number of space in a indentation.
     unsigned long spaces_;
 
-    /// Suppress newline generation.
-    bool suppress_nl_;
-
     enum Construct
     {
       OTHER,

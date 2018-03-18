@@ -622,7 +622,7 @@ namespace Recursive
       virtual ::XMLSchema::Writer::FundamentalType< ::XMLSchema::long_, ACE_TCHAR >,
       virtual ::XSCRT::Writer<ACE_TCHAR>
       {
-        W (::XSCRT::XML::Element<ACE_TCHAR>& e)
+        explicit W (::XSCRT::XML::Element<ACE_TCHAR>& e)
         : ::XSCRT::Writer<ACE_TCHAR> (e)
         {
         }
