@@ -476,13 +476,6 @@ namespace
       }
       else if (e.min () >= 1)
       {
-        string container;
-
-        if (this->generate_ra_sequences_)
-          container = L"std::vector";
-        else
-          container = L"std::list";
-
         os << comma ()
            << name << "_container_type const& "
            << id(name) << "__";
