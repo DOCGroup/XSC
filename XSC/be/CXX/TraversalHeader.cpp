@@ -258,6 +258,8 @@ namespace
     virtual void
     pre (Type& c)
     {
+      string override_string (this->cpp11_ ? L" override" : L"");
+
       os << "struct " << e << name_
          << " : ::XMLSchema::Traversal::Traverser< " << fq_name (c) << " >"
          << "{";
@@ -265,11 +267,11 @@ namespace
       // traverse ()
       //
       os << "virtual void" << endl
-         << "traverse (Type&);"
+         << "traverse (Type&)" << override_string << ";"
          << endl;
 
       os << "virtual void" << endl
-         << "traverse (Type const&);"
+         << "traverse (Type const&)" << override_string << ";"
          << endl;
 
       // pre ()

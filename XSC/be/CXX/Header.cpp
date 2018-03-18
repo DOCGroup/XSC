@@ -560,13 +560,19 @@ namespace
 
       // copy c-tor
       //
-      os << name << " (" << name << " const& s);"
-         << endl;
+      os << name << " (" << name << " const& s);";
 
       // operator=
       //
       os << name << "& operator= (" << name << " const& s);"
          << endl;
+
+      if (this->cpp11_)
+      {
+        os << name << " (" << name << "&&) = default;";
+        os << name << "& operator= (" << name << "&&) = default;"
+           << endl;
+      }
 
       os << "private:" << endl
          << "char regulator__;";
@@ -896,8 +902,9 @@ generate_header (Context& ctx,
          << "#include \"ace/XML_Utils/XMLSchema/id_map.hpp\"" << endl;
 
   ctx.os << "#include \"ace/Refcounted_Auto_Ptr.h\"" << endl
-     << "#include \"ace/Null_Mutex.h\"" << endl
-     << "#include \"ace/TSS_T.h\""<< endl
+         << "#include \"ace/Null_Mutex.h\"" << endl;
+
+  ctx.os << "#include \"ace/TSS_T.h\""<< endl
      << "#include \"ace/ace_wchar.h\"" << endl
      << "#include \"ace/Singleton.h\"" << endl << endl;
 
