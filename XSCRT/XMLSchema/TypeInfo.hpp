@@ -15,7 +15,6 @@ namespace XMLSchema
   };
 }
 
-#include <XMLSchema/TypeInfo.ipp>
 #include <XMLSchema/TypeInfo.tpp>
 
 #endif  // XMLSCHEMA_TYPE_INFO_HPP
