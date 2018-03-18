@@ -985,10 +985,18 @@ namespace
           {
             // optional
             //
-
-            os << name << "_ ("
-              << "s." << name << "_.get () ? "
-              << "new " << type << " (*s." << name << "_) : " << nullptr_string << ")," << endl;
+            if (this->cpp11_)
+            {
+              os << name << "_ ("
+                << "s." << name << "_ ? "
+                << "std::make_unique< " << type << "> (*s." << name << "_) : " << nullptr_string << ")," << endl;
+            }
+            else
+            {
+              os << name << "_ ("
+                << "s." << name << "_.get () ? "
+                << "new " << type << " (*s." << name << "_) : " << nullptr_string << ")," << endl;
+            }
           }
         else if (e.min () == 1 && e.max () == 1)
           {

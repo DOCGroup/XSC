@@ -168,19 +168,19 @@ namespace Recursive
 
       if (n == ACE_TEXT("value"))
       {
-        ACE_Refcounted_Auto_Ptr < ::XMLSchema::string<ACE_TCHAR>, ACE_Null_Mutex>  t (new ::XMLSchema::string<ACE_TCHAR> (e));
+        value_value_type t (new ::XMLSchema::string<ACE_TCHAR> (e));
         add_value (t);
       }
 
       else if (n == ACE_TEXT("long"))
       {
-        ACE_Refcounted_Auto_Ptr < ::XMLSchema::long_, ACE_Null_Mutex>  t (new ::XMLSchema::long_ (e));
+        long_value_type t (new ::XMLSchema::long_ (e));
         add_long (t);
       }
 
       else if (n == ACE_TEXT("el"))
       {
-        ACE_Refcounted_Auto_Ptr < ::Recursive::Element, ACE_Null_Mutex>  t (new ::Recursive::Element (e));
+        el_value_type t (new ::Recursive::Element (e));
         add_el (t);
       }
 
