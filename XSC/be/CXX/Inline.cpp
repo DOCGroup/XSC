@@ -49,24 +49,23 @@ namespace
 
       if (e.min () == 0 && e.max () == 1)
       {
-        std::wstring nullptr_string;
-        if (this->cpp11_)
-        {
-          nullptr_string = L"nullptr";
-        }
-        else
-        {
-          nullptr_string = L"0";
-        }
-
         // optional
         //
         os << i
            << "bool " << scope << "::" << endl
            << name << "_p () const"
-           << "{"
-           << "return " << id (name) << "_.get () != " << nullptr_string << ";"
-           << "}";
+           << "{";
+
+        if (this->cpp11_)
+        {
+          os << "return !!" << id (name) << "_;";
+        }
+        else
+        {
+          os << "return " << id (name) << "_.get () != 0;";
+        }
+
+        os << "}";
 
         os << i
            << type << " const& " << scope << "::" << endl
@@ -106,9 +105,18 @@ namespace
         os << i
            << "void " << scope << "::" << endl
            << id (name) << " (" << type << " const& e)"
-           << "{"
-           << "if (" << id (name) << "_.get ())"
-           << "{"
+           << "{";
+
+        if (this->cpp11_)
+        {
+          os << "if (" << id (name) << "_)";
+        }
+        else
+        {
+          os << "if (" << id (name) << "_.get ())";
+        }
+
+        os << "{"
            << "*" << id (name) << "_ = e;"
            << "}"
            << "else"
@@ -199,7 +207,7 @@ namespace
            << scope << "::" << name << "_const_iterator " << scope << "::" << endl
            << "begin_" << name << " () const"
            << "{"
-           << "return " << id(name) << "_.begin ();"
+           << "return " << id(name) << "_.cbegin ();"
            << "}";
 
         // end_typename const
@@ -207,7 +215,7 @@ namespace
            << scope << "::" << name << "_const_iterator " << scope << "::" << endl
            << "end_" << name << " () const"
            << "{"
-           << "return " << id(name) << "_.end ();"
+           << "return " << id(name) << "_.cend ();"
            << "}";
 
         // add IDREF access method
@@ -288,21 +296,24 @@ namespace
 
       if (a.optional ())
       {
-        std::wstring nullptr_string;
         if (this->cpp11_)
         {
-          nullptr_string = L"nullptr";
+          os << i
+            << "bool " << scope << "::" << endl
+            << name << "_p () const"
+            << "{"
+            << "return !!" << id (name) << "_;"
+            << "}";
         }
         else
         {
-          nullptr_string = L"0";
+          os << i
+            << "bool " << scope << "::" << endl
+            << name << "_p () const"
+            << "{"
+            << "return " << id (name) << "_.get () != 0;"
+            << "}";
         }
-        os << i
-           << "bool " << scope << "::" << endl
-           << name << "_p () const"
-           << "{"
-           << "return " << id (name) << "_.get () != " << nullptr_string << ";"
-           << "}";
 
         os << i
            << type << " const& " << scope << "::" << endl
@@ -342,13 +353,23 @@ namespace
         os << i
            << "void " << scope << "::" << endl
            << id (name) << " (" << type << " const& e)"
-           << "{"
-           << "if (" << id (name) << "_.get ())"
-           << "{"
+           << "{";
+
+        if (this->cpp11_)
+        {
+          os << "if (" << id (name) << "_)";
+        }
+        else
+        {
+          os << "if (" << id (name) << "_.get ())";
+        }
+
+        os << "{"
            << "*" << id (name) << "_ = e;"
            << "}"
            << "else"
            << "{";
+
         if (this->cpp11_)
         {
           os << id (name) << "_ = std::make_unique< " << type << "> (e);";
@@ -837,7 +858,14 @@ namespace
           string name (id (e.name ()));
           string type (type_name (e));
 
-          os << name << "_ (new " << type << " (" << name << "__))," << endl;
+          if (this->cpp11_)
+          {
+            os << name << "_ (std::make_unique< " << type << "> (" << name << "__))," << endl;
+          }
+          else
+          {
+            os << name << "_ (new " << type << " (" << name << "__))," << endl;
+          }
         }
         else if (e.min () >= 1)
         {
@@ -862,7 +890,14 @@ namespace
           string name (id (a.name ()));
           string type (type_name (a));
 
-          os << name << "_ (new " << type << " (" << name << "__))," << endl;
+          if (this->cpp11_)
+          {
+            os << name << "_ (std::make_unique< " << type << "> (" << name << "__))," << endl;
+          }
+          else
+          {
+            os << name << "_ (new " << type << " (" << name << "__))," << endl;
+          }
         }
       }
 
@@ -959,8 +994,14 @@ namespace
           {
             // one
             //
-
-            os << name << "_ (new " << type << " (*s." << name << "_))," << endl;
+            if (this->cpp11_)
+            {
+              os << name << "_ (std::make_unique< " << type << "> (*s." << name << "_))," << endl;
+            }
+            else
+            {
+              os << name << "_ (new " << type << " (*s." << name << "_))," << endl;
+            }
           }
         else
           {
@@ -994,7 +1035,14 @@ namespace
         }
         else
         {
-          os << name << "_ (new " << type << " (*s." << name << "_))," << endl;
+          if (this->cpp11_)
+          {
+            os << name << "_ (std::make_unique< " << type << "> (*s." << name << "_))," << endl;
+          }
+          else
+          {
+            os << name << "_ (new " << type << " (*s." << name << "_))," << endl;
+          }
         }
       }
 
@@ -1027,8 +1075,16 @@ namespace
 
           // optional
           //
-          os << "if (" << name << "_.get ()) "
-             << name << "_->container (this);";
+          if (this->cpp11_)
+          {
+            os << "if (" << name << "_) "
+              << name << "_->container (this);";
+          }
+          else
+          {
+            os << "if (" << name << "_.get ()) "
+              << name << "_->container (this);";
+          }
         }
         else if (e.min () == 1 && e.max () == 1)
         {
@@ -1061,8 +1117,16 @@ namespace
         {
           // optional
           //
-          os << "if (" << name << "_.get ()) "
-             << name << "_->container (this);";
+          if (this->cpp11_)
+          {
+            os << "if (" << name << "_) "
+              << name << "_->container (this);";
+          }
+          else
+          {
+            os << "if (" << name << "_.get ()) "
+              << name << "_->container (this);";
+          }
         }
         else
         {
@@ -1101,11 +1165,22 @@ namespace
 
           // optional
           //
-          os << "if (s." << name << "_.get ())" << std::endl
-             << "  " << name << " (*(s." << name << "_));"
-             << "else" << std::endl
-             << "  " << name << "_.reset (0);"
-             << endl;
+          if (this->cpp11_)
+          {
+            os << "if (s." << name << "_)" << std::endl
+               << "  " << name << " (*(s." << name << "_));"
+               << "else" << std::endl
+               << "  " << name << "_.reset (nullptr);"
+               << endl;
+          }
+          else
+          {
+            os << "if (s." << name << "_.get ())" << std::endl
+              << "  " << name << " (*(s." << name << "_));"
+              << "else" << std::endl
+              << "  " << name << "_.reset (0);"
+              << endl;
+          }
         }
         else if (e.min () == 1 && e.max () == 1)
         {
@@ -1144,22 +1219,23 @@ namespace
       {
         string name (id (a.name ()));
         string type (type_name (a));
-        std::wstring nullptr_string;
-        if (this->cpp11_)
-        {
-          nullptr_string = L"nullptr";
-        }
-        else
-        {
-          nullptr_string = L"0";
-        }
 
         if (a.optional ())
         {
-          os << "if (s." << name << "_.get ()) "
-             << name << " (*(s." << name << "_));"
-             << "else " << name << "_.reset (" << nullptr_string << ");"
-             << endl;
+          if (this->cpp11_)
+          {
+            os << "if (s." << name << "_) "
+              << name << " (*(s." << name << "_));"
+              << "else " << name << "_.reset (nullptr);"
+              << endl;
+          }
+          else
+          {
+            os << "if (s." << name << "_.get ()) "
+              << name << " (*(s." << name << "_));"
+              << "else " << name << "_.reset (0);"
+              << endl;
+          }
         }
         else
         {
