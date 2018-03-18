@@ -65,7 +65,6 @@ namespace XSCRT
   };
 }
 
-#include <XSCRT/Parser.ipp>
 #include <XSCRT/Parser.tpp>
 
 #endif  // XSCRT_PARSER_HPP

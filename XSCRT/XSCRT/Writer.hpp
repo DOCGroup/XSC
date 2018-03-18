@@ -74,7 +74,6 @@ namespace XSCRT
   };
 }
 
-#include <XSCRT/Writer.ipp>
 #include <XSCRT/Writer.tpp>
 
 #endif  // XSCRT_WRITER_HPP

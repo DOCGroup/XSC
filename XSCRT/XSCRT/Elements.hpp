@@ -427,7 +427,6 @@ namespace XSCRT
   }
 }
 
-#include <XSCRT/Elements.ipp>
 #include <XSCRT/Elements.tpp>
 
 #endif  // XSCRT_ELEMENTS_HPP
