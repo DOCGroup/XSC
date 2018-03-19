@@ -26,7 +26,7 @@ namespace
 {
   struct Element : Traversal::Element, protected virtual Context
   {
-    Element (Context& c)
+    explicit Element (Context& c)
         : Context (c)
     {
     }
@@ -197,7 +197,7 @@ namespace
 
   struct Attribute : Traversal::Attribute, protected virtual Context
   {
-    Attribute (Context& c)
+    explicit Attribute (Context& c)
         : Context (c)
     {
     }
@@ -818,7 +818,6 @@ namespace
     {
       // Read length first and then
       // individual elements
-      string type (type_name (e));
       string name (e.name ());
 
       // Pre: read the number of elements
@@ -1289,7 +1288,7 @@ namespace
 
   struct ComplexAttribute : Traversal::Complex, protected virtual Context
   {
-    ComplexAttribute (Context& c, string const name_ = L"")
+    ComplexAttribute (Context& c, const string & name_ = L"")
         : Context (c), name (name_)
     {
     }
@@ -1302,7 +1301,7 @@ namespace
       struct Traverser : Traversal::Inherits,
                          Traversal::Complex
       {
-        Traverser (bool& v)
+        explicit Traverser (bool& v)
             : v_ (v)
         {
           edge_traverser (*this);
@@ -1516,7 +1515,7 @@ namespace
 
   struct AnonymousType : Traversal::Element, protected virtual Context
   {
-    AnonymousType (Context& c)
+    explicit AnonymousType (Context& c)
         : Context (c)
     {
     }

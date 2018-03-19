@@ -21,7 +21,7 @@ namespace
                   Traversal::Attribute,
                   protected virtual Context
   {
-    Member (Context& c)
+    explicit Member (Context& c)
         : Context (c)
     {
     }
@@ -225,7 +225,6 @@ namespace
 
       //@@ rm string scope (id(a.scope ().name ()));
       string name (a.name ());
-      string type (type_name (a));
 
       if (a.optional ())
       {
@@ -278,7 +277,7 @@ namespace
 
   struct Base : Traversal::Complex
   {
-    Base (Context& c)
+    explicit Base (Context& c)
         : member_ (c)
     {
       edge_traverser (inherits_);

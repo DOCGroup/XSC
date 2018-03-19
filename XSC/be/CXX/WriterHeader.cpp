@@ -22,7 +22,7 @@ namespace
                   Traversal::Attribute,
                   protected virtual Context
   {
-    Member (Context& c)
+    explicit Member (Context& c)
       : Context (c)
     {
     }
@@ -166,7 +166,7 @@ namespace
                 Fundamental,
                 protected virtual Context
   {
-    Base (Context& c)
+    explicit Base (Context& c)
         : Context (c)
     {
     }
@@ -361,7 +361,7 @@ namespace
 
   struct WriterNamespace : Namespace
   {
-    WriterNamespace (Context& c)
+    explicit WriterNamespace (Context& c)
         : Context (c), Namespace (c)
     {
     }
