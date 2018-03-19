@@ -206,17 +206,33 @@ namespace
         os << i
            << scope << "::" << name << "_const_iterator " << scope << "::" << endl
            << "begin_" << name << " () const"
-           << "{"
-           << "return " << id(name) << "_.cbegin ();"
-           << "}";
+           << "{";
+
+        if (this->cpp11_)
+        {
+          os << "return " << id(name) << "_.cbegin ();";
+        }
+        else
+        {
+          os << "return " << id(name) << "_.begin ();";
+        }
+        os << "}";
 
         // end_typename const
         os << i
            << scope << "::" << name << "_const_iterator " << scope << "::" << endl
            << "end_" << name << " () const"
-           << "{"
-           << "return " << id(name) << "_.cend ();"
-           << "}";
+           << "{";
+
+        if (this->cpp11_)
+        {
+           os << "return " << id(name) << "_.cend ();";
+        }
+        else
+        {
+           os << "return " << id(name) << "_.end ();";
+        }
+        os << "}";
 
         // add IDREF access method
         if (idref_ptr != std::string::npos)
