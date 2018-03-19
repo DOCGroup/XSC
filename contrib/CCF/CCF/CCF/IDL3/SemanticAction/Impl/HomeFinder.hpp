@@ -19,7 +19,7 @@ namespace CCF
 
         struct HomeFinder : SemanticAction::HomeFinder, Base
         {
-          HomeFinder (Context& c);
+          explicit HomeFinder (Context& c);
 
           virtual void
           name (SimpleIdentifierPtr const& id);

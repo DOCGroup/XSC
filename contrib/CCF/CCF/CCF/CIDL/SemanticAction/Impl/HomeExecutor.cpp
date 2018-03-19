@@ -18,7 +18,7 @@ namespace CCF
       {
         using namespace SemanticGraph;
 
-        HomeExecutor::
+        explicit HomeExecutor::
         HomeExecutor (Context& c)
             : Base (c)
         {

@@ -80,7 +80,7 @@ namespace
     traverse (SemanticGraph::Element& e)
     {
       string type (type_name (e));
-      string name (id (e.name ()));
+      string name (e.name ());
 
       if (e.min () == 1 && e.max () == 1)
       {
@@ -88,16 +88,9 @@ namespace
       }
       else if (e.min () >= 1)
       {
-        string container;
-
-        if (this->generate_ra_sequences_)
-          container = L"std::vector";
-        else
-          container = L"std::list";
-
         os << comma ()
            << name << "_container_type const& "
-           << name << "__";
+           << id (name) << "__";
       }
     }
 
@@ -577,7 +570,6 @@ namespace
       os << "private:" << endl
          << "char regulator__;";
 
-
       // Closing brace for the class declaration
       // Example: class Foo {
       // };
@@ -626,7 +618,7 @@ namespace
 
   struct Enumerator : Traversal::Enumerator, protected virtual Context
   {
-    Enumerator (Context& c)
+    explicit Enumerator (Context& c)
         : Context (c)
     {
     }
@@ -642,6 +634,7 @@ namespace
   {
     Label (Context& c)
       : Context (c)
+      , first_ (true)
     {
     }
 
@@ -811,7 +804,7 @@ namespace
 
   struct AnonymousType : Traversal::Element, protected virtual Context
   {
-    AnonymousType (Context& c)
+    explicit AnonymousType (Context& c)
         : Context (c)
     {
     }

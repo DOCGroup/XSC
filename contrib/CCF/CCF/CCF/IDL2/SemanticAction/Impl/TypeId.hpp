@@ -20,7 +20,7 @@ namespace CCF
         //
         struct TypeId : SemanticAction::TypeId
         {
-          TypeId (Context& c);
+          explicit TypeId (Context& c);
 
           virtual void
           begin (IdentifierPtr const& d, StringLiteralPtr const& id);
@@ -38,7 +38,7 @@ namespace CCF
         //
         struct TypePrefix : SemanticAction::TypePrefix
         {
-          TypePrefix (Context& c);
+          explicit TypePrefix (Context& c);
 
           virtual void
           begin (IdentifierPtr const& d, StringLiteralPtr const& prefix);

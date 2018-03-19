@@ -18,7 +18,7 @@ namespace CCF
       {
         struct Provides : SemanticAction::Provides, Base
         {
-          Provides (Context& c);
+          explicit Provides (Context& c);
 
           virtual void
           type (IdentifierPtr const& id);

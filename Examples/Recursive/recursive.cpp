@@ -3,12 +3,9 @@
 namespace Recursive
 {
   // Element
-  //
 
-  Element::
-  Element (std::list< ::XMLSchema::string< wchar_t >::_ptr > const& value__,
-           std::list< ::XMLSchema::long_::_ptr > const& long___)
-  :
+  Element::Element (value_container_type const& value__,
+                    long_container_type const& long___) :
   ::XSCRT::Type (),
   value_ (value__),
   long__ (long___),
@@ -16,10 +13,8 @@ namespace Recursive
   {
   }
 
-  Element::
-  Element (Element const& s)
-  :
-  ::XSCRT::Type (),
+  Element::Element (Element const& s) :
+  ::XSCRT::Type (s),
   value_ (s.value_),
   long__ (s.long__),
   el_ (s.el_),
@@ -27,21 +22,23 @@ namespace Recursive
   {
   }
 
-  Element& Element::
-  operator= (Element const& s)
+  Element&
+  Element::operator= (Element const& s)
   {
-    value_ = s.value_;
+    if (&s != this)
+    {
+      value_ = s.value_;
 
-    long__ = s.long__;
+      long__ = s.long__;
 
-    el_ = s.el_;
+      el_ = s.el_;
+    }
 
     return *this;
   }
 
 
   // Element
-  //
   Element::value_iterator Element::
   begin_value ()
   {
@@ -57,17 +54,17 @@ namespace Recursive
   Element::value_const_iterator Element::
   begin_value () const
   {
-    return value_.begin ();
+    return value_.cbegin ();
   }
 
   Element::value_const_iterator Element::
   end_value () const
   {
-    return value_.end ();
+    return value_.cend ();
   }
 
   void Element::
-  add_value (::XMLSchema::string< wchar_t >::_ptr const& e)
+  add_value (Element::value_value_type const& e)
   {
     value_.push_back (e);
   }
@@ -79,7 +76,6 @@ namespace Recursive
   }
 
   // Element
-  //
   Element::long_iterator Element::
   begin_long ()
   {
@@ -95,17 +91,17 @@ namespace Recursive
   Element::long_const_iterator Element::
   begin_long () const
   {
-    return long__.begin ();
+    return long__.cbegin ();
   }
 
   Element::long_const_iterator Element::
   end_long () const
   {
-    return long__.end ();
+    return long__.cend ();
   }
 
   void Element::
-  add_long (::XMLSchema::long_::_ptr const& e)
+  add_long (Element::long_value_type const& e)
   {
     long__.push_back (e);
   }
@@ -117,7 +113,6 @@ namespace Recursive
   }
 
   // Element
-  //
   Element::el_iterator Element::
   begin_el ()
   {
@@ -133,17 +128,17 @@ namespace Recursive
   Element::el_const_iterator Element::
   begin_el () const
   {
-    return el_.begin ();
+    return el_.cbegin ();
   }
 
   Element::el_const_iterator Element::
   end_el () const
   {
-    return el_.end ();
+    return el_.cend ();
   }
 
   void Element::
-  add_el (::Recursive::Element::_ptr const& e)
+  add_el (Element::el_value_type const& e)
   {
     el_.push_back (e);
   }
@@ -158,35 +153,34 @@ namespace Recursive
 namespace Recursive
 {
   // Element
-  //
 
   Element::
-  Element (::XSCRT::XML::Element< wchar_t > const& e)
+  Element (::XSCRT::XML::Element<ACE_TCHAR> const& e)
   :Base (e), regulator__ ()
   {
 
-    ::XSCRT::Parser< wchar_t > p (e);
+    ::XSCRT::Parser<ACE_TCHAR> p (e);
 
     while (p.more_elements ())
     {
-      ::XSCRT::XML::Element< wchar_t > e (p.next_element ());
-      std::basic_string< wchar_t > n (::XSCRT::XML::uq_name (e.name ()));
+      ::XSCRT::XML::Element<ACE_TCHAR> e (p.next_element ());
+      std::basic_string<ACE_TCHAR> n (::XSCRT::XML::uq_name (e.name ()));
 
-      if (n == L"value")
+      if (n == ACE_TEXT("value"))
       {
-        ::XMLSchema::string< wchar_t >::_ptr t (new ::XMLSchema::string< wchar_t > (e));
+        value_value_type t (new ::XMLSchema::string<ACE_TCHAR> (e));
         add_value (t);
       }
 
-      else if (n == L"long")
+      else if (n == ACE_TEXT("long"))
       {
-        ::XMLSchema::long_::_ptr t (new ::XMLSchema::long_ (e));
+        long_value_type t (new ::XMLSchema::long_ (e));
         add_long (t);
       }
 
-      else if (n == L"el")
+      else if (n == ACE_TEXT("el"))
       {
-        ::Recursive::Element::_ptr t (new ::Recursive::Element (e));
+        el_value_type t (new ::Recursive::Element (e));
         add_el (t);
       }
 
@@ -204,10 +198,24 @@ namespace Recursive
     ::Recursive::Element
     el (xercesc::DOMDocument const* d)
     {
-      ::XSCRT::XML::Element< wchar_t > e (d->getDocumentElement ());
-      if (e.name () == L"el")
+      // Initiate our Singleton as an ACE_TSS object (ensures thread
+      // specific storage
+      ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());
+
+
+      xercesc::DOMElement* dom_element = d->getDocumentElement ();
+      if (!dom_element)
+      {
+        throw 1;
+      }
+
+      ::XSCRT::XML::Element<ACE_TCHAR> e (dom_element);
+      if (e.name () == ACE_TEXT("el"))
       {
         ::Recursive::Element r (e);
+
+        (*TSS_ID_Map)->resolve_idref();
+
         return r;
       }
 
@@ -219,13 +227,13 @@ namespace Recursive
   }
 }
 
-#include "XMLSchema/TypeInfo.hpp"
+#include "ace/XML_Utils/XMLSchema/TypeInfo.hpp"
 
 namespace Recursive
 {
   namespace
   {
-    ::XMLSchema::TypeInfoInitializer < wchar_t > XMLSchemaTypeInfoInitializer_ (::XSCRT::extended_type_info_map ());
+    ::XMLSchema::TypeInfoInitializer < ACE_TCHAR > XMLSchemaTypeInfoInitializer_ (::XSCRT::extended_type_info_map ());
 
     struct ElementTypeInfoInitializer
     {
@@ -248,8 +256,6 @@ namespace Recursive
   namespace Traversal
   {
     // Element
-    //
-    //
 
     void Element::
     traverse (Type& o)
@@ -285,7 +291,6 @@ namespace Recursive
     value (Type& o)
     {
       // VC6 anathema strikes again
-      //
       ::Recursive::Element::value_iterator b (o.begin_value()), e (o.end_value());
 
       if (b != e)
@@ -305,7 +310,6 @@ namespace Recursive
     value (Type const& o)
     {
       // VC6 anathema strikes again
-      //
       ::Recursive::Element::value_const_iterator b (o.begin_value()), e (o.end_value());
 
       if (b != e)
@@ -355,7 +359,6 @@ namespace Recursive
     long_ (Type& o)
     {
       // VC6 anathema strikes again
-      //
       ::Recursive::Element::long_iterator b (o.begin_long()), e (o.end_long());
 
       if (b != e)
@@ -375,7 +378,6 @@ namespace Recursive
     long_ (Type const& o)
     {
       // VC6 anathema strikes again
-      //
       ::Recursive::Element::long_const_iterator b (o.begin_long()), e (o.end_long());
 
       if (b != e)
@@ -425,7 +427,6 @@ namespace Recursive
     el (Type& o)
     {
       // VC6 anathema strikes again
-      //
       ::Recursive::Element::el_iterator b (o.begin_el()), e (o.end_el());
 
       if (b != e)
@@ -447,7 +448,6 @@ namespace Recursive
     el (Type const& o)
     {
       // VC6 anathema strikes again
-      //
       ::Recursive::Element::el_const_iterator b (o.begin_el()), e (o.end_el());
 
       if (b != e)
@@ -522,12 +522,9 @@ namespace Recursive
   namespace Writer
   {
     // Element
-    //
-    //
-
     Element::
-    Element (::XSCRT::XML::Element< wchar_t >& e)
-    : ::XSCRT::Writer< wchar_t > (e)
+    Element (::XSCRT::XML::Element<ACE_TCHAR>& e)
+    : ::XSCRT::Writer<ACE_TCHAR> (e)
     {
     }
 
@@ -545,7 +542,7 @@ namespace Recursive
     void Element::
     value_pre (Type const&)
     {
-      push_ (::XSCRT::XML::Element< wchar_t > (L"value", top_ ()));
+      push_ (::XSCRT::XML::Element<ACE_TCHAR> (ACE_TEXT("value"), top_ ()));
     }
 
     void Element::
@@ -564,7 +561,7 @@ namespace Recursive
     void Element::
     long_pre (Type const&)
     {
-      push_ (::XSCRT::XML::Element< wchar_t > (L"long", top_ ()));
+      push_ (::XSCRT::XML::Element<ACE_TCHAR> (ACE_TEXT("long"), top_ ()));
     }
 
     void Element::
@@ -583,7 +580,7 @@ namespace Recursive
     void Element::
     el_pre (Type const&)
     {
-      push_ (::XSCRT::XML::Element< wchar_t > (L"el", top_ ()));
+      push_ (::XSCRT::XML::Element<ACE_TCHAR> (ACE_TEXT("el"), top_ ()));
     }
 
     void Element::
@@ -608,19 +605,25 @@ namespace Recursive
     void
     el (::Recursive::Element const& s, xercesc::DOMDocument* d)
     {
-      ::XSCRT::XML::Element< wchar_t > e (d->getDocumentElement ());
-      if (e.name () != L"el")
+      xercesc::DOMElement* dom_element = d->getDocumentElement ();
+      if (!dom_element)
+      {
+        throw 1;
+      }
+
+      ::XSCRT::XML::Element<ACE_TCHAR> e (dom_element);
+      if (e.name () != ACE_TEXT ("el"))
       {
         throw 1;
       }
 
       struct W : virtual ::Recursive::Writer::Element,
-      virtual ::XMLSchema::Writer::FundamentalType< ::XMLSchema::string< wchar_t >, wchar_t >,
-      virtual ::XMLSchema::Writer::FundamentalType< ::XMLSchema::long_, wchar_t >,
-      virtual ::XSCRT::Writer< wchar_t >
+      virtual ::XMLSchema::Writer::FundamentalType< ::XMLSchema::string< ACE_TCHAR >, ACE_TCHAR >,
+      virtual ::XMLSchema::Writer::FundamentalType< ::XMLSchema::long_, ACE_TCHAR >,
+      virtual ::XSCRT::Writer<ACE_TCHAR>
       {
-        W (::XSCRT::XML::Element< wchar_t >& e)
-        : ::XSCRT::Writer< wchar_t > (e)
+        explicit W (::XSCRT::XML::Element<ACE_TCHAR>& e)
+        : ::XSCRT::Writer<ACE_TCHAR> (e)
         {
         }
       };

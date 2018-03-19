@@ -18,7 +18,7 @@ namespace CCF
       {
         struct Consumes : SemanticAction::Consumes, Base
         {
-          Consumes (Context& c);
+          explicit Consumes (Context& c);
 
           virtual void
           type (IdentifierPtr const& id);

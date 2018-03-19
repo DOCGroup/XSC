@@ -546,7 +546,7 @@ namespace
 
       os << "virtual ::XSCRT::Writer<" << char_type << ">" << endl
          << "{"
-         << "W (" << xml_element_type << "& e)" << endl
+         << "explicit W (" << xml_element_type << "& e)" << endl
          << ": ";
 
       os << "::XSCRT::Writer<" << char_type << "> (e)"

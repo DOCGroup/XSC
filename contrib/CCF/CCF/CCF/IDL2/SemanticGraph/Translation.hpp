@@ -57,7 +57,7 @@ namespace CCF
       protected:
         friend class Graph<Node, Edge>;
 
-        ContainsImplied (std::string const& name = "")
+        explicit ContainsImplied (std::string const& name = "")
             : name_ (name)
         {
           type_info (static_type_info ());

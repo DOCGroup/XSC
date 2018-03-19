@@ -99,7 +99,7 @@ namespace
 
   struct Attribute : Traversal::Attribute, protected virtual Context
   {
-    Attribute (Context& c)
+    explicit Attribute (Context& c)
         : Context (c)
     {
     }

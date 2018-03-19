@@ -18,7 +18,7 @@ namespace CCF
       {
         struct Uses : SemanticAction::Uses, Base
         {
-          Uses (Context& c);
+          explicit Uses (Context& c);
 
           virtual void
           multiple ();

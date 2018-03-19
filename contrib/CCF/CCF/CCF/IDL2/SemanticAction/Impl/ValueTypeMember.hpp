@@ -18,7 +18,7 @@ namespace CCF
       {
         struct ValueTypeMember : SemanticAction::ValueTypeMember, Base
         {
-          ValueTypeMember (Context& c);
+          explicit ValueTypeMember (Context& c);
 
           virtual void
           begin_private ();

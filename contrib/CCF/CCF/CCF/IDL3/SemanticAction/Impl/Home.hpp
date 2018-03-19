@@ -18,7 +18,7 @@ namespace CCF
       {
         struct Home : SemanticAction::Home, ScopeBase<SemanticGraph::Home>
         {
-          Home (Context& c);
+          explicit Home (Context& c);
 
           virtual void
           begin (SimpleIdentifierPtr const& id);

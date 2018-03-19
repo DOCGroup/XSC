@@ -19,7 +19,7 @@ namespace CCF
         struct Module : SemanticAction::Module,
                         ScopeBase<SemanticGraph::Module>
         {
-          Module (Context& c);
+          explicit Module (Context& c);
 
           virtual void
           begin (SimpleIdentifierPtr const& id);

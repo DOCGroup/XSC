@@ -11,7 +11,7 @@ namespace
 {
   struct Base : Traversal::Type, protected virtual Context
   {
-    Base (Context& c)
+    explicit Base (Context& c)
         : Context (c)
     {
     }

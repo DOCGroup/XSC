@@ -19,7 +19,7 @@ namespace CCF
         struct Interface : SemanticAction::Interface,
                            ScopeBase<SemanticGraph::Interface>
         {
-          Interface (Context& c);
+          explicit Interface (Context& c);
 
           virtual void
           begin_abstract_def (SimpleIdentifierPtr const& id);

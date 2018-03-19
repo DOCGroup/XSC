@@ -64,7 +64,7 @@ namespace XSC
 
     struct Path_Resolver_Functor
     {
-      Path_Resolver_Functor (const XMLCh *const systemId)
+      explicit Path_Resolver_Functor (const XMLCh *const systemId)
         : systemId_ (systemId)
       {
 

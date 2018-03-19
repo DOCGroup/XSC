@@ -10,16 +10,13 @@
 
 namespace XSCRT
 {
-  //
-  //
-  //
   class TypeId
   {
   public:
     template<typename T>
-    TypeId (T const& t);
+    explicit TypeId (T const& t);
 
-    TypeId (std::type_info const& tid);
+    explicit TypeId (std::type_info const& tid);
 
   public:
     bool

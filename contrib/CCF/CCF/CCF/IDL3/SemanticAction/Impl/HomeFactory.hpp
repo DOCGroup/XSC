@@ -18,7 +18,7 @@ namespace CCF
       {
         struct HomeFactory : SemanticAction::HomeFactory, Base
         {
-          HomeFactory (Context& c);
+          explicit HomeFactory (Context& c);
 
           virtual void
           name (SimpleIdentifierPtr const& id);

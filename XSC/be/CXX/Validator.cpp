@@ -42,7 +42,7 @@ namespace
 
   struct Element : Traversal::Element, protected virtual ValidationContext
   {
-    Element (ValidationContext& c)
+    explicit Element (ValidationContext& c)
         : ValidationContext (c)
     {
     }

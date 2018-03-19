@@ -18,7 +18,7 @@ namespace CCF
       {
         struct Emits : SemanticAction::Emits, Base
         {
-          Emits (Context& c);
+          explicit Emits (Context& c);
 
           virtual void
           type (IdentifierPtr const& id);

@@ -2,18 +2,21 @@
 #define RECURSIVE_HPP
 
 // Forward declarations.
-//
 namespace Recursive
 {
   class Element;
 }
 
 #include <memory>
+#include <string>
 #include <list>
-#include "XMLSchema/Types.hpp"
-
+#include "ace/XML_Utils/XMLSchema/Types.hpp"
+#include "ace/XML_Utils/XMLSchema/id_map.hpp"
 #include "ace/Refcounted_Auto_Ptr.h"
 #include "ace/Null_Mutex.h"
+#include "ace/TSS_T.h"
+#include "ace/ace_wchar.h"
+#include "ace/Singleton.h"
 
 namespace Recursive
 {
@@ -21,62 +24,64 @@ namespace Recursive
   {
     typedef ::XSCRT::Type Base;
 
-    typedef ACE_Refcounted_Auto_Ptr < Element, ACE_Null_Mutex > _ptr;
+    public:
+    typedef ACE_Refcounted_Auto_Ptr < ::Recursive::Element, ACE_Null_Mutex> _ptr;
 
     // value
-    //
     public:
-    typedef std::list< ::XMLSchema::string< wchar_t >::_ptr >::iterator value_iterator;
-    typedef std::list< ::XMLSchema::string< wchar_t >::_ptr >::const_iterator value_const_iterator;
+    typedef ACE_Refcounted_Auto_Ptr < ::XMLSchema::string<ACE_TCHAR>, ACE_Null_Mutex> value_value_type;
+    typedef std::list<value_value_type> value_container_type;
+    typedef value_container_type::iterator value_iterator;
+    typedef value_container_type::const_iterator value_const_iterator;
     value_iterator begin_value ();
     value_iterator end_value ();
     value_const_iterator begin_value () const;
     value_const_iterator end_value () const;
-    void add_value (::XMLSchema::string< wchar_t >::_ptr const& );
-    size_t count_value (void) const;
+    void add_value (value_value_type const&);
+    size_t count_value () const;
 
     protected:
-    std::list< ::XMLSchema::string< wchar_t >::_ptr > value_;
+    value_container_type value_;
 
     // long
-    //
     public:
-    typedef std::list< ::XMLSchema::long_::_ptr >::iterator long_iterator;
-    typedef std::list< ::XMLSchema::long_::_ptr >::const_iterator long_const_iterator;
+    typedef ACE_Refcounted_Auto_Ptr < ::XMLSchema::long_, ACE_Null_Mutex> long_value_type;
+    typedef std::list<long_value_type> long_container_type;
+    typedef long_container_type::iterator long_iterator;
+    typedef long_container_type::const_iterator long_const_iterator;
     long_iterator begin_long ();
     long_iterator end_long ();
     long_const_iterator begin_long () const;
     long_const_iterator end_long () const;
-    void add_long (::XMLSchema::long_::_ptr const& );
-    size_t count_long (void) const;
+    void add_long (long_value_type const&);
+    size_t count_long () const;
 
     protected:
-    std::list< ::XMLSchema::long_::_ptr > long__;
+    long_container_type long__;
 
     // el
-    //
     public:
-    typedef std::list< ::Recursive::Element::_ptr >::iterator el_iterator;
-    typedef std::list< ::Recursive::Element::_ptr >::const_iterator el_const_iterator;
+    typedef ACE_Refcounted_Auto_Ptr < ::Recursive::Element, ACE_Null_Mutex> el_value_type;
+    typedef std::list<el_value_type> el_container_type;
+    typedef el_container_type::iterator el_iterator;
+    typedef el_container_type::const_iterator el_const_iterator;
     el_iterator begin_el ();
     el_iterator end_el ();
     el_const_iterator begin_el () const;
     el_const_iterator end_el () const;
-    void add_el (::Recursive::Element::_ptr const& );
-    size_t count_el (void) const;
+    void add_el (el_value_type const&);
+    size_t count_el () const;
 
     protected:
-    std::list< ::Recursive::Element::_ptr > el_;
+    el_container_type el_;
 
     public:
-    Element (std::list< ::XMLSchema::string< wchar_t >::_ptr > const& value__,
-             std::list< ::XMLSchema::long_::_ptr > const& long___);
+    Element (value_container_type const& value__,
+             long_container_type const& long___);
 
-    Element (::XSCRT::XML::Element< wchar_t > const&);
+    explicit Element (::XSCRT::XML::Element<ACE_TCHAR> const&);
     Element (Element const& s);
-
-    Element&
-    operator= (Element const& s);
+    Element& operator= (Element const& s);
 
     private:
     char regulator__;
@@ -92,7 +97,7 @@ namespace Recursive
   }
 }
 
-#include "XMLSchema/Traversal.hpp"
+#include "ace/XML_Utils/XMLSchema/Traversal.hpp"
 
 namespace Recursive
 {
@@ -199,17 +204,17 @@ namespace Recursive
   }
 }
 
-#include "XMLSchema/Writer.hpp"
+#include "ace/XML_Utils/XMLSchema/Writer.hpp"
 
 namespace Recursive
 {
   namespace Writer
   {
     struct Element : Traversal::Element,
-    virtual ::XSCRT::Writer< wchar_t >
+    virtual ::XSCRT::Writer<ACE_TCHAR>
     {
       typedef ::Recursive::Element Type;
-      Element (::XSCRT::XML::Element< wchar_t >&);
+      explicit Element (::XSCRT::XML::Element<ACE_TCHAR>&);
 
       virtual void
       traverse (Type &o)

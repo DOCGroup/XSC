@@ -79,7 +79,7 @@ namespace CDD
 
         for (LevelMap::const_iterator i = levels.begin ();
              i != levels.end ();
-             i++)
+             ++i)
         {
           if (i->second == l)
           {
