@@ -904,7 +904,6 @@ generate_header (Context& ctx,
   if (!ctx.cpp11())
   {
     ctx.os << "#include \"ace/Refcounted_Auto_Ptr.h\"" << endl
-          << "#include \"ace/Singleton.h\"" << endl
           << "#include \"ace/Null_Mutex.h\"" << endl;
   }
 
