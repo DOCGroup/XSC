@@ -178,7 +178,14 @@ namespace
       {
         // sequence
         //
-        os << "typedef ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> " << name << "_value_type;";
+        if (this->cpp11_)
+        {
+          os << "typedef std::shared_ptr< " << type << "> " << name << "_value_type;";
+        }
+        else
+        {
+          os << "typedef ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> " << name << "_value_type;";
+        }
         os << "typedef " << container  << "<" << name << "_value_type> " << name << "_container_type;";
         os << "typedef " << name << "_container_type::iterator " << name << "_iterator;";
         os << "typedef " << name << "_container_type::const_iterator " << name << "_const_iterator;";
@@ -894,12 +901,13 @@ generate_header (Context& ctx,
   ctx.os << "#include \"ace/XML_Utils/XMLSchema/Types.hpp\"" << endl
          << "#include \"ace/XML_Utils/XMLSchema/id_map.hpp\"" << endl;
 
-  ctx.os << "#include \"ace/Refcounted_Auto_Ptr.h\"" << endl
-         << "#include \"ace/Null_Mutex.h\"" << endl;
+  if (!ctx.cpp11())
+  {
+    ctx.os << "#include \"ace/Refcounted_Auto_Ptr.h\"" << endl
+          << "#include \"ace/Null_Mutex.h\"" << endl;
+  }
 
-  ctx.os << "#include \"ace/TSS_T.h\""<< endl
-     << "#include \"ace/ace_wchar.h\"" << endl
-     << "#include \"ace/Singleton.h\"" << endl << endl;
+  ctx.os << "#include \"ace/ace_wchar.h\"" << endl << endl;
 
   // -- Include CDR Type headers if cdr generation is
   // enabled
