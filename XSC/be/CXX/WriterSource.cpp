@@ -122,9 +122,18 @@ namespace
         (q ? L + L" (\"" + ns + L"\")" + L", " : L"") <<
         L << L" (\"" << L"\")" << ", " << "top_ ());"
          << attrinit
-         << "Traversal::" << scope << "::" << id (name) << " (o);"
-         << "attr_ (0);"
-         << "}";
+         << "Traversal::" << scope << "::" << id (name) << " (o);";
+
+      if (this->cpp11_)
+      {
+        os << "attr_ (nullptr);";
+      }
+      else
+      {
+        os << "attr_ (0);";
+      }
+
+      os << "}";
     }
 
   };

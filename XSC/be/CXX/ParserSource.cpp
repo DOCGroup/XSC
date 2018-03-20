@@ -22,6 +22,20 @@ namespace
       string name (c.name ());
       string type (type_name (c));
 
+      string compare_name;
+      if (char_type == L"wchar_t")
+        {
+          compare_name = L"L\"" + name + L"\"";
+        }
+      else if (char_type == L"ACE_TCHAR")
+        {
+          compare_name = L"ACE_TEXT(\"" + name + L"\")";
+        }
+      else
+        {
+          compare_name = L"\"" + name + L"\"";
+        }
+
       //@@ need to use FQ-names.
       //
       os << "namespace reader"
@@ -29,16 +43,16 @@ namespace
          << type << endl
          << id (name) << " (xercesc::DOMDocument const* d)"
          << "{"
-         << "// Initiate our Singleton as an ACE_TSS object (ensures thread\n"
-         << "// specific storage\n"
-         << "ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());\n\n"
+         << "// Initiate our Singleton as an ACE_TSS object (ensures thread" << endl
+         << "// specific storage" << endl
+         << "ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());"
          << "xercesc::DOMElement* dom_element = d->getDocumentElement ();"
          << "if (!dom_element)"
          << "{"
          << "throw 1;"
          << "}"
          << xml_element_type << " e (dom_element);"
-         << "if (e.name () == ACE_TEXT(\"" << name << "\"))"
+         << "if (e.name () == " << compare_name << ")"
          << "{"
          << type << " r (e);\n"
          << "(*TSS_ID_Map)->resolve_idref();\n"
