@@ -112,8 +112,8 @@ namespace
         {
           if (this->char_type == char_compare)
           {
-            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_CHAR_TO_TCHAR (" << id(name);
-            os << "_.back()->id().c_str()));\n";
+            os << "std::basic_string<char> temp (" << id(name);
+            os << "_.back()->id().c_str());\n";
           }
           else if (this->char_type == wchar_t_compare)
           {
@@ -135,8 +135,8 @@ namespace
         {
           if (this->char_type == char_compare)
           {
-            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_CHAR_TO_TCHAR ((*" << id(name);
-            os << "_).id().c_str()));\n";
+            os << "std::basic_string<char> temp ((*" << id(name);
+            os << "_).id().c_str());\n";
           }
           else if (this->char_type == wchar_t_compare)
           {
@@ -160,7 +160,7 @@ namespace
         {
           if (this->char_type == char_compare)
           {
-            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_CHAR_TO_TCHAR ((*" << id(name) << "_).c_str()));";
+            os << "std::basic_string<char> temp ((*" << id(name) << "_).c_str());";
           }
           else if (this->char_type == wchar_t_compare)
           {
@@ -177,8 +177,8 @@ namespace
         {
           if (this->char_type == char_compare)
           {
-            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_CHAR_TO_TCHAR (" << id(name);
-            os << "_.back()->c_str()));\n";
+            os << "std::basic_string<char> temp (" << id(name);
+            os << "_.back()->c_str());\n";
           }
           else if (this->char_type == wchar_t_compare)
           {
@@ -252,8 +252,8 @@ namespace
       {
         if (this->char_type == char_compare)
         {
-          os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_CHAR_TO_TCHAR ((*" << id(name);
-          os << "_).id().c_str()));\n";
+          os << "std::basic_string<char> temp ((*" << id(name);
+          os << "_).id().c_str());\n";
         }
         else if (this->char_type == wchar_t_compare)
         {
@@ -282,7 +282,7 @@ namespace
       {
         if (this->char_type == char_compare)
         {
-          os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_CHAR_TO_TCHAR ((*" << id(name) << "_).c_str()));";
+          os << "std::basic_string<char> temp ((*" << id(name) << "_).c_str());";
         }
         else if (this->char_type == wchar_t_compare)
         {
