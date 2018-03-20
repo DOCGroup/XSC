@@ -63,8 +63,15 @@ namespace
       {
         // sequence
         //
-        os << name << "_value_type t (new " << type << " (e));"
-           << "add_" << name << " (t);";
+        if (this->cpp11_)
+        {
+          os << name << "_value_type t (std::make_shared< " << type << "> (e));";
+        }
+        else
+        {
+          os << name << "_value_type t (new " << type << " (e));";
+        }
+        os << "add_" << name << " (t);";
       }
       else if (c.min () == 0)
       {
