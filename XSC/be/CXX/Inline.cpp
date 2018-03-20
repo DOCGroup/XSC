@@ -262,15 +262,24 @@ namespace
         if (ra_sequence)
           {
             os << "if (" << name << "_.capacity () < " << name << "_.size () + 1)"
-               << "{"
-               << "std::vector<ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> > v;"
-               << "v.reserve (" << id(name) << "_.size () + 1);"
+               << "{";
+
+            if (this->cpp11_)
+            {
+              os << "std::vector<std::shared_ptr< " << type << "> > v;";
+            }
+            else
+            {
+              os << "std::vector<ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> > v;";
+            }
+
+            os << "v.reserve (" << id(name) << "_.size () + 1);"
                << endl
                << "for (" << name << "_iterator i = " << id(name) << "_.begin ();"
                << "i != " << id(name) << "_.end (); ++i)"
                << "{"
                << type << "& t = *i;"
-               << "t.container (0);"
+               << "t.container (nullptr);"
                << "v.push_back (t);"
                << "v.back ().container (this);"
                << "}"
@@ -1414,6 +1423,11 @@ namespace
 void
 generate_inline (Context& ctx, SemanticGraph::Schema& schema, bool i)
 {
+  ctx.os << "#include \"ace/Null_Mutex.h\"" << endl
+     << "#include \"ace/TSS_T.h\""<< endl
+     << "#include \"ace/ace_wchar.h\"" << endl
+     << "#include \"ace/Singleton.h\"" << endl << endl;
+
   Traversal::Schema traverser;
   Traversal::Sources sources;
   Traversal::Names schema_names;
