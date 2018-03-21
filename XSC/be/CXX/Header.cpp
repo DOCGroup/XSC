@@ -907,7 +907,10 @@ generate_header (Context& ctx,
           << "#include \"ace/Null_Mutex.h\"" << endl;
   }
 
-  ctx.os << "#include \"ace/ace_wchar.h\"" << endl << endl;
+  if (ctx.char_type == L"ACE_TCHAR")
+  {
+    ctx.os << "#include \"ace/ace_wchar.h\"" << endl << endl;
+  }
 
   // -- Include CDR Type headers if cdr generation is
   // enabled

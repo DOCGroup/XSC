@@ -8,7 +8,6 @@
 #include "XSC/Traversal.hpp"
 
 #include "CCF/CodeGenerationKit/Regex.hpp"
-//#include "ace/ace_wchar.h"
 
 #include <ctype.h>
 #include <string>

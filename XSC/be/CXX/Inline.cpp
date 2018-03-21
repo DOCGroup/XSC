@@ -1423,9 +1423,13 @@ namespace
 void
 generate_inline (Context& ctx, SemanticGraph::Schema& schema, bool i)
 {
+  if (ctx.char_type == L"ACE_TCHAR")
+  {
+    ctx.os << "#include \"ace/ace_wchar.h\"" << endl;
+  }
+
   ctx.os << "#include \"ace/Null_Mutex.h\"" << endl
      << "#include \"ace/TSS_T.h\""<< endl
-     << "#include \"ace/ace_wchar.h\"" << endl
      << "#include \"ace/Singleton.h\"" << endl << endl;
 
   Traversal::Schema traverser;
