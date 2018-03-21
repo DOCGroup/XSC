@@ -199,8 +199,8 @@ namespace
         //Return referenced item if an IDREF
         if (idref_ptr != std::string::npos)
         {
-          os << "XSCRT::Type* get_" << name << "_ptr (const std::basic_string<" << char_type <<">& idref);";
-          os << "void set_" << name << "_ptr (const std::basic_string<" << char_type << ">& idref);";
+          os << "XSCRT::Type* get_" << name << "_ptr (const " << string_type <<"& idref);";
+          os << "void set_" << name << "_ptr (const " << string_type << "& idref);";
         }
         os << "size_t count_" << name << " () const;";
 
@@ -222,7 +222,7 @@ namespace
         if (idref_ptr != std::string::npos)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ();\n";
-           os << "void set_" << id (name) << "_ptr (const std::basic_string<" << char_type << ">& idref);";
+           os << "void set_" << id (name) << "_ptr (const " << string_type << "& idref);";
         }
 
         os << endl
@@ -250,7 +250,7 @@ namespace
         if (idref_ptr != std::string::npos)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ( void );\n";
-           os << "void set_" << id(name) << "_ptr (const std::basic_string<" << char_type << ">& idref);";
+           os << "void set_" << id(name) << "_ptr (const " << string_type << "& idref);";
         }
 
         os << endl
@@ -320,7 +320,7 @@ namespace
         if (idref_ptr != std::string::npos)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ();\n";
-           os << "void set_" << id(name) << "_ptr (const std::basic_string<" << char_type << ">& idref);";
+           os << "void set_" << id(name) << "_ptr (const " << string_type << "& idref);";
         }
 
         os << endl
@@ -347,7 +347,7 @@ namespace
         if (idref_ptr != std::string::npos)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ( void );\n";
-           os << "void set_" << id (name) << "_ptr (const std::basic_string<" << char_type << ">& idref);";
+           os << "void set_" << id (name) << "_ptr (const " << string_type << "& idref);";
         }
 
         os << endl
