@@ -112,17 +112,17 @@ namespace
         {
           if (this->char_type == char_compare)
           {
-            os << "std::basic_string<char> temp (" << id(name);
-            os << "_.back()->id().c_str());\n";
+            os << string_type << " temp (" << id(name);
+            os << "_.back()->id());\n";
           }
           else if (this->char_type == wchar_t_compare)
           {
-            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_WCHAR_TO_TCHAR (" << id(name);
+            os << string_type << " temp (ACE_TEXT_WCHAR_TO_TCHAR (" << id(name);
             os << "_.back()->id().c_str()));\n";
           }
           else
           {
-            os << "std::basic_string<ACE_TCHAR> temp (" << id(name);
+            os << string_type << " temp (" << id(name);
             os << "_.back()->id().c_str());\n";
           }
 
@@ -135,17 +135,17 @@ namespace
         {
           if (this->char_type == char_compare)
           {
-            os << "std::basic_string<char> temp ((*" << id(name);
-            os << "_).id().c_str());\n";
+            os << string_type << " temp ((*" << id(name);
+            os << "_).id());\n";
           }
           else if (this->char_type == wchar_t_compare)
           {
-            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name);
+            os << string_type << " temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name);
             os << "_).id().c_str()));\n";
           }
           else
           {
-            os << "std::basic_string<ACE_TCHAR> temp ((*" << id(name);
+            os << string_type << " temp ((*" << id(name);
             os << "_).id().c_str());\n";
           }
           //If there is only one, then the idref gets added to the id_map
@@ -160,15 +160,15 @@ namespace
         {
           if (this->char_type == char_compare)
           {
-            os << "std::basic_string<char> temp ((*" << id(name) << "_).c_str());";
+            os << string_type << " temp ((*" << id(name) << "_).c_str());";
           }
           else if (this->char_type == wchar_t_compare)
           {
-            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name) << "_).c_str()));";
+            os << string_type << " temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name) << "_).c_str()));";
           }
           else
           {
-             os << "std::basic_string<" << this->char_type << "> temp ((*" << id(name) << "_).c_str());";
+             os << string_type << " temp ((*" << id(name) << "_).c_str());";
           }
              os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_id(temp"
               << ", dynamic_cast<XSCRT::Type*> (this));";
@@ -177,17 +177,17 @@ namespace
         {
           if (this->char_type == char_compare)
           {
-            os << "std::basic_string<char> temp (" << id(name);
+            os << string_type << " temp (" << id(name);
             os << "_.back()->c_str());\n";
           }
           else if (this->char_type == wchar_t_compare)
           {
-            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_WCHAR_TO_TCHAR (" << id(name);
+            os << string_type << " temp (ACE_TEXT_WCHAR_TO_TCHAR (" << id(name);
             os << "_.back()->c_str()));\n";
           }
           else
           {
-            os << "std::basic_string<" << this->char_type <<"> temp (" << id(name);
+            os << string_type << " temp (" << id(name);
             os << "_.back()->c_str());\n";
           }
              os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_id(temp"
@@ -252,17 +252,17 @@ namespace
       {
         if (this->char_type == char_compare)
         {
-          os << "std::basic_string<char> temp ((*" << id(name);
+          os << string_type << " temp ((*" << id(name);
           os << "_).id().c_str());\n";
         }
         else if (this->char_type == wchar_t_compare)
         {
-          os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name);
+          os << string_type << " temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name);
           os << "_).id().c_str()));\n";
         }
         else
         {
-          os << "std::basic_string<ACE_TCHAR> temp ((*" << id(name);
+          os << string_type << " temp ((*" << id(name);
           os << "_).id().c_str());\n";
         }
           //If there is only one, then the idref gets added to the id_map
@@ -282,15 +282,15 @@ namespace
       {
         if (this->char_type == char_compare)
         {
-          os << "std::basic_string<char> temp ((*" << id(name) << "_).c_str());";
+          os << string_type << " temp ((*" << id(name) << "_).c_str());";
         }
         else if (this->char_type == wchar_t_compare)
         {
-            os << "std::basic_string<ACE_TCHAR> temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name) << "_).c_str()));";
+            os << string_type << " temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name) << "_).c_str()));";
         }
         else
         {
-           os << "std::basic_string<" << this->char_type << "> temp ((*" << id(name) << "_).c_str());";
+           os << string_type << " temp ((*" << id(name) << "_).c_str());";
         }
            os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_id(temp"
               << ", dynamic_cast<XSCRT::Type*> (this));";

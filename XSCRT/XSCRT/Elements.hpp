@@ -198,6 +198,20 @@ namespace XSCRT
       return 0;
     }
 
+    Type* get_idref (const std::basic_string<ACE_TCHAR>& name)
+    {
+      std::map<std::basic_string<ACE_TCHAR>, XSCRT::Type*>::iterator i =
+          this->idref_map_.find(name);
+      if (i != idref_map_.end())
+      {
+        return i->second;
+      }
+      else
+      {
+        return 0;
+      }
+    }
+
     //Get and set methods for the idref_map_ data member
     Type* get_idref (const char* name)
     {
@@ -228,7 +242,6 @@ namespace XSCRT
         return 0;
       }
     }
-
 
     void set_idref (std::basic_string<ACE_TCHAR> name, Type* new_idref)
     {
