@@ -38,7 +38,7 @@ namespace
       string type (type_name (e));
       string char_typ (this->char_type);
 
-      bool ra_sequence (this->generate_ra_sequences_);
+      //bool ra_sequence (this->generate_ra_sequences_);
 
       //Check if the type is an IDREF
       std::string::size_type idref_ptr = 0;
@@ -74,7 +74,7 @@ namespace
            << "return *" << id (name) << "_;"
            << "}";
 
-        //Return referenced item if an IDREF
+        // Return referenced item if an IDREF
         if (idref_ptr != std::string::npos)
         {
            os << i
@@ -259,39 +259,7 @@ namespace
            << "add_" << name << " (" << scope << "::" << name << "_value_type const& e)"
            << "{";
 
-        if (ra_sequence)
-          {
-            os << "if (" << name << "_.capacity () < " << name << "_.size () + 1)"
-               << "{";
-
-            if (this->cpp11_)
-            {
-              os << "std::vector<std::shared_ptr< " << type << "> > v;";
-            }
-            else
-            {
-              os << "std::vector<ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> > v;";
-            }
-
-            os << "v.reserve (" << id(name) << "_.size () + 1);"
-               << endl
-               << "for (" << name << "_iterator i = " << id(name) << "_.begin ();"
-               << "i != " << id(name) << "_.end (); ++i)"
-               << "{"
-               << type << "& t = *i;"
-               << "t.container (nullptr);"
-               << "v.push_back (t);"
-               << "v.back ().container (this);"
-               << "}"
-               << id(name) << "_.swap (v);"
-               << "}"
-               << id(name) << "_.push_back (e);"
-               << id(name) << "_.back ().container (this);";
-          }
-        else
-          {
-            os << id(name) << "_.push_back (e);";
-          }
+        os << id(name) << "_.push_back (e);";
         os << "}";
 
         // count_typename
