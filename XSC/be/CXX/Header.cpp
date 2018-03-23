@@ -180,13 +180,13 @@ namespace
         //
         if (this->cpp11_)
         {
-          os << "typedef std::shared_ptr< " << type << "> " << name << "_value_type;";
+          os << "typedef " << container  << "< " << type << "> " << name << "_container_type;";
         }
         else
         {
           os << "typedef ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> " << name << "_value_type;";
+          os << "typedef " << container  << "<" << name << "_value_type> " << name << "_container_type;";
         }
-        os << "typedef " << container  << "<" << name << "_value_type> " << name << "_container_type;";
         os << "typedef " << name << "_container_type::iterator " << name << "_iterator;";
         os << "typedef " << name << "_container_type::const_iterator " << name << "_const_iterator;";
 
@@ -195,14 +195,20 @@ namespace
         os << name << "_const_iterator begin_" << name << " () const;";
         os << name << "_const_iterator end_" << name << " () const;";
 
-        os << "void add_" << name << " (" << name << "_value_type const&);";
+        if (!this->cpp11_)
+        {
+          os << "void add_" << name << " (" << name << "_value_type const&);";
+        }
         //Return referenced item if an IDREF
         if (idref_ptr != std::string::npos)
         {
           os << "XSCRT::Type* get_" << name << "_ptr (const " << string_type <<"& idref);";
           os << "void set_" << name << "_ptr (const " << string_type << "& idref);";
         }
-        os << "size_t count_" << name << " () const;";
+        //if (!this->cpp11_)
+        {
+          os << "size_t count_" << name << " () const;";
+        }
 
         os << endl
            << "protected:" << endl;

@@ -253,24 +253,29 @@ namespace
               << "}\n";
         }
 
-        // add_typename
-        os << i
-           << "void " << scope << "::" << endl
-           << "add_" << name << " (" << scope << "::" << name << "_value_type const& e)"
-           << "{";
+        if (!this->cpp11_)
+        {
+          // add_typename
+          os << i
+            << "void " << scope << "::" << endl
+            << "add_" << name << " (" << scope << "::" << name << "_value_type const& e)"
+            << "{";
 
-        os << id(name) << "_.push_back (e);";
-        os << "}";
+          os << id(name) << "_.push_back (e);";
+          os << "}";
+        }
 
-        // count_typename
-        //
-        os << i
-           << "size_t " << scope << "::" << endl
-           << "count_" << name << "(void) const"
-           << "{"
-           << "return " << id(name) << "_.size ();"
-           << "}";
-
+//        if (!this->cpp11_)
+        {
+          // count_typename
+          //
+          os << i
+            << "size_t " << scope << "::" << endl
+            << "count_" << name << "(void) const"
+            << "{"
+            << "return " << id(name) << "_.size ();"
+            << "}";
+        }
       }
     }
 
