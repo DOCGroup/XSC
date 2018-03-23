@@ -64,13 +64,15 @@ namespace
         //
         if (this->cpp11_)
         {
-          os << name << "_value_type t (std::make_shared< " << type << "> (e));";
+          os << type << " t (e);";
+          os << id (name) << "_.push_back (t);";
+
         }
         else
         {
           os << name << "_value_type t (new " << type << " (e));";
+          os << "add_" << name << " (t);";
         }
-        os << "add_" << name << " (t);";
       }
       else if (c.min () == 0)
       {
