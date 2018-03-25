@@ -128,16 +128,16 @@ namespace
           }
 
           //If there are more than one, then the last added IDREF is added to the ID_Map
-          os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_idref("
-             << "temp, dynamic_cast<XSCRT::Type*> (this));\n";
+          os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_idref("
+             << "temp, this);\n";
              //<< id(name) << "_.back()->id().c_str(), dynamic_cast<XSCRT::Type*> (this));\n";
         }
         else
         {
           if (this->char_type == char_compare)
           {
-            os << string_type << " temp ((*" << id(name);
-            os << "_).id());\n";
+            os << string_type << " temp (" << id(name);
+            os << "_->id());\n";
           }
           else if (this->char_type == wchar_t_compare)
           {
@@ -150,8 +150,8 @@ namespace
             os << "_).id().c_str());\n";
           }
           //If there is only one, then the idref gets added to the id_map
-          os <<"(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_idref("
-             << "temp, dynamic_cast<XSCRT::Type*> (this));\n";
+          os <<"(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_idref("
+             << "temp, (this);\n";
              //<< id(name) << "_).id().c_str(), dynamic_cast<XSCRT::Type*> (this));\n";
         }
       }
@@ -161,7 +161,7 @@ namespace
         {
           if (this->char_type == char_compare)
           {
-            os << string_type << " temp ((*" << id(name) << "_).c_str());";
+            os << string_type << " temp ((*" << id(name) << "_));";
           }
           else if (this->char_type == wchar_t_compare)
           {
@@ -171,8 +171,8 @@ namespace
           {
              os << string_type << " temp ((*" << id(name) << "_).c_str());";
           }
-             os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_id(temp"
-              << ", dynamic_cast<XSCRT::Type*> (this));";
+             os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_id(temp"
+              << ", this);";
         }
         else
         {
@@ -191,8 +191,8 @@ namespace
             os << string_type << " temp (" << id(name);
             os << "_.back()->c_str());\n";
           }
-             os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_id(temp"
-              << ", dynamic_cast<XSCRT::Type*> (this));";
+             os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_id(temp"
+              << ", this);";
 
         }
       }
@@ -253,8 +253,8 @@ namespace
       {
         if (this->char_type == char_compare)
         {
-          os << string_type << " temp ((*" << id(name);
-          os << "_).id().c_str());\n";
+          os << string_type << " temp (" << id(name);
+          os << "_->id());\n";
         }
         else if (this->char_type == wchar_t_compare)
         {
@@ -267,8 +267,8 @@ namespace
           os << "_).id().c_str());\n";
         }
           //If there is only one, then the idref gets added to the id_map
-          os <<"(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_idref("
-             << "temp, dynamic_cast<XSCRT::Type*> (this));\n";
+          os <<"(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_idref("
+             << "temp, this);\n";
              //<< id(name) << "_).id().c_str(), dynamic_cast<XSCRT::Type*> (this));\n";
       }
       /*if (idref_ptr != string::npos)
@@ -283,7 +283,7 @@ namespace
       {
         if (this->char_type == char_compare)
         {
-          os << string_type << " temp ((*" << id(name) << "_).c_str());";
+          os << string_type << " temp ((*" << id(name) << "_));";
         }
         else if (this->char_type == wchar_t_compare)
         {
@@ -293,8 +293,8 @@ namespace
         {
            os << string_type << " temp ((*" << id(name) << "_).c_str());";
         }
-           os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->\nadd_id(temp"
-              << ", dynamic_cast<XSCRT::Type*> (this));";
+           os << "(*ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance())->add_id(temp"
+              << ", this);";
       }
 
       os << "}"

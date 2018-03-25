@@ -36,17 +36,20 @@ namespace
           compare_name = L"\"" + name + L"\"";
         }
 
-      //@@ need to use FQ-names.
-      //
       os << "namespace reader"
          << "{"
          << type << endl
          << id (name) << " (xercesc::DOMDocument const* d)"
-         << "{"
-         << "// Initiate our Singleton as an ACE_TSS object (ensures thread" << endl
-         << "// specific storage" << endl
-         << "ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());"
-         << "xercesc::DOMElement* dom_element = d->getDocumentElement ();"
+         << "{";
+
+      if (!this->cpp11_)
+      {
+         os << "// Initiate our Singleton as an ACE_TSS object (ensures thread" << endl
+            << "// specific storage" << endl
+            << "ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());";
+      }
+
+      os << "xercesc::DOMElement* dom_element = d->getDocumentElement ();"
          << "if (!dom_element)"
          << "{"
          << "throw 1;"
@@ -54,9 +57,13 @@ namespace
          << xml_element_type << " e (dom_element);"
          << "if (e.name () == " << compare_name << ")"
          << "{"
-         << type << " r (e);\n"
-         << "(*TSS_ID_Map)->resolve_idref();\n"
-         << "return r;"
+         << type << " r (e);\n";
+
+     if (!this->cpp11_)
+     {
+       os  << "(*TSS_ID_Map)->resolve_idref();" << endl;
+     }
+     os  << "return r;"
          << "}"
          << "else"
          << "{"

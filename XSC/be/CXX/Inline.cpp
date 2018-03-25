@@ -75,7 +75,7 @@ namespace
            << "}";
 
         // Return referenced item if an IDREF
-        if (idref_ptr != std::string::npos)
+        if ((idref_ptr != std::string::npos) && (!this->cpp11_))
         {
            os << i
               << "::XSCRT::Type* " << scope << "::get_"
@@ -152,7 +152,7 @@ namespace
            << "return *" << id (name) << "_;"
            << "}";
         */
-        if (idref_ptr != std::string::npos)
+        if ((idref_ptr != std::string::npos) && (!this->cpp11_))
         {
            os << i
               << "::XSCRT::Type* " << scope << "::get_"
@@ -238,7 +238,7 @@ namespace
         os << "}";
 
         // add IDREF access method
-        if (idref_ptr != std::string::npos)
+        if ((idref_ptr != std::string::npos) && (!this->cpp11_))
         {
            os << i
               << "XSCRT::Type* " << scope << "::get_" << name
@@ -331,7 +331,7 @@ namespace
            << "}";
 
         // Return a pointer to the referenced item
-        if (idref_ptr != std::string::npos)
+        if ((idref_ptr != std::string::npos) && (!this->cpp11_))
         {
            os << i
               << "::XSCRT::Type* " << scope << "::get_"
@@ -400,7 +400,7 @@ namespace
            << "}";
 
         //Return a pointer to the referenced item
-        if (idref_ptr != std::string::npos)
+        if ((idref_ptr != std::string::npos) && (!this->cpp11_))
         {
            os << i
               << "::XSCRT::Type* " << scope << "::get_"
