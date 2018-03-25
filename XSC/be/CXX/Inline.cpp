@@ -184,23 +184,26 @@ namespace
         // sequence
         //
 
-        // begin_typename
-        //
-        os << i
-           << scope << "::" << name << "_iterator " << scope << "::" << endl
-           << "begin_" << name << " ()"
-           << "{"
-           << "return " << id(name) << "_.begin ();"
-           << "}";
+        if (!this->cpp11_)
+        {
+          // begin_typename
+          //
+          os << i
+            << scope << "::" << name << "_iterator " << scope << "::" << endl
+            << "begin_" << name << " ()"
+            << "{"
+            << "return " << id(name) << "_.begin ();"
+            << "}";
 
-        // end_typename
-        //
-        os << i
-           << scope << "::" << name << "_iterator " << scope << "::" << endl
-           << "end_" << name << " ()"
-           << "{"
-           << "return " << id(name) << "_.end ();"
-           << "}";
+          // end_typename
+          //
+          os << i
+            << scope << "::" << name << "_iterator " << scope << "::" << endl
+            << "end_" << name << " ()"
+            << "{"
+            << "return " << id(name) << "_.end ();"
+            << "}";
+        }
 
         // begin_typename const
         os << i

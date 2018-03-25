@@ -187,11 +187,17 @@ namespace
           os << "typedef ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> " << name << "_value_type;";
           os << "typedef " << container  << "<" << name << "_value_type> " << name << "_container_type;";
         }
-        os << "typedef " << name << "_container_type::iterator " << name << "_iterator;";
+        if (!this->cpp11_)
+        {
+          os << "typedef " << name << "_container_type::iterator " << name << "_iterator;";
+        }
         os << "typedef " << name << "_container_type::const_iterator " << name << "_const_iterator;";
 
-        os << name << "_iterator begin_" << name << " ();";
-        os << name << "_iterator end_" << name << " ();";
+        if (!this->cpp11_)
+        {
+          os << name << "_iterator begin_" << name << " ();";
+          os << name << "_iterator end_" << name << " ();";
+        }
         os << name << "_const_iterator begin_" << name << " () const;";
         os << name << "_const_iterator end_" << name << " () const;";
 
