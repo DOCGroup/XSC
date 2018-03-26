@@ -107,7 +107,7 @@ namespace
       idref_ptr = type.find(idref_str);
       id_ptr = type.find(id_str);
 
-      if (idref_ptr != string::npos)
+      if ((idref_ptr != std::string::npos) && (!this->cpp11_))
       {
         if (c.max() != 1)
         {
@@ -249,7 +249,8 @@ namespace
       std::wstring char_compare (L"char");
       idref_ptr = type.find(idref_str);
       id_ptr = type.find(id_str);
-      if (idref_ptr != string::npos)
+
+      if ((idref_ptr != std::string::npos) && (!this->cpp11_))
       {
         if (this->char_type == char_compare)
         {
