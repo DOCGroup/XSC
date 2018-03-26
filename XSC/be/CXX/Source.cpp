@@ -98,16 +98,14 @@ namespace
       }
 
       //Check if idref or id is the type
-      std::string::size_type idref_ptr = 0;
-      std::string::size_type id_ptr = 0;
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       std::wstring id_str (L"::XMLSchema::ID<");
       std::wstring wchar_t_compare (L"wchar_t");
       std::wstring char_compare (L"char");
-      idref_ptr = type.find(idref_str);
-      id_ptr = type.find(id_str);
+      std::string::size_type idref_ptr = type.find(idref_str);
+      std::string::size_type id_ptr = type.find(id_str);
 
-      if (idref_ptr != string::npos)
+      if ((idref_ptr != std::string::npos) && (!this->cpp11_))
       {
         if (c.max() != 1)
         {
@@ -155,7 +153,7 @@ namespace
              //<< id(name) << "_).id().c_str(), dynamic_cast<XSCRT::Type*> (this));\n";
         }
       }
-      else if (id_ptr != string::npos)
+      else if ((id_ptr != std::string::npos) && (!this->cpp11_))
       {
         if (c.max() == 1)
         {
@@ -249,7 +247,8 @@ namespace
       std::wstring char_compare (L"char");
       idref_ptr = type.find(idref_str);
       id_ptr = type.find(id_str);
-      if (idref_ptr != string::npos)
+
+      if ((idref_ptr != std::string::npos) && (!this->cpp11_))
       {
         if (this->char_type == char_compare)
         {
@@ -279,7 +278,7 @@ namespace
         //"_).id(), dynamic_cast<XSCRT::Type*> (this));\n";
       }
       */
-      else if (id_ptr != string::npos)
+      else if ((id_ptr != std::string::npos) && (!this->cpp11_))
       {
         if (this->char_type == char_compare)
         {
