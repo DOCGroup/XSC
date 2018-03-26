@@ -928,10 +928,15 @@ generate_header (Context& ctx,
   // enabled
   if (ctx.cdr_reader_generation_enabled () ||
       ctx.cdr_writer_generation_enabled ())
+  {
     ctx.os << "#include \"XMLSchema/CDR_Types.hpp\"" << endl
            << "#include \"XMLSchema/id_map.hpp\"" << endl
-           << "#include \"ace/TSS_T.h\""<< endl
            << endl;
+    if (!ctx.cpp11())
+    {
+      ctx.os << "#include \"ace/TSS_T.h\""<< endl;
+    }
+  }
 
   if (ctx.cpp11())
   {
