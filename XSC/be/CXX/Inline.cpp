@@ -128,10 +128,10 @@ namespace
         }
         else
         {
-          os << id (name) << "_ = " << scope << "::" << id(name) << "_auto_ptr_type (new " << type << " (e));";
+          os << id (name) << "_ = " << scope << "::" << id(name) << "_auto_ptr_type (new " << type << " (e));"
+             << id (name) << "_->container (this);";
         }
-        os << id (name) << "_->container (this);"
-           << "}"
+        os << "}"
            << "}";
       }
       else if (e.min () == 1 && e.max () == 1)
@@ -377,10 +377,10 @@ namespace
         }
         else
         {
-          os << id (name) << "_ = " << scope << "::" << id(name) << "_auto_ptr_type (new " << type << " (e));";
+          os << id (name) << "_ = " << scope << "::" << id(name) << "_auto_ptr_type (new " << type << " (e));"
+             << id (name) << "_->container (this);";
         }
-        os << id (name) << "_->container (this);"
-           << "}"
+        os << "}"
            << "}";
       }
       else
@@ -912,7 +912,7 @@ namespace
       virtual void
       traverse (SemanticGraph::Element& e)
       {
-        if (e.min () == 1 && e.max () == 1)
+        if (e.min () == 1 && e.max () == 1 && !this->cpp11_)
         {
           // one
           //
@@ -923,7 +923,7 @@ namespace
       virtual void
       traverse (SemanticGraph::Attribute& a)
       {
-        if (!a.optional ())
+        if (!a.optional () && !this->cpp11_)
         {
           os << id (a.name ()) << "_->container (this);";
         }
@@ -1077,18 +1077,13 @@ namespace
 
           // optional
           //
-          if (this->cpp11_)
-          {
-            os << "if (" << name << "_) "
-              << name << "_->container (this);";
-          }
-          else
+          if (!this->cpp11_)
           {
             os << "if (" << name << "_.get ()) "
-              << name << "_->container (this);";
+               << name << "_->container (this);";
           }
         }
-        else if (e.min () == 1 && e.max () == 1)
+        else if (e.min () == 1 && e.max () == 1 && !this->cpp11_)
         {
           os << id (name) << "_->container (this);";
         }
@@ -1119,20 +1114,18 @@ namespace
         {
           // optional
           //
-          if (this->cpp11_)
-          {
-            os << "if (" << name << "_) "
-              << name << "_->container (this);";
-          }
-          else
+          if (!this->cpp11_)
           {
             os << "if (" << name << "_.get ()) "
-              << name << "_->container (this);";
+               << name << "_->container (this);";
           }
         }
         else
         {
-          os << name << "_->container (this);";
+          if (!this->cpp11_)
+          {
+            os << name << "_->container (this);";
+          }
         }
       }
     };
