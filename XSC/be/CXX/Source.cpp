@@ -87,8 +87,7 @@ namespace
         //
         if (this->cpp11_)
         {
-          os << id (name) << "_ = std::make_unique< " << type << "> (e);"
-             << id (name) << "_->container (this);";
+          os << id (name) << "_ = std::make_unique< " << type << "> (e);";
         }
         else
         {
@@ -228,8 +227,7 @@ namespace
       {
         if (this->cpp11_)
         {
-          os << id (name) << "_ = std::make_unique<" << type << "> (a);"
-             << id (name) << "_->container (this);";
+          os << id (name) << "_ = std::make_unique<" << type << "> (a);";
         }
         else
         {
