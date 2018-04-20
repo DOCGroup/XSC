@@ -1146,7 +1146,7 @@ namespace
 
       os << scope << "::" << endl
          << name << " (" << xml_element_type << " const& e)" << endl
-         << ":" << "Base (e), regulator__ ()"
+         << ":" << "Base (e)"
          << "{"
          << endl;
     }
@@ -1353,8 +1353,7 @@ namespace
       os << scope << "::" << endl
          << name << " (" << xml_attribute_type << " const& a)" << endl
          << ":" << endl
-         << "Base (a)," << endl
-         << "regulator__ ()"
+         << "Base (a)" << endl
          << "{";
     }
 

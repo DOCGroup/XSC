@@ -586,9 +586,6 @@ namespace
            << endl;
       }
 
-      os << "private:" << endl
-         << "char regulator__;";
-
       // Closing brace for the class declaration
       // Example: class Foo {
       // };

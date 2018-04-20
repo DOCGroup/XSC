@@ -584,7 +584,7 @@ namespace
 
       ctor_args_.traverse (c);
 
-      os << ") :" << endl;
+      os << ")" << endl;
 
       inherits (c, ctor_base_);
 
@@ -596,8 +596,7 @@ namespace
       ctor_member__.reset_base_class_initialization ();
       names (c, ctor_member_);
 
-      os << "regulator__ ()"
-         << "{";
+      os << "{";
 
       names (c, ctor_body_);
 
@@ -608,7 +607,7 @@ namespace
       os << i
          << scope << "::"
          << name << " (" << type << " const& s) :" << endl
-         << "::XSCRT::Type (s)," << endl;
+         << "::XSCRT::Type (s)" << endl;
 
       // Resets a flag that determines if a Complex Type's
       // copy constructor has inherited from the base XSCRT::Type
@@ -619,8 +618,7 @@ namespace
 
       names (c, copy_member_);
 
-      os << "regulator__ ()"
-         << "{";
+      os << "{";
 
       names (c, copy_body_member_);
 
@@ -830,19 +828,19 @@ namespace
     {
       CTorMember (Context& c)
       : Context (c),
-        base_class_initialized_ (0)
+        base_class_initialized_ (false)
       {
       }
 
       virtual void
       traverse (SemanticGraph::Element& e)
       {
-        // Copy constructor for a complex type needs
+        // Constructor for a complex type needs
         // to inherit from the ::XSCRT::Type base class
         if (! base_class_initialized_)
         {
-          os << "::XSCRT::Type ()," << endl;
-          base_class_initialized_ = 1;
+          os << ": ::XSCRT::Type ()" << endl;
+          base_class_initialized_ = true;
         }
 
         if (e.min () == 1 && e.max () == 1)
@@ -854,11 +852,11 @@ namespace
 
           if (this->cpp11_)
           {
-            os << name << "_ (std::make_unique< " << type << "> (" << name << "__))," << endl;
+            os << ", " << name << "_ (std::make_unique< " << type << "> (" << name << "__))" << endl;
           }
           else
           {
-            os << name << "_ (new " << type << " (" << name << "__))," << endl;
+            os << ", " << name << "_ (new " << type << " (" << name << "__))" << endl;
           }
         }
         else if (e.min () >= 1)
@@ -867,13 +865,13 @@ namespace
           string name (id (e.name ()));
           string type (type_name (e));
 
-          os << name << "_ ("<< name << "__)," << endl;
+          os << ", " << name << "_ ("<< name << "__)" << endl;
         }
       }
 
       void reset_base_class_initialization ()
       {
-        base_class_initialized_ = 0;
+        base_class_initialized_ = false;
       }
 
       virtual void
@@ -886,11 +884,11 @@ namespace
 
           if (this->cpp11_)
           {
-            os << name << "_ (std::make_unique< " << type << "> (" << name << "__))," << endl;
+            os << ", " << name << "_ (std::make_unique< " << type << "> (" << name << "__))" << endl;
           }
           else
           {
-            os << name << "_ (new " << type << " (" << name << "__))," << endl;
+            os << ", " << name << "_ (new " << type << " (" << name << "__))" << endl;
           }
         }
       }
@@ -939,7 +937,7 @@ namespace
     {
       Copy (Context& c)
       : Context (c),
-        base_class_initialized_ (0)
+        base_class_initialized_ (false)
       {
       }
 
@@ -948,8 +946,8 @@ namespace
       {
         if (!this->base_class_initialized_)
           {
-            os << "Base (s)," << endl;
-            this->base_class_initialized_ = 1;
+            os << "Base (s)" << endl;
+            this->base_class_initialized_ = true;
           }
       }
 
@@ -972,7 +970,7 @@ namespace
         // constructor. Fix for compile warnings.
         if (! base_class_initialized_)
           {
-            base_class_initialized_ = 1;
+            base_class_initialized_ = true;
           }
 
         if (e.min () == 0 && e.max () == 1)
@@ -981,15 +979,15 @@ namespace
             //
             if (this->cpp11_)
             {
-              os << name << "_ ("
+              os << ", " << name << "_ ("
                 << "s." << name << "_ ? "
-                << "std::make_unique< " << type << "> (*s." << name << "_) : " << nullptr_string << ")," << endl;
+                << "std::make_unique< " << type << "> (*s." << name << "_) : " << nullptr_string << ")" << endl;
             }
             else
             {
-              os << name << "_ ("
+              os << ", " << name << "_ ("
                 << "s." << name << "_.get () ? "
-                << "new " << type << " (*s." << name << "_) : " << nullptr_string << ")," << endl;
+                << "new " << type << " (*s." << name << "_) : " << nullptr_string << ")" << endl;
             }
           }
         else if (e.min () == 1 && e.max () == 1)
@@ -998,11 +996,11 @@ namespace
             //
             if (this->cpp11_)
             {
-              os << name << "_ (std::make_unique< " << type << "> (*s." << name << "_))," << endl;
+              os << ", " << name << "_ (std::make_unique< " << type << "> (*s." << name << "_))" << endl;
             }
             else
             {
-              os << name << "_ (new " << type << " (*s." << name << "_))," << endl;
+              os << ", " << name << "_ (new " << type << " (*s." << name << "_))" << endl;
             }
           }
         else
@@ -1010,7 +1008,7 @@ namespace
             // sequence
             //
 
-            os << name << "_ (s." << name << "_)," << endl;
+            os << ", " << name << "_ (s." << name << "_)" << endl;
           }
       }
 
@@ -1031,26 +1029,26 @@ namespace
 
         if (a.optional ())
         {
-          os << name << "_ ("
+          os << ", " << name << "_ ("
              << "s." << name << "_.get () ? "
-             << "new " << type << " (*s." << name << "_) : " << nullptr_string << ")," << endl;
+             << "new " << type << " (*s." << name << "_) : " << nullptr_string << ")" << endl;
         }
         else
         {
           if (this->cpp11_)
           {
-            os << name << "_ (std::make_unique< " << type << "> (*s." << name << "_))," << endl;
+            os << ", " << name << "_ (std::make_unique< " << type << "> (*s." << name << "_))" << endl;
           }
           else
           {
-            os << name << "_ (new " << type << " (*s." << name << "_))," << endl;
+            os << ", " << name << "_ (new " << type << " (*s." << name << "_))" << endl;
           }
         }
       }
 
       void reset_base_class_initialization ()
       {
-        base_class_initialized_ = 0;
+        base_class_initialized_ = false;
       }
 
     private:
