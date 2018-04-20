@@ -13,7 +13,6 @@ Reader_T (typename reader_function <T>::result_type reader)
 : parser_ (new xercesc::XercesDOMParser ()),
   reader_ (reader)
 {
-
 }
 
 //
@@ -22,7 +21,6 @@ Reader_T (typename reader_function <T>::result_type reader)
 template <typename T, typename CHAR_TYPE>
 Reader_T <T, CHAR_TYPE>::~Reader_T (void)
 {
-
 }
 
 //
