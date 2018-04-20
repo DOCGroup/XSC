@@ -1,5 +1,3 @@
-// 
-
 #include "xercesc/util/XMLUniDefs.hpp"
 
 namespace XSCRT
