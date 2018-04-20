@@ -1146,7 +1146,7 @@ namespace
 
       os << scope << "::" << endl
          << name << " (" << xml_element_type << " const& e)" << endl
-         << ":" << "Base (e), regulator__ ()"
+         << ":" << "Base (e)"
          << "{"
          << endl;
     }
@@ -1353,8 +1353,7 @@ namespace
       os << scope << "::" << endl
          << name << " (" << xml_attribute_type << " const& a)" << endl
          << ":" << endl
-         << "Base (a)," << endl
-         << "regulator__ ()"
+         << "Base (a)" << endl
          << "{";
     }
 
@@ -1407,7 +1406,7 @@ namespace
 
   struct Enumeration : Traversal::Enumeration, protected virtual Context
   {
-    Enumeration (Context& c, string name_ = L"")
+    Enumeration (Context& c, const string& name_ = L"")
         : Context (c), name (name_), enumerator_ (c), static_enumerator_ (c)
     {
       names_.node_traverser (enumerator_);

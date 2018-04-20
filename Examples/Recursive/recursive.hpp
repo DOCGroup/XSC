@@ -14,9 +14,7 @@ namespace Recursive
 #include "ace/XML_Utils/XMLSchema/id_map.hpp"
 #include "ace/Refcounted_Auto_Ptr.h"
 #include "ace/Null_Mutex.h"
-#include "ace/TSS_T.h"
 #include "ace/ace_wchar.h"
-#include "ace/Singleton.h"
 
 namespace Recursive
 {
@@ -82,9 +80,6 @@ namespace Recursive
     explicit Element (::XSCRT::XML::Element<ACE_TCHAR> const&);
     Element (Element const& s);
     Element& operator= (Element const& s);
-
-    private:
-    char regulator__;
   };
 }
 

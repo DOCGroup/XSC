@@ -1,24 +1,27 @@
 #include "recursive.hpp"
 
+#include "ace/ace_wchar.h"
+#include "ace/Null_Mutex.h"
+#include "ace/TSS_T.h"
+#include "ace/Singleton.h"
+
 namespace Recursive
 {
   // Element
 
   Element::Element (value_container_type const& value__,
-                    long_container_type const& long___) :
-  ::XSCRT::Type (),
-  value_ (value__),
-  long__ (long___),
-  regulator__ ()
+                    long_container_type const& long___)
+  : ::XSCRT::Type ()
+  , value_ (value__)
+  , long__ (long___)
   {
   }
 
   Element::Element (Element const& s) :
-  ::XSCRT::Type (s),
-  value_ (s.value_),
-  long__ (s.long__),
-  el_ (s.el_),
-  regulator__ ()
+  ::XSCRT::Type (s)
+  , value_ (s.value_)
+  , long__ (s.long__)
+  , el_ (s.el_)
   {
   }
 
@@ -54,13 +57,13 @@ namespace Recursive
   Element::value_const_iterator Element::
   begin_value () const
   {
-    return value_.cbegin ();
+    return value_.begin ();
   }
 
   Element::value_const_iterator Element::
   end_value () const
   {
-    return value_.cend ();
+    return value_.end ();
   }
 
   void Element::
@@ -91,13 +94,13 @@ namespace Recursive
   Element::long_const_iterator Element::
   begin_long () const
   {
-    return long__.cbegin ();
+    return long__.begin ();
   }
 
   Element::long_const_iterator Element::
   end_long () const
   {
-    return long__.cend ();
+    return long__.end ();
   }
 
   void Element::
@@ -128,13 +131,13 @@ namespace Recursive
   Element::el_const_iterator Element::
   begin_el () const
   {
-    return el_.cbegin ();
+    return el_.begin ();
   }
 
   Element::el_const_iterator Element::
   end_el () const
   {
-    return el_.cend ();
+    return el_.end ();
   }
 
   void Element::
@@ -156,7 +159,7 @@ namespace Recursive
 
   Element::
   Element (::XSCRT::XML::Element<ACE_TCHAR> const& e)
-  :Base (e), regulator__ ()
+  :Base (e)
   {
 
     ::XSCRT::Parser<ACE_TCHAR> p (e);
@@ -201,8 +204,6 @@ namespace Recursive
       // Initiate our Singleton as an ACE_TSS object (ensures thread
       // specific storage
       ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());
-
-
       xercesc::DOMElement* dom_element = d->getDocumentElement ();
       if (!dom_element)
       {
