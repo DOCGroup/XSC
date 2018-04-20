@@ -363,7 +363,7 @@ namespace
 
   struct CallBase : Traversal::Complex
   {
-    CallBase (Context& c)
+    explicit CallBase (Context& c)
         : member_ (c)
     {
       edge_traverser (inherits_);

@@ -36,7 +36,6 @@ namespace
     {
       string name (e.name ());
       string type (type_name (e));
-      string char_typ (this->char_type);
 
       //bool ra_sequence (this->generate_ra_sequences_);
 
@@ -443,7 +442,7 @@ namespace
                     protected Traversal::Attribute,
                     protected virtual Context
   {
-    CtorArgs (Context& c)
+    explicit CtorArgs (Context& c)
         : Context (c)
     {
       complex_.edge_traverser (inherits_);

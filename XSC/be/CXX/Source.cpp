@@ -1406,7 +1406,7 @@ namespace
 
   struct Enumeration : Traversal::Enumeration, protected virtual Context
   {
-    Enumeration (Context& c, string name_ = L"")
+    Enumeration (Context& c, const string& name_ = L"")
         : Context (c), name (name_), enumerator_ (c), static_enumerator_ (c)
     {
       names_.node_traverser (enumerator_);
