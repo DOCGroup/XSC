@@ -486,7 +486,6 @@ post (Type& n)
     if (b == ns.npos) break;
 
     b += 2;
-
   }
   while (true);
 }
