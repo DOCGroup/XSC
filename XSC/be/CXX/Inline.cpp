@@ -82,7 +82,7 @@ namespace
               << "{"
               << string_type << " temp ("
               << id (name) << "().id());"
-              << "return this->get_idref(temp.c_str ());\n"
+              << "return this->get_idref(temp);\n"
               << "}\n";
 
            os << i
@@ -159,7 +159,7 @@ namespace
               << "{"
               << string_type << " temp ("
               << id (name) << "().id());"
-              << "return this->get_idref(temp.c_str ());\n"
+              << "return this->get_idref(temp);\n"
               << "}\n";
 
            os << i
@@ -338,7 +338,7 @@ namespace
               << "{"
               << string_type << " temp ("
               << id (name) << "().id());"
-              << "return this->get_idref(temp.c_str ());\n"
+              << "return this->get_idref(temp);\n"
               << "}\n";
 
            os << i
@@ -407,7 +407,7 @@ namespace
               << "{"
               << string_type << " temp ("
               << id (name) << "().id());"
-              << "return this->get_idref(temp.c_str ());\n"
+              << "return this->get_idref(temp);\n"
               << "}\n";
 
            os << i
