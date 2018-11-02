@@ -255,7 +255,14 @@ namespace
 
       //@@ Should probably be Type__
       //
-      os << "typedef " << fq_name (c) << " Type;";
+      if (this->cpp11_)
+      {
+        os << "using Type =" << fq_name (c) << ";";
+      }
+      else
+      {
+        os << "typedef " << fq_name (c) << " Type;";
+      }
 
       // c-tor
       //

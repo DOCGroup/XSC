@@ -1328,30 +1328,30 @@ namespace
 
       // CDR Insertion extraction operations if needed
       if (this->cdr_reader_generation_)
-  os << "bool" << endl
-     << "operator >> (::XMLSchema::CDR_InputStream &stream,"
-     << endl
-     << "             ::XMLSchema::cdr_arg_traits < "
-     << type << " >::inout_type element)"
-     << endl
-     << "{"
-     << "return " << type << "::read_"
-     << name << " (stream, element);"
-     << endl
-     << "}";
+        os << "bool" << endl
+          << "operator >> (::XMLSchema::CDR_InputStream &stream,"
+          << endl
+          << "             ::XMLSchema::cdr_arg_traits < "
+          << type << " >::inout_type element)"
+          << endl
+          << "{"
+          << "return " << type << "::read_"
+          << name << " (stream, element);"
+          << endl
+          << "}";
 
       if (this->cdr_writer_generation_)
-  os << "bool" << endl
-     << "operator << (::XMLSchema::CDR_OutputStream &stream,"
-     << endl
-     << "             ::XMLSchema::cdr_arg_traits < "
-     << type << " >::in_type element)"
-     << endl
-     << "{"
-     << "return element.write_"
-     << name << " (stream);"
-     << endl
-     << "}";
+        os << "bool" << endl
+          << "operator << (::XMLSchema::CDR_OutputStream &stream,"
+          << endl
+          << "             ::XMLSchema::cdr_arg_traits < "
+          << type << " >::in_type element)"
+          << endl
+          << "{"
+          << "return element.write_"
+          << name << " (stream);"
+          << endl
+          << "}";
     }
 
   private:

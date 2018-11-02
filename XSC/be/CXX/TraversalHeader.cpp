@@ -327,10 +327,14 @@ namespace
       string name ((this->name_ != L"") ? name_: id (e.name ()));
       string type (type_name (e));
 
-      os << "typedef" << endl
-         << "::XMLSchema::Traversal::Traverser< " << type << " >" << endl
-   << name << ";"
-         << endl;
+      if (this->cpp11_)
+      {
+        os << "using " << name << " = ::XMLSchema::Traversal::Traverser< " << type << ">;" << endl;
+      }
+      else
+      {
+        os << "typedef ::XMLSchema::Traversal::Traverser< " << type << " >" << name << ";" << endl;
+      }
     }
 
   private:
