@@ -35,11 +35,15 @@ namespace
       string name (type_name (c));
 
       os << " : public " << name
-         << "{"
-        //         << "//@@ VC6 anathema" << endl
-         << "typedef " << name << " Base;"
-         << endl;
-
+         << "{";
+      if (this->cpp11_)
+      {
+        os << "using Base = " << name << ";" << endl;
+      }
+      else
+      {
+        os << "typedef " << name << " Base;" << endl;
+      }
     }
   };
 
@@ -63,12 +67,6 @@ namespace
       inherits_.node_traverser (*this);
       names_.node_traverser (*this);
     }
-
-    //virtual void
-    //traverse (SemanticGraph::Type& t)
-    //{
-    //  os << comma () << type_name (t) << " const& " << id (t.name ()) << "__";
-    //}
 
     virtual void
     traverse (SemanticGraph::Enumeration& e)
@@ -180,24 +178,25 @@ namespace
         //
         if (this->cpp11_)
         {
-          os << "typedef " << container  << "< " << type << "> " << name << "_container_type;";
+          os << "using " << name << "_container_type = " << container  << "< " << type << ">;";
         }
         else
         {
           os << "typedef ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> " << name << "_value_type;";
           os << "typedef " << container  << "<" << name << "_value_type> " << name << "_container_type;";
         }
-        if (!this->cpp11_)
+        if (this->cpp11_)
+        {
+          os << "using " << name << "_const_iterator = " << name << "_container_type::const_iterator;";
+        }
+        else
         {
           os << "typedef " << name << "_container_type::iterator " << name << "_iterator;";
-        }
-        os << "typedef " << name << "_container_type::const_iterator " << name << "_const_iterator;";
-
-        if (!this->cpp11_)
-        {
+          os << "typedef " << name << "_container_type::const_iterator " << name << "_const_iterator;";
           os << name << "_iterator begin_" << name << " ();";
           os << name << "_iterator end_" << name << " ();";
         }
+
         os << name << "_const_iterator begin_" << name << " () const;";
         os << name << "_const_iterator end_" << name << " () const;";
 
@@ -241,7 +240,7 @@ namespace
            << "protected:" << endl;
         if (this->cpp11_)
         {
-          os << "typedef std::unique_ptr< " << type << " > " << id (name) << "_unique_ptr_type;";
+          os << "using " << id (name) << "_unique_ptr_type = std::unique_ptr< " << type << ">;";
           os << id (name) << "_unique_ptr_type " << id (name) << "_;";
         }
         else
@@ -270,7 +269,7 @@ namespace
 
         if (this->cpp11_)
         {
-          os << "typedef std::unique_ptr< " << type << " > " << id (name) << "_unique_ptr_type;";
+          os << "using " << id (name) << "_unique_ptr_type = std::unique_ptr< " << type << ">;";
           os << id (name) << "_unique_ptr_type " << id (name) << "_;";
         }
         else
@@ -340,7 +339,7 @@ namespace
 
         if (this->cpp11_)
         {
-          os << "typedef std::unique_ptr< " << type << " > " << id (name) << "_unique_ptr_type;";
+          os << "using " << id (name) << "_unique_ptr_type = std::unique_ptr< " << type << ">;";
           os << id (name) << "_unique_ptr_type " << id (name) << "_;";
         }
         else
@@ -367,7 +366,7 @@ namespace
 
         if (this->cpp11_)
         {
-          os << "typedef std::unique_ptr< " << type << " > " << id (name) << "_unique_ptr_type;";
+          os << "using " << id (name) << "_unique_ptr_type = std::unique_ptr< " << type << ">;";
           os << id (name) << "_unique_ptr_type " << id (name) << "_;";
         }
         else
@@ -434,8 +433,7 @@ namespace
     {
       os << " : public ::XSCRT::Type"
          << "{"
-        //         << "//@@ VC6 anathema" << endl
-         << "typedef ::XSCRT::Type Base;"
+         << "using Base = ::XSCRT::Type;"
          << endl;
       if (!this->cpp11_)
       {
@@ -498,8 +496,7 @@ namespace
         for (size_t j =0; j < name.length () + 5; j++)
           os << " ";
 
-        os << " ::XMLSchema::cdr_arg_traits < " << name
-           << " >::inout_type);" << endl;
+        os << " ::XMLSchema::cdr_arg_traits < " << name << " >::inout_type);" << endl;
       }
 
       // CDR Extraction Operators

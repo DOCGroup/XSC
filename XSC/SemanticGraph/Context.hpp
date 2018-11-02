@@ -35,7 +35,7 @@ namespace XSC
 
       template <typename T>
       T const&
-      get (char const* key) const throw (NotFound, Typing)
+      get (char const* key) const
       {
         Map::const_iterator i = map_.find (key);
         if (i == map_.end ()) throw NotFound ();
@@ -53,7 +53,7 @@ namespace XSC
 
       template <typename T>
       T const&
-      get (char const* key, T const& def) const throw (Typing)
+      get (char const* key, T const& def)
       {
         Map::const_iterator i = map_.find (key);
         if (i == map_.end ()) return def;
@@ -70,7 +70,7 @@ namespace XSC
 
       template <typename T>
       void
-      set (char const* key, T const& value) throw (Typing)
+      set (char const* key, T const& value)
       {
         try
         {
@@ -88,7 +88,7 @@ namespace XSC
       }
 
       void
-      remove (char const* key) throw (NotFound)
+      remove (char const* key)
       {
         Map::iterator i (map_.find (key));
 
