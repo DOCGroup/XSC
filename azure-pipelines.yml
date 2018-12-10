@@ -9,6 +9,7 @@ resources:
 - repo: self
   fetchDepth: 1
 
+jobs:
 - job: Linux
   timeoutInMinutes: 30
   pool:
