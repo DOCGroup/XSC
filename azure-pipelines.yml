@@ -17,10 +17,9 @@ jobs:
     vmImage: ubuntu-16.04
   strategy:
     matrix:
-      GCC8:
-        CC: gcc-6
-        CXX: g++-6
-        PackageDeps: g++-6
+      GCC4:
+        CC: gcc
+        CXX: g++
         platform_file: include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU
   steps:
   - script: |
