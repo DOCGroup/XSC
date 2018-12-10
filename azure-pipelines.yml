@@ -1,0 +1,56 @@
+variables:
+   DOC_ROOT: $(Build.SourcesDirectory)/ACE_TAO
+   ACE_ROOT: $(DOC_ROOT)/ACE
+   MPC_ROOT: $(ACE_ROOT)/MPC
+   TAO_ROOT: $(DOC_ROOT)/TAO
+   system.prefergit: true
+
+resources:
+- repo: self
+  fetchDepth: 1
+
+- job: Linux
+  timeoutInMinutes: 30
+  pool:
+    vmImage: ubuntu-16.04
+  strategy:
+    matrix:
+      GCC8:
+        CC: gcc-8
+        CXX: g++-8
+        PackageDeps: g++-8
+        platform_file: include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU
+  steps:
+  - script: |
+      wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add -
+      sudo apt-add-repository "deb http://apt.llvm.org/$(lsb_release -cs)/ $(Repo) main"
+    displayName: Add repository ($(Repo))
+    condition: and(succeeded(), ne(variables['Repo'], ''))
+  - script: |
+      sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+      sudo apt-get --yes update
+      sudo apt-get --yes install libxerces-c-dev libssl-dev libboost-all-dev $(PackageDeps)
+    displayName: install system package dependencies ($(PackageDeps))
+  - powershell: git clone --depth 1 git://github.com/DOCGroup/ACE_TAO.git $(DOC_ROOT)
+    displayName: git clone ACE_TAO
+  - powershell: git clone --depth 1 git://github.com/DOCGroup/MPC.git $(MPC_ROOT)
+    displayName: git clone MPC
+  - powershell: |
+      '#include "ace/config-linux.h"' > $(ACE_ROOT)/ace/config.h
+    displayName: Create config.h file
+  - powershell: |
+      'xerces3=1' > $(ACE_ROOT)/bin/MakeProjectCreator/config/default.features
+      'boost=1' >> $(ACE_ROOT)/bin/MakeProjectCreator/config/default.features
+      'xsc=1' >> $(ACE_ROOT)/bin/MakeProjectCreator/config/default.features
+    displayName: Create default.features file
+  - powershell: |
+      'xerces3=1' > $(ACE_ROOT)/include/makeinclude/platform_macros.GNU
+      'ssl=1' >> $(ACE_ROOT)/include/makeinclude/platform_macros.GNU
+      'c++11=1' >> $(ACE_ROOT)/include/makeinclude/platform_macros.GNU
+      'boost=1' >> $(ACE_ROOT)/include/makeinclude/platform_macros.GNU
+      "$(platform_file)" >> $(ACE_ROOT)/include/makeinclude/platform_macros.GNU
+    displayName: Create platform_macros file
+  - powershell: perl $(ACE_ROOT)/bin/mwc.pl -type gnuace XSC.mwc -workers 4
+    displayName: Run mwc.pl on XSC.mwc
+  - bash: make -j 6
+    displayName: Build project
