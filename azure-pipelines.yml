@@ -1,4 +1,5 @@
 variables:
+   XSC_ROOT: $(Build.SourcesDirectory)
    DOC_ROOT: $(Build.SourcesDirectory)/ACE_TAO
    ACE_ROOT: $(DOC_ROOT)/ACE
    MPC_ROOT: $(ACE_ROOT)/MPC
