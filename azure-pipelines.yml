@@ -1,4 +1,5 @@
 variables:
+   XSC_ROOT: $(Build.SourcesDirectory)
    DOC_ROOT: $(Build.SourcesDirectory)/ACE_TAO
    ACE_ROOT: $(DOC_ROOT)/ACE
    MPC_ROOT: $(ACE_ROOT)/MPC
@@ -16,10 +17,9 @@ jobs:
     vmImage: ubuntu-16.04
   strategy:
     matrix:
-      GCC8:
-        CC: gcc-8
-        CXX: g++-8
-        PackageDeps: g++-8
+      GCC4:
+        CC: gcc
+        CXX: g++
         platform_file: include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU
   steps:
   - script: |
