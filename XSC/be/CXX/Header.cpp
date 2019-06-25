@@ -245,7 +245,7 @@ namespace
         }
         else
         {
-          os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_auto_ptr_type;";
+          os << "typedef XML_XSC_SMART_PTR( " << type << " ) " << id (name) << "_auto_ptr_type;";
           os << id (name) << "_auto_ptr_type " << id (name) << "_;";
         }
       }
@@ -274,7 +274,7 @@ namespace
         }
         else
         {
-          os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_auto_ptr_type;";
+          os << "typedef XML_XSC_SMART_PTR( " << type << " ) " << id (name) << "_auto_ptr_type;";
           os << id (name) << "_auto_ptr_type " << id (name) << "_;";
         }
       }
@@ -344,7 +344,7 @@ namespace
         }
         else
         {
-          os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_auto_ptr_type;";
+          os << "typedef XML_XSC_SMART_PTR( " << type << " ) " << id (name) << "_auto_ptr_type;";
           os << id (name) << "_auto_ptr_type " << id (name) << "_;";
         }
       }
@@ -371,7 +371,7 @@ namespace
         }
         else
         {
-          os << "typedef std::auto_ptr< " << type << " > " << id (name) << "_auto_ptr_type;";
+          os << "typedef XML_XSC_SMART_PTR( " << type << " ) " << id (name) << "_auto_ptr_type;";
           os << id (name) << "_auto_ptr_type " << id (name) << "_;";
         }
       }
@@ -433,7 +433,7 @@ namespace
     {
       os << " : public ::XSCRT::Type"
          << "{"
-         << "using Base = ::XSCRT::Type;"
+         << (this->cpp11_ ? "using Base = ::XSCRT::Type;" : "typedef ::XSCRT::Type Base;" )
          << endl;
       if (!this->cpp11_)
       {
@@ -678,7 +678,8 @@ namespace
     Enumeration (Context& c, string const& name_ = L"")
         : Context (c),
           name (name_),
-          ex (c.esymbol.empty () ? c.esymbol : c.esymbol + L" "),
+          ex_ (c.esymbol),
+          ex_sp_ (c.esymbol.empty () ? c.esymbol : c.esymbol + L" "),
           enumerator_ (c),
           label_ (c)
     {
@@ -692,7 +693,7 @@ namespace
       if (e.named ())
         name = id (e.name ());
 
-      os << "class " << ex << name << " : public ::XSCRT::Type"
+      os << "class " << ex_sp_ << name << " : public ::XSCRT::Type"
          << "{"
          << "public:" << endl;
 
@@ -725,11 +726,11 @@ namespace
          << "integral () const;"
          << endl;
 
-      os << "friend bool " << ex << endl
+      os << "friend bool " << ex_ << endl
          << "operator== (" << name << " const& a, " << name << " const& b);"
          << endl;
 
-      os << "friend bool " << ex << endl
+      os << "friend bool " << ex_ << endl
          << "operator!= (" << name << " const& a, " << name << " const& b);"
          << endl;
 
@@ -779,11 +780,11 @@ namespace
       // End of class
       os << "};";
 
-      os << "bool " << ex
+      os << "bool " << ex_sp_
          << "operator== (" << name << " const &a, " << name << " const &b);"
          << endl;
 
-      os << "bool " << ex
+      os << "bool " << ex_sp_
          << "operator!= (" << name << " const &a, " << name << " const &b);"
          << endl;
 
@@ -805,7 +806,8 @@ namespace
     }
   private:
     string name;
-    string ex;
+    string ex_;
+    string ex_sp_;
 
     Enumerator enumerator_;
     Traversal::Names names_enumerators_;
@@ -942,6 +944,15 @@ generate_header (Context& ctx,
   Traversal::Sources sources;
   Includes includes (ctx);
   Traversal::Names schema_names;
+
+  if (!ctx.cpp11())
+  {
+    ctx.os << "#if defined(ACE_HAS_CPP11)" << endl
+           << "# define XML_XSC_SMART_PTR(X) std::unique_ptr<X>" << endl
+           << "#else" << endl
+           << "# define XML_XSC_SMART_PTR(X) std::auto_ptr<X>" << endl
+           << "#endif" << endl << endl;
+  }
 
   Namespace ns (ctx);
 
