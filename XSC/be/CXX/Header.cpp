@@ -947,10 +947,12 @@ generate_header (Context& ctx,
 
   if (!ctx.cpp11())
   {
-    ctx.os << "#if defined(ACE_HAS_CPP11)" << endl
-           << "# define XML_XSC_SMART_PTR(X) std::unique_ptr<X>" << endl
-           << "#else" << endl
-           << "# define XML_XSC_SMART_PTR(X) std::auto_ptr<X>" << endl
+    ctx.os << "#if !defined(XML_XSC_SMART_PTR)" << endl
+           << "# if defined(ACE_HAS_CPP11)" << endl
+           << "#   define XML_XSC_SMART_PTR(X) std::unique_ptr<X>" << endl
+           << "# else" << endl
+           << "#   define XML_XSC_SMART_PTR(X) std::auto_ptr<X>" << endl
+           << "# endif" << endl
            << "#endif" << endl << endl;
   }
 
