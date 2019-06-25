@@ -47,7 +47,6 @@ jobs:
   - powershell: |
       'xerces3=1' > $(ACE_ROOT)/include/makeinclude/platform_macros.GNU
       'ssl=1' >> $(ACE_ROOT)/include/makeinclude/platform_macros.GNU
-      'c++11=1' >> $(ACE_ROOT)/include/makeinclude/platform_macros.GNU
       'boost=1' >> $(ACE_ROOT)/include/makeinclude/platform_macros.GNU
       "$(platform_file)" >> $(ACE_ROOT)/include/makeinclude/platform_macros.GNU
     displayName: Create platform_macros file
