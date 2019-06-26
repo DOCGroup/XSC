@@ -20,6 +20,7 @@ jobs:
       GCC4:
         CC: gcc
         CXX: g++
+        BOOST_ROOT_LIB: /usr/local/share/boost/1.69.0/lib
         platform_file: include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU
   steps:
   - script: |
