@@ -53,14 +53,14 @@ jobs:
       "$(platform_file)" >> $(ACE_ROOT)/include/makeinclude/platform_macros.GNU
     displayName: Create platform_macros file
   - script: |
-      export LD_LIBRARY_PATH=$BOOST_ROOT/lib
-      wget -P $Build.SourcesDirectory https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.bz2
-      cd $Build.SourcesDirectory
+      export LD_LIBRARY_PATH=$(BOOST_ROOT)/lib
+      wget -P $(Build.SourcesDirectory) https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.bz2
+      cd $(Build.SourcesDirectory)
       tar xjf boost_1_64_0.tar.bz2
-      cd $Build.SourcesDirectory/boost_1_64_0
-      ./bootstrap.sh --prefix=$BOOST_ROOT
+      cd $(Build.SourcesDirectory)/boost_1_64_0
+      ./bootstrap.sh --prefix=$(BOOST_ROOT)
       BOOST_LIBRARIES="chrono context coroutine date_time filesystem locale program_options serialization signals system test thread"
-      for libname in $BOOST_LIBRARIES; do boost_libs+=("--with-$libname"); done
+      for libname in $(BOOST_LIBRARIES); do boost_libs+=("--with-$libname"); done
       ./b2 -d0 -j4 ${boost_libs[@]} link=static install
     displayName: Download and install boost
   - powershell: perl $(ACE_ROOT)/bin/mwc.pl -type gnuace XSC.mwc -workers 4
