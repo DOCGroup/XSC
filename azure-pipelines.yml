@@ -30,7 +30,7 @@ jobs:
   - script: |
       sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
       sudo apt-get --yes update
-      sudo apt-get --yes install libxerces-c-dev libssl-dev libboost-all-dev $(PackageDeps)
+      sudo apt-get --yes install libxerces-c-dev libssl-dev $(PackageDeps)
     displayName: install system package dependencies ($(PackageDeps))
   - powershell: git clone --depth 1 git://github.com/DOCGroup/ACE_TAO.git $(DOC_ROOT)
     displayName: git clone ACE_TAO
