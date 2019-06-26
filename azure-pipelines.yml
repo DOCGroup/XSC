@@ -67,7 +67,7 @@ jobs:
       tar xjf boost_1_64_0.tar.bz2
       cd $(Build.SourcesDirectory)/boost_1_64_0
       ./bootstrap.sh --prefix=$(BOOST_ROOT)
-      ./b2 -d0 -j4 --with-regex --with-system --with-program-options --with-filesystem link=static install
+      ./b2 -d0 -j4 --with-regex --with-system --with-program_options --with-filesystem link=static install
     displayName: Download and install boost
   - powershell: perl $(ACE_ROOT)/bin/mwc.pl -type gnuace XSC.mwc -workers 4
     displayName: Run mwc.pl on XSC.mwc
