@@ -1,3 +1,4 @@
+dist: bionic
 group: travis_latest
 language: cpp
 os:
@@ -15,7 +16,6 @@ env:
     - MPC_ROOT=$TRAVIS_BUILD_DIR/ext/MPC
     - XSC_ROOT=$TRAVIS_BUILD_DIR
     - LD_LIBRARY_PATH=$ACE_ROOT/lib:$LD_LIBRARY_PATH
-    - COMPILER=g++-8
 
 addons:
   apt:
@@ -24,7 +24,6 @@ addons:
     packages:
       - libssl-dev
       - libxerces-c-dev
-      - g++-8
       - libboost-all-dev
 
 before_install:
