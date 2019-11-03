@@ -4,7 +4,6 @@ variables:
    ACE_ROOT: $(DOC_ROOT)/ACE
    MPC_ROOT: $(ACE_ROOT)/MPC
    TAO_ROOT: $(DOC_ROOT)/TAO
-   BOOST_ROOT: $(Build.SourcesDirectory)/boost_1_64_0/ext
    system.prefergit: true
 
 schedules:
@@ -23,12 +22,13 @@ jobs:
 - job: Linux
   timeoutInMinutes: 30
   pool:
-    vmImage: ubuntu-16.04
+    vmImage: ubuntu-latest
   strategy:
     matrix:
-      GCC4:
-        CC: gcc
-        CXX: g++
+      GCC8:
+        CC: gcc-8
+        CXX: g++-8
+        PackageDeps: g++-8
         platform_file: include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU
   steps:
   - script: |
@@ -37,9 +37,8 @@ jobs:
     displayName: Add repository ($(Repo))
     condition: and(succeeded(), ne(variables['Repo'], ''))
   - script: |
-      sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
       sudo apt-get --yes update
-      sudo apt-get --yes install libxerces-c-dev libssl-dev $(PackageDeps)
+      sudo apt-get --yes install libxerces-c-dev libssl-dev libboost-dev $(PackageDeps)
     displayName: install system package dependencies ($(PackageDeps))
   - powershell: git clone --depth 1 git://github.com/DOCGroup/ACE_TAO.git $(DOC_ROOT)
     displayName: git clone ACE_TAO
@@ -60,15 +59,6 @@ jobs:
       'boost=1' >> $(ACE_ROOT)/include/makeinclude/platform_macros.GNU
       "$(platform_file)" >> $(ACE_ROOT)/include/makeinclude/platform_macros.GNU
     displayName: Create platform_macros file
-  - script: |
-      export LD_LIBRARY_PATH=$(BOOST_ROOT)/lib
-      wget -P $(Build.SourcesDirectory) https://dl.bintray.com/boostorg/release/1.64.0/source/boost_1_64_0.tar.bz2
-      cd $(Build.SourcesDirectory)
-      tar xjf boost_1_64_0.tar.bz2
-      cd $(Build.SourcesDirectory)/boost_1_64_0
-      ./bootstrap.sh --prefix=$(BOOST_ROOT)
-      ./b2 -d0 -j4 --with-regex --with-system --with-program_options --with-filesystem link=static install
-    displayName: Download and install boost
   - powershell: perl $(ACE_ROOT)/bin/mwc.pl -type gnuace XSC.mwc -workers 4
     displayName: Run mwc.pl on XSC.mwc
   - bash: make -j 6
