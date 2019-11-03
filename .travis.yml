@@ -19,8 +19,6 @@ env:
 
 addons:
   apt:
-    sources:
-      - ubuntu-toolchain-r-test
     packages:
       - libssl-dev
       - libxerces-c-dev

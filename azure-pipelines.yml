@@ -38,7 +38,7 @@ jobs:
     condition: and(succeeded(), ne(variables['Repo'], ''))
   - script: |
       sudo apt-get --yes update
-      sudo apt-get --yes install libxerces-c-dev libssl-dev libboost-dev $(PackageDeps)
+      sudo apt-get --yes install libxerces-c-dev libssl-dev libboost-all-dev $(PackageDeps)
     displayName: install system package dependencies ($(PackageDeps))
   - powershell: git clone --depth 1 git://github.com/DOCGroup/ACE_TAO.git $(DOC_ROOT)
     displayName: git clone ACE_TAO
