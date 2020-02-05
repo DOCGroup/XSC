@@ -25,10 +25,7 @@ jobs:
     vmImage: ubuntu-18.04
   strategy:
     matrix:
-      GCC8:
-        CC: gcc-9
-        CXX: g++-9
-        PackageDeps: g++-9
+      GCC:
         platform_file: include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU
   steps:
   - script: |
@@ -38,7 +35,7 @@ jobs:
     condition: and(succeeded(), ne(variables['Repo'], ''))
   - script: |
       sudo apt-get --yes update
-      sudo apt-get --yes install libxerces-c-dev libssl-dev $(PackageDeps)
+      sudo apt-get --yes install libxerces-c-dev libssl-dev libboost-all-dev $(PackageDeps)
     displayName: install system package dependencies ($(PackageDeps))
   - powershell: git clone --depth 1 git://github.com/DOCGroup/ACE_TAO.git $(DOC_ROOT)
     displayName: git clone ACE_TAO
