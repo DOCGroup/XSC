@@ -26,9 +26,9 @@ jobs:
   strategy:
     matrix:
       GCC8:
-        CC: gcc-8
-        CXX: g++-8
-        PackageDeps: g++-8
+        CC: gcc-9
+        CXX: g++-9
+        PackageDeps: g++-9
         platform_file: include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU
   steps:
   - script: |
