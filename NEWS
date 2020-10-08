@@ -18,4 +18,4 @@ USER VISIBLE CHANGES ADDED TO XSC
   . This feature requires that the generated code be linked with the ACE
     framework toolkit, which is an open-source framework for building
     distributed applications. ACE can be downloaded from the following
-    URL: http://www.dre.vanderbilt.edu/~schmidt/ACE.html
+    URL: https://www.dre.vanderbilt.edu/~schmidt/ACE.html
