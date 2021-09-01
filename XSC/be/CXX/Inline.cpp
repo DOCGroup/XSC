@@ -273,7 +273,7 @@ namespace
           //
           os << i
             << "size_t " << scope << "::" << endl
-            << "count_" << name << "(void) const"
+            << "count_" << name << "() const"
             << "{"
             << "return " << id(name) << "_.size ();"
             << "}";
