@@ -245,7 +245,7 @@ namespace
         }
         else
         {
-          os << "typedef XML_XSC_SMART_PTR( " << type << " ) " << id (name) << "_auto_ptr_type;";
+          os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_auto_ptr_type;";
           os << id (name) << "_auto_ptr_type " << id (name) << "_;";
         }
       }
@@ -274,7 +274,7 @@ namespace
         }
         else
         {
-          os << "typedef XML_XSC_SMART_PTR( " << type << " ) " << id (name) << "_auto_ptr_type;";
+          os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_auto_ptr_type;";
           os << id (name) << "_auto_ptr_type " << id (name) << "_;";
         }
       }
@@ -344,7 +344,7 @@ namespace
         }
         else
         {
-          os << "typedef XML_XSC_SMART_PTR( " << type << " ) " << id (name) << "_auto_ptr_type;";
+          os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_auto_ptr_type;";
           os << id (name) << "_auto_ptr_type " << id (name) << "_;";
         }
       }
@@ -371,7 +371,7 @@ namespace
         }
         else
         {
-          os << "typedef XML_XSC_SMART_PTR( " << type << " ) " << id (name) << "_auto_ptr_type;";
+          os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_auto_ptr_type;";
           os << id (name) << "_auto_ptr_type " << id (name) << "_;";
         }
       }
