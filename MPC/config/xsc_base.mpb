@@ -13,4 +13,10 @@ project : vcwarnings {
     inputext          = .xsd
     keyword xscflags  = commandflags
   }
+
+  verbatim(gnuace,local) {
+    XSC_BIN = $(XSC_ROOT)/bin/xsc
+    XSC_DEP = $(XSC_ROOT)/bin/xsc$(EXEEXT)
+    XSC_FLAGS = --backend cxx
+  }
 }
