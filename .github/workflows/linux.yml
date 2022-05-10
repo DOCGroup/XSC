@@ -7,6 +7,9 @@ on:
     - cron: '0 1 * * SUN'
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   build:
     strategy:
