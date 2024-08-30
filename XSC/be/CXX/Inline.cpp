@@ -55,7 +55,7 @@ namespace
            << name << "_p () const"
            << "{";
 
-        if (this->cpp11_)
+        if (this->cppmode_ != CPPMODE::CPP03)
         {
           os << "return !!" << id (name) << "_;";
         }
@@ -74,7 +74,7 @@ namespace
            << "}";
 
         // Return referenced item if an IDREF
-        if ((idref_ptr != std::string::npos) && (!this->cpp11_))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
         {
            os << i
               << "::XSCRT::Type* " << scope << "::get_"
@@ -106,7 +106,7 @@ namespace
            << id (name) << " (" << type << " const& e)"
            << "{";
 
-        if (this->cpp11_)
+        if (this->cppmode_ != CPPMODE::CPP03)
         {
           os << "if (" << id (name) << "_)";
         }
@@ -121,14 +121,16 @@ namespace
            << "else"
            << "{";
 
-        if (this->cpp11_)
-        {
-          os << id (name) << "_ = std::make_unique< " << type << "> (e);";
-        }
-        else
-        {
-          os << id (name) << "_ = " << scope << "::" << id(name) << "_auto_ptr_type (new " << type << " (e));"
-             << id (name) << "_->container (this);";
+          switch(this->cppmode_)
+          {
+            case CPPMODE::CPP03:
+              os << id (name) << "_ = " << scope << "::" << id(name) << "_auto_ptr_type (new " << type << " (e));"
+                << id (name) << "_->container (this);";
+              break;
+            case CPPMODE::CPP11:
+            case CPPMODE::CPP17:
+              os << id (name) << "_ = std::make_unique< " << type << "> (e);";
+              break;
         }
         os << "}"
            << "}";
@@ -151,7 +153,7 @@ namespace
            << "return *" << id (name) << "_;"
            << "}";
         */
-        if ((idref_ptr != std::string::npos) && (!this->cpp11_))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
         {
            os << i
               << "::XSCRT::Type* " << scope << "::get_"
@@ -183,7 +185,7 @@ namespace
         // sequence
         //
 
-        if (!this->cpp11_)
+        if (this->cppmode_ == CPPMODE::CPP03)
         {
           // begin_typename
           //
@@ -210,7 +212,7 @@ namespace
            << "begin_" << name << " () const"
            << "{";
 
-        if (this->cpp11_)
+        if (this->cppmode_ != CPPMODE::CPP03)
         {
           os << "return " << id(name) << "_.cbegin ();";
         }
@@ -226,7 +228,7 @@ namespace
            << "end_" << name << " () const"
            << "{";
 
-        if (this->cpp11_)
+        if (this->cppmode_ != CPPMODE::CPP03)
         {
            os << "return " << id(name) << "_.cend ();";
         }
@@ -237,7 +239,7 @@ namespace
         os << "}";
 
         // add IDREF access method
-        if ((idref_ptr != std::string::npos) && (!this->cpp11_))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
         {
            os << i
               << "XSCRT::Type* " << scope << "::get_" << name
@@ -255,7 +257,7 @@ namespace
               << "}\n";
         }
 
-        if (!this->cpp11_)
+        if (this->cppmode_ == CPPMODE::CPP03)
         {
           // add_typename
           os << i
@@ -263,8 +265,8 @@ namespace
             << "add_" << name << " (" << scope << "::" << name << "_value_type const& e)"
             << "{";
           os << id(name) << "_.push_back (e);";
-          os << "}\n";
-          // add_typename
+          os << "}";
+          // del_typename
           os << i
             << "void " << scope << "::" << endl
             << "del_" << name << " (" << scope << "::" << name << "_value_type const& e)"
@@ -302,7 +304,7 @@ namespace
 
       if (a.optional ())
       {
-        if (this->cpp11_)
+        if (this->cppmode_ != CPPMODE::CPP03)
         {
           os << i
             << "bool " << scope << "::" << endl
@@ -336,7 +338,7 @@ namespace
            << "}";
 
         // Return a pointer to the referenced item
-        if ((idref_ptr != std::string::npos) && (!this->cpp11_))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
         {
            os << i
               << "::XSCRT::Type* " << scope << "::get_"
@@ -361,7 +363,7 @@ namespace
            << id (name) << " (" << type << " const& e)"
            << "{";
 
-        if (this->cpp11_)
+        if (this->cppmode_ != CPPMODE::CPP03)
         {
           os << "if (" << id (name) << "_)";
         }
@@ -376,7 +378,7 @@ namespace
            << "else"
            << "{";
 
-        if (this->cpp11_)
+        if (this->cppmode_ != CPPMODE::CPP03)
         {
           os << id (name) << "_ = std::make_unique< " << type << "> (e);";
         }
@@ -404,8 +406,8 @@ namespace
            << "return *" << id (name) << "_;"
            << "}";
 
-        //Return a pointer to the referenced item
-        if ((idref_ptr != std::string::npos) && (!this->cpp11_))
+        // Return a pointer to the referenced item
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
         {
            os << i
               << "::XSCRT::Type* " << scope << "::get_"
@@ -630,7 +632,7 @@ namespace
       os << "}";
 
       std::wstring selfcheck;
-      if (this->cpp11_)
+      if (this->cppmode_ != CPPMODE::CPP03)
       {
         selfcheck = L"if (std::addressof(s) != this)";
       }
@@ -855,7 +857,7 @@ namespace
           string name (id (e.name ()));
           string type (type_name (e));
 
-          if (this->cpp11_)
+          if (this->cppmode_ != CPPMODE::CPP03)
           {
             os << ", " << name << "_ (std::make_unique< " << type << "> (" << name << "__))" << endl;
           }
@@ -887,7 +889,7 @@ namespace
           string name (id (a.name ()));
           string type (type_name (a));
 
-          if (this->cpp11_)
+          if (this->cppmode_ != CPPMODE::CPP03)
           {
             os << ", " << name << "_ (std::make_unique< " << type << "> (" << name << "__))" << endl;
           }
@@ -915,7 +917,7 @@ namespace
       virtual void
       traverse (SemanticGraph::Element& e)
       {
-        if (e.min () == 1 && e.max () == 1 && !this->cpp11_)
+        if (e.min () == 1 && e.max () == 1 && (this->cppmode_ == CPPMODE::CPP03))
         {
           // one
           //
@@ -926,7 +928,7 @@ namespace
       virtual void
       traverse (SemanticGraph::Attribute& a)
       {
-        if (!a.optional () && !this->cpp11_)
+        if (!a.optional () && (this->cppmode_ == CPPMODE::CPP03))
         {
           os << id (a.name ()) << "_->container (this);";
         }
@@ -962,7 +964,7 @@ namespace
         string name (id (e.name ()));
         string type (type_name (e));
         std::wstring nullptr_string;
-        if (this->cpp11_)
+        if (this->cppmode_ != CPPMODE::CPP03)
         {
           nullptr_string = L"nullptr";
         }
@@ -982,7 +984,7 @@ namespace
           {
             // optional
             //
-            if (this->cpp11_)
+            if (this->cppmode_ != CPPMODE::CPP03)
             {
               os << ", " << name << "_ ("
                 << "s." << name << "_ ? "
@@ -999,7 +1001,7 @@ namespace
           {
             // one
             //
-            if (this->cpp11_)
+            if (this->cppmode_ != CPPMODE::CPP03)
             {
               os << ", " << name << "_ (std::make_unique< " << type << "> (*s." << name << "_))" << endl;
             }
@@ -1023,7 +1025,7 @@ namespace
         string name (id (a.name ()));
         string type (type_name (a));
         std::wstring nullptr_string;
-        if (this->cpp11_)
+        if (this->cppmode_ != CPPMODE::CPP03)
         {
           nullptr_string = L"nullptr";
         }
@@ -1034,7 +1036,7 @@ namespace
 
         if (a.optional ())
         {
-          if (this->cpp11_)
+          if (this->cppmode_ != CPPMODE::CPP03)
           {
             os << ", " << name << "_ ("
               << "s." << name << "_ ? "
@@ -1049,7 +1051,7 @@ namespace
         }
         else
         {
-          if (this->cpp11_)
+          if (this->cppmode_ != CPPMODE::CPP03)
           {
             os << ", " << name << "_ (std::make_unique< " << type << "> (*s." << name << "_))" << endl;
           }
@@ -1089,13 +1091,13 @@ namespace
 
           // optional
           //
-          if (!this->cpp11_)
+          if (this->cppmode_ == CPPMODE::CPP03)
           {
             os << "if (" << name << "_.get ()) "
                << name << "_->container (this);";
           }
         }
-        else if (e.min () == 1 && e.max () == 1 && !this->cpp11_)
+        else if (e.min () == 1 && e.max () == 1 && this->cppmode_ == CPPMODE::CPP03)
         {
           os << id (name) << "_->container (this);";
         }
@@ -1126,7 +1128,7 @@ namespace
         {
           // optional
           //
-          if (!this->cpp11_)
+          if (this->cppmode_ == CPPMODE::CPP03)
           {
             os << "if (" << name << "_.get ()) "
                << name << "_->container (this);";
@@ -1134,7 +1136,7 @@ namespace
         }
         else
         {
-          if (!this->cpp11_)
+          if (this->cppmode_ == CPPMODE::CPP03)
           {
             os << name << "_->container (this);";
           }
@@ -1172,7 +1174,7 @@ namespace
 
           // optional
           //
-          if (this->cpp11_)
+          if (this->cppmode_ != CPPMODE::CPP03)
           {
             os << "if (s." << name << "_)" << std::endl
                << "  " << name << " (*(s." << name << "_));"
@@ -1229,7 +1231,7 @@ namespace
 
         if (a.optional ())
         {
-          if (this->cpp11_)
+          if (this->cppmode_ != CPPMODE::CPP03)
           {
             os << "if (s." << name << "_) "
               << name << " (*(s." << name << "_));"
@@ -1409,7 +1411,7 @@ generate_inline (Context& ctx, SemanticGraph::Schema& schema, bool i)
     ctx.os << "#include \"ace/ace_wchar.h\"" << endl;
   }
 
-  if (!ctx.cpp11 ())
+  if (ctx.cppmode() == Context::CPPMODE::CPP03)
   {
     ctx.os << "#include \"ace/Null_Mutex.h\"" << endl
       << "#include \"ace/TSS_T.h\""<< endl

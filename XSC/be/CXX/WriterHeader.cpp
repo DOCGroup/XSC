@@ -39,7 +39,7 @@ namespace
 
       if (e.min () == 0 && e.max () == 1)
       {
-        if (!this->cpp11_)
+        if (this->cppmode_ == CPPMODE::CPP03)
         {
           // Borland post
           os << "virtual void" << endl
@@ -58,7 +58,7 @@ namespace
       }
       else if (e.min () == 1 && e.max () == 1)
       {
-        if (!this->cpp11_)
+        if (this->cppmode_ == CPPMODE::CPP03)
         {
           // Borland post
           os << "virtual void" << endl
@@ -82,7 +82,7 @@ namespace
 
         // Pre
         //
-        if (!this->cpp11_)
+        if (this->cppmode_ == CPPMODE::CPP03)
         {
           os << "virtual void" << endl
             << name << "_pre (Type &o)" << endl
@@ -100,7 +100,7 @@ namespace
 
         // non-const next
         //
-        if (!this->cpp11_)
+        if (this->cppmode_ == CPPMODE::CPP03)
         {
           os << "virtual void" << endl
             << name << "_next (Type &o)" << endl
@@ -117,7 +117,7 @@ namespace
            << endl;
 
         //  post
-        if (!this->cpp11_)
+        if (this->cppmode_ == CPPMODE::CPP03)
         {
           os << "virtual void" << endl
             << name << "_post (Type &o)" << endl
@@ -146,7 +146,7 @@ namespace
       string name (a.name ());
 
       // Borland post
-      if (!this->cpp11_)
+      if (this->cppmode_ == CPPMODE::CPP03)
       {
         os << "virtual void" << endl
           << id (name)  << " (Type &o)" << endl
@@ -255,7 +255,7 @@ namespace
 
       //@@ Should probably be Type__
       //
-      if (this->cpp11_)
+      if (this->cppmode_ != CPPMODE::CPP03)
       {
         os << "using Type =" << fq_name (c) << ";";
       }
@@ -270,7 +270,7 @@ namespace
          << endl;
 
       // Non-const traverse for Borland
-      if (!this->cpp11_)
+      if (this->cppmode_ == CPPMODE::CPP03)
       {
         os << "virtual void" << endl
           << "traverse (Type &o)" << endl
@@ -280,7 +280,7 @@ namespace
           << "}";
       }
 
-      string override_string (this->cpp11_ ? L" override" : L"");
+      string override_string (this->cppmode_ != CPPMODE::CPP03 ? L" override" : L"");
 
       // traverse
       //
@@ -292,7 +292,7 @@ namespace
     virtual void
     post (Type& )
     {
-      string default_string (this->cpp11_ ? L" = default" : L"");
+      string default_string (this->cppmode_ != CPPMODE::CPP03 ? L" = default" : L"");
       os << "protected:" << endl
          << name_ << " ()" << default_string << ";"
          <<"};";
@@ -323,8 +323,8 @@ namespace
     {
       string name ((this->name_ != L"") ? name_ : id (e.name ()));
       string type (type_name (e));
-      string override_string (this->cpp11_ ? L" override" : L"");
-      string default_string (this->cpp11_ ? L" = default" : L"");
+      string override_string (this->cppmode_ != CPPMODE::CPP03 ? L" override" : L"");
+      string default_string (this->cppmode_ != CPPMODE::CPP03 ? L" = default" : L"");
 
       if (name == L"") name = L"BAD NAME";
 
@@ -338,7 +338,7 @@ namespace
          << endl;
 
       // Non-const traverse for Borland
-      if (!this->cpp11_)
+      if (this->cppmode_ == CPPMODE::CPP03)
       {
         os << "virtual void" << endl
           << "traverse (Type &o)"

@@ -62,7 +62,7 @@ namespace
       {
         // sequence
         //
-        if (this->cpp11_)
+        if (this->cppmode_ != CPPMODE::CPP03)
         {
           os << type << " t (e);";
           os << id (name) << "_.push_back (t);";
@@ -85,7 +85,7 @@ namespace
       {
         // one
         //
-        if (this->cpp11_)
+        if (this->cppmode_ != CPPMODE::CPP03)
         {
           os << id (name) << "_ = std::make_unique< " << type << "> (e);";
         }
@@ -104,7 +104,7 @@ namespace
       std::string::size_type idref_ptr = type.find(idref_str);
       std::string::size_type id_ptr = type.find(id_str);
 
-      if ((idref_ptr != std::string::npos) && (!this->cpp11_))
+      if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
       {
         if (c.max() != 1)
         {
@@ -152,7 +152,7 @@ namespace
              //<< id(name) << "_).id().c_str(), dynamic_cast<XSCRT::Type*> (this));\n";
         }
       }
-      else if ((id_ptr != std::string::npos) && (!this->cpp11_))
+      else if ((id_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
       {
         if (c.max() == 1)
         {
@@ -225,7 +225,7 @@ namespace
       }
       else
       {
-        if (this->cpp11_)
+        if (this->cppmode_ != CPPMODE::CPP03)
         {
           os << id (name) << "_ = std::make_unique<" << type << "> (a);";
         }
@@ -246,7 +246,7 @@ namespace
       idref_ptr = type.find(idref_str);
       id_ptr = type.find(id_str);
 
-      if ((idref_ptr != std::string::npos) && (!this->cpp11_))
+      if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
       {
         if (this->char_type == char_compare)
         {
@@ -276,7 +276,7 @@ namespace
         //"_).id(), dynamic_cast<XSCRT::Type*> (this));\n";
       }
       */
-      else if ((id_ptr != std::string::npos) && (!this->cpp11_))
+      else if ((id_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
       {
         if (this->char_type == char_compare)
         {

@@ -42,7 +42,7 @@ namespace
          << id (name) << " (xercesc::DOMDocument const* d)"
          << "{";
 
-      if (!this->cpp11_)
+      if (this->cppmode_ == CPPMODE::CPP03)
       {
          os << "// Initiate our Singleton as an ACE_TSS object (ensures thread" << endl
             << "// specific storage" << endl
@@ -59,7 +59,7 @@ namespace
          << "{"
          << type << " r (e);\n";
 
-     if (!this->cpp11_)
+     if (this->cppmode_ == CPPMODE::CPP03)
      {
        os  << "(*TSS_ID_Map)->resolve_idref();" << endl;
      }
