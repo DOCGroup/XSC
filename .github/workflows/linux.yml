@@ -16,7 +16,7 @@ jobs:
       matrix:
         include:
           - platform_file: include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU
-            os: ubuntu-20.04
+            os: ubuntu-22.04
     runs-on: ${{ matrix.os }}
     name: ${{ matrix.os }} ${{ matrix.CXX }} ${{ matrix.feature }}
     env:
