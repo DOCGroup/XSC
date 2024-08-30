@@ -342,14 +342,6 @@ type_name (SemanticGraph::Instance& i, string const& nss)
     }
     else
     {
-      //@@ I wonder if this is at all necessary now?
-      //
-
-      //if (!scope.empty ()) r += scope + L"::";
-
-      //r += fq_name (i.scope ());
-      //r += L"::";
-
       r += id (i.name ());
     }
 

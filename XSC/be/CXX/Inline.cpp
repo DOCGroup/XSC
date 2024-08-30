@@ -1101,22 +1101,6 @@ namespace
         {
           os << id (name) << "_->container (this);";
         }
-        else
-        {
-          //string type (type_name (e));
-
-          //// sequence
-          ////
-          //if (this->generate_ra_sequences_)
-          //  os << name << "_.reserve (s." << name << "_.size ());";
-
-          //os << "{"
-          //   << "for (" << name << "_const_iterator i (s."
-          //   << name << "_.begin ());"
-          //   << "i != s." << name << "_.end ();"
-          //   << "++i) " << "add_" << name << " (*i);"
-          //   << "}";
-        }
       }
 
       virtual void
@@ -1207,19 +1191,6 @@ namespace
           //
           os << id(name) << "_ = s." << id(name) << "_;"
              << std::endl;
-
-          //os << name << "_.clear ();";
-
-          //if (this->generate_ra_sequences_)
-          //  os   << name << "_.reserve (s." << name << "_.size ());";
-
-          //os << "{"
-          //   << "for (" << name << "_const_iterator i (s."
-          //   << name << "_.begin ());"
-          //   << "i != s." << name << "_.end ();"
-          //   << "++i) " << std::endl
-          //   << "add_" << name << " (*i);"
-          //   << "}";
         }
       }
 
