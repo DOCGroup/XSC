@@ -936,7 +936,7 @@ generate_header (Context& ctx,
 
   if (ctx.cpp11())
   {
-    ctx.os << "#include \"tao/x11/stddef.h\"" << endl;
+    ctx.os << "#include \"tao/x11/base/stddef.h\"" << endl;
   }
 
   Traversal::Schema traverser;

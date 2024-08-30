@@ -1145,8 +1145,8 @@ namespace
          << endl;
 
       os << scope << "::" << endl
-         << name << " (" << xml_element_type << " const& e)" << endl
-         << ":" << "Base (e)"
+         << name << " (" << xml_element_type << " const& element)" << endl
+         << ":" << "Base (element)"
          << "{"
          << endl;
     }
@@ -1161,7 +1161,7 @@ namespace
 
       if (he || ha)
       {
-        os << parser_type << " p (e);"
+        os << parser_type << " p (element);"
            << endl;
 
         if (he)
