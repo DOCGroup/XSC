@@ -145,14 +145,6 @@ namespace
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
-        /* Lets just have one mutator
-        os << i
-           << type << "& " << scope << "::" << endl
-           << id (name) << " ()"
-           << "{"
-           << "return *" << id (name) << "_;"
-           << "}";
-        */
         if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
         {
            os << i
@@ -275,7 +267,6 @@ namespace
           os << "}";
         }
 
-//        if (!this->cpp11_)
         {
           // count_typename
           //
@@ -459,12 +450,6 @@ namespace
       inherits_.node_traverser (*this);
       names_.node_traverser (*this);
     }
-
-    //virtual void
-    //traverse (SemanticGraph::Type& t)
-    //{
-    //  os << comma () << type_name (t) << " const& b__";
-    //}
 
     virtual void
     traverse (SemanticGraph::Enumeration& e)
@@ -729,12 +714,6 @@ namespace
           : Context (c), args_ (c)
       {
       }
-
-      //virtual void
-      //traverse (SemanticGraph::Type&)
-      //{
-      //  os << "Base (b__)," << endl;
-      //}
 
       virtual void
       traverse (SemanticGraph::Enumeration&)
@@ -1137,14 +1116,6 @@ namespace
           : Context (c)
       {
       }
-
-      //virtual void
-      //traverse (SemanticGraph::Type&)
-      //{
-      //  os << "static_cast< Base& > (*this) = "
-      //     << "static_cast< Base const& > (s);"
-      //     << endl;
-      //}
 
       virtual void
       traverse (SemanticGraph::Element& e)
