@@ -262,8 +262,14 @@ namespace
             << "void " << scope << "::" << endl
             << "add_" << name << " (" << scope << "::" << name << "_value_type const& e)"
             << "{";
-
           os << id(name) << "_.push_back (e);";
+          os << "}\n";
+          // add_typename
+          os << i
+            << "void " << scope << "::" << endl
+            << "del_" << name << " (" << scope << "::" << name << "_value_type const& e)"
+            << "{";
+          os << id(name) << "_.remove (e);";
           os << "}";
         }
 

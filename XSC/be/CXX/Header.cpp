@@ -203,6 +203,7 @@ namespace
         if (!this->cpp11_)
         {
           os << "void add_" << name << " (" << name << "_value_type const&);";
+          os << "void del_" << name << " (" << name << "_value_type const&);";
         }
         //Return referenced item if an IDREF
         if ((idref_ptr != std::string::npos) && (!this->cpp11_))
