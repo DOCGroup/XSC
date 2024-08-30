@@ -117,6 +117,8 @@ options (po::options_description& d)
      "CDR streams.")
     ("cxx-cpp11",
      "Generate code that depends on C++11 features.")
+    ("cxx-cpp17",
+     "Generate code that depends on C++17 features.")
     ;
 }
 
@@ -332,7 +334,16 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   bool cdr_reader (vm.count ("cxx-generate-cdr-reader-types"));
   bool cdr_writer (vm.count ("cxx-generate-cdr-writer-types"));
 
-  bool cpp11 (vm.count ("cxx-cpp11"));
+  ::Context::CPPMODE cppmode_ { ::Context::CPPMODE::CPP03 };
+  if (vm.count ("cxx-cpp11"))
+    {
+      cppmode_ = ::Context::CPPMODE::CPP11;
+    }
+  if (vm.count ("cxx-cpp17"))
+    {
+      cppmode_ = ::Context::CPPMODE::CPP17;
+    }
+
 
   // Check about random access sequences
   bool ra_sequences (vm.count ("cxx-enable-random-access-sequences"));
@@ -413,7 +424,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
     ctx.cdr_reader_generation (cdr_reader);
     ctx.cdr_writer_generation (cdr_writer);
 
-    ctx.cpp11 (cpp11);
+    ctx.cppmode (cppmode_);
 
     // Add additional information to the context:
     ctx.generate_ra_sequences (ra_sequences);
@@ -455,7 +466,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
     ctx.cdr_reader_generation (cdr_reader);
     ctx.cdr_writer_generation (cdr_writer);
 
-    ctx.cpp11 (cpp11);
+    ctx.cppmode (cppmode_);
 
     // Add additional information to the context:
     ctx.generate_ra_sequences (ra_sequences);
@@ -479,7 +490,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
     // Add additional information to the context:
     ctx.generate_ra_sequences (ra_sequences);
 
-    ctx.cpp11 (cpp11);
+    ctx.cppmode (cppmode_);
 
     if (!inline_)
     {
