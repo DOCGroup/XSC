@@ -148,13 +148,12 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   std::string ixx_expr (vm["cxx-inline-regex"].as<std::string> ());
   std::string cxx_expr (vm["cxx-source-regex"].as<std::string> ());
 
-
-  //Output file names are named <name>.<suffix>
+  // Output file names are named <name>.<suffix>
   std::string hxx_name (regex::perl_s (name, hxx_expr) + hxx_suffix);
   std::string ixx_name (regex::perl_s (name, ixx_expr) + ixx_suffix);
   std::string cxx_name (regex::perl_s (name, cxx_expr) + cxx_suffix);
 
-  //File handlers are created for each file name
+  // File handlers are created for each file name
   fs::path hxx_path (hxx_name);
   fs::path ixx_path (ixx_name);
   fs::path cxx_path (cxx_name);
