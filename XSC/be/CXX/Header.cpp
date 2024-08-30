@@ -36,13 +36,15 @@ namespace
 
       os << " : public " << name
          << "{";
-      if (this->cpp11_)
+      switch(this->cppmode_)
       {
-        os << "using Base = " << name << ";" << endl;
-      }
-      else
-      {
-        os << "typedef " << name << " Base;" << endl;
+        case CPPMODE::CPP03:
+          os << "typedef " << name << " Base;" << endl;
+          break;
+        case CPPMODE::CPP11:
+        case CPPMODE::CPP17:
+          os << "using Base = " << name << ";" << endl;
+          break;
       }
     }
   };
@@ -176,44 +178,52 @@ namespace
       {
         // sequence
         //
-        if (this->cpp11_)
+        switch(this->cppmode_)
         {
-          os << "using " << name << "_container_type = " << container  << "< " << type << ">;";
+          case CPPMODE::CPP03:
+            os << "typedef ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> " << name << "_value_type;";
+            os << "typedef " << container  << "<" << name << "_value_type> " << name << "_container_type;";
+            break;
+          case CPPMODE::CPP11:
+          case CPPMODE::CPP17:
+            os << "using " << name << "_container_type = " << container  << "< " << type << ">;";
+            break;
         }
-        else
+        switch(this->cppmode_)
         {
-          os << "typedef ACE_Refcounted_Auto_Ptr < " << type << ", ACE_Null_Mutex> " << name << "_value_type;";
-          os << "typedef " << container  << "<" << name << "_value_type> " << name << "_container_type;";
-        }
-        if (this->cpp11_)
-        {
-          os << "using " << name << "_const_iterator = " << name << "_container_type::const_iterator;";
-        }
-        else
-        {
-          os << "typedef " << name << "_container_type::iterator " << name << "_iterator;";
-          os << "typedef " << name << "_container_type::const_iterator " << name << "_const_iterator;";
-          os << name << "_iterator begin_" << name << " ();";
-          os << name << "_iterator end_" << name << " ();";
+          case CPPMODE::CPP03:
+            os << "typedef " << name << "_container_type::iterator " << name << "_iterator;";
+            os << "typedef " << name << "_container_type::const_iterator " << name << "_const_iterator;";
+            os << name << "_iterator begin_" << name << " ();";
+            os << name << "_iterator end_" << name << " ();";
+            break;
+          case CPPMODE::CPP11:
+          case CPPMODE::CPP17:
+            os << "using " << name << "_const_iterator = " << name << "_container_type::const_iterator;";
+            break;
         }
 
         os << name << "_const_iterator begin_" << name << " () const;";
         os << name << "_const_iterator end_" << name << " () const;";
 
-        if (!this->cpp11_)
+        switch(this->cppmode_)
         {
-          os << "void add_" << name << " (" << name << "_value_type const&);";
+          case CPPMODE::CPP03:
+            os << "void add_" << name << " (" << name << "_value_type const&);";
+            os << "void del_" << name << " (" << name << "_value_type const&);";
+            break;
+          case CPPMODE::CPP11:
+          case CPPMODE::CPP17:
+            break;
         }
         //Return referenced item if an IDREF
-        if ((idref_ptr != std::string::npos) && (!this->cpp11_))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
         {
           os << "XSCRT::Type* get_" << name << "_ptr (const " << string_type <<"& idref);";
           os << "void set_" << name << "_ptr (const " << string_type << "& idref);";
         }
-        //if (!this->cpp11_)
-        {
-          os << "size_t count_" << name << " () const;";
-        }
+
+        os << "size_t count_" << name << " () const;";
 
         os << endl
            << "protected:" << endl;
@@ -230,7 +240,7 @@ namespace
         os << "void " << id (name) << " (" << type << " const& );";
 
         //Added for IDREF case
-        if ((idref_ptr != std::string::npos) && (!this->cpp11_))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ();\n";
            os << "void set_" << id (name) << "_ptr (const " << string_type << "& idref);";
@@ -238,15 +248,17 @@ namespace
 
         os << endl
            << "protected:" << endl;
-        if (this->cpp11_)
+        switch(this->cppmode_)
         {
-          os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
-          os << id (name) << "_type " << id (name) << "_;";
-        }
-        else
-        {
-          os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_auto_ptr_type;";
-          os << id (name) << "_auto_ptr_type " << id (name) << "_;";
+          case CPPMODE::CPP03:
+            os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_type;";
+            os << id (name) << "_type " << id (name) << "_;";
+            break;
+          case CPPMODE::CPP11:
+          case CPPMODE::CPP17:
+            os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
+            os << id (name) << "_type " << id (name) << "_;";
+            break;
         }
       }
       else
@@ -258,7 +270,7 @@ namespace
         os << "void " << id (name) << " (" << type << " const& );";
 
         //Added for IDREF case
-        if ((idref_ptr != std::string::npos) && (!this->cpp11_))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ( void );\n";
            os << "void set_" << id(name) << "_ptr (const " << string_type << "& idref);";
@@ -267,15 +279,17 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        if (this->cpp11_)
+        switch(this->cppmode_)
         {
-          os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
-          os << id (name) << "_type " << id (name) << "_;";
-        }
-        else
-        {
-          os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_auto_ptr_type;";
-          os << id (name) << "_auto_ptr_type " << id (name) << "_;";
+          case CPPMODE::CPP03:
+            os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_type;";
+            os << id (name) << "_type " << id (name) << "_;";
+            break;
+          case CPPMODE::CPP11:
+          case CPPMODE::CPP17:
+            os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
+            os << id (name) << "_type " << id (name) << "_;";
+            break;
         }
       }
 
@@ -328,7 +342,7 @@ namespace
         os << "void " << id (name) << " (" << type << " const& );";
 
         //Added for IDREF case
-        if ((idref_ptr != std::string::npos) && (!this->cpp11_))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ();\n";
            os << "void set_" << id(name) << "_ptr (const " << string_type << "& idref);";
@@ -337,15 +351,17 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        if (this->cpp11_)
+        switch(this->cppmode_)
         {
-          os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
-          os << id (name) << "_type " << id (name) << "_;";
-        }
-        else
-        {
-          os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_auto_ptr_type;";
-          os << id (name) << "_auto_ptr_type " << id (name) << "_;";
+          case CPPMODE::CPP03:
+            os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_type;";
+            os << id (name) << "_type " << id (name) << "_;";
+            break;
+          case CPPMODE::CPP11:
+          case CPPMODE::CPP17:
+            os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
+            os << id (name) << "_type " << id (name) << "_;";
+            break;
         }
       }
       else
@@ -355,7 +371,7 @@ namespace
         os << "void " << id (name) << " (" << type << " const& );";
 
         //Added for IDREF case
-        if ((idref_ptr != std::string::npos) && (!this->cpp11_))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ( void );\n";
            os << "void set_" << id (name) << "_ptr (const " << string_type << "& idref);";
@@ -364,15 +380,17 @@ namespace
         os << endl
            << "protected:" << endl;
 
-        if (this->cpp11_)
+        switch(this->cppmode_)
         {
-          os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
-          os << id (name) << "_type " << id (name) << "_;";
-        }
-        else
-        {
-          os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_auto_ptr_type;";
-          os << id (name) << "_auto_ptr_type " << id (name) << "_;";
+          case CPPMODE::CPP03:
+            os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_type;";
+            os << id (name) << "_type " << id (name) << "_;";
+            break;
+          case CPPMODE::CPP11:
+          case CPPMODE::CPP17:
+            os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
+            os << id (name) << "_type " << id (name) << "_;";
+            break;
         }
       }
 
@@ -433,20 +451,24 @@ namespace
     {
       os << " : public ::XSCRT::Type"
          << "{"
-         << (this->cpp11_ ? "using Base = ::XSCRT::Type;" : "typedef ::XSCRT::Type Base;" )
+         << (this->cppmode_ != CPPMODE::CPP03 ? "using Base = ::XSCRT::Type;" : "typedef ::XSCRT::Type Base;" )
          << endl;
-      if (!this->cpp11_)
+      switch(this->cppmode_)
       {
-        os << "public:" << endl;
-        os << "typedef ACE_Refcounted_Auto_Ptr < " << type_name (c) << ", ACE_Null_Mutex> _ptr;";
-        os << endl;
+        case CPPMODE::CPP03:
+          os << "public:" << endl;
+          os << "typedef ACE_Refcounted_Auto_Ptr < " << type_name (c) << ", ACE_Null_Mutex> _ptr;";
+          break;
+        case CPPMODE::CPP11:
+        case CPPMODE::CPP17:
+          break;
       }
     }
 
     virtual void
     inherits_post (Type &c)
     {
-      if (!this->cpp11_)
+      if (this->cppmode_ == CPPMODE::CPP03)
       {
         os << "public:" << endl;
         os << "typedef ACE_Refcounted_Auto_Ptr < " << type_name(c) << ", ACE_Null_Mutex> _ptr;";
@@ -576,7 +598,7 @@ namespace
       os << name << "& operator= (" << name << " const& s);"
          << endl;
 
-      if (this->cpp11_)
+      if (this->cppmode_ != CPPMODE::CPP03)
       {
         os << name << " (" << name << "&&) = default;";
         os << name << "& operator= (" << name << "&&) = default;"
@@ -909,7 +931,7 @@ generate_header (Context& ctx,
   ctx.os << "#include \"ace/XML_Utils/XMLSchema/Types.hpp\"" << endl
          << "#include \"ace/XML_Utils/XMLSchema/id_map.hpp\"" << endl;
 
-  if (!ctx.cpp11())
+  if (ctx.cppmode() == Context::CPPMODE::CPP03)
   {
     ctx.os << "#include \"ace/Refcounted_Auto_Ptr.h\"" << endl
           << "#include \"ace/Null_Mutex.h\"" << endl;
@@ -928,13 +950,13 @@ generate_header (Context& ctx,
     ctx.os << "#include \"XMLSchema/CDR_Types.hpp\"" << endl
            << "#include \"XMLSchema/id_map.hpp\"" << endl
            << endl;
-    if (!ctx.cpp11())
+    if (ctx.cppmode() == Context::CPPMODE::CPP03)
     {
       ctx.os << "#include \"ace/TSS_T.h\""<< endl;
     }
   }
 
-  if (ctx.cpp11())
+  if (ctx.cppmode() != Context::CPPMODE::CPP03)
   {
     ctx.os << "#include \"tao/x11/base/stddef.h\"" << endl;
   }
@@ -945,7 +967,7 @@ generate_header (Context& ctx,
   Includes includes (ctx);
   Traversal::Names schema_names;
 
-  if (!ctx.cpp11())
+  if (ctx.cppmode() == Context::CPPMODE::CPP03)
   {
     ctx.os << "#if !defined(XML_XSC_SMART_PTR)" << endl
            << "# if defined(ACE_HAS_CPP11)" << endl

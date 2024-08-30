@@ -258,7 +258,7 @@ namespace
     virtual void
     pre (Type& c)
     {
-      string override_string (this->cpp11_ ? L" override" : L"");
+      string override_string (this->cppmode_ != CPPMODE::CPP03 ? L" override" : L"");
 
       os << "struct " << e << name_
          << " : ::XMLSchema::Traversal::Traverser< " << fq_name (c) << " >"
@@ -327,7 +327,7 @@ namespace
       string name ((this->name_ != L"") ? name_: id (e.name ()));
       string type (type_name (e));
 
-      if (this->cpp11_)
+      if (this->cppmode_ != CPPMODE::CPP03)
       {
         os << "using " << name << " = ::XMLSchema::Traversal::Traverser< " << type << ">;" << endl;
       }

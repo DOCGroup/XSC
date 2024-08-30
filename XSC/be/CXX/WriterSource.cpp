@@ -103,7 +103,7 @@ namespace
       //string scope (id (a.scope ().name ()));
       string ns (xs_ns_name (a));
       std::wstring attrinit;
-      if (this->cpp11_)
+      if (this->cppmode_ != CPPMODE::CPP03)
       {
         attrinit = L"attr_ (std::addressof(a));";
       }
@@ -124,7 +124,7 @@ namespace
          << attrinit
          << "Traversal::" << scope << "::" << id (name) << " (o);";
 
-      if (this->cpp11_)
+      if (this->cppmode_ != CPPMODE::CPP03)
       {
         os << "attr_ (nullptr);";
       }
@@ -241,7 +241,7 @@ namespace
 
       // c-tor ()
       //
-      if (!this->cpp11_)
+      if (this->cppmode_ == CPPMODE::CPP03)
       {
         os << scope << "::" << endl
           << name << " ()"
@@ -320,7 +320,7 @@ namespace
 
       // c-tor ()
       //
-      if (!this->cpp11_)
+      if (this->cppmode_ == CPPMODE::CPP03)
       {
         os << name << "::" << endl
           << name << " ()"

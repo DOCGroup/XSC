@@ -24,6 +24,12 @@ typedef std::vector<string> NamespaceMapping;
 class Context
 {
 public:
+  // Which C++ version we generate for
+  enum class CPPMODE {
+    CPP03,
+    CPP11,
+    CPP17
+  };
 
 
 public:
@@ -61,7 +67,7 @@ public:
         ns_mapping_ (ns_mapping),
         cdr_reader_generation_ (false),
         cdr_writer_generation_ (false),
-        cpp11_ (false),
+        cppmode_ (CPPMODE::CPP03),
         generate_ra_sequences_ (false)
   {
     if (char_type == L"wchar_t")
@@ -107,7 +113,7 @@ protected:
         ns_mapping_ (c.ns_mapping_),
         cdr_reader_generation_ (c.cdr_reader_generation_),
         cdr_writer_generation_ (c.cdr_writer_generation_),
-        cpp11_ (c.cpp11_),
+        cppmode_ (c.cppmode_),
         generate_ra_sequences_ (c.generate_ra_sequences_)
   {
   }
@@ -218,9 +224,9 @@ public:
     this->cdr_writer_generation_ = flag;
   }
   void
-  cpp11 (bool flag)
+  cppmode (CPPMODE flag)
   {
-    this->cpp11_ = flag;
+    this->cppmode_ = flag;
   }
   bool
   cdr_reader_generation_enabled ()
@@ -232,10 +238,10 @@ public:
   {
     return this->cdr_writer_generation_;
   }
-  bool
-  cpp11 ()
+  CPPMODE
+  cppmode ()
   {
-    return this->cpp11_;
+    return this->cppmode_;
   }
 
   void
@@ -315,8 +321,9 @@ protected:
   bool cdr_reader_generation_;
   bool cdr_writer_generation_;
 
-  // Generate code depending on C++11 features
-  bool cpp11_;
+  // Generate code depending on C++ features
+  CPPMODE cppmode_;
+
   bool generate_ra_sequences_;
 };
 

@@ -90,6 +90,9 @@ options (po::options_description& d)
     ("cxx-source-regex", po::value<std::string> ()->default_value ("/\\..*$//"),
      "Use provided regular expression of the form /pattern/replacement/ when constructing "
      "the name of the source file.")
+    ("cxx-header-guard", po::value<std::string> ()->default_value (""),
+     "Use this header include guard instead of the filename' "
+     "when constructing the name of the header file.")
     ("cxx-banner-file", po::value<std::string> ()->default_value (""),
      "Copy provided banner at the beginning of every generated "
      "file for which file-specific banner is not provided.")
@@ -117,6 +120,8 @@ options (po::options_description& d)
      "CDR streams.")
     ("cxx-cpp11",
      "Generate code that depends on C++11 features.")
+    ("cxx-cpp17",
+     "Generate code that depends on C++17 features.")
     ;
 }
 
@@ -332,7 +337,16 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   bool cdr_reader (vm.count ("cxx-generate-cdr-reader-types"));
   bool cdr_writer (vm.count ("cxx-generate-cdr-writer-types"));
 
-  bool cpp11 (vm.count ("cxx-cpp11"));
+  ::Context::CPPMODE cppmode_ { ::Context::CPPMODE::CPP03 };
+  if (vm.count ("cxx-cpp11"))
+    {
+      cppmode_ = ::Context::CPPMODE::CPP11;
+    }
+  if (vm.count ("cxx-cpp17"))
+    {
+      cppmode_ = ::Context::CPPMODE::CPP17;
+    }
+
 
   // Check about random access sequences
   bool ra_sequences (vm.count ("cxx-enable-random-access-sequences"));
@@ -371,22 +385,30 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   // HXX
   //
   std::string guard (hxx_name);
+  std::string guard_flag (vm["cxx-header-guard"].as<std::string> ());
+  // When the userhas passed a special guard use that, else construct one
+  if (!guard_flag.empty ())
+  {
+    guard = guard_flag;
+  }
+  else
+  {
+    // Split words
+    //
+    guard = regex::perl_s (guard, "/([a-z])([A-Z])/$1_$2/");
 
-  // Split words
-  //
-  guard = regex::perl_s (guard, "/([a-z])([A-Z])/$1_$2/");
+    // Upcase.
+    //
+    std::transform (guard.begin (), guard.end(), guard.begin (), upcase);
 
-  // Upcase.
-  //
-  std::transform (guard.begin (), guard.end(), guard.begin (), upcase);
+    // Replace '.' with '_'.
+    //
+    guard = regex::perl_s (guard, "/\\./_/");
 
-  // Replace '.' with '_'.
-  //
-  guard = regex::perl_s (guard, "/\\./_/");
-
-  // Replace '-' with '_'.
-  //
-  guard = regex::perl_s (guard, "/\\-/_/");
+    // Replace '-' with '_'.
+    //
+    guard = regex::perl_s (guard, "/\\-/_/");
+  }
 
   hxx << "#ifndef " << guard.c_str () << endl
       << "#define " << guard.c_str () << endl
@@ -413,7 +435,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
     ctx.cdr_reader_generation (cdr_reader);
     ctx.cdr_writer_generation (cdr_writer);
 
-    ctx.cpp11 (cpp11);
+    ctx.cppmode (cppmode_);
 
     // Add additional information to the context:
     ctx.generate_ra_sequences (ra_sequences);
@@ -455,7 +477,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
     ctx.cdr_reader_generation (cdr_reader);
     ctx.cdr_writer_generation (cdr_writer);
 
-    ctx.cpp11 (cpp11);
+    ctx.cppmode (cppmode_);
 
     // Add additional information to the context:
     ctx.generate_ra_sequences (ra_sequences);
@@ -479,7 +501,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
     // Add additional information to the context:
     ctx.generate_ra_sequences (ra_sequences);
 
-    ctx.cpp11 (cpp11);
+    ctx.cppmode (cppmode_);
 
     if (!inline_)
     {
