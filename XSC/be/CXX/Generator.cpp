@@ -90,6 +90,9 @@ options (po::options_description& d)
     ("cxx-source-regex", po::value<std::string> ()->default_value ("/\\..*$//"),
      "Use provided regular expression of the form /pattern/replacement/ when constructing "
      "the name of the source file.")
+    ("cxx-header-guard", po::value<std::string> ()->default_value (""),
+     "Use this header include guard instead of the filename' "
+     "when constructing the name of the header file.")
     ("cxx-banner-file", po::value<std::string> ()->default_value (""),
      "Copy provided banner at the beginning of every generated "
      "file for which file-specific banner is not provided.")
@@ -382,22 +385,30 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   // HXX
   //
   std::string guard (hxx_name);
+  std::string guard_flag (vm["cxx-header-guard"].as<std::string> ());
+  // When the userhas passed a special guard use that, else construct one
+  if (!guard_flag.empty ())
+  {
+    guard = guard_flag;
+  }
+  else
+  {
+    // Split words
+    //
+    guard = regex::perl_s (guard, "/([a-z])([A-Z])/$1_$2/");
 
-  // Split words
-  //
-  guard = regex::perl_s (guard, "/([a-z])([A-Z])/$1_$2/");
+    // Upcase.
+    //
+    std::transform (guard.begin (), guard.end(), guard.begin (), upcase);
 
-  // Upcase.
-  //
-  std::transform (guard.begin (), guard.end(), guard.begin (), upcase);
+    // Replace '.' with '_'.
+    //
+    guard = regex::perl_s (guard, "/\\./_/");
 
-  // Replace '.' with '_'.
-  //
-  guard = regex::perl_s (guard, "/\\./_/");
-
-  // Replace '-' with '_'.
-  //
-  guard = regex::perl_s (guard, "/\\-/_/");
+    // Replace '-' with '_'.
+    //
+    guard = regex::perl_s (guard, "/\\-/_/");
+  }
 
   hxx << "#ifndef " << guard.c_str () << endl
       << "#define " << guard.c_str () << endl
