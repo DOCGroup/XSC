@@ -240,8 +240,8 @@ namespace
            << "protected:" << endl;
         if (this->cpp11_)
         {
-          os << "using " << id (name) << "_unique_ptr_type = std::unique_ptr<" << type << ">;";
-          os << id (name) << "_unique_ptr_type " << id (name) << "_;";
+          os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
+          os << id (name) << "_type " << id (name) << "_;";
         }
         else
         {
@@ -269,8 +269,8 @@ namespace
 
         if (this->cpp11_)
         {
-          os << "using " << id (name) << "_unique_ptr_type = std::unique_ptr<" << type << ">;";
-          os << id (name) << "_unique_ptr_type " << id (name) << "_;";
+          os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
+          os << id (name) << "_type " << id (name) << "_;";
         }
         else
         {
@@ -339,8 +339,8 @@ namespace
 
         if (this->cpp11_)
         {
-          os << "using " << id (name) << "_unique_ptr_type = std::unique_ptr<" << type << ">;";
-          os << id (name) << "_unique_ptr_type " << id (name) << "_;";
+          os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
+          os << id (name) << "_type " << id (name) << "_;";
         }
         else
         {
@@ -366,8 +366,8 @@ namespace
 
         if (this->cpp11_)
         {
-          os << "using " << id (name) << "_unique_ptr_type = std::unique_ptr<" << type << ">;";
-          os << id (name) << "_unique_ptr_type " << id (name) << "_;";
+          os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
+          os << id (name) << "_type " << id (name) << "_;";
         }
         else
         {
