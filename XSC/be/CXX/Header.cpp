@@ -186,7 +186,7 @@ namespace
             break;
           case CPPMODE::CPP11:
           case CPPMODE::CPP17:
-            os << "using " << name << "_container_type = " << container  << "< " << type << ">;";
+            os << "using " << name << "_container_type = " << container  << "<" << type << ">;";
             break;
         }
         switch(this->cppmode_)
@@ -237,7 +237,7 @@ namespace
         os << "bool " << name << "_p () const;";
         os << type << " const& " << id (name) << " () const;";
         // os << type << "& " << id (name) << " ();";  // Lets just have one mutator
-        os << "void " << id (name) << " (" << type << " const& );";
+        os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
         if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
@@ -267,7 +267,7 @@ namespace
         //
         os << type << " const& " << id (name) << " () const;";
         // os << type << "& " << id (name) << " ();"; // Lets just have one mutator.
-        os << "void " << id (name) << " (" << type << " const& );";
+        os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
         if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
@@ -339,7 +339,7 @@ namespace
         os << "bool " << name << "_p () const;";
         os << type << " const& " << id (name) << " () const;";
         os << type << "& " << id (name) << " ();";
-        os << "void " << id (name) << " (" << type << " const& );";
+        os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
         if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
@@ -368,7 +368,7 @@ namespace
       {
         os << type << " const& " << id (name) << " () const;";
         os << type << "& " << id (name) << " ();";
-        os << "void " << id (name) << " (" << type << " const& );";
+        os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
         if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
