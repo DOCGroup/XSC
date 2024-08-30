@@ -1179,7 +1179,7 @@ namespace
             os << "if (s." << name << "_)" << std::endl
                << "  " << name << " (*(s." << name << "_));"
                << "else" << std::endl
-               << "  " << name << "_.reset (nullptr);"
+               << "  " << name << "_.release ();"
                << endl;
           }
           else
@@ -1235,7 +1235,7 @@ namespace
           {
             os << "if (s." << name << "_) "
               << name << " (*(s." << name << "_));"
-              << "else " << name << "_.reset (nullptr);"
+              << "else " << name << "_.release ();"
               << endl;
           }
           else
