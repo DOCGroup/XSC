@@ -60,8 +60,6 @@ namespace XSCRT
     Type&
     operator= (Type const&)
     {
-      //@@ I don't need this.
-      //if (map_.get ()) map_->clear (); // Flush the map.
       return *this;
     }
 

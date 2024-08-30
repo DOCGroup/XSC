@@ -186,7 +186,7 @@ namespace
             break;
           case CPPMODE::CPP11:
           case CPPMODE::CPP17:
-            os << "using " << name << "_container_type = " << container  << "< " << type << ">;";
+            os << "using " << name << "_container_type = " << container  << "<" << type << ">;";
             break;
         }
         switch(this->cppmode_)
@@ -237,7 +237,7 @@ namespace
         os << "bool " << name << "_p () const;";
         os << type << " const& " << id (name) << " () const;";
         // os << type << "& " << id (name) << " ();";  // Lets just have one mutator
-        os << "void " << id (name) << " (" << type << " const& );";
+        os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
         if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
@@ -251,13 +251,13 @@ namespace
         switch(this->cppmode_)
         {
           case CPPMODE::CPP03:
-            os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_auto_ptr_type;";
-            os << id (name) << "_auto_ptr_type " << id (name) << "_;";
+            os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_type;";
+            os << id (name) << "_type " << id (name) << "_;";
             break;
           case CPPMODE::CPP11:
           case CPPMODE::CPP17:
-            os << "using " << id (name) << "_unique_ptr_type = std::unique_ptr< " << type << ">;";
-            os << id (name) << "_unique_ptr_type " << id (name) << "_;";
+            os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
+            os << id (name) << "_type " << id (name) << "_;";
             break;
         }
       }
@@ -267,7 +267,7 @@ namespace
         //
         os << type << " const& " << id (name) << " () const;";
         // os << type << "& " << id (name) << " ();"; // Lets just have one mutator.
-        os << "void " << id (name) << " (" << type << " const& );";
+        os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
         if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
@@ -282,13 +282,13 @@ namespace
         switch(this->cppmode_)
         {
           case CPPMODE::CPP03:
-            os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_auto_ptr_type;";
-            os << id (name) << "_auto_ptr_type " << id (name) << "_;";
+            os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_type;";
+            os << id (name) << "_type " << id (name) << "_;";
             break;
           case CPPMODE::CPP11:
           case CPPMODE::CPP17:
-            os << "using " << id (name) << "_unique_ptr_type = std::unique_ptr< " << type << ">;";
-            os << id (name) << "_unique_ptr_type " << id (name) << "_;";
+            os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
+            os << id (name) << "_type " << id (name) << "_;";
             break;
         }
       }
@@ -339,7 +339,7 @@ namespace
         os << "bool " << name << "_p () const;";
         os << type << " const& " << id (name) << " () const;";
         os << type << "& " << id (name) << " ();";
-        os << "void " << id (name) << " (" << type << " const& );";
+        os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
         if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
@@ -354,13 +354,13 @@ namespace
         switch(this->cppmode_)
         {
           case CPPMODE::CPP03:
-            os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_auto_ptr_type;";
-            os << id (name) << "_auto_ptr_type " << id (name) << "_;";
+            os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_type;";
+            os << id (name) << "_type " << id (name) << "_;";
             break;
           case CPPMODE::CPP11:
           case CPPMODE::CPP17:
-            os << "using " << id (name) << "_unique_ptr_type = std::unique_ptr< " << type << ">;";
-            os << id (name) << "_unique_ptr_type " << id (name) << "_;";
+            os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
+            os << id (name) << "_type " << id (name) << "_;";
             break;
         }
       }
@@ -368,7 +368,7 @@ namespace
       {
         os << type << " const& " << id (name) << " () const;";
         os << type << "& " << id (name) << " ();";
-        os << "void " << id (name) << " (" << type << " const& );";
+        os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
         if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
@@ -383,13 +383,13 @@ namespace
         switch(this->cppmode_)
         {
           case CPPMODE::CPP03:
-            os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_auto_ptr_type;";
-            os << id (name) << "_auto_ptr_type " << id (name) << "_;";
+            os << "typedef XML_XSC_SMART_PTR( " << type << ") " << id (name) << "_type;";
+            os << id (name) << "_type " << id (name) << "_;";
             break;
           case CPPMODE::CPP11:
           case CPPMODE::CPP17:
-            os << "using " << id (name) << "_unique_ptr_type = std::unique_ptr< " << type << ">;";
-            os << id (name) << "_unique_ptr_type " << id (name) << "_;";
+            os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
+            os << id (name) << "_type " << id (name) << "_;";
             break;
         }
       }

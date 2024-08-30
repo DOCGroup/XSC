@@ -124,12 +124,12 @@ namespace
           switch(this->cppmode_)
           {
             case CPPMODE::CPP03:
-              os << id (name) << "_ = " << scope << "::" << id(name) << "_auto_ptr_type (new " << type << " (e));"
+              os << id (name) << "_ = " << scope << "::" << id(name) << "_type (new " << type << " (e));"
                 << id (name) << "_->container (this);";
               break;
             case CPPMODE::CPP11:
             case CPPMODE::CPP17:
-              os << id (name) << "_ = std::make_unique< " << type << "> (e);";
+              os << id (name) << "_ = std::make_unique<" << type << "> (e);";
               break;
         }
         os << "}"
@@ -145,14 +145,6 @@ namespace
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
-        /* Lets just have one mutator
-        os << i
-           << type << "& " << scope << "::" << endl
-           << id (name) << " ()"
-           << "{"
-           << "return *" << id (name) << "_;"
-           << "}";
-        */
         if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
         {
            os << i
@@ -275,7 +267,6 @@ namespace
           os << "}";
         }
 
-//        if (!this->cpp11_)
         {
           // count_typename
           //
@@ -380,11 +371,11 @@ namespace
 
         if (this->cppmode_ != CPPMODE::CPP03)
         {
-          os << id (name) << "_ = std::make_unique< " << type << "> (e);";
+          os << id (name) << "_ = std::make_unique<" << type << "> (e);";
         }
         else
         {
-          os << id (name) << "_ = " << scope << "::" << id(name) << "_auto_ptr_type (new " << type << " (e));"
+          os << id (name) << "_ = " << scope << "::" << id(name) << "_type (new " << type << " (e));"
              << id (name) << "_->container (this);";
         }
         os << "}"
@@ -459,12 +450,6 @@ namespace
       inherits_.node_traverser (*this);
       names_.node_traverser (*this);
     }
-
-    //virtual void
-    //traverse (SemanticGraph::Type& t)
-    //{
-    //  os << comma () << type_name (t) << " const& b__";
-    //}
 
     virtual void
     traverse (SemanticGraph::Enumeration& e)
@@ -730,12 +715,6 @@ namespace
       {
       }
 
-      //virtual void
-      //traverse (SemanticGraph::Type&)
-      //{
-      //  os << "Base (b__)," << endl;
-      //}
-
       virtual void
       traverse (SemanticGraph::Enumeration&)
       {
@@ -859,7 +838,7 @@ namespace
 
           if (this->cppmode_ != CPPMODE::CPP03)
           {
-            os << ", " << name << "_ (std::make_unique< " << type << "> (" << name << "__))" << endl;
+            os << ", " << name << "_ (std::make_unique<" << type << "> (" << name << "__))" << endl;
           }
           else
           {
@@ -891,7 +870,7 @@ namespace
 
           if (this->cppmode_ != CPPMODE::CPP03)
           {
-            os << ", " << name << "_ (std::make_unique< " << type << "> (" << name << "__))" << endl;
+            os << ", " << name << "_ (std::make_unique<" << type << "> (" << name << "__))" << endl;
           }
           else
           {
@@ -988,7 +967,7 @@ namespace
             {
               os << ", " << name << "_ ("
                 << "s." << name << "_ ? "
-                << "std::make_unique< " << type << "> (*s." << name << "_) : " << nullptr_string << ")" << endl;
+                << "std::make_unique<" << type << "> (*s." << name << "_) : " << nullptr_string << ")" << endl;
             }
             else
             {
@@ -1003,7 +982,7 @@ namespace
             //
             if (this->cppmode_ != CPPMODE::CPP03)
             {
-              os << ", " << name << "_ (std::make_unique< " << type << "> (*s." << name << "_))" << endl;
+              os << ", " << name << "_ (std::make_unique<" << type << "> (*s." << name << "_))" << endl;
             }
             else
             {
@@ -1040,7 +1019,7 @@ namespace
           {
             os << ", " << name << "_ ("
               << "s." << name << "_ ? "
-              << "std::make_unique< " << type << "> (*s." << name << "_) : " << nullptr_string << ")" << endl;
+              << "std::make_unique<" << type << "> (*s." << name << "_) : " << nullptr_string << ")" << endl;
           }
           else
           {
@@ -1053,7 +1032,7 @@ namespace
         {
           if (this->cppmode_ != CPPMODE::CPP03)
           {
-            os << ", " << name << "_ (std::make_unique< " << type << "> (*s." << name << "_))" << endl;
+            os << ", " << name << "_ (std::make_unique<" << type << "> (*s." << name << "_))" << endl;
           }
           else
           {
@@ -1101,22 +1080,6 @@ namespace
         {
           os << id (name) << "_->container (this);";
         }
-        else
-        {
-          //string type (type_name (e));
-
-          //// sequence
-          ////
-          //if (this->generate_ra_sequences_)
-          //  os << name << "_.reserve (s." << name << "_.size ());";
-
-          //os << "{"
-          //   << "for (" << name << "_const_iterator i (s."
-          //   << name << "_.begin ());"
-          //   << "i != s." << name << "_.end ();"
-          //   << "++i) " << "add_" << name << " (*i);"
-          //   << "}";
-        }
       }
 
       virtual void
@@ -1154,14 +1117,6 @@ namespace
       {
       }
 
-      //virtual void
-      //traverse (SemanticGraph::Type&)
-      //{
-      //  os << "static_cast< Base& > (*this) = "
-      //     << "static_cast< Base const& > (s);"
-      //     << endl;
-      //}
-
       virtual void
       traverse (SemanticGraph::Element& e)
       {
@@ -1179,7 +1134,7 @@ namespace
             os << "if (s." << name << "_)" << std::endl
                << "  " << name << " (*(s." << name << "_));"
                << "else" << std::endl
-               << "  " << name << "_.reset (nullptr);"
+               << "  " << name << "_.release ();"
                << endl;
           }
           else
@@ -1207,19 +1162,6 @@ namespace
           //
           os << id(name) << "_ = s." << id(name) << "_;"
              << std::endl;
-
-          //os << name << "_.clear ();";
-
-          //if (this->generate_ra_sequences_)
-          //  os   << name << "_.reserve (s." << name << "_.size ());";
-
-          //os << "{"
-          //   << "for (" << name << "_const_iterator i (s."
-          //   << name << "_.begin ());"
-          //   << "i != s." << name << "_.end ();"
-          //   << "++i) " << std::endl
-          //   << "add_" << name << " (*i);"
-          //   << "}";
         }
       }
 
@@ -1235,7 +1177,7 @@ namespace
           {
             os << "if (s." << name << "_) "
               << name << " (*(s." << name << "_));"
-              << "else " << name << "_.reset (nullptr);"
+              << "else " << name << "_.release ();"
               << endl;
           }
           else

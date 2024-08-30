@@ -87,11 +87,11 @@ namespace
         //
         if (this->cppmode_ != CPPMODE::CPP03)
         {
-          os << id (name) << "_ = std::make_unique< " << type << "> (e);";
+          os << id (name) << "_ = std::make_unique<" << type << "> (e);";
         }
         else
         {
-          os << id (name) << "_ = " << scope << "::" << id(name) << "_auto_ptr_type (new " << type << " (e));"
+          os << id (name) << "_ = " << scope << "::" << id(name) << "_type (new " << type << " (e));"
              << id (name) << "_->container (this);";
         }
       }
@@ -231,7 +231,7 @@ namespace
         }
         else
         {
-          os << id (name) << "_ = " << scope << "::" << id(name) << "_auto_ptr_type (new " << type << " (a));"
+          os << id (name) << "_ = " << scope << "::" << id(name) << "_type (new " << type << " (a));"
              << id (name) << "_->container (this);";
         }
       }
