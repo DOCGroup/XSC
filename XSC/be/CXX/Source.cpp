@@ -87,7 +87,7 @@ namespace
         //
         if (this->cppmode_ != CPPMODE::CPP03)
         {
-          os << id (name) << "_ = std::make_unique< " << type << "> (e);";
+          os << id (name) << "_ = std::make_unique<" << type << "> (e);";
         }
         else
         {

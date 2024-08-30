@@ -129,7 +129,7 @@ namespace
               break;
             case CPPMODE::CPP11:
             case CPPMODE::CPP17:
-              os << id (name) << "_ = std::make_unique< " << type << "> (e);";
+              os << id (name) << "_ = std::make_unique<" << type << "> (e);";
               break;
         }
         os << "}"
@@ -380,7 +380,7 @@ namespace
 
         if (this->cppmode_ != CPPMODE::CPP03)
         {
-          os << id (name) << "_ = std::make_unique< " << type << "> (e);";
+          os << id (name) << "_ = std::make_unique<" << type << "> (e);";
         }
         else
         {
@@ -859,7 +859,7 @@ namespace
 
           if (this->cppmode_ != CPPMODE::CPP03)
           {
-            os << ", " << name << "_ (std::make_unique< " << type << "> (" << name << "__))" << endl;
+            os << ", " << name << "_ (std::make_unique<" << type << "> (" << name << "__))" << endl;
           }
           else
           {
@@ -891,7 +891,7 @@ namespace
 
           if (this->cppmode_ != CPPMODE::CPP03)
           {
-            os << ", " << name << "_ (std::make_unique< " << type << "> (" << name << "__))" << endl;
+            os << ", " << name << "_ (std::make_unique<" << type << "> (" << name << "__))" << endl;
           }
           else
           {
@@ -988,7 +988,7 @@ namespace
             {
               os << ", " << name << "_ ("
                 << "s." << name << "_ ? "
-                << "std::make_unique< " << type << "> (*s." << name << "_) : " << nullptr_string << ")" << endl;
+                << "std::make_unique<" << type << "> (*s." << name << "_) : " << nullptr_string << ")" << endl;
             }
             else
             {
@@ -1003,7 +1003,7 @@ namespace
             //
             if (this->cppmode_ != CPPMODE::CPP03)
             {
-              os << ", " << name << "_ (std::make_unique< " << type << "> (*s." << name << "_))" << endl;
+              os << ", " << name << "_ (std::make_unique<" << type << "> (*s." << name << "_))" << endl;
             }
             else
             {
@@ -1040,7 +1040,7 @@ namespace
           {
             os << ", " << name << "_ ("
               << "s." << name << "_ ? "
-              << "std::make_unique< " << type << "> (*s." << name << "_) : " << nullptr_string << ")" << endl;
+              << "std::make_unique<" << type << "> (*s." << name << "_) : " << nullptr_string << ")" << endl;
           }
           else
           {
@@ -1053,7 +1053,7 @@ namespace
         {
           if (this->cppmode_ != CPPMODE::CPP03)
           {
-            os << ", " << name << "_ (std::make_unique< " << type << "> (*s." << name << "_))" << endl;
+            os << ", " << name << "_ (std::make_unique<" << type << "> (*s." << name << "_))" << endl;
           }
           else
           {
