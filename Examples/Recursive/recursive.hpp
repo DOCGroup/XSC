@@ -23,7 +23,7 @@ namespace Recursive
     typedef ::XSCRT::Type Base;
 
     public:
-    "type ACE_Refcounted_Auto_Ptr < ::Recursive::Element, ACE_Null_Mutex> _ptr;
+    typedef ACE_Refcounted_Auto_Ptr < ::Recursive::Element, ACE_Null_Mutex> _ptr;
 
     // value
     public:
