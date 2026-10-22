@@ -298,7 +298,7 @@ namespace IDL
 
     else
       {
-        wcerr << "There can't be a named type inside an anonymous one!\n";
+        std::wcerr << "There can't be a named type inside an anonymous one!\n";
         throw;
       }
 

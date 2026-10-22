@@ -30,7 +30,7 @@
 
 #include "boost/program_options.hpp"
 #include "boost/exception/all.hpp"
-#include "CCF/CompilerElements/FileSystem.hpp"
+#include "XSC/FileSystem.hpp"
 #include "XSC/Parser.hpp"
 #include "XSC/be/CXX/Validator.hpp"
 #include "XSC/be/CXX/Generator.hpp"
@@ -227,11 +227,7 @@ int main (int argc, char* argv[])
           {
             try
               {
-#if BOOST_FILESYSTEM_VERSION == 2
-                search_paths.push_back (fs::path (*i, fs::native));
-#else
                 search_paths.push_back (fs::path (*i));
-#endif
               }
             catch (...)
               {
