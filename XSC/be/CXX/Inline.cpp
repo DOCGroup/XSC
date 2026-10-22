@@ -57,7 +57,7 @@ namespace
 
         if (this->cppmode_ != CPPMODE::CPP03)
         {
-          os << "return !!" << id (name) << "_;";
+          os << "return static_cast<bool> (" << id (name) << "_);";
         }
         else
         {
@@ -300,7 +300,7 @@ namespace
             << "bool " << scope << "::" << std::endl
             << name << "_p () const"
             << "{"
-            << "return !!" << id (name) << "_;"
+            << "return static_cast<bool> (" << id (name) << "_);"
             << "}";
         }
         else
@@ -1160,7 +1160,7 @@ namespace
             os << "if (s." << name << "_)" << std::endl
                << "  " << name << " (*(s." << name << "_));"
                << "else" << std::endl
-               << "  " << name << "_.release ();"
+               << "  " << name << "_.reset ();"
                << std::endl;
           }
           else
@@ -1203,7 +1203,7 @@ namespace
           {
             os << "if (s." << name << "_) "
               << name << " (*(s." << name << "_));"
-              << "else " << name << "_.release ();"
+              << "else " << name << "_.reset ();"
               << std::endl;
           }
           else

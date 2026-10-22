@@ -64,8 +64,7 @@ namespace
         //
         if (this->cppmode_ != CPPMODE::CPP03)
         {
-          os << type << " t (e);";
-          os << id (name) << "_.push_back (t);";
+          os << id (name) << "_.emplace_back (e);";
 
         }
         else
@@ -583,6 +582,14 @@ namespace
       }
     }
 
+    string
+    smart_pointer_type () const
+    {
+      return this->cppmode_ == CPPMODE::CPP03
+        ? L"std::auto_ptr"
+        : L"std::unique_ptr";
+    }
+
     /*
      * Reading a pointer type.
      * A type which is read in via the pointer semantics. This
@@ -599,7 +606,7 @@ namespace
     read_pointer_type (string &element_name, string &type)
     {
       os << "stream >> " << element_name << "_tmp;"
-         << "std::auto_ptr < " << type << "::CDR_Type__ > "
+         << this->smart_pointer_type () << " < " << type << "::CDR_Type__ > "
          << "auto_" << element_name << " (" << element_name << "_tmp);"
          << type << " " << element_name << " (" << element_name
          << "_tmp);"
@@ -614,7 +621,7 @@ namespace
     read_complex_type (string &element_name, string &type)
     {
       os << "stream >> " << element_name << ";"
-         << "std::auto_ptr < " << type << " > "
+         << this->smart_pointer_type () << " < " << type << " > "
          << "auto_" << element_name << " (" << element_name << ");"
          << std::endl;
     }
@@ -682,13 +689,17 @@ namespace
       bool pointer_semantics = read_type_as_pointer (type);
 
       if (pointer_semantics)
-  os << type << "::CDR_Type__ *" << element_name << "_tmp (0)"
-     << ";"
-     << "std::auto_ptr < " << type << "::CDR_Type__ > "
-     << "auto_" << element_name << " (" << element_name << "_tmp);";
+      {
+        os << type << "::CDR_Type__ *" << element_name << "_tmp (0)"
+           << ";"
+           << this->smart_pointer_type () << " < " << type << "::CDR_Type__ > "
+           << "auto_" << element_name << " (" << element_name << "_tmp);";
+      }
       else
-  os << type << "::CDR_Type__ " << element_name << "_tmp"
-     << ";" ;
+      {
+        os << type << "::CDR_Type__ " << element_name << "_tmp"
+           << ";";
+      }
 
       os << "if (" << element_name << "_p)"
    << "{";

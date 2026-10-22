@@ -4,7 +4,9 @@ project (xsc_test_dancex11): xscdefaults {
   requires += xsc
   custom_only = 1
 
+  xscflags += --cxx-cpp17
   xscflags += --cxx-char-type char
+  xscflags += --cxx-generate-writer-types
   xscflags += --search-path .
 
   XSC_Files {
@@ -40,5 +42,15 @@ project (xsc_test_dancex11_generated): xscrt {
     iad.cpp
     pcd.cpp
     toplevel.cpp
+  }
+}
+
+project (xsc_test_dancex11_optional_copy): xscrt {
+  after += xsc_test_dancex11_generated
+  libs += CXX IDL
+
+  Source_Files {
+    Basic_Deployment_Data.cpp
+    optional_copy.cpp
   }
 }
