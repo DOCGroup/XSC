@@ -1242,7 +1242,7 @@ namespace XSC
               {
                 // anyType almighty.
                 //
-                string prefix (ns_prefix (e, xsd, true));
+                string prefix (ns_prefix (e, xsd));
                 type =  prefix + (prefix.empty () ? L"" : L":") + L"anyType";
 
                 set_type<Belongs> (type, e, node);
@@ -1462,7 +1462,7 @@ namespace XSC
 
     if (!type)
       {
-        string prefix (ns_prefix (a, xsd, true));
+        string prefix (ns_prefix (a, xsd));
         type =  prefix + (prefix.empty () ? L"" : L":") + L"anySimpleType";
       }
 

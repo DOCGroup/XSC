@@ -191,20 +191,11 @@ namespace XSC
     inline
     string
     ns_prefix (Element const& e,
-               string const& ns,
-               bool
-#if XERCES_VERSION_MAJOR != 3
-                    use_default
-#endif
-               )
+               string const& ns)
     {
       auto p = transcode (ns);
 
-#if XERCES_VERSION_MAJOR == 3
       XMLCh const* xns (e.dom_element ()->lookupPrefix (p.get ()));
-#else
-      XMLCh const* xns (e.dom_element ()->lookupNamespacePrefix (p.get (), use_default));
-#endif
       string prefix (xns ? transcode (xns) : string (L""));
       return prefix;
     }

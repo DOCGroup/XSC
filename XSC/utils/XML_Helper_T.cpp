@@ -3,7 +3,6 @@
 #include "XML_Schema_Resolver.h"
 #include "XercesString.h"
 #include "xercesc/dom/DOM.hpp"
-#include "xercesc/framework/LocalFileFormatTarget.hpp"
 #include "xercesc/util/XMLUniDefs.hpp"
 
 namespace XSC
@@ -15,12 +14,9 @@ namespace XSC
     using xercesc::DOMImplementation;
     using xercesc::DOMImplementationRegistry;
 //    using xercesc::DOMBuilder;
-    using xercesc::DOMImplementationLS;
-    using xercesc::XMLUni;
     using xercesc::DOMDocument;
     using xercesc::DOMException;
     using xercesc::DOMDocumentType;
-    using xercesc::XercesDOMParser;
 /*
     template <typename Resolver, typename Error>
     XML_Helper<Resolver, Error>::XML_Helper (void)
@@ -99,7 +95,7 @@ namespace XSC
     }
 
     template <typename Resolver, typename Error>
-    XERCES_CPP_NAMESPACE::DOMDocument *
+    xercesc::DOMDocument *
     XML_Helper<Resolver, Error>::create_dom (const char *root,
                                              const char *ns,
                                              DOMDocumentType *doctype) const
@@ -113,7 +109,7 @@ namespace XSC
     }
 
     template <typename Resolver, typename Error>
-    XERCES_CPP_NAMESPACE::DOMDocumentType *
+    xercesc::DOMDocumentType *
     XML_Helper<Resolver, Error>::create_doctype (const char *qn,
                                                  const char *pid,
                                                  const char *sid) const
@@ -123,7 +119,7 @@ namespace XSC
                                               XStr (sid));
     }
     template <typename Resolver, typename Error>
-    XERCES_CPP_NAMESPACE::DOMDocument *
+    xercesc::DOMDocument *
     XML_Helper<Resolver, Error>::create_dom (const char *url) const
     {
 
@@ -238,47 +234,11 @@ namespace XSC
 
     template <typename Resolver, typename Error>
     bool
-    XML_Helper<Resolver, Error>::write_DOM (XERCES_CPP_NAMESPACE::DOMDocument *doc,
+    XML_Helper<Resolver, Error>::write_DOM (xercesc::DOMDocument *doc,
                                             const char *file) const
     {
-      try
-        {
-          /*          bool retn;
-          std::auto_ptr <XERCES_CPP_NAMESPACE::DOMWriter> writer (impl_->createDOMWriter());
-
-          if (writer->canSetFeature (XMLUni::fgDOMWRTFormatPrettyPrint,
-                                     true))
-            writer->setFeature (XMLUni::fgDOMWRTFormatPrettyPrint, true);
-
-          std::auto_ptr <xercesc::XMLFormatTarget> ft (new xercesc::LocalFileFormatTarget(file));
-          retn = writer->writeNode(ft.get (), *doc);
-
-          return retn;*/
-        }
-      catch (const xercesc::XMLException &e)
-        {
-          /**
-          char* message =
-            XMLString::transcode (e.getMessage());
-          ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
-
-          char* name =
-            XMLString::transcode (e.getType());
-          ACE_Auto_Basic_Array_Ptr<char> cleanup_name (name);
-
-          ACE_ERROR ((LM_ERROR, "Caught exception while serializing DOM to file.\n"
-                      "Name: %s\n"
-                      "Message: %s\n"
-                      "SrcFile: %s\n"
-                      "SrcLine: %d\n",
-                      name,
-                      message,
-                      e.getSrcFile (),
-                      e.getSrcLine ()));
-          return false;
-          */
-        }
-
+      (void) doc;
+      (void) file;
       return false;
     }
   }
