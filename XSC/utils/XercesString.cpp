@@ -1,4 +1,5 @@
 #include "XercesString.h"
+#include <cstddef>
 #include <ostream>
 #include <utility>
 
@@ -58,6 +59,15 @@ XStr::XStr (const XStr &right)
 }
 
 //
+// XStr
+//
+XStr::XStr (XStr&& right) noexcept
+  : wstr_ (std::exchange (right.wstr_, nullptr)),
+    cstr_ (std::exchange (right.cstr_, nullptr))
+{
+}
+
+//
 // ~XStr
 //
 XStr::~XStr (void)
@@ -80,6 +90,26 @@ XStr& XStr::operator = (const XStr& rhs)
   XStr temp (rhs);
   std::swap (this->wstr_, temp.wstr_);
   std::swap (this->cstr_, temp.cstr_);
+
+  return *this;
+}
+
+//
+// operator =
+//
+XStr& XStr::operator = (XStr&& rhs) noexcept
+{
+  if (&rhs == this)
+    return *this;
+
+  if (this->wstr_ != nullptr)
+    XMLString::release (&this->wstr_);
+
+  if (this->cstr_ != nullptr)
+    XMLString::release (&this->cstr_);
+
+  this->wstr_ = std::exchange (rhs.wstr_, nullptr);
+  this->cstr_ = std::exchange (rhs.cstr_, nullptr);
 
   return *this;
 }
@@ -162,7 +192,10 @@ bool XStr::erase (const XMLCh *head, const XMLCh *tail)
   bool bOK = head <= tail && head >= begin() && tail <= end();
   if (bOK)
     {
-      XMLCh *result = new XMLCh[ size() - (tail - head) + 1 ];
+      const std::size_t length = size () - (tail - head) + 1;
+      XMLCh *result =
+        static_cast<XMLCh *> (xercesc::XMLPlatformUtils::fgMemoryManager->allocate (
+          length * sizeof (XMLCh)));
       XMLCh *target = result;
       bOK = target != nullptr;
 

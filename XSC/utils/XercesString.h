@@ -22,7 +22,11 @@ namespace XSC
 
     XStr (const XStr& copy);
 
+    XStr (XStr&&) noexcept;
+
     XStr& operator= (const XStr& rhs);
+
+    XStr& operator= (XStr&&) noexcept;
 
     XStr& operator= (const char * rhs);
 
