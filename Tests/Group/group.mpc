@@ -1,4 +1,4 @@
-project (xsc_test_group): install, xscdefaults {
+project (xsc_test_group): xscdefaults {
   requires += xsc
   custom_only = 1
   XSC_Files {

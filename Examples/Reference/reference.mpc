@@ -1,4 +1,4 @@
-project (reference_xsd_gen): install, xscdefaults {
+project (reference_xsd_gen): xscdefaults {
   requires += xsc
 
   custom_only = 1

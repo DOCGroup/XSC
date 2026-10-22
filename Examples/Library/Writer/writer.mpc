@@ -1,4 +1,4 @@
-project (library_writer_xsd_gen): install, xscdefaults {
+project (library_writer_xsd_gen): xscdefaults {
   requires += xsc
 
   custom_only = 1

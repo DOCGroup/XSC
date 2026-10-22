@@ -1,4 +1,4 @@
-project (xsc_test_validation): install {
+project (xsc_test_validation) {
   Source_Files {
   }
 }

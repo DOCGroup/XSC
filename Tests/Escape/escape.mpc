@@ -1,4 +1,4 @@
-project (xsc_test_escape): install, xscdefaults {
+project (xsc_test_escape): xscdefaults {
   requires += xsc
   custom_only = 1
   XSC_Files {
