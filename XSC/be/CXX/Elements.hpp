@@ -312,9 +312,7 @@ public:
   string &esymbol;
 
 private:
-  typedef
-  std::deque <string>
-  Scope_;
+  using Scope_ = std::deque<string>;
 
   Scope_ scope_stack_;
 

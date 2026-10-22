@@ -206,9 +206,7 @@ namespace IDL
     string xml_element_type_;
     string xml_attribute_type_;
 
-    typedef
-    std::deque<string>
-    Scope_;
+    using Scope_ = std::deque<string>;
 
     Scope_& scope_stack;
 
