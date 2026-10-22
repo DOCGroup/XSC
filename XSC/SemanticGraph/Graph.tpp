@@ -55,7 +55,7 @@ namespace XSC
 
     template <typename N, typename E>
     void Graph<N, E>::
-    delete_node (N const& nr)
+    delete_node (N& nr)
     {
       N* n (std::addressof (nr));
 
@@ -139,7 +139,7 @@ namespace XSC
 
     template <typename N, typename E>
     void Graph<N, E>::
-    delete_edge (E const& er)
+    delete_edge (E& er)
     {
       E* e (std::addressof (er));
 

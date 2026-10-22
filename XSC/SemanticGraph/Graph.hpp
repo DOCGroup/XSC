@@ -42,7 +42,7 @@ namespace XSC
       new_node (A0 const& a0, A1 const& a1, A2 const& a2);
 
       void
-      delete_node (N const& n);
+      delete_node (N& n);
 
     public:
       template <typename T, typename X, typename Y>
@@ -61,7 +61,7 @@ namespace XSC
       new_edge (X& left, Y& right, A0 const& a0, A1 const& a1);
 
       void
-      delete_edge (E const& e);
+      delete_edge (E& e);
 
     protected:
       using NodePtr = N*;
