@@ -2,7 +2,7 @@ project (XSC_BE): acelib, utility, xsc_utils, xsc_static, xsc_common {
   sharedname = XSC_BE
 
   dynamicflags += XSC_BE_BUILD_DLL
-  includes += $(XSC_ROOT)/contrib/CCF/CCF
+  includes += $(XSC_ROOT)
 
   Source_Files {
     .

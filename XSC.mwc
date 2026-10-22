@@ -12,11 +12,5 @@ workspace (XSC) {
   XSC/utils
   XSC/XSC.mpc
 
-  exclude (wix, !gnuace) {
-    cmdline += -static -base xsc_ccf_root \
-               -include $XSC_ROOT/contrib/CCF/CCF/MPC/config
-
-    $(XSC_ROOT)/contrib/CCF/CCF/CCF/CodeGenerationKit
-    $(XSC_ROOT)/contrib/CCF/utility
-  }
+  $(XSC_ROOT)/CCF/utility
 }
