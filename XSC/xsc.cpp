@@ -40,7 +40,6 @@ using namespace XSC;
 
 using std::wcerr;
 using std::endl;
-using std::unique_ptr;
 
 wchar_t const* const version = L"0.0.8";
 
@@ -81,7 +80,7 @@ public:
   }
 
   bool
-  error () const throw ()
+  error () const noexcept
   {
     return error_;
   }
@@ -269,7 +268,7 @@ int main (int argc, char* argv[])
     Parser parser (vm.count ("trace"), search_paths);
 
     //File is parsed and loaded into the Semantic Graph::Schema (s)
-    unique_ptr<SemanticGraph::Schema> s (parser.parse (tu));
+    std::unique_ptr<SemanticGraph::Schema> s (parser.parse (tu));
 
     if (detector.error ())
       {

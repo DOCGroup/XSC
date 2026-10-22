@@ -104,8 +104,8 @@ namespace XSC
                                              const char *ns,
                                              DOMDocumentType *doctype) const
     {
-      if (root == 0 || ns == 0)
-        return 0;
+      if (root == nullptr || ns == nullptr)
+        return nullptr;
 
       return this->impl_->createDocument (XStr (ns),
                                           XStr (root),
@@ -127,13 +127,13 @@ namespace XSC
     XML_Helper<Resolver, Error>::create_dom (const char *url) const
     {
 
-      if (url == 0)
-        return 0;
+      if (url == nullptr)
+        return nullptr;
 
       try
         {
-          if (this->parser_.get () == 0)
-            this->parser_.reset ((new xercesc::XercesDOMParser ()));
+          if (this->parser_.get () == nullptr)
+            this->parser_ = std::make_unique<xercesc::XercesDOMParser> ();
 
           // Perform Namespace processing.
           this->parser_->setDoNamespaces (true);
@@ -176,7 +176,7 @@ namespace XSC
           this->parser_->parse (url);
 
           if (e_handler_.getErrors ())
-            return 0;
+            return nullptr;
 
           return this->parser_->adoptDocument ();
         }
@@ -194,7 +194,7 @@ namespace XSC
 //                              ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
               delete message;
             }
-          return 0;
+          return nullptr;
 
         }
       catch (const XMLException& e)
@@ -211,7 +211,7 @@ namespace XSC
           throw;
         }
 
-      return 0;
+      return nullptr;
     }
 
     template <typename Resolver, typename Error>

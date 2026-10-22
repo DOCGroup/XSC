@@ -14,9 +14,7 @@ namespace XSC
   {
     class Context
     {
-      typedef
-      std::map<std::string, Utility::Hetero::Container>
-      Map;
+      using Map = std::map<std::string, Utility::Hetero::Container>;
 
     public:
       Context ()
@@ -28,7 +26,7 @@ namespace XSC
       class Typing {};
 
       Map::size_type
-      count (char const* key) const throw ()
+      count (char const* key) const noexcept
       {
         return map_.count (key);
       }
@@ -102,8 +100,8 @@ namespace XSC
 
     private:
       // Copy semanic is not supported.
-      Context (Context const&) throw ();
-      Context& operator= (Context const&) throw ();
+      Context (Context const&) = delete;
+      Context& operator= (Context const&) = delete;
     };
   }
 }

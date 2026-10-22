@@ -37,8 +37,6 @@ namespace XSC
 
   using namespace SemanticGraph;
   using namespace Xerces;
-  using std::unique_ptr;
-
   string const xsd = L"http://www.w3.org/2001/XMLSchema";
   string const xmi = L"http://www.omg.org/XMI";
 
@@ -273,7 +271,7 @@ namespace XSC
   Schema* Parser::
   parse (fs::path const& uri)
   {
-    unique_ptr<Schema> rs (new Schema);
+    std::unique_ptr<Schema> rs (std::make_unique<Schema> ());
 
     // Implied schema with fundamental types.
     //

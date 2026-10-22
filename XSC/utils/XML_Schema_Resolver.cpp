@@ -80,7 +80,7 @@ namespace XSC
         path.append (this->systemId_);
 
         FileHandle file (XMLPlatformUtils::openFile (path));
-        bool retval = 0 != file ? true : false;
+        bool retval = file != nullptr;
 
         if (retval)
           XMLPlatformUtils::closeFile (file);
@@ -128,7 +128,7 @@ namespace XSC
         return new xercesc::LocalFileInputSource (path);
       }
 
-      return 0;
+      return nullptr;
     }
 
     ///////////////////////////////////////////////////////////////////////////

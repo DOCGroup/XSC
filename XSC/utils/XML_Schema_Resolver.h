@@ -41,12 +41,12 @@ namespace XSC
 
       /// This function is called by the Xerces infrastructure to
       /// actually resolve the location of a schema.
-      virtual InputSource * resolveEntity (const XMLCh *const publicId,
-                                           const XMLCh *const systemId);
+      InputSource * resolveEntity (const XMLCh *const publicId,
+                                   const XMLCh *const systemId) override;
 
     private:
-      XML_Schema_Resolver (void);
-      XML_Schema_Resolver (XML_Schema_Resolver<Resolver> &);
+      XML_Schema_Resolver (void) = delete;
+      XML_Schema_Resolver (XML_Schema_Resolver<Resolver> &) = delete;
 
       Resolver &resolver_;
     };
@@ -59,7 +59,7 @@ namespace XSC
     {
       InputSource * operator() (const XMLCh *const,
                                 const XMLCh *const) const
-      { return 0; };
+      { return nullptr; };
     };
 
     /**
@@ -70,7 +70,7 @@ namespace XSC
     struct Basic_Resolver
     {
       /// Type definition of the char type.
-      typedef CHAR char_type;
+      using char_type = CHAR;
 
       /// Defualt consturctor.
       Basic_Resolver (void);
@@ -123,9 +123,8 @@ namespace XSC
     template <typename CHAR = char>
     struct Path_Resolver
     {
-      typedef std::basic_string <CHAR> string_type;
-
-      typedef std::vector <string_type> path_type;
+      using string_type = std::basic_string<CHAR>;
+      using path_type = std::vector<string_type>;
 
       Path_Resolver (void);
 

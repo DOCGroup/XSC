@@ -1,5 +1,6 @@
 #include "XercesString.h"
 #include <ostream>
+#include <utility>
 
 using xercesc::XMLString;
 
@@ -10,8 +11,8 @@ namespace XSC
 // XStr
 //
 XStr::XStr (void)
-  : wstr_ (0),
-    cstr_ (0)
+  : wstr_ (nullptr),
+    cstr_ (nullptr)
 {
 
 }
@@ -20,8 +21,8 @@ XStr::XStr (void)
 // XStr
 //
 XStr::XStr (const char* str)
-  : wstr_ (0),
-    cstr_ (0)
+  : wstr_ (nullptr),
+    cstr_ (nullptr)
 {
   this->wstr_ = XMLString::transcode (str);
 }
@@ -30,8 +31,8 @@ XStr::XStr (const char* str)
 // XStr
 //
 XStr::XStr (XMLCh *wstr)
-  : wstr_ (0),
-    cstr_ (0)
+  : wstr_ (nullptr),
+    cstr_ (nullptr)
 {
   this->wstr_ = XMLString::replicate (wstr);
 }
@@ -40,8 +41,8 @@ XStr::XStr (XMLCh *wstr)
 // XStr
 //
 XStr::XStr (const XMLCh* wstr)
-  : wstr_ (0),
-    cstr_ (0)
+  : wstr_ (nullptr),
+    cstr_ (nullptr)
 {
   this->wstr_ = XMLString::replicate (wstr);
 }
@@ -50,8 +51,8 @@ XStr::XStr (const XMLCh* wstr)
 // XStr
 //
 XStr::XStr (const XStr &right)
-  : wstr_ (0),
-    cstr_ (0)
+  : wstr_ (nullptr),
+    cstr_ (nullptr)
 {
   this->wstr_ = XMLString::replicate (right.wstr_);
 }
@@ -61,10 +62,10 @@ XStr::XStr (const XStr &right)
 //
 XStr::~XStr (void)
 {
-  if (0 != this->wstr_)
+  if (this->wstr_ != nullptr)
     XMLString::release (&this->wstr_);
 
-  if (0 != this->cstr_)
+  if (this->cstr_ != nullptr)
     XMLString::release (&this->cstr_);
 }
 
@@ -123,9 +124,10 @@ bool XStr::append (const XMLCh *tail)
   size_t length = iWorkLen + iTailLen + 1;
 
   XMLCh * result =
-    (XMLCh *) XMLPlatformUtils::fgMemoryManager->allocate (length * sizeof (XMLCh));
+    static_cast<XMLCh *> (XMLPlatformUtils::fgMemoryManager->allocate (
+      length * sizeof (XMLCh)));
 
-  bool bOK = result != 0;
+  bool bOK = result != nullptr;
 
   if (bOK)
   {
@@ -142,10 +144,10 @@ bool XStr::append (const XMLCh *tail)
     XMLString::release (&this->wstr_);
     this->wstr_ = result;
 
-    if (0 != this->cstr_)
+    if (this->cstr_ != nullptr)
     {
       XMLString::release (&this->cstr_);
-      this->cstr_ = 0;
+      this->cstr_ = nullptr;
     }
   }
 
@@ -162,7 +164,7 @@ bool XStr::erase (const XMLCh *head, const XMLCh *tail)
     {
       XMLCh *result = new XMLCh[ size() - (tail - head) + 1 ];
       XMLCh *target = result;
-      bOK = target != NULL;
+      bOK = target != nullptr;
 
       if (bOK)
         {
@@ -176,10 +178,10 @@ bool XStr::erase (const XMLCh *head, const XMLCh *tail)
           XMLString::release (&this->wstr_);
           this->wstr_ = result;
 
-          if (0 != this->cstr_)
+          if (this->cstr_ != nullptr)
           {
             XMLString::release (&this->cstr_);
-            this->cstr_ = 0;
+            this->cstr_ = nullptr;
           }
         }
     }
@@ -216,13 +218,13 @@ XMLCh XStr::operator [] (const int i) const
 XMLCh * XStr::release (void)
 {
   XMLCh * temp = this->wstr_;
-  this->wstr_ = 0;
+  this->wstr_ = nullptr;
 
   // Release the C string.
-  if (0 != this->cstr_)
+  if (this->cstr_ != nullptr)
   {
     XMLString::release (&this->cstr_);
-    this->cstr_ = 0;
+    this->cstr_ = nullptr;
   }
 
   return temp;
@@ -233,7 +235,7 @@ XMLCh * XStr::release (void)
 //
 const char * XStr::c_str (void)
 {
-  if (0 != this->cstr_)
+  if (this->cstr_ != nullptr)
     return this->cstr_;
 
   this->cstr_ = XMLString::transcode (this->wstr_);

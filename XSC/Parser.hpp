@@ -44,20 +44,10 @@ namespace XSC
     {
     }
 
-    // conversion to bool
-    //
-  private:
-    void
-    true_ () const
-    {
-    }
-
-    typedef void (string::*bool_convertable)() const;
-
   public:
-    operator bool_convertable () const
+    explicit operator bool () const noexcept
     {
-      return empty () ? 0 : &string::true_;
+      return !empty ();
     }
   };
 

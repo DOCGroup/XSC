@@ -138,7 +138,7 @@ namespace XSC
     {
     public:
       Schema ()
-          : contained_ (0)
+          : contained_ (nullptr)
       {
         type_info (static_type_info ());
       }
@@ -151,7 +151,7 @@ namespace XSC
       bool
       contained_p () const
       {
-        return contained_ != 0;
+        return contained_ != nullptr;
       }
 
       Contains&

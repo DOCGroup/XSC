@@ -62,11 +62,11 @@ namespace XSC
       delete_edge (E const& e);
 
     protected:
-      typedef N* NodePtr;
-      typedef E* EdgePtr;
+      using NodePtr = N*;
+      using EdgePtr = E*;
 
-      typedef std::set<NodePtr> Nodes_;
-      typedef std::set<EdgePtr> Edges_;
+      using Nodes_ = std::set<NodePtr>;
+      using Edges_ = std::set<EdgePtr>;
 
       Nodes_ nodes_;
       Edges_ edges_;
