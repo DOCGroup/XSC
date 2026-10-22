@@ -59,7 +59,7 @@ namespace XSC
     {
       N* n (&nr);
 
-      for (E* e (n->remove_edge_ ()); e != 0; e = n->remove_edge_ ())
+      for (E* e (n->remove_edge_ ()); e != nullptr; e = n->remove_edge_ ())
       {
         // One endpoint of the edge has removed this edge from
         // its edge set. Now handle the other endpoint.
