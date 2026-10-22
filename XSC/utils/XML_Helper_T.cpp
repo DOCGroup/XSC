@@ -198,7 +198,7 @@ namespace XSC
           char* message = XMLString::transcode (e.getMessage());
           //          ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
           XMLString::release (&message);
-          throw 0;
+          throw;
         }
       catch (...)
         {
