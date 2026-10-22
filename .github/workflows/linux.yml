@@ -16,7 +16,6 @@ jobs:
       matrix:
         include:
           - feature: C++17
-            optional_macros: c++std=c++17
             platform_file: include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU
             os: ubuntu-24.04
     runs-on: ${{ matrix.os }}
