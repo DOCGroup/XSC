@@ -14,11 +14,9 @@
 
 using namespace XSC;
 
-using std::endl;
+using string = std::wstring;
 
-typedef std::wstring string;
-
-typedef std::vector<string> NamespaceMapping;
+using NamespaceMapping = std::vector<string>;
 
 //
 class Context

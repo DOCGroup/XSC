@@ -16,16 +16,14 @@ namespace IDL
 
   using namespace XSC;
 
-  using std::endl;
-
-  typedef std::wstring string;
+  using string = std::wstring;
 
   //
   //
   class Context
   {
   public:
-    typedef std::vector<string> NamespaceMapping;
+    using NamespaceMapping = std::vector<string>;
 
   public:
     Context (std::wostream& o,
