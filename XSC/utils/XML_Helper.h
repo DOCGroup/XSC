@@ -33,7 +33,7 @@ namespace XSC
     class XML_Helper
     {
     public:
-      //      XML_Helper (void);
+      //      XML_Helper ();
 
       // Initialize the resolver we should use.
       XML_Helper (Resolver &resolver, Error_Handler &eh);

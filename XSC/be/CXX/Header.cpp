@@ -688,7 +688,7 @@ namespace
       os << id (e.name ()) << "_l";
     }
 
-    void reset (void)
+    void reset ()
     {
       first_ = true;
     }

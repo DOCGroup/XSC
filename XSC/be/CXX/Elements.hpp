@@ -135,13 +135,13 @@ protected:
   }
 
   size_t
-  scope_depth (void)
+  scope_depth ()
   {
     return scope_stack.size ();
   }
 
   void
-  leave_scope (void)
+  leave_scope ()
   {
     scope_stack.pop_back ();
     update_scope ();
@@ -270,7 +270,7 @@ public:
   }
 
   bool
-  generate_ra_sequences (void)
+  generate_ra_sequences ()
   {
     return this->generate_ra_sequences_;
   }
