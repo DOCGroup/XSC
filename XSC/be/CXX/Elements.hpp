@@ -72,7 +72,7 @@ public:
         ns_mapping_ (ns_mapping),
         cdr_reader_generation_ (false),
         cdr_writer_generation_ (false),
-        cppmode_ (CPPMODE::CPP11),
+        cppmode_ (CPPMODE::CPP17),
         orb_ (ORB::TAO),
         generate_ra_sequences_ (false)
   {

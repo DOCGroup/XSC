@@ -340,7 +340,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   bool cdr_reader (vm.count ("cxx-generate-cdr-reader-types"));
   bool cdr_writer (vm.count ("cxx-generate-cdr-writer-types"));
 
-  ::Context::CPPMODE cppmode_ { ::Context::CPPMODE::CPP11 };
+  ::Context::CPPMODE cppmode_ { ::Context::CPPMODE::CPP17 };
   if (vm.count ("cxx-cpp11"))
     {
       cppmode_ = ::Context::CPPMODE::CPP11;
