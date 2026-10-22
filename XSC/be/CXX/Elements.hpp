@@ -566,10 +566,6 @@ inline bool
 has_constructor_required_members (SemanticGraph::Complex& c)
 {
   ConstructorRequiredMembers t;
-  Traversal::Scope scope;
-  Traversal::Names names;
-  scope.edge_traverser (names);
-  names.node_traverser (t);
 
   std::function<void (SemanticGraph::Complex&)> visit = [&] (SemanticGraph::Complex& current)
   {
@@ -577,7 +573,11 @@ has_constructor_required_members (SemanticGraph::Complex& c)
       if (auto base = dynamic_cast<SemanticGraph::Complex*> (std::addressof ((**i).inheritee ())))
         visit (*base);
 
-    scope.traverse (current);
+    Traversal::Complex complex;
+    Traversal::Names names;
+    complex.edge_traverser (names);
+    names.node_traverser (t);
+    complex.traverse (current);
   };
 
   visit (c);
