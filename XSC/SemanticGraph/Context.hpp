@@ -99,9 +99,11 @@ namespace XSC
       Map map_;
 
     private:
-      // Copy semanic is not supported.
+      // Copy and move semantics are not supported.
       Context (Context const&) = delete;
       Context& operator= (Context const&) = delete;
+      Context (Context&&) = delete;
+      Context& operator= (Context&&) = delete;
     };
   }
 }

@@ -46,7 +46,10 @@ namespace XSC
 
     private:
       XML_Schema_Resolver (void) = delete;
-      XML_Schema_Resolver (XML_Schema_Resolver<Resolver> &) = delete;
+      XML_Schema_Resolver (XML_Schema_Resolver const&) = delete;
+      XML_Schema_Resolver& operator= (XML_Schema_Resolver const&) = delete;
+      XML_Schema_Resolver (XML_Schema_Resolver<Resolver> &&) = delete;
+      XML_Schema_Resolver& operator= (XML_Schema_Resolver<Resolver> &&) = delete;
 
       Resolver &resolver_;
     };

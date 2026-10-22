@@ -460,6 +460,8 @@ namespace XSC
   private:
     Parser (Parser const&) = delete;
     Parser& operator= (Parser const&) = delete;
+    Parser (Parser&&) = delete;
+    Parser& operator= (Parser&&) = delete;
   };
 }
 
