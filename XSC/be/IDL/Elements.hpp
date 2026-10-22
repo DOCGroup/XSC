@@ -239,11 +239,11 @@ namespace IDL
     {
     }
 
-    virtual void
-    pre (Type& ns);
+    void
+    pre (Type& ns) override;
 
-    virtual void
-    post (Type&);
+    void
+    post (Type&) override;
   };
 
 
@@ -300,56 +300,56 @@ namespace IDL
     virtual void
     fundamental_template (SemanticGraph::FundamentalType& t) = 0;
 
-    virtual void
-    traverse (SemanticGraph::FundamentalType& t)
+    void
+    traverse (SemanticGraph::FundamentalType& t) override
     {
       fundamental_type (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::String& t)
+    void
+    traverse (SemanticGraph::String& t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::NormalizedString& t)
+    void
+    traverse (SemanticGraph::NormalizedString& t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::Token& t)
+    void
+    traverse (SemanticGraph::Token& t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::Name& t)
+    void
+    traverse (SemanticGraph::Name& t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::NMTOKEN& t)
+    void
+    traverse (SemanticGraph::NMTOKEN& t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::NCName& t)
+    void
+    traverse (SemanticGraph::NCName& t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::Id& t)
+    void
+    traverse (SemanticGraph::Id& t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::IdRef& t)
+    void
+    traverse (SemanticGraph::IdRef& t) override
     {
       fundamental_template (t);
     }

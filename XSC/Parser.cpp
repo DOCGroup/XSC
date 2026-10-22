@@ -84,7 +84,7 @@ namespace XSC
       }
 
       void
-      traverse (SemanticGraph::Instance& i)
+      traverse (SemanticGraph::Instance& i) override
       {
         string ns_name;
         string uq_name;
@@ -139,7 +139,7 @@ namespace XSC
       }
 
       void
-      traverse (SemanticGraph::Complex& c)
+      traverse (SemanticGraph::Complex& c) override
       {
         string ns_name;
         string uq_name;
@@ -238,7 +238,7 @@ namespace XSC
       // We don't need to go inside enumerations.
       //
       void
-      traverse (SemanticGraph::Enumeration&)
+      traverse (SemanticGraph::Enumeration&) override
       {
       }
 

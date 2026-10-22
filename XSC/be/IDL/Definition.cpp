@@ -31,22 +31,22 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Type& c)
+    void
+    traverse (SemanticGraph::Type& c) override
     {
       os << " :  " << type_name (c)
          << "{";
     }
 
-    virtual void
-    traverse (SemanticGraph::FundamentalType& c)
+    void
+    traverse (SemanticGraph::FundamentalType& c) override
     {
       os << " :  " << type_name (c, L"_value")
          << "{";
     }
 
-    virtual void
-    traverse (SemanticGraph::Enumeration& c)
+    void
+    traverse (SemanticGraph::Enumeration& c) override
     {
       os << " :  " << type_name (c, L"_value")
          << "{";
@@ -60,8 +60,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       string name (c.name ());
       string type (type_name (c));
@@ -104,8 +104,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& a)
+    void
+    traverse (Type& a) override
     {
       string name (a.name ());
       string type (type_name (a));
@@ -145,27 +145,27 @@ namespace
       names_.node_traverser (attribute_);
     }
 
-    virtual void
-    pre (SemanticGraph::Complex& c)
+    void
+    pre (SemanticGraph::Complex& c) override
     {
       os << "valuetype " << id (c.name ());
     }
 
-    virtual void
-    inherits_none (SemanticGraph::Complex&)
+    void
+    inherits_none (SemanticGraph::Complex&) override
     {
       os << " : ::XMLSchema::object_"
          << "{";
     }
 
-    virtual void
-    post (SemanticGraph::Complex&)
+    void
+    post (SemanticGraph::Complex&) override
     {
       os << "};";
     }
 
-    virtual void
-    traverse (SemanticGraph::Enumeration&)
+    void
+    traverse (SemanticGraph::Enumeration&) override
     {
     }
 
@@ -190,14 +190,14 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Imports& i)
+    void
+    traverse (SemanticGraph::Imports& i) override
     {
       traverse (i.file ());
     }
 
-    virtual void
-    traverse (SemanticGraph::Includes& i)
+    void
+    traverse (SemanticGraph::Includes& i) override
     {
       traverse (i.file ());
     }

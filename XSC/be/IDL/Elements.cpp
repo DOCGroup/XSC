@@ -142,8 +142,8 @@ namespace IDL
       {
       }
 
-      virtual void
-      traverse (SemanticGraph::Type& t)
+      void
+      traverse (SemanticGraph::Type& t) override
       {
         r  = fq_name (t, suffix_);
       }

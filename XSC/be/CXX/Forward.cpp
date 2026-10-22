@@ -16,8 +16,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       if (e.named ())
         os << "class " << id (e.name ()) << ";";
@@ -35,8 +35,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       if (e.named ())
         os << "class " << id (e.name ()) << ";";

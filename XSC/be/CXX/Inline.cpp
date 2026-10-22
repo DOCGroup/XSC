@@ -31,8 +31,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Element& e)
+    void
+    traverse (SemanticGraph::Element& e) override
     {
       string name (e.name ());
       string type (type_name (e));
@@ -279,8 +279,8 @@ namespace
       }
     }
 
-    virtual void
-    traverse (SemanticGraph::Attribute& a)
+    void
+    traverse (SemanticGraph::Attribute& a) override
     {
       string name (a.name ());
       string type (type_name (a));
@@ -450,14 +450,14 @@ namespace
       names_.node_traverser (*this);
     }
 
-    virtual void
-    traverse (SemanticGraph::Enumeration& e)
+    void
+    traverse (SemanticGraph::Enumeration& e) override
     {
       os << comma () << type_name (e) << " const& b__";
     }
 
-    virtual void
-    traverse (SemanticGraph::Element& e)
+    void
+    traverse (SemanticGraph::Element& e) override
     {
       string type (type_name (e));
       string name (e.name ());
@@ -474,8 +474,8 @@ namespace
       }
     }
 
-    virtual void
-    traverse (SemanticGraph::Attribute& a)
+    void
+    traverse (SemanticGraph::Attribute& a) override
     {
       if (!a.optional ())
       {
@@ -484,7 +484,7 @@ namespace
     }
 
     void
-    traverse (SemanticGraph::Complex& c)
+    traverse (SemanticGraph::Complex& c) override
     {
       first_ = true;
       complex_.traverse (c);
@@ -539,8 +539,8 @@ namespace
       names_.node_traverser (member_);
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       if (c.named ())
         name = id (c.name ());
@@ -560,8 +560,8 @@ namespace
     }
 
 
-    virtual void
-    pre (Type& c)
+    void
+    pre (Type& c) override
     {
       string type (name);
 
@@ -650,8 +650,8 @@ namespace
       os << std::endl;
     }
 
-    virtual void
-    post (Type&)
+    void
+    post (Type&) override
     {
       os << std::endl;
     }
@@ -671,7 +671,7 @@ namespace
     }
 
     void
-    insertion_extraction (Type &c)
+    insertion_extraction (Type &c) override
     {
       // Check if we need to generate
       // cdr insertion and extraction
@@ -720,20 +720,20 @@ namespace
       {
       }
 
-      virtual void
-      traverse (SemanticGraph::Enumeration&)
+      void
+      traverse (SemanticGraph::Enumeration&) override
       {
         os << ": Base (b__)" << std::endl;
       }
 
-      virtual void
-      traverse (SemanticGraph::Type&)
+      void
+      traverse (SemanticGraph::Type&) override
       {
         os << ": Base ()" << std::endl;
       }
 
       void
-      traverse (SemanticGraph::Complex& c)
+      traverse (SemanticGraph::Complex& c) override
       {
         string type (type_name (c));
         string name (id (c.name ()));
@@ -763,20 +763,20 @@ namespace
           names_.node_traverser (*this);
         }
 
-        virtual void
-        traverse (SemanticGraph::Type&)
+        void
+        traverse (SemanticGraph::Type&) override
         {
           os << comma () << "b__";
         }
 
-        virtual void
-        traverse (SemanticGraph::Enumeration&)
+        void
+        traverse (SemanticGraph::Enumeration&) override
         {
           os << comma () << "b__";
         }
 
-        virtual void
-        traverse (SemanticGraph::Element& e)
+        void
+        traverse (SemanticGraph::Element& e) override
         {
           if (e.min () == 1 && e.max () == 1)
           {
@@ -788,8 +788,8 @@ namespace
           }
         }
 
-        virtual void
-        traverse (SemanticGraph::Attribute& a)
+        void
+        traverse (SemanticGraph::Attribute& a) override
         {
           if (!a.optional ())
           {
@@ -798,7 +798,7 @@ namespace
         }
 
         void
-        traverse (SemanticGraph::Complex& c)
+        traverse (SemanticGraph::Complex& c) override
         {
           first_ = true;
 
@@ -833,8 +833,8 @@ namespace
       {
       }
 
-      virtual void
-      traverse (SemanticGraph::Element& e)
+      void
+      traverse (SemanticGraph::Element& e) override
       {
         ensure_base_class_initialization ();
 
@@ -869,8 +869,8 @@ namespace
         base_class_initialized_ = initialized;
       }
 
-      virtual void
-      traverse (SemanticGraph::Attribute& a)
+      void
+      traverse (SemanticGraph::Attribute& a) override
       {
         if (!a.optional ())
         {
@@ -913,8 +913,8 @@ namespace
       {
       }
 
-      virtual void
-      traverse (SemanticGraph::Element& e)
+      void
+      traverse (SemanticGraph::Element& e) override
       {
         if (e.min () == 1 && e.max () == 1 && (this->cppmode_ == CPPMODE::CPP03))
         {
@@ -924,8 +924,8 @@ namespace
         }
       }
 
-      virtual void
-      traverse (SemanticGraph::Attribute& a)
+      void
+      traverse (SemanticGraph::Attribute& a) override
       {
         if (!a.optional () && (this->cppmode_ == CPPMODE::CPP03))
         {
@@ -947,8 +947,8 @@ namespace
       {
       }
 
-      virtual void
-      traverse (SemanticGraph::Type&)
+      void
+      traverse (SemanticGraph::Type&) override
       {
         if (!this->base_class_initialized_)
           {
@@ -957,8 +957,8 @@ namespace
           }
       }
 
-      virtual void
-      traverse (SemanticGraph::Element& e)
+      void
+      traverse (SemanticGraph::Element& e) override
       {
         string name (id (e.name ()));
         string type (type_name (e));
@@ -1018,8 +1018,8 @@ namespace
           }
       }
 
-      virtual void
-      traverse (SemanticGraph::Attribute& a)
+      void
+      traverse (SemanticGraph::Attribute& a) override
       {
         string name (id (a.name ()));
         string type (type_name (a));
@@ -1079,8 +1079,8 @@ namespace
       {
       }
 
-      virtual void
-      traverse (SemanticGraph::Element& e)
+      void
+      traverse (SemanticGraph::Element& e) override
       {
         string name (e.name ());
 
@@ -1102,8 +1102,8 @@ namespace
         }
       }
 
-      virtual void
-      traverse (SemanticGraph::Attribute& a)
+      void
+      traverse (SemanticGraph::Attribute& a) override
       {
         string name (id (a.name ()));
 
@@ -1137,14 +1137,14 @@ namespace
       {
       }
 
-      virtual void
-      traverse (SemanticGraph::Type&)
+      void
+      traverse (SemanticGraph::Type&) override
       {
         os << "Base::operator= (s);" << std::endl;
       }
 
-      virtual void
-      traverse (SemanticGraph::Element& e)
+      void
+      traverse (SemanticGraph::Element& e) override
       {
         string name (e.name ());
         string type (type_name (e));
@@ -1191,8 +1191,8 @@ namespace
         }
       }
 
-      virtual void
-      traverse (SemanticGraph::Attribute& a)
+      void
+      traverse (SemanticGraph::Attribute& a) override
       {
         string name (id (a.name ()));
         string type (type_name (a));
@@ -1258,8 +1258,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       if (e.named ())
         name = id (e.name ());
@@ -1342,8 +1342,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       SemanticGraph::Type& t (e.type ());
 

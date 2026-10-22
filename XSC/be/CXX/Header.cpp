@@ -29,8 +29,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Type& c)
+    void
+    traverse (SemanticGraph::Type& c) override
     {
       string name (type_name (c));
 
@@ -70,14 +70,14 @@ namespace
       names_.node_traverser (*this);
     }
 
-    virtual void
-    traverse (SemanticGraph::Enumeration& e)
+    void
+    traverse (SemanticGraph::Enumeration& e) override
     {
       os << comma () << type_name (e) << " const& " << e.name () << "__";
     }
 
-    virtual void
-    traverse (SemanticGraph::Element& e)
+    void
+    traverse (SemanticGraph::Element& e) override
     {
       string type (type_name (e));
       string name (e.name ());
@@ -94,8 +94,8 @@ namespace
       }
     }
 
-    virtual void
-    traverse (SemanticGraph::Attribute& a)
+    void
+    traverse (SemanticGraph::Attribute& a) override
     {
       if (!a.optional ())
       {
@@ -104,7 +104,7 @@ namespace
     }
 
     void
-    traverse (SemanticGraph::Complex& c)
+    traverse (SemanticGraph::Complex& c) override
     {
       first_ = true;
       complex_.traverse (c);
@@ -150,8 +150,8 @@ namespace
     }
 
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       string name (c.name ());
       string type (type_name (c));
@@ -322,8 +322,8 @@ namespace
       }
     }
 
-    virtual void
-    traverse (Type& a)
+    void
+    traverse (Type& a) override
     {
       string name (a.name ());
       string type (type_name (a));
@@ -424,8 +424,8 @@ namespace
       names_.node_traverser (attribute_);
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       // We need to get the name of the element. The name would
       // be already set if it was an anonymous type.
@@ -443,14 +443,14 @@ namespace
       }
     }
 
-    virtual void
-    pre (Type&)
+    void
+    pre (Type&) override
     {
       os << "class " << e << name;
     }
 
-    virtual void
-    inherits_none (Type &c)
+    void
+    inherits_none (Type &c) override
     {
       os << " : public ::XSCRT::Type"
          << "{"
@@ -468,8 +468,8 @@ namespace
       }
     }
 
-    virtual void
-    inherits_post (Type &c)
+    void
+    inherits_post (Type &c) override
     {
       if (this->cppmode_ == CPPMODE::CPP03)
       {
@@ -497,8 +497,8 @@ namespace
       return ret_val;
     }
 
-    virtual void
-    read_write_type (Type &c)
+    void
+    read_write_type (Type &c) override
     {
       if (! generate_cdr_types (c))
         return;
@@ -538,8 +538,8 @@ namespace
       }
     }
 
-    virtual void
-    post (Type& c)
+    void
+    post (Type& c) override
     {
       os << "public:" << std::endl;
 
@@ -570,8 +570,8 @@ namespace
           node_traverser (*this);
         }
 
-        virtual void
-        traverse (SemanticGraph::Complex& c)
+        void
+        traverse (SemanticGraph::Complex& c) override
         {
           if (has<Traversal::Element> (c) || has<Traversal::Attribute> (c))
             v_ = false;
@@ -615,7 +615,7 @@ namespace
     }
 
     void
-    insertion_extraction (Type &c)
+    insertion_extraction (Type &c) override
     {
       // Check to see if >> and << operators need to
       // be generated
@@ -661,8 +661,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       os << "static " << scope << " const " << id (e.name ()) << ";";
     }
@@ -676,8 +676,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       if (!first_)
         {
@@ -712,8 +712,8 @@ namespace
       names_labels_.node_traverser (label_);
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       if (e.named ())
         name = id (e.name ());
@@ -849,8 +849,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       SemanticGraph::Type& t (e.type ());
 
@@ -891,14 +891,14 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Imports& i)
+    void
+    traverse (SemanticGraph::Imports& i) override
     {
       traverse (i.file ());
     }
 
-    virtual void
-    traverse (SemanticGraph::Includes& i)
+    void
+    traverse (SemanticGraph::Includes& i) override
     {
       traverse (i.file ());
     }
