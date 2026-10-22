@@ -1,9 +1,18 @@
 project (xsc_test_escape): xscdefaults {
-  requires += xsc dummy_label
+  requires += xsc
   custom_only = 1
+  xscflags += --cxx-cpp11
   XSC_Files {
     test.xsd
   }
   Source_Files {
+  }
+}
+
+project (xsc_test_escape_generated): xscrt {
+  after += xsc_test_escape
+
+  Source_Files {
+    test.cpp
   }
 }

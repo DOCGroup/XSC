@@ -84,7 +84,7 @@ namespace
 
       if (e.min () == 1 && e.max () == 1)
       {
-        os << comma () << type << " const& " << name << "__";
+        os << comma () << type << " const& " << id (name) << "__";
       }
       else if (e.min () >= 1)
       {
@@ -956,7 +956,7 @@ generate_header (Context& ctx,
     }
   }
 
-  if (ctx.cppmode() != Context::CPPMODE::CPP03)
+  if (ctx.orb() == Context::ORB::TAOX11)
   {
     ctx.os << "#include \"tao/x11/base/stddef.h\"" << endl;
   }

@@ -465,7 +465,7 @@ namespace
 
       if (e.min () == 1 && e.max () == 1)
       {
-        os << comma () << type << " const& " << name << "__";
+        os << comma () << type << " const& " << id (name) << "__";
       }
       else if (e.min () >= 1)
       {
