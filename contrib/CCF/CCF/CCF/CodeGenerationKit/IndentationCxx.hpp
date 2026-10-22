@@ -49,7 +49,7 @@ namespace Indentation
     }
 
     /// Destructor
-    virtual ~Cxx (void)
+    virtual ~Cxx ()
     {
     }
 
@@ -333,7 +333,7 @@ namespace Indentation
      * Unbuffer the elements. This will remove the elements on
      * the holding queue to the target output stream.
      */
-    virtual void unbuffer (void)
+    virtual void unbuffer ()
     {
       int_type result;
 
@@ -355,7 +355,7 @@ namespace Indentation
      * Helper method that makes sure a newline exists at the end
      * of the holding buffer.
      */
-    void ensure_new_line (void)
+    void ensure_new_line ()
     {
       if (this->hold_.empty () || hold_.back () != '\n')
       {
@@ -371,7 +371,7 @@ namespace Indentation
      * Helper method that writes the current indentation to the
      * output buffer.
      */
-    void output_indentation (void)
+    void output_indentation ()
     {
       if (!this->hold_.empty () && this->hold_.back () == '\n')
       {
