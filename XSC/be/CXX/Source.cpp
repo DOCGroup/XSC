@@ -358,26 +358,40 @@ namespace
       // Write length first
       os << "// " << name << std::endl;
       os << "size_t " << name << "_size = "
-         << "this->" << name << "_.size ();"
+         << "this->" << id (name) << "_.size ();"
          << "stream << " << name << "_size;"
          << std::endl;
 
       // Write each member next
-      os << "for (" << name << "_const_iterator "
-         << name << "_iter = " << "this->begin_" << name << " ();"
-         << "    " << name << "_iter != this->end_" << name
-         << " ();"
-         << "    ++" << name << "_iter)"
-         << "{";
+      if (this->cppmode_ == CPPMODE::CPP03)
+      {
+        os << "for (" << name << "_const_iterator "
+           << name << "_iter = " << "this->begin_" << name << " ();"
+           << "    " << name << "_iter != this->end_" << name
+           << " ();"
+           << "    ++" << name << "_iter)"
+           << "{";
 
-      // Check if the type being written is a boolean
-      // type
-      if (type_is_boolean (type))
-        os << "stream.write_boolean (*" << name << ");";
+        if (type_is_boolean (type))
+          os << "stream.write_boolean (*" << name << "_iter);";
+        else
+          os << "stream << (*" << name << "_iter);";
+
+        os << "}";
+      }
       else
-        os << "stream << (*" << name << "_iter);";
+      {
+        os << "for (auto const& " << name << "_value : this->"
+           << id (name) << "_)"
+           << "{";
 
-      os << "}";
+        if (type_is_boolean (type))
+          os << "stream.write_boolean (" << name << "_value);";
+        else
+          os << "stream << " << name << "_value;";
+
+        os << "}";
+      }
     }
 
     virtual void
