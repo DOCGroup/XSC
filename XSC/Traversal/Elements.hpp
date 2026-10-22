@@ -63,17 +63,9 @@ namespace XSC
       }
 
     public:
-      typedef
-      std::vector<Traverser<T>*>
-      Traversers;
-
-      typedef
-      std::map<Introspection::TypeId, Traversers>
-      TraversalMap;
-
-      typedef
-      typename TraversalMap::const_iterator
-      Iterator;
+      using Traversers = std::vector<Traverser<T>*>;
+      using TraversalMap = std::map<Introspection::TypeId, Traversers>;
+      using Iterator = typename TraversalMap::const_iterator;
 
       Iterator
       begin () const
@@ -98,13 +90,10 @@ namespace XSC
         }
       };
 
-      typedef
-      std::map<Introspection::TypeInfo, unsigned long, TypeInfoComparator>
-      LevelMap;
-
-      typedef
-      std::set<Introspection::TypeInfo, TypeInfoComparator>
-      TypeInfoSet;
+      using LevelMap = std::map<Introspection::TypeInfo,
+                                unsigned long,
+                                TypeInfoComparator>;
+      using TypeInfoSet = std::set<Introspection::TypeInfo, TypeInfoComparator>;
 
       static unsigned long
       compute_levels (Introspection::TypeInfo const& ti,
@@ -122,13 +111,8 @@ namespace XSC
     //
     //
     //
-    typedef
-    Dispatcher<SemanticGraph::Node>
-    NodeDispatcherBase;
-
-    typedef
-    Dispatcher<SemanticGraph::Edge>
-    EdgeDispatcherBase;
+    using NodeDispatcherBase = Dispatcher<SemanticGraph::Node>;
+    using EdgeDispatcherBase = Dispatcher<SemanticGraph::Edge>;
 
 
     //
@@ -231,9 +215,7 @@ namespace XSC
     template <typename T>
     struct Node : Traverser<SemanticGraph::Node>, virtual NodeDispatcher
     {
-      typedef
-      T
-      Type;
+      using Type = T;
 
       Node ()
       {
@@ -257,9 +239,7 @@ namespace XSC
     template <typename T>
     struct Edge : Traverser <SemanticGraph::Edge>, virtual EdgeDispatcher
     {
-      typedef
-      T
-      Type;
+      using Type = T;
 
       Edge ()
       {
@@ -361,9 +341,7 @@ namespace XSC
     //
     //
     //
-    typedef
-    ScopeTemplate<SemanticGraph::Scope>
-    Scope;
+    using Scope = ScopeTemplate<SemanticGraph::Scope>;
 
 
     //
