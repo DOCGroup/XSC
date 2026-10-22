@@ -15,16 +15,19 @@ jobs:
     strategy:
       matrix:
         include:
-          - platform_file: include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU
-            os: ubuntu-22.04
+          - feature: C++17
+            optional_macros: c++std=c++17
+            platform_file: include $(ACE_ROOT)/include/makeinclude/platform_linux.GNU
+            os: ubuntu-24.04
     runs-on: ${{ matrix.os }}
-    name: ${{ matrix.os }} ${{ matrix.CXX }} ${{ matrix.feature }}
+    name: ${{ matrix.os }} default compiler ${{ matrix.feature }}
     env:
       DOC_ROOT: ${{ github.workspace }}/ACE_TAO
       ACE_ROOT: ${{ github.workspace }}/ACE_TAO/ACE
       TAO_ROOT: ${{ github.workspace }}/ACE_TAO/TAO
       MPC_ROOT: ${{ github.workspace }}/ACE_TAO/MPC
       XSC_ROOT: ${{ github.workspace }}/
+      LD_LIBRARY_PATH: ${{ github.workspace }}/XSC/utils:${{ github.workspace }}/lib:${{ github.workspace }}/ACE_TAO/ACE/lib
     steps:
     - name: checkout XSC
       uses: actions/checkout@v7
@@ -45,7 +48,6 @@ jobs:
       if: matrix.Repo != ''
     - name: Add packages
       run: |
-        sudo apt-get --yes update
         sudo apt-get --yes install libxerces-c-dev libssl-dev libboost-all-dev ${{ matrix.PackageDeps }}
     - name: create $ACE_ROOT/ace/config.h
       run: |
@@ -84,4 +86,41 @@ jobs:
     - name: Build XSC project
       run: |
         make -j 6 -C ${env:XSC_ROOT}
+      shell: pwsh
+    - name: Build XSC examples
+      run: |
+        perl ${env:ACE_ROOT}/bin/mwc.pl -type gnuace -include ${env:XSC_ROOT}/MPC/config -include ${env:XSC_ROOT}/contrib/CCF/CCF/MPC/config ${env:XSC_ROOT}/Examples -workers 4
+        make -j 6 -C ${env:XSC_ROOT}/Examples
+      shell: pwsh
+    - name: Compile generated schema tests
+      run: |
+        $testRoot = Join-Path ${env:RUNNER_TEMP} xsc-tests
+        Copy-Item -Recurse ${env:XSC_ROOT}/Tests $testRoot
+        $schemas = @(
+          'Abstract/abstract.xsd',
+          'Anonymous/test.xsd',
+          'Chameleon/includer.xsd',
+          'ComplexTypeImport/importer.xsd',
+          'Escape/test.xsd',
+          'Group/test.xsd',
+          'Import/importer.xsd',
+          'Include/includer.xsd',
+          'NoNamespace/test.xsd',
+          'UnqualifiedImport/lib.xsd'
+        )
+        $schemas | ForEach-Object {
+          $schema = Join-Path $testRoot $_
+          Push-Location (Split-Path -Parent $schema)
+          try {
+            & ${env:XSC_ROOT}/bin/xsc --backend cxx --cxx-cpp17 (Split-Path -Leaf $schema)
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+          finally {
+            Pop-Location
+          }
+        }
+        Get-ChildItem -Path $testRoot -Recurse -Filter *.cpp | ForEach-Object {
+          g++ -std=c++17 -I${env:XSC_ROOT} -I${env:ACE_ROOT} -c $_.FullName -o "$($_.FullName).o"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        }
       shell: pwsh
