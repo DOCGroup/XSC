@@ -1,0 +1,13 @@
+project (library_reader_xsd_gen): install, xscdefaults {
+  requires += xsc
+
+  custom_only = 1
+  xscflags += --cxx-generate-traversal-types
+
+  XSC_Files {
+    ../library.xsd
+  }
+
+  Source_Files {
+  }
+}

@@ -1,0 +1,12 @@
+project (library_writer_xsd_gen): install, xscdefaults {
+  requires += xsc
+
+  custom_only = 1
+
+  XSC_Files {
+    ../library.xsd
+  }
+
+  Source_Files {
+  }
+}

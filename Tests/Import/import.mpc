@@ -1,0 +1,9 @@
+project (xsc_test_import): install, xscdefaults {
+  requires += xsc
+  custom_only = 1
+  XSC_Files {
+    importer.xsd
+  }
+  Source_Files {
+  }
+}

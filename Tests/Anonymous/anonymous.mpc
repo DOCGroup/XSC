@@ -1,0 +1,9 @@
+project (xsc_test_anonymous): install, xscdefaults {
+  requires += xsc
+  custom_only = 1
+  XSC_Files {
+    test.xsd
+  }
+  Source_Files {
+  }
+}

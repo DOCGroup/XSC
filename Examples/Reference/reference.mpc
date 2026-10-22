@@ -1,0 +1,12 @@
+project (reference_xsd_gen): install, xscdefaults {
+  requires += xsc
+
+  custom_only = 1
+
+  XSC_Files {
+    reference.xsd
+  }
+
+  Source_Files {
+  }
+}
