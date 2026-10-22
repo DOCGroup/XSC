@@ -38,9 +38,6 @@
 
 using namespace XSC;
 
-using std::wcerr;
-using std::endl;
-
 wchar_t const* const version = L"0.0.8";
 
  /**
@@ -172,20 +169,20 @@ int main (int argc, char* argv[])
       }
     catch (po::error &ex)
       {
-        wcerr << "command line syntax error: " << ex.what () << endl;
-        wcerr << "try " << argv[0] << " --help for usage information" << endl;
+        std::wcerr << "command line syntax error: " << ex.what () << std::endl;
+        std::wcerr << "try " << argv[0] << " --help for usage information" << std::endl;
         return 1;
       }
     catch (...)
       {
-        wcerr << "unexpected po exception" << endl;
+        std::wcerr << "unexpected po exception" << std::endl;
         return 1;
       }
 
     // Display the version and then exit.
     if (vm.count("version"))
     {
-      wcerr << "XML Schema compiler " << version << endl;
+      std::wcerr << "XML Schema compiler " << version << std::endl;
       return 0;
     }
 
@@ -234,7 +231,7 @@ int main (int argc, char* argv[])
               }
             catch (...)
               {
-                wcerr << "error: Nonexistant search path supplied:" << i->c_str () << endl;
+                std::wcerr << "error: Nonexistant search path supplied:" << i->c_str () << std::endl;
                 return -1;
               }
           }
@@ -242,8 +239,8 @@ int main (int argc, char* argv[])
 
     if (backend != "cxx" && backend != "idl")
       {
-        wcerr << "unknown backend: " << backend.c_str () << endl;
-        wcerr << "try " << argv[0] << " --help for backend list" << endl;
+        std::wcerr << "unknown backend: " << backend.c_str () << std::endl;
+        std::wcerr << "try " << argv[0] << " --help for backend list" << std::endl;
         return 1;
       }
 
@@ -252,7 +249,7 @@ int main (int argc, char* argv[])
 
     if (argument == "")
     {
-      wcerr << "error: no input file." << endl;
+      std::wcerr << "error: no input file." << std::endl;
       return 1;
     }
 
@@ -260,7 +257,7 @@ int main (int argc, char* argv[])
     // by return value. Once I redesign diagnostic in CCF this should
     // be removed.
     //
-    ErrorDetector detector (wcerr);
+    ErrorDetector detector (std::wcerr);
 
     //"tu" is set to the schema path provided in the command line.
     fs::path tu (argument.c_str ());
@@ -272,7 +269,7 @@ int main (int argc, char* argv[])
 
     if (detector.error ())
       {
-        wcerr << "Parsing encountered an error.\n";
+        std::wcerr << "Parsing encountered an error.\n";
         return 1;
       }
 
@@ -307,7 +304,7 @@ int main (int argc, char* argv[])
   }
   catch (const boost::bad_any_cast &)
     {
-      wcerr << "Bad program option" << endl;
+      std::wcerr << "Bad program option" << std::endl;
     }
 //   catch (const boost::exception &ex)
 //     {
@@ -316,7 +313,7 @@ int main (int argc, char* argv[])
 //     }
   catch (...)
   {
-    wcerr << "caught unknown exception" << endl;
+    std::wcerr << "caught unknown exception" << std::endl;
   }
 
   return 1;
