@@ -613,12 +613,15 @@ namespace
           os << name << " () = delete;";
       }
 
-      os << name << " (";
+      if (!this->read_only_)
+      {
+        os << name << " (";
 
-      ctor_args_.traverse (c);
+        ctor_args_.traverse (c);
 
-      os <<  ");"
-         << std::endl;
+        os <<  ");"
+           << std::endl;
+      }
 
       // c-tor (Element const&)
       //

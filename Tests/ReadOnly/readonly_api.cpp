@@ -1,5 +1,6 @@
 #include "readonly.hpp"
 
+#include <list>
 #include <type_traits>
 #include <utility>
 
@@ -36,6 +37,8 @@ namespace
   static_assert (!std::is_move_assignable_v<ReadOnly>);
   static_assert (!has_name_setter<ReadOnly>::value);
   static_assert (!has_optionalValue_presence_accessor<ReadOnly>::value);
+  static_assert (std::is_same_v<ReadOnly::item_container_type,
+                                std::list<::XMLSchema::string<char>>>);
   static_assert (std::is_same_v<decltype (std::declval<ReadOnly&> ().name ()),
                                 ::XMLSchema::string<char> const&>);
   static_assert (std::is_same_v<decltype (std::declval<ReadOnly&> ().optionalValue_if_set ()),

@@ -570,32 +570,35 @@ namespace
         os << "// " << scope << std::endl
            << std::endl;
 
-      // c-tor
-      //
-      os << i
-         << scope << "::" << name << " (";
-
-      ctor_args_.traverse (c);
-
-      os << ")" << std::endl;
-
       bool const has_base (c.inherits_begin () != c.inherits_end ());
 
-      inherits (c, ctor_base_);
+      if (!this->read_only_)
+      {
+        // c-tor
+        //
+        os << i
+           << scope << "::" << name << " (";
 
-      // Resets a flag that determines if a Complex Type's constructor
-      // has inherited from the base XSCRT::Type class. Right now, this
-      // is commented out since it was producing a bug when complex types
-      // extended another complete type.
+        ctor_args_.traverse (c);
 
-      ctor_member__.reset_base_class_initialization (has_base);
-      names (c, ctor_member_);
+        os << ")" << std::endl;
 
-      os << "{";
+        inherits (c, ctor_base_);
 
-      names (c, ctor_body_);
+        // Resets a flag that determines if a Complex Type's constructor
+        // has inherited from the base XSCRT::Type class. Right now, this
+        // is commented out since it was producing a bug when complex types
+        // extended another complete type.
 
-      os << "}";
+        ctor_member__.reset_base_class_initialization (has_base);
+        names (c, ctor_member_);
+
+        os << "{";
+
+        names (c, ctor_body_);
+
+        os << "}";
+      }
 
       if (!this->read_only_)
       {
