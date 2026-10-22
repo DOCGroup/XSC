@@ -1558,11 +1558,9 @@ namespace XSC
         // Setup the entity resolver.
         XSC::XML::Path_Resolver < > path_resolver;
 
-        for (std::vector <fs::path>::const_iterator iter = this->include_paths_.begin ();
-             iter != this->include_paths_.end ();
-             ++ iter)
+        for (fs::path const& include_path : this->include_paths_)
         {
-          path_resolver.insert (iter->string ().c_str ());
+          path_resolver.insert (include_path.string ().c_str ());
         }
 
         XSC::XML::XML_Schema_Resolver <

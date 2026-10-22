@@ -220,17 +220,15 @@ int main (int argc, char* argv[])
       {
         const SearchPaths &search_path_strings (vm["search-path"].as <SearchPaths> ());
 
-        for (SearchPaths::const_iterator i = search_path_strings.begin ();
-             i != search_path_strings.end ();
-             ++i)
+        for (std::string const& search_path : search_path_strings)
           {
             try
               {
-                search_paths.push_back (fs::path (*i));
+                search_paths.push_back (fs::path (search_path));
               }
             catch (...)
               {
-                std::wcerr << "error: Nonexistant search path supplied:" << i->c_str () << std::endl;
+                std::wcerr << "error: Nonexistant search path supplied:" << search_path.c_str () << std::endl;
                 return -1;
               }
           }
