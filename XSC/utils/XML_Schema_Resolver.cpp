@@ -32,9 +32,7 @@ namespace XSC
     // class Basic_Resolver
 
     template <typename CHAR>
-    Basic_Resolver <CHAR>::Basic_Resolver (void)
-    {
-    }
+    Basic_Resolver <CHAR>::Basic_Resolver (void) = default;
 
     template <typename CHAR>
     Basic_Resolver <CHAR>::Basic_Resolver (const CHAR *path)
@@ -93,10 +91,7 @@ namespace XSC
     };
 
     template <typename CHAR>
-    Path_Resolver <CHAR>::Path_Resolver (void)
-    {
-
-    }
+    Path_Resolver <CHAR>::Path_Resolver (void) = default;
 
     template <typename CHAR>
     Path_Resolver <CHAR>::Path_Resolver (const path_type & paths)

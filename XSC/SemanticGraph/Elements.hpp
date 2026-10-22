@@ -51,10 +51,7 @@ namespace XSC
     protected:
       friend class Graph<Node, Edge>;
 
-      virtual
-      ~Edge ()
-      {
-      }
+      virtual ~Edge () = default;
 
 
       Edge ()
@@ -95,10 +92,7 @@ namespace XSC
     protected:
       friend class Graph<Node, Edge>;
 
-      virtual
-      ~Node ()
-      {
-      }
+      virtual ~Node () = default;
 
       Node ()
       {

@@ -13,9 +13,7 @@ namespace XSC
 
     template<typename T>
     Traverser<T>::
-    ~Traverser ()
-    {
-    }
+    ~Traverser () = default;
 
     // Dispatcher
     //
@@ -23,9 +21,7 @@ namespace XSC
 
     template <typename T>
     Dispatcher<T>::
-    ~Dispatcher ()
-    {
-    }
+    ~Dispatcher () = default;
 
     template <typename T>
     void Dispatcher<T>::
