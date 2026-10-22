@@ -121,6 +121,8 @@ options (po::options_description& d)
     ("cxx-generate-cdr-reader-types",
      "Generate code for reading types from "
      "CDR streams.")
+    ("cxx-cpp03",
+     "Generate code compatible with C++03.")
     ("cxx-cpp11",
      "Generate code that depends on C++11 features.")
     ("cxx-cpp17",
@@ -144,6 +146,19 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
 #else
   std::string name (file_path.filename ().string ());
 #endif
+
+  // Validate options that can otherwise fail after opening (and truncating)
+  // the generated output files.
+  ::Context::ORB orb_ { ::Context::ORB::TAO };
+  std::string const orb (vm["cxx-orb"].as<std::string> ());
+  if (orb == "taox11")
+    {
+      orb_ = ::Context::ORB::TAOX11;
+    }
+  else if (orb != "tao")
+    {
+      throw std::invalid_argument ("invalid value for --cxx-orb: " + orb);
+    }
 
   //Stores file suffixes (defaults are .hpp, ipp, and cpp)
   std::string hxx_suffix (vm["cxx-header-suffix"].as<std::string> ());
@@ -341,6 +356,10 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   bool cdr_writer (vm.count ("cxx-generate-cdr-writer-types"));
 
   ::Context::CPPMODE cppmode_ { ::Context::CPPMODE::CPP17 };
+  if (vm.count ("cxx-cpp03"))
+    {
+      cppmode_ = ::Context::CPPMODE::CPP03;
+    }
   if (vm.count ("cxx-cpp11"))
     {
       cppmode_ = ::Context::CPPMODE::CPP11;
@@ -349,18 +368,6 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
     {
       cppmode_ = ::Context::CPPMODE::CPP17;
     }
-
-  ::Context::ORB orb_ { ::Context::ORB::TAO };
-  std::string const orb (vm["cxx-orb"].as<std::string> ());
-  if (orb == "taox11")
-    {
-      orb_ = ::Context::ORB::TAOX11;
-    }
-  else if (orb != "tao")
-    {
-      throw std::invalid_argument ("invalid value for --cxx-orb: " + orb);
-    }
-
 
   // Check about random access sequences
   bool ra_sequences (vm.count ("cxx-enable-random-access-sequences"));

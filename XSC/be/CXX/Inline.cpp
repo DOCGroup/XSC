@@ -782,6 +782,10 @@ namespace
           {
             os << comma () << id (e.name ()) << "__";
           }
+          else if (e.min () >= 1)
+          {
+            os << comma () << id (e.name ()) << "__";
+          }
         }
 
         virtual void

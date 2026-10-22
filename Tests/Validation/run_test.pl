@@ -21,7 +21,11 @@ unless (-x $xsc) {
 my $process = $target->CreateProcess ($xsc, '--backend cxx test.xsd');
 my $result = $process->SpawnWaitKill ($target->ProcessStartWaitInterval ());
 
-if ($result == 0) {
+if ($result == -1) {
+  print STDERR "ERROR: XSC could not be started or timed out\n";
+  $status = 1;
+}
+elsif ($result == 0) {
   print STDERR "ERROR: XSC accepted test.xsd; rejection was expected\n";
   $status = 1;
 }
