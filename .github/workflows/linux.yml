@@ -84,8 +84,14 @@ jobs:
       shell: pwsh
     - name: Build XSC examples
       run: |
-        perl ${env:ACE_ROOT}/bin/mwc.pl -type gnuace -include ${env:XSC_ROOT}/MPC/config -include ${env:XSC_ROOT}/contrib/CCF/CCF/MPC/config ${env:XSC_ROOT}/Examples -workers 4
-        make -j 6 -C ${env:XSC_ROOT}/Examples
+        Push-Location ${env:XSC_ROOT}/Examples
+        try {
+          perl ${env:ACE_ROOT}/bin/mwc.pl -type gnuace Examples.mwc -workers 4
+          make -j 6
+        }
+        finally {
+          Pop-Location
+        }
       shell: pwsh
     - name: Run XSC validation rejection test
       run: |
