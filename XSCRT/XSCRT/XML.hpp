@@ -4,6 +4,7 @@
 #ifndef XSCRT_XML_HPP
 #define XSCRT_XML_HPP
 
+#include <cstddef>
 #include <string>
 #include "xercesc/dom/DOM.hpp"
 #include "xercesc/util/XMLString.hpp"
@@ -12,7 +13,7 @@
 #if defined (_MSC_VER) && (_MSC_VER < 1300)
 namespace std
 {
-  typedef ::size_t size_t;
+  using size_t = std::size_t;
 }
 #endif
 
@@ -145,7 +146,7 @@ namespace XSCRT
     template <typename C>
     class Element
     {
-      typedef std::basic_string<C> string_;
+      using string_ = std::basic_string<C>;
 
     public:
       Element (xercesc::DOMElement const* e)
@@ -273,7 +274,7 @@ namespace XSCRT
     template <typename C>
     class Attribute
     {
-      typedef std::basic_string<C> string_;
+      using string_ = std::basic_string<C>;
 
     public:
       Attribute (xercesc::DOMAttr const* a)

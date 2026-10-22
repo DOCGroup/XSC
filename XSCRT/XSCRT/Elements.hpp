@@ -274,7 +274,7 @@ namespace XSCRT
   {
   public:
     // Trait for marshaling a FundamentalType X
-    typedef X CDR_Type__;
+    using CDR_Type__ = X;
 
     FundamentalType ()
     {
