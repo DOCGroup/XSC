@@ -16,7 +16,7 @@ namespace XSCRT
   {
   public:
     Writer (XML::Element<C>& e)
-        : attr__ (0)
+        : attr__ (nullptr)
     {
       push_ (e);
     }

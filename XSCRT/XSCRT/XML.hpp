@@ -150,7 +150,7 @@ namespace XSCRT
 
     public:
       Element (xercesc::DOMElement const* e)
-          : e_ (0),
+          : e_ (nullptr),
             ce_ (e),
             name_ (transcode<C> (e->getLocalName (), 0)),
             namespace__ (transcode<C> (e->getNamespaceURI (), 0))
@@ -166,8 +166,8 @@ namespace XSCRT
       }
 
       Element (string_ const& name, Element& parent)
-          : e_ (0),
-            ce_ (0),
+          : e_ (nullptr),
+            ce_ (nullptr),
             name_ (name)
       {
         xercesc::DOMDocument* doc (
@@ -181,8 +181,8 @@ namespace XSCRT
       }
 
       Element (string_ const& name, string_ const& ns, Element& parent)
-          : e_ (0),
-            ce_ (0),
+          : e_ (nullptr),
+            ce_ (nullptr),
             name_ (name),
             namespace__ (ns)
       {
@@ -278,7 +278,7 @@ namespace XSCRT
 
     public:
       Attribute (xercesc::DOMAttr const* a)
-          : a_ (0),
+          : a_ (nullptr),
             ca_ (a),
             name_ (transcode<C> (a->getLocalName (), 0)),
             value_ (transcode<C> (a->getValue (), 0))
@@ -296,8 +296,8 @@ namespace XSCRT
       Attribute (string_ const& name,
                  string_ const& v,
                  Element<C>& parent)
-          : a_ (0),
-            ca_ (0),
+          : a_ (nullptr),
+            ca_ (nullptr),
             name_ (name),
             value_ ()
       {
@@ -317,8 +317,8 @@ namespace XSCRT
                  string_ const& ns,
                  string_ const& v,
                  Element<C>& parent)
-          : a_ (0),
-            ca_ (0),
+          : a_ (nullptr),
+            ca_ (nullptr),
             name_ (name),
             value_ ()
       {
