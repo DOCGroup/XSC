@@ -23,10 +23,7 @@ Buffer_Writer_T (const CHAR_TYPE * ns,
 // Buffer_Writer_T
 //
 template <typename T, typename CHAR_TYPE>
-Buffer_Writer_T <T, CHAR_TYPE>::~Buffer_Writer_T ()
-{
-
-}
+Buffer_Writer_T <T, CHAR_TYPE>::~Buffer_Writer_T () = default;
 
 //
 // open

@@ -23,10 +23,7 @@ File_Writer_T (const CHAR_TYPE * ns,
 // File_Writer_T
 //
 template <typename T, typename CHAR_TYPE>
-File_Writer_T <T, CHAR_TYPE>::~File_Writer_T ()
-{
-
-}
+File_Writer_T <T, CHAR_TYPE>::~File_Writer_T () = default;
 
 //
 // open

@@ -21,40 +21,35 @@ namespace XSCRT
     virtual bool
     before (IdentityProvider const&) const = 0;
 
-    virtual ~IdentityProvider ()
-    {
-
-    }
+    virtual ~IdentityProvider () = default;
   };
 
   class Type
   {
   public:
 
-    virtual ~Type ()
-    {
-    }
+    virtual ~Type () = default;
 
   protected:
     Type ()
-        : container_ (0)
+        : container_ (nullptr)
     {
     }
 
     template <typename C>
     Type (XML::Element<C> const&)
-        : container_ (0)
+        : container_ (nullptr)
     {
     }
 
     template <typename C>
     Type (XML::Attribute<C> const&)
-        : container_ (0)
+        : container_ (nullptr)
     {
     }
 
     Type (Type const&)
-        : container_ (0)
+        : container_ (nullptr)
     {
     }
 
@@ -207,7 +202,7 @@ namespace XSCRT
       }
       else
       {
-        return 0;
+        return nullptr;
       }
     }
 
@@ -223,7 +218,7 @@ namespace XSCRT
       }
       else
       {
-        return 0;
+        return nullptr;
       }
     }
 
@@ -238,7 +233,7 @@ namespace XSCRT
       }
       else
       {
-        return 0;
+        return nullptr;
       }
     }
 
