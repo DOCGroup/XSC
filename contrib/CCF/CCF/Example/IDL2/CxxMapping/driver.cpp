@@ -2,9 +2,9 @@
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
 
 #include <iostream>
+#include <filesystem>
 
 #include "CCF/CompilerElements/Context.hpp"
-#include "CCF/CompilerElements/FileSystem.hpp"
 #include "CCF/CompilerElements/Diagnostic.hpp"
 #include "CCF/CompilerElements/TokenStream.hpp"
 #include "CCF/CompilerElements/Preprocessor.hpp"

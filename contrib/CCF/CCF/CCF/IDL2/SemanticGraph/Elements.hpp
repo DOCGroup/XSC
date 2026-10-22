@@ -7,10 +7,10 @@
 #include <set>
 #include <vector>
 #include <iosfwd>
+#include <filesystem>
 
 #include "Graph.hpp"
 
-#include "CCF/CompilerElements/FileSystem.hpp"
 #include "CCF/CompilerElements/Introspection.hpp"
 #include "CCF/CompilerElements/Context.hpp"
 

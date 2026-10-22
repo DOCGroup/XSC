@@ -6,7 +6,8 @@
 
 #include "CCF/CompilerElements/Context.hpp"
 #include "CCF/CompilerElements/Diagnostic.hpp"
-#include "CCF/CompilerElements/FileSystem.hpp"
+
+#include <filesystem>
 
 #include "CCF/IDL2/SemanticAction.hpp"
 #include "CCF/IDL2/LexicalAnalyzer.hpp"

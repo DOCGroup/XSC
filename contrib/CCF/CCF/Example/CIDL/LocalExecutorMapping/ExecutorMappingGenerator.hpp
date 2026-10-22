@@ -4,7 +4,7 @@
 #ifndef EXECUTOR_MAPPING_GENERATOR_HPP
 #define EXECUTOR_MAPPING_GENERATOR_HPP
 
-#include "CCF/CompilerElements/FileSystem.hpp"
+#include <filesystem>
 
 #include "CCF/CodeGenerationKit/CommandLine.hpp"
 #include "CCF/CodeGenerationKit/CommandLineDescriptor.hpp"
