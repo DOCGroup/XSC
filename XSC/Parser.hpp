@@ -174,7 +174,7 @@ namespace XSC
     string
     ns_name (Element const& e, string const& n)
     {
-      XMLCh* p (0);
+      XMLCh* p (nullptr);
 
       string wp (prefix (n));
 
@@ -453,14 +453,12 @@ namespace XSC
       }
     };
 
-    typedef
-    std::map<fs::path, string, FilePathComparator>
-    FileMap_;
+    using FileMap_ = std::map<fs::path, string, FilePathComparator>;
 
     FileMap_ file_map_;
 
   public:
-    typedef std::vector <fs::path> Paths;
+    using Paths = std::vector<fs::path>;
 
   private:
     Paths include_paths_;
@@ -470,10 +468,8 @@ namespace XSC
     bool qualify_element_;
 
   private:
-    Parser (Parser const&);
-
-    void
-    operator= (Parser const&);
+    Parser (Parser const&) = delete;
+    Parser& operator= (Parser const&) = delete;
   };
 }
 

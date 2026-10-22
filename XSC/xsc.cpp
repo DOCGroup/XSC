@@ -211,7 +211,7 @@ int main (int argc, char* argv[])
     }
 
     // process search paths
-    typedef std::vector <std::string> SearchPaths;
+    using SearchPaths = std::vector<std::string>;
 
     Parser::Paths search_paths;
     search_paths.push_back (fs::path ());

@@ -132,9 +132,7 @@ namespace XSC
     //
     //
     //
-    typedef
-    std::wstring
-    Name_;
+    using Name_ = std::wstring;
 
     //
     //
@@ -205,9 +203,7 @@ namespace XSC
 
     class Nameable : public virtual Node
     {
-      typedef
-      std::vector<Names*>
-      Named_;
+      using Named_ = std::vector<Names*>;
 
     public:
       bool
@@ -268,9 +264,7 @@ namespace XSC
       Named_ named_;
     };
 
-    typedef
-    std::set<Nameable*>
-    Nameables;
+    using Nameables = std::set<Nameable*>;
 
 
     //
@@ -279,24 +273,14 @@ namespace XSC
     class Scope : public virtual Nameable
     {
     protected:
-      typedef
-      std::vector<Names*>
-      Names_;
-
-      typedef
-      std::map<Name_, Names_>
-      NamesMap_;
+      using Names_ = std::vector<Names*>;
+      using NamesMap_ = std::map<Name_, Names_>;
 
     public:
       //
       //
-      typedef
-      Names_::const_iterator
-      NamesIterator;
-
-      typedef
-      std::pair <NamesIterator, NamesIterator>
-      NamesIteratorPair;
+      using NamesIterator = Names_::const_iterator;
+      using NamesIteratorPair = std::pair<NamesIterator, NamesIterator>;
 
       NamesIterator
       names_begin () const
@@ -384,9 +368,7 @@ namespace XSC
       //using Node::add_edge_left;
 
     private:
-      typedef
-      std::vector<Belongs*>
-      Classifies_;
+      using Classifies_ = std::vector<Belongs*>;
 
       Classifies_ slassifies_;
     };
@@ -407,7 +389,7 @@ namespace XSC
       bool
       typed () const
       {
-        return belongs_ != 0;
+        return belongs_ != nullptr;
       }
 
       static Introspection::TypeInfo const&
@@ -417,7 +399,7 @@ namespace XSC
       friend class Graph<Node, Edge>;
 
       Instance ()
-          : belongs_ (0)
+          : belongs_ (nullptr)
       {
         type_info (static_type_info ());
       }
@@ -570,14 +552,10 @@ namespace XSC
 
     class Container : public virtual Node
     {
-      typedef
-      std::vector<Contains*>
-      Contains_;
+      using Contains_ = std::vector<Contains*>;
 
     public:
-      typedef
-      Contains_::const_iterator
-      ContainsIterator;
+      using ContainsIterator = Contains_::const_iterator;
 
       ContainsIterator
       contains_begin () const

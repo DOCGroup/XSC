@@ -255,8 +255,8 @@ namespace XSC
 
   Parser::
   Parser (bool trace, const std::vector <fs::path> &include_paths)
-    : root_schema_ (0),
-      cur_schema_ (0),
+    : root_schema_ (nullptr),
+      cur_schema_ (nullptr),
       qualify_attribute_ (false),
       qualify_element_ (false)
   {
@@ -354,7 +354,7 @@ namespace XSC
 
         pop_scope ();
 
-        root_schema_ = cur_schema_ = 0;
+        root_schema_ = cur_schema_ = nullptr;
         d->release ();
       }
 
@@ -479,7 +479,7 @@ namespace XSC
   {
     string loc (i[L"schemaLocation"]);
 
-    size_t len (std::wcstombs (0, loc.c_str (), 0) + 1);
+    size_t len (std::wcstombs (nullptr, loc.c_str (), 0) + 1);
     scoped_array <char> str (new char[len]);
     std::wcstombs (str.get (), loc.c_str (), len);
 
@@ -527,7 +527,7 @@ namespace XSC
       {
         string loc (i[L"schemaLocation"]);
 
-        size_t len (std::wcstombs (0, loc.c_str (), 0) + 1);
+        size_t len (std::wcstombs (nullptr, loc.c_str (), 0) + 1);
         scoped_array <char> str (new char[len]);
         std::wcstombs (str.get (), loc.c_str (), len);
         fs::path path (str.get ());
@@ -732,7 +732,7 @@ namespace XSC
   Type* Parser::
   simple_type (XML::Element const& t, const string& anon_name)
   {
-    Type* r (0);
+    Type* r (nullptr);
 
     push (t);
 
@@ -760,7 +760,7 @@ namespace XSC
   Type* Parser::
   simple_content_restriction (XML::Element const& r, const string& anon_name)
   {
-    Type* rv (0);
+    Type* rv (nullptr);
 
     string base (fq_name (r, r[L"base"]));
 
@@ -839,7 +839,7 @@ namespace XSC
     // todo
     wcerr << "complex content restriction is not supported yet" << endl;
 
-    Type* rv (0);
+    Type* rv (nullptr);
 
     push (r);
 
@@ -873,7 +873,7 @@ namespace XSC
   Type* Parser::
   complex_type (XML::Element const& t, const string &anon_name)
   {
-    Type* r (0);
+    Type* r (nullptr);
 
     if (t[L"mixed"] == L"true")
       {
@@ -1228,7 +1228,7 @@ namespace XSC
                 if (trace_)
                   wcout << anon_name << endl;
 
-                Type* t (0);
+                Type* t (nullptr);
 
                 if (anon_name == L"simpleType")
                   t = simple_type (e, name);
@@ -1589,7 +1589,7 @@ namespace XSC
         {
           std::cerr << "encountered an error when loading grammar ["
                     << uri << "]" << endl;
-          return 0;
+          return nullptr;
         }
 
         // Now, let's parse the XSD file. Since we made it this far, then
@@ -1610,6 +1610,6 @@ namespace XSC
         wcerr << "caught XMLException" << endl;
       }
 
-    return 0;
+    return nullptr;
   }
 }

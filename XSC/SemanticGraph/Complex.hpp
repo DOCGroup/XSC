@@ -12,14 +12,10 @@ namespace XSC
   {
     class Complex : public virtual Type, public virtual Scope
     {
-      typedef
-      std::vector <Inherits*>
-      Inherits_;
+      using Inherits_ = std::vector<Inherits*>;
 
     public:
-      typedef
-      Inherits_::const_iterator
-      InheritsIterator;
+      using InheritsIterator = Inherits_::const_iterator;
 
       InheritsIterator
       inherits_begin () const
