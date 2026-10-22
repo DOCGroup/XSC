@@ -8,7 +8,6 @@
 #include "xercesc/util/XMLString.hpp"
 #include "xercesc/validators/common/Grammar.hpp"
 #include "xercesc/validators/schema/XSDDOMParser.hpp"
-#include "boost/scoped_array.hpp"
 #include "utils/XML_Schema_Resolver.h"
 #include "utils/XML_Helper.h"
 
@@ -28,8 +27,6 @@
 using std::wcout;
 using std::wcerr;
 using std::endl;
-
-using boost::scoped_array;
 
 namespace XSC
 {
@@ -475,11 +472,11 @@ namespace XSC
   {
     string loc (i[L"schemaLocation"]);
 
-    size_t len (std::wcstombs (nullptr, loc.c_str (), 0) + 1);
-    scoped_array <char> str (new char[len]);
-    std::wcstombs (str.get (), loc.c_str (), len);
+    std::size_t len (std::wcstombs (nullptr, loc.c_str (), 0) + 1);
+    std::vector<char> str (len);
+    std::wcstombs (str.data (), loc.c_str (), len);
 
-    fs::path path (str.get ());
+    fs::path path (str.data ());
 
     // Check to see if we have already parsed this file....
     if (file_map_.find (path) != file_map_.end ()) return;
@@ -523,10 +520,10 @@ namespace XSC
       {
         string loc (i[L"schemaLocation"]);
 
-        size_t len (std::wcstombs (nullptr, loc.c_str (), 0) + 1);
-        scoped_array <char> str (new char[len]);
-        std::wcstombs (str.get (), loc.c_str (), len);
-        fs::path path (str.get ());
+        std::size_t len (std::wcstombs (nullptr, loc.c_str (), 0) + 1);
+        std::vector<char> str (len);
+        std::wcstombs (str.data (), loc.c_str (), len);
+        fs::path path (str.data ());
 
         if (file_map_.find (path) != file_map_.end ()) return;
 

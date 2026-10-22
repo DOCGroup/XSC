@@ -9,6 +9,7 @@
 #include <memory>
 #include <stack>
 #include <string>
+#include <vector>
 #include "xercesc/dom/DOM.hpp"
 #include "xercesc/util/XMLString.hpp"
 #include "XSC/SemanticGraph/Schema.hpp"
