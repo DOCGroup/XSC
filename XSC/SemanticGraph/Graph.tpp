@@ -158,13 +158,11 @@ namespace XSC
     {
       //@@ auto
 
-      for (typename Edges_::iterator i (edges_.begin ()), end (edges_.end ());
-           i != end;
-           ++i) delete *i;
+      for (E* edge : edges_)
+        delete edge;
 
-      for (typename Nodes_::iterator i (nodes_.begin ()), end (nodes_.end ());
-           i != end;
-           ++i) delete *i;
+      for (N* node : nodes_)
+        delete node;
     }
   }
 }
