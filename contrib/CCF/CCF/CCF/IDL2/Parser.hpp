@@ -124,7 +124,7 @@ namespace CCF
           case Parsing::DiagnosticType::BEFORE:
             {
               Diagnostic::Error rec (
-                context_.get<fs::path> ("file-path").string (),
+                context_.get<std::filesystem::path> ("file-path").string (),
                 (*i)->line ());
 
               rec << "before \'" << (*i)->lexeme () << "\': "
@@ -138,7 +138,7 @@ namespace CCF
               i--;
 
               Diagnostic::Error rec (
-                context_.get<fs::path> ("file-path").string (),
+                context_.get<std::filesystem::path> ("file-path").string (),
                 (*i)->line ());
 
               rec << "after \'" << (*i)->lexeme () << "\': "
@@ -197,7 +197,7 @@ namespace CCF
               case Parsing::DiagnosticType::BEFORE:
                 {
                   Diagnostic::Error rec (
-                    context_.get<fs::path> ("file-path").string (),
+                    context_.get<std::filesystem::path> ("file-path").string (),
                     (*i)->line ());
 
                   rec << "before \'" << (*i)->lexeme () << "\': "
@@ -209,7 +209,7 @@ namespace CCF
               case Parsing::DiagnosticType::AFTER:
                 {
                   Diagnostic::Error rec (
-                    context_.get<fs::path> ("file-path").string (),
+                    context_.get<std::filesystem::path> ("file-path").string (),
                     (*i)->line ());
 
                   rec << "after \'" << (*i)->lexeme () << "\': "

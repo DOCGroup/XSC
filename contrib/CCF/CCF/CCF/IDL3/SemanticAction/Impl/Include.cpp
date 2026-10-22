@@ -35,9 +35,9 @@ namespace CCF
               action_factory_ (action_factory)
         {
           abs_path_stack_.push (
-            fs::normalize (
-              fs::complete (
-                ctx.parsing_context ().get<fs::path> ("file-path"))));
+            std::filesystem::absolute (
+              ctx.parsing_context ().get<std::filesystem::path> ("file-path"))
+              .lexically_normal ());
         }
 
         void Include::
@@ -79,18 +79,18 @@ namespace CCF
 
           try
           {
-            fs::ifstream ifs;
+            std::ifstream ifs;
             ifs.exceptions (std::ios_base::badbit | std::ios_base::failbit);
 
-            fs::path include_path (sl->value ());
-            fs::path complete_path (include_path);
+            std::filesystem::path include_path (sl->value ());
+            std::filesystem::path complete_path (include_path);
 
             if (ctx.trace ()) cerr << prefix << ": staring resolution."
                                    << endl;
 
-            if (complete_path.is_complete ())
+            if (complete_path.is_absolute ())
             {
-              complete_path = fs::normalize (complete_path);
+              complete_path = complete_path.lexically_normal ();
 
               if (handle_already_included (complete_path, sl)) return;
 
@@ -102,14 +102,14 @@ namespace CCF
 
               if (type == quote_)
               {
-                fs::path rel_path (abs_path_stack_.top ().branch_path ());
+                std::filesystem::path rel_path (abs_path_stack_.top ().parent_path ());
 
-                complete_path = fs::normalize (rel_path / include_path);
+                complete_path = (rel_path / include_path).lexically_normal ();
 
                 if (ctx.trace ()) cerr << prefix << ": considering "
                                        << complete_path.string () << endl;
 
-                if (fs::exists (complete_path))
+                if (std::filesystem::exists (complete_path))
                 {
                   if (handle_already_included (complete_path, sl)) return;
 
@@ -120,7 +120,7 @@ namespace CCF
 
               if (!found)
               {
-                typedef std::vector<fs::path> SearchPaths;
+                typedef std::vector<std::filesystem::path> SearchPaths;
 
                 SearchPaths const& search_paths (
                   pctx.get<SearchPaths> ("include-search-paths"));
@@ -131,17 +131,17 @@ namespace CCF
                 {
                   complete_path  = *i / include_path;
 
-                  if (!complete_path.is_complete ())
+                  if (!complete_path.is_absolute ())
                   {
-                    complete_path = complete (complete_path);
+                    complete_path = std::filesystem::absolute (complete_path);
                   }
 
-                  complete_path = fs::normalize (complete_path);
+                  complete_path = complete_path.lexically_normal ();
 
                   if (ctx.trace ()) cerr << prefix << ": considering "
                                          << complete_path.string () << endl;
 
-                  if (fs::exists (complete_path))
+                  if (std::filesystem::exists (complete_path))
                   {
                     if (handle_already_included (complete_path, sl)) return;
                     ifs.open (complete_path, std::ios_base::in);
@@ -194,7 +194,7 @@ namespace CCF
 
             // Store previous relative path and current absolute.
             //
-            rel_path_stack_.push (pctx.get<fs::path> ("file-path"));
+            rel_path_stack_.push (pctx.get<std::filesystem::path> ("file-path"));
             pctx.set("file-path", include_path);
 
             abs_path_stack_.push (complete_path);
@@ -253,7 +253,7 @@ namespace CCF
               ctx.scope (root);
             }
           }
-          catch (fs::filesystem_error const&)
+          catch (std::filesystem::filesystem_error const&)
           {
             cerr << ctx.file () << ":" << sl->line () << ": error: "
                  << "'" << sl << "': unable to open in read mode" << endl;
@@ -266,7 +266,7 @@ namespace CCF
         }
 
         bool Include::
-        handle_already_included (fs::path const& path,
+        handle_already_included (std::filesystem::path const& path,
                                  StringLiteralPtr const&)
         {
           if(!include_file_set_.insert (path).second)

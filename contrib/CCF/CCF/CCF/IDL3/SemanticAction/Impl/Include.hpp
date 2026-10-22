@@ -56,24 +56,24 @@ namespace CCF
           impl (StringLiteralPtr const& sl, Type_ type);
 
           bool
-          handle_already_included (fs::path const& path,
+          handle_already_included (std::filesystem::path const& path,
                                    StringLiteralPtr const& sl);
         private:
           Diagnostic::Stream& dout_;
           SemanticAction::Factory& action_factory_;
 
           std::stack<SemanticGraph::TranslationRegion*> stack_;
-          std::stack<fs::path> abs_path_stack_, rel_path_stack_;
+          std::stack<std::filesystem::path> abs_path_stack_, rel_path_stack_;
 
           struct FilePathComparator
           {
-            bool operator () (fs::path const& x, fs::path const& y) const
+            bool operator () (std::filesystem::path const& x, std::filesystem::path const& y) const
             {
               return x.string () < y.string ();
             }
           };
 
-          std::set<fs::path, FilePathComparator> include_file_set_;
+          std::set<std::filesystem::path, FilePathComparator> include_file_set_;
         };
       }
     }

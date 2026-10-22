@@ -24,7 +24,7 @@ namespace CCF
     {
       //
       //
-      typedef fs::path Path;
+      typedef std::filesystem::path Path;
 
       //
       //

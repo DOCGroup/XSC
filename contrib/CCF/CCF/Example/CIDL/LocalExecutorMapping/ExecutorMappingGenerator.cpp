@@ -1486,13 +1486,13 @@ options (CL::Description& d)
 void ExecutorMappingGenerator::
 generate (CommandLine const& cl,
           TranslationUnit& tu,
-          fs::path const& file_path)
+          std::filesystem::path const& file_path)
 {
-  fs::ofstream ofs;
+  std::ofstream ofs;
 
   if (!file_path.empty ())
   {
-    string file_name (file_path.leaf ());
+    string file_name (file_path.filename ());
 
     string suffix (cl.get_value ("lem-file-suffix", "E.idl"));
 
@@ -1501,7 +1501,7 @@ generate (CommandLine const& cl,
 
     string lem_file_name (regex::perl_s (file_name, expr));
 
-    fs::path lem_file_path (lem_file_name);
+    std::filesystem::path lem_file_path (lem_file_name);
 
     ofs.open (lem_file_path, std::ios_base::out);
 

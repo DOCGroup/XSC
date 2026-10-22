@@ -36,7 +36,7 @@ main ()
   {
     Diagnostic::Stream dout;
 
-    fs::path file_path ("stdout");
+    std::filesystem::path file_path ("stdout");
 
     InputStreamAdapter isa (std::cin);
     CPP::Preprocessor pp (isa);

@@ -83,10 +83,10 @@ main (int argc, char* argv[])
       return 0;
     }
 
-    fs::ifstream ifs;
-    ifs.exceptions (ios_base::badbit | ios_base::failbit);
+    std::ifstream ifs;
+    ifs.exceptions (std::ios_base::badbit | std::ios_base::failbit);
 
-    fs::path file_path;
+    std::filesystem::path file_path;
 
     CommandLine::ArgumentsIterator i = cl.arguments_begin ();
 
@@ -94,15 +94,15 @@ main (int argc, char* argv[])
     {
       try
       {
-        file_path = fs::path (*i, fs::native);
-        ifs.open (file_path, std::ios_base::in);
+        file_path = std::filesystem::path (*i);
+        ifs.open (file_path, std::std::ios_base::in);
       }
-      catch (fs::filesystem_error const&)
+      catch (std::filesystem::filesystem_error const&)
       {
         cerr << *i << ": error: unable to open in read mode" << endl;
         return -1;
       }
-      catch (std::ios_base::failure const&)
+      catch (std::std::ios_base::failure const&)
       {
         cerr << *i << ": error: unable to open in read mode" << endl;
         return -1;
@@ -112,7 +112,7 @@ main (int argc, char* argv[])
     //@@ for some reason ifs throws exception if I don't reset it to
     //   original state. It probably has something to do with call to
     //   get after eof.
-    ifs.exceptions (ios_base::iostate (0));
+    ifs.exceptions (std::ios_base::iostate (0));
 
     std::istream& is = ifs.is_open ()
       ? static_cast<std::istream&> (ifs)
@@ -169,20 +169,20 @@ main (int argc, char* argv[])
     // Extract include search paths.
     //
 
-    std::vector<fs::path> include_paths;
+    std::vector<std::filesystem::path> include_paths;
 
     for (CommandLine::OptionsIterator
            i (cl.options_begin ()), e (cl.options_end ()); i != e; ++i)
     {
       if (i->name () == "I")
       {
-        include_paths.push_back (fs::path (i->value (), fs::native));
+        include_paths.push_back (std::filesystem::path (i->value ()));
       }
       else if (i->name ()[0] == 'I')
       {
         std::string opt (i->name ());
         std::string path (opt.begin () + 1, opt.end ());
-        include_paths.push_back (fs::path (path, fs::native));
+        include_paths.push_back (std::filesystem::path (path));
       }
     }
 
