@@ -8,7 +8,6 @@ project (XSC_Utils) : acelib, xsc_common {
   }
 
   Template_Files {
-    XML_Helper_T.cpp
     XML_Schema_Resolver.cpp
   }
 }
