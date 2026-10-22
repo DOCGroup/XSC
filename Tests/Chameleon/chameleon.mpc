@@ -1,0 +1,17 @@
+project (xsc_test_chameleon): xscdefaults {
+  requires += xsc
+  custom_only = 1
+  XSC_Files {
+    includer.xsd
+  }
+  Source_Files {
+  }
+}
+
+project (xsc_test_chameleon_generated): xscrt {
+  after += xsc_test_chameleon
+
+  Source_Files {
+    includer.cpp
+  }
+}

@@ -1,0 +1,20 @@
+project (library_writer_xsd_gen): xscdefaults {
+  requires += xsc
+
+  custom_only = 1
+
+  XSC_Files {
+    ../library.xsd
+  }
+
+  Source_Files {
+  }
+}
+
+project (library_writer_generated): xscrt {
+  after += library_writer_xsd_gen
+
+  Source_Files {
+    library.cpp
+  }
+}

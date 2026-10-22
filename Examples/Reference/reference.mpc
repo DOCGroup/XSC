@@ -1,0 +1,20 @@
+project (reference_xsd_gen): xscdefaults {
+  requires += xsc
+
+  custom_only = 1
+
+  XSC_Files {
+    reference.xsd
+  }
+
+  Source_Files {
+  }
+}
+
+project (reference_generated): xscrt {
+  after += reference_xsd_gen
+
+  Source_Files {
+    reference.cpp
+  }
+}

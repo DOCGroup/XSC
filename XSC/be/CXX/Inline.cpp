@@ -177,7 +177,6 @@ namespace
         // sequence
         //
 
-        if (this->cppmode_ == CPPMODE::CPP03)
         {
           // begin_typename
           //
@@ -465,7 +464,7 @@ namespace
 
       if (e.min () == 1 && e.max () == 1)
       {
-        os << comma () << type << " const& " << name << "__";
+        os << comma () << type << " const& " << id (name) << "__";
       }
       else if (e.min () >= 1)
       {
@@ -578,6 +577,8 @@ namespace
 
       os << ")" << endl;
 
+      bool const has_base (c.inherits_begin () != c.inherits_end ());
+
       inherits (c, ctor_base_);
 
       // Resets a flag that determines if a Complex Type's constructor
@@ -585,7 +586,7 @@ namespace
       // is commented out since it was producing a bug when complex types
       // extended another complete type.
 
-      ctor_member__.reset_base_class_initialization ();
+      ctor_member__.reset_base_class_initialization (has_base);
       names (c, ctor_member_);
 
       os << "{";
@@ -598,8 +599,12 @@ namespace
       //
       os << i
          << scope << "::"
-         << name << " (" << type << " const& s) :" << endl
-         << "::XSCRT::Type (s)" << endl;
+         << name << " (" << type << " const& s)" << endl;
+
+      if (!has_base)
+      {
+        os << ": ::XSCRT::Type (s)" << endl;
+      }
 
       // Resets a flag that determines if a Complex Type's
       // copy constructor has inherited from the base XSCRT::Type
@@ -705,7 +710,7 @@ namespace
 
     struct CtorBase : Traversal::Complex,
                       Traversal::Enumeration,
-                      //Traversal::Type,
+                      Traversal::Type,
                       protected Traversal::Element,
                       protected Traversal::Attribute,
                       protected virtual Context
@@ -718,7 +723,13 @@ namespace
       virtual void
       traverse (SemanticGraph::Enumeration&)
       {
-        os << "Base (b__)," << endl;
+        os << ": Base (b__)" << endl;
+      }
+
+      virtual void
+      traverse (SemanticGraph::Type&)
+      {
+        os << ": Base ()" << endl;
       }
 
       void
@@ -727,11 +738,11 @@ namespace
         string type (type_name (c));
         string name (id (c.name ()));
 
-        os << name << " (";
+        os << ": " << name << " (";
 
         args_.traverse (c);
 
-        os << ")," << endl;
+        os << ")" << endl;
       }
 
     private:
@@ -768,6 +779,10 @@ namespace
         traverse (SemanticGraph::Element& e)
         {
           if (e.min () == 1 && e.max () == 1)
+          {
+            os << comma () << id (e.name ()) << "__";
+          }
+          else if (e.min () >= 1)
           {
             os << comma () << id (e.name ()) << "__";
           }
@@ -821,13 +836,7 @@ namespace
       virtual void
       traverse (SemanticGraph::Element& e)
       {
-        // Constructor for a complex type needs
-        // to inherit from the ::XSCRT::Type base class
-        if (! base_class_initialized_)
-        {
-          os << ": ::XSCRT::Type ()" << endl;
-          base_class_initialized_ = true;
-        }
+        ensure_base_class_initialization ();
 
         if (e.min () == 1 && e.max () == 1)
         {
@@ -855,9 +864,9 @@ namespace
         }
       }
 
-      void reset_base_class_initialization ()
+      void reset_base_class_initialization (bool initialized)
       {
-        base_class_initialized_ = false;
+        base_class_initialized_ = initialized;
       }
 
       virtual void
@@ -865,6 +874,8 @@ namespace
       {
         if (!a.optional ())
         {
+          ensure_base_class_initialization ();
+
           string name (id (a.name ()));
           string type (type_name (a));
 
@@ -880,6 +891,15 @@ namespace
       }
 
     private:
+      void ensure_base_class_initialization ()
+      {
+        if (!base_class_initialized_)
+        {
+          os << ": ::XSCRT::Type ()" << endl;
+          base_class_initialized_ = true;
+        }
+      }
+
       bool base_class_initialized_;
     };
 
@@ -932,7 +952,7 @@ namespace
       {
         if (!this->base_class_initialized_)
           {
-            os << "Base (s)" << endl;
+            os << ": Base (s)" << endl;
             this->base_class_initialized_ = true;
           }
       }
@@ -1107,7 +1127,7 @@ namespace
       }
     };
 
-    struct Assignment : /*Traversal::Type, */
+    struct Assignment : Traversal::Type,
                         Traversal::Element,
                         Traversal::Attribute,
                         protected virtual Context
@@ -1115,6 +1135,12 @@ namespace
       Assignment (Context& c)
           : Context (c)
       {
+      }
+
+      virtual void
+      traverse (SemanticGraph::Type&)
+      {
+        os << "Base::operator= (s);" << endl;
       }
 
       virtual void

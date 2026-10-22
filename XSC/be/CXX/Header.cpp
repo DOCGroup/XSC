@@ -84,7 +84,7 @@ namespace
 
       if (e.min () == 1 && e.max () == 1)
       {
-        os << comma () << type << " const& " << name << "__";
+        os << comma () << type << " const& " << id (name) << "__";
       }
       else if (e.min () >= 1)
       {
@@ -199,7 +199,10 @@ namespace
             break;
           case CPPMODE::CPP11:
           case CPPMODE::CPP17:
+            os << "using " << name << "_iterator = " << name << "_container_type::iterator;";
             os << "using " << name << "_const_iterator = " << name << "_container_type::const_iterator;";
+            os << name << "_iterator begin_" << name << " ();";
+            os << name << "_iterator end_" << name << " ();";
             break;
         }
 
@@ -956,7 +959,7 @@ generate_header (Context& ctx,
     }
   }
 
-  if (ctx.cppmode() != Context::CPPMODE::CPP03)
+  if (ctx.orb() == Context::ORB::TAOX11)
   {
     ctx.os << "#include \"tao/x11/base/stddef.h\"" << endl;
   }

@@ -31,6 +31,11 @@ public:
     CPP17
   };
 
+  enum class ORB {
+    TAO,
+    TAOX11
+  };
+
 
 public:
   Context (std::wostream& o,
@@ -67,7 +72,8 @@ public:
         ns_mapping_ (ns_mapping),
         cdr_reader_generation_ (false),
         cdr_writer_generation_ (false),
-        cppmode_ (CPPMODE::CPP03),
+        cppmode_ (CPPMODE::CPP17),
+        orb_ (ORB::TAO),
         generate_ra_sequences_ (false)
   {
     if (char_type == L"wchar_t")
@@ -114,6 +120,7 @@ protected:
         cdr_reader_generation_ (c.cdr_reader_generation_),
         cdr_writer_generation_ (c.cdr_writer_generation_),
         cppmode_ (c.cppmode_),
+        orb_ (c.orb_),
         generate_ra_sequences_ (c.generate_ra_sequences_)
   {
   }
@@ -245,6 +252,18 @@ public:
   }
 
   void
+  orb (ORB value)
+  {
+    this->orb_ = value;
+  }
+
+  ORB
+  orb ()
+  {
+    return this->orb_;
+  }
+
+  void
   generate_ra_sequences (bool flag)
   {
     this->generate_ra_sequences_ = flag;
@@ -323,6 +342,8 @@ protected:
 
   // Generate code depending on C++ features
   CPPMODE cppmode_;
+
+  ORB orb_;
 
   bool generate_ra_sequences_;
 };

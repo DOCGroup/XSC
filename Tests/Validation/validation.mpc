@@ -1,0 +1,4 @@
+project (xsc_test_validation) {
+  Source_Files {
+  }
+}

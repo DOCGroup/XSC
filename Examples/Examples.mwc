@@ -1,0 +1,9 @@
+workspace (Examples) {
+  cmdline += -include $XSC_ROOT/MPC/config
+  cmdline += -include $XSC_ROOT/contrib/CCF/CCF/MPC/config
+
+  Library/Reader
+  Library/Writer
+  Recursive
+  Reference
+}

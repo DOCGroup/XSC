@@ -1,0 +1,18 @@
+project (xsc_test_anonymous): xscdefaults {
+  requires += xsc
+  custom_only = 1
+  XSC_Files {
+    test.xsd
+  }
+  Source_Files {
+  }
+}
+
+project (xsc_test_anonymous_generated): xscrt {
+  requires += dummy_label
+  after += xsc_test_anonymous
+
+  Source_Files {
+    test.cpp
+  }
+}

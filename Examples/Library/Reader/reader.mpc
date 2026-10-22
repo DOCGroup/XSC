@@ -1,0 +1,21 @@
+project (library_reader_xsd_gen): xscdefaults {
+  requires += xsc
+
+  custom_only = 1
+  xscflags += --cxx-generate-traversal-types
+
+  XSC_Files {
+    ../library.xsd
+  }
+
+  Source_Files {
+  }
+}
+
+project (library_reader_generated): xscrt {
+  after += library_reader_xsd_gen
+
+  Source_Files {
+    library.cpp
+  }
+}

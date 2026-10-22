@@ -1,0 +1,9 @@
+project (xsc_test_complex_type_import): xscdefaults {
+  requires += xsc dummy_label
+  custom_only = 1
+  XSC_Files {
+    importer.xsd
+  }
+  Source_Files {
+  }
+}
