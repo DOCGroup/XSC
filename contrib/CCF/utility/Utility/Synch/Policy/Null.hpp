@@ -21,13 +21,13 @@ namespace Utility
       {
       public:
         explicit
-        NullGuard (NullMutex&) throw ();
+        NullGuard (NullMutex&) noexcept;
 
       private:
-        NullGuard (NullGuard const&) throw ();
+        NullGuard (NullGuard const&) noexcept;
 
         NullGuard&
-        operator= (NullGuard const&) throw ();
+        operator= (NullGuard const&) noexcept;
       };
 
       struct Null

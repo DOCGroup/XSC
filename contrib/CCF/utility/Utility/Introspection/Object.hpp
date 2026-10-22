@@ -16,24 +16,24 @@ namespace Utility
     {
     public:
       static TypeInfo const&
-      static_type_info () throw ();
+      static_type_info () noexcept;
 
       virtual TypeInfo const&
-      type_info () const throw ();
+      type_info () const noexcept;
 
     protected:
       virtual
       ~Object ();
 
-      Object () throw ();
-      Object (Object const&) throw ();
+      Object () noexcept;
+      Object (Object const&) noexcept;
 
       Object&
-      operator= (Object const&) throw ();
+      operator= (Object const&) noexcept;
 
     protected:
       virtual void
-      type_info (TypeInfo const& tid) throw ();
+      type_info (TypeInfo const& tid) noexcept;
 
     private:
       TypeInfo const* type_info_;

@@ -11,14 +11,14 @@ namespace Utility
 
     template <typename T>
     StrictPtr<T>::
-    StrictPtr () throw ()
+    StrictPtr () noexcept
         : ptr_ (0)
     {
     }
 
     template <typename T>
     StrictPtr<T>::
-    StrictPtr (Type* ptr) throw ()
+    StrictPtr (Type* ptr) noexcept
         : ptr_ (ptr)
     {
     }
@@ -41,7 +41,7 @@ namespace Utility
 
     template <typename T>
     StrictPtr<T>::
-    ~StrictPtr () throw ()
+    ~StrictPtr () noexcept
     {
       // This is an additional catch-all layer to protect from
       // non-conformant Type.
@@ -58,7 +58,7 @@ namespace Utility
 
     template <typename T>
     StrictPtr<T>&
-    StrictPtr<T>::operator= (Type* ptr) throw ()
+    StrictPtr<T>::operator= (Type* ptr) noexcept
     {
       if (ptr_ != 0) ptr_->remove_ref ();
       ptr_ = ptr;
@@ -97,14 +97,14 @@ namespace Utility
 
     template <typename T>
     bool StrictPtr<T>::
-    operator== (Type* other) const throw ()
+    operator== (Type* other) const noexcept
     {
       return ptr_ == other;
     }
 
     template <typename T>
     bool StrictPtr<T>::
-    operator!= (Type* other) const throw ()
+    operator!= (Type* other) const noexcept
     {
       return ptr_ != other;
     }
@@ -126,14 +126,14 @@ namespace Utility
 
     template <typename T>
     T* StrictPtr<T>::
-    in () const throw ()
+    in () const noexcept
     {
       return ptr_;
     }
 
     template <typename T>
     T* StrictPtr<T>::
-    retn() throw ()
+    retn() noexcept
     {
       Type* ret (ptr_);
       ptr_ = 0;

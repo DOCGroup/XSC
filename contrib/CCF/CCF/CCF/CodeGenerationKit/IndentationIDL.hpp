@@ -40,7 +40,7 @@ namespace Indentation
     }
 
     virtual
-    ~IDL () throw () {}
+    ~IDL () noexcept {}
 
   public:
     virtual int_type

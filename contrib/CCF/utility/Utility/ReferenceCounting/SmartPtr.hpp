@@ -31,8 +31,8 @@ namespace Utility
     public:
       // c-tor's
 
-      SmartPtr () throw ();
-      SmartPtr (Type* ptr) throw ();
+      SmartPtr () noexcept;
+      SmartPtr (Type* ptr) noexcept;
       SmartPtr (SmartPtr<Type> const& s_ptr);
 
       template <typename Other>
@@ -40,12 +40,12 @@ namespace Utility
 
       // d-tor
 
-      ~SmartPtr () throw ();
+      ~SmartPtr () noexcept;
 
       // assignment & copy-assignment operators
 
       SmartPtr<Type>&
-      operator= (Type* ptr) throw ();
+      operator= (Type* ptr) noexcept;
 
       SmartPtr<Type>&
       operator= (SmartPtr<Type> const& s_ptr);
@@ -56,7 +56,7 @@ namespace Utility
 
       //conversions
 
-      operator Type* () const throw ();
+      operator Type* () const noexcept;
 
       // accessors
 
@@ -64,10 +64,10 @@ namespace Utility
       operator-> () const;
 
       Type*
-      in () const throw ();
+      in () const noexcept;
 
       Type*
-      retn() throw ();
+      retn() noexcept;
 
     private:
       Type* ptr_;

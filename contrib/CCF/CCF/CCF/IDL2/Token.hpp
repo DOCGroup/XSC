@@ -28,7 +28,7 @@ namespace CCF
 
     public:
       virtual
-      ~Token () throw () {}
+      ~Token () noexcept {}
 
       virtual void
       print (std::ostream& o)
@@ -106,7 +106,7 @@ namespace CCF
       }
 
       virtual
-      ~Punctuation () throw () {}
+      ~Punctuation () noexcept {}
     };
 
     typedef
@@ -126,7 +126,7 @@ namespace CCF
       }
 
       virtual
-      ~Operator () throw () {}
+      ~Operator () noexcept {}
     };
 
     typedef
@@ -305,7 +305,7 @@ namespace CCF
     {
     public:
       virtual
-      ~StringLiteral () throw () {}
+      ~StringLiteral () noexcept {}
 
       StringLiteral (std::string const& value,
                      std::string const& lexeme,

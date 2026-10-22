@@ -28,7 +28,7 @@ namespace CCF
       class Typing {};
 
       Map::size_type
-      count (char const* key) const throw ()
+      count (char const* key) const noexcept
       {
         return map_.count (key);
       }
@@ -102,8 +102,8 @@ namespace CCF
 
     private:
       // Copy semanic is not supported.
-      Context (Context const&) throw ();
-      Context& operator= (Context const&) throw ();
+      Context (Context const&) noexcept;
+      Context& operator= (Context const&) noexcept;
     };
   }
 }

@@ -8,7 +8,7 @@ namespace Utility
   namespace Introspection
   {
     inline TypeInfo const& Object::
-    type_info () const throw ()
+    type_info () const noexcept
     {
       return *type_info_;
     }
@@ -19,27 +19,27 @@ namespace Utility
     }
 
     inline Object::
-    Object () throw ()
+    Object () noexcept
     {
       type_info (static_type_info ());
     }
 
 
     inline Object::
-    Object (Object const&) throw ()
+    Object (Object const&) noexcept
     {
       type_info (static_type_info ());
     }
 
 
     inline Object& Object::
-    operator= (Object const&) throw ()
+    operator= (Object const&) noexcept
     {
       return *this;
     }
 
     inline void Object::
-    type_info (TypeInfo const& tid) throw ()
+    type_info (TypeInfo const& tid) noexcept
     {
       type_info_ = &tid;
     }

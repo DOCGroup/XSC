@@ -19,26 +19,26 @@ namespace Utility
       typedef _Base Base;
 
       explicit
-      Compound (char const* description) throw ();
+      Compound (char const* description) noexcept;
 
       explicit
-      Compound (std::string const& description) throw ();
+      Compound (std::string const& description) noexcept;
 
       template <typename T>
       explicit
-      Compound (T const& description) throw ();
+      Compound (T const& description) noexcept;
 
-      Compound (Compound const& src) throw ();
+      Compound (Compound const& src) noexcept;
 
       virtual
-      ~Compound () throw ();
+      ~Compound () noexcept;
 
     public:
       Compound&
-      operator= (Compound const& src) throw ();
+      operator= (Compound const& src) noexcept;
 
     protected:
-      Compound () throw ();
+      Compound () noexcept;
     };
   }
 }

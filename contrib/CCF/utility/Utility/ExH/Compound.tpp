@@ -12,20 +12,20 @@ namespace Utility
     // c-tor's & d-tor
     template <typename Type, typename Base>
     Compound<Type, Base>::
-    Compound () throw ()
+    Compound () noexcept
     {
     }
 
     template <typename Type, typename Base>
     Compound<Type, Base>::
-    Compound (char const* description) throw ()
+    Compound (char const* description) noexcept
     {
       Base::init (description);
     }
 
     template <typename Type, typename Base>
     Compound<Type, Base>::
-    Compound (std::string const& description) throw ()
+    Compound (std::string const& description) noexcept
     {
       try
       {
@@ -39,14 +39,14 @@ namespace Utility
     template <typename Type, typename Base>
     template <typename T>
     Compound<Type, Base>::
-    Compound (T const& description) throw ()
+    Compound (T const& description) noexcept
     {
       Base::init (converter<T> (description).c_str ());
     }
 
     template <typename Type, typename Base>
     Compound<Type, Base>::
-    Compound (Compound const& src) throw ()
+    Compound (Compound const& src) noexcept
           : Base::Base::Base (),
             Base::Base (),
             Base ()
@@ -56,7 +56,7 @@ namespace Utility
 
     template <typename Type, typename Base>
     Compound<Type, Base>::
-    ~Compound () throw ()
+    ~Compound () noexcept
     {
     }
 
@@ -64,7 +64,7 @@ namespace Utility
 
     template <typename Type, typename Base>
     Compound<Type, Base>& Compound<Type, Base>::
-    operator= (Compound const& src) throw ()
+    operator= (Compound const& src) noexcept
     {
       Base::init (src.what ());
       return *this;

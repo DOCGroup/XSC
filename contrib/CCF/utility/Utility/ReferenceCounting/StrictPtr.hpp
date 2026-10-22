@@ -31,10 +31,10 @@ namespace Utility
     public:
       // c-tor's
 
-      StrictPtr () throw ();
+      StrictPtr () noexcept;
 
       explicit
-      StrictPtr (Type* ptr) throw ();
+      StrictPtr (Type* ptr) noexcept;
 
       StrictPtr (StrictPtr<Type> const& s_ptr);
 
@@ -42,12 +42,12 @@ namespace Utility
       StrictPtr (StrictPtr<Other> const& s_ptr);
       // d-tor
 
-      ~StrictPtr () throw ();
+      ~StrictPtr () noexcept;
 
       // assignment & copy-assignment operators
 
       StrictPtr<Type>&
-      operator= (Type* ptr) throw ();
+      operator= (Type* ptr) noexcept;
 
       StrictPtr<Type>&
       operator= (StrictPtr<Type> const& s_ptr);
@@ -63,10 +63,10 @@ namespace Utility
       // comparison
 
       bool
-      operator== (Type* other) const throw ();
+      operator== (Type* other) const noexcept;
 
       bool
-      operator!= (Type* other) const throw ();
+      operator!= (Type* other) const noexcept;
 
       // accessors
 
@@ -74,10 +74,10 @@ namespace Utility
       operator-> () const;
 
       Type*
-      in () const throw ();
+      in () const noexcept;
 
       Type*
-      retn() throw ();
+      retn() noexcept;
 
     private:
       Type* ptr_;

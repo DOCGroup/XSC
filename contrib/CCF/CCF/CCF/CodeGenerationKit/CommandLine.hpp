@@ -21,7 +21,7 @@ public:
 public:
 
   bool
-  require (std::string option) const throw ()
+  require (std::string option) const noexcept
   {
     return std::find_if (options.begin (),
                          options.end (),
@@ -30,7 +30,7 @@ public:
 
   bool
   depends (std::string dependant,
-           std::string principal) const throw ()
+           std::string principal) const noexcept
   {
     Options::const_iterator begin = options.begin ();
     Options::const_iterator end   = options.end ();
@@ -47,7 +47,7 @@ public:
 
   bool
   inconsistent (std::string a,
-                std::string b) const throw ()
+                std::string b) const noexcept
   {
     Options::const_iterator begin = options.begin ();
     Options::const_iterator end   = options.end ();
@@ -219,7 +219,7 @@ public:
     {
     }
 
-    bool operator ()(Option const& option) throw ()
+    bool operator ()(Option const& option) noexcept
     {
       return name_ == option.name ();
     }

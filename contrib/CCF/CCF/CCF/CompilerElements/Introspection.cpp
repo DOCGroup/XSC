@@ -17,7 +17,7 @@ namespace Utility
     }
 
     TypeInfo const& Object::
-    static_type_info () throw ()
+    static_type_info () noexcept
     {
       return object_;
     }

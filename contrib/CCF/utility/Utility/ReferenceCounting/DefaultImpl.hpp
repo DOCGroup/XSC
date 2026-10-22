@@ -37,14 +37,14 @@ namespace Utility
       DefaultImpl ();
 
       virtual
-      ~DefaultImpl () throw ();
+      ~DefaultImpl () noexcept;
 
     public:
       virtual void
       add_ref () const;
 
       virtual void
-      remove_ref () const throw ();
+      remove_ref () const noexcept;
 
       virtual count_t
       refcount_value () const;
@@ -60,7 +60,7 @@ namespace Utility
       refcount_value_i () const;
 
       typename SynchPolicy::Mutex&
-      lock_i () const throw ();
+      lock_i () const noexcept;
 
     protected:
       typedef
@@ -83,9 +83,9 @@ namespace Utility
 
     private:
       // Copy semanic is not supported.
-      DefaultImpl (DefaultImpl const&) throw ();
+      DefaultImpl (DefaultImpl const&) noexcept;
       DefaultImpl&
-      operator= (DefaultImpl const&) throw ();
+      operator= (DefaultImpl const&) noexcept;
     };
   }
 }

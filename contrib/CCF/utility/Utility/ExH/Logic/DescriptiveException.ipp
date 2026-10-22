@@ -12,18 +12,18 @@ namespace Utility
       // c-tor's & d-tor
 
       inline DescriptiveException::
-      DescriptiveException () throw ()
+      DescriptiveException () noexcept
       {
       }
 
       inline DescriptiveException::
-      DescriptiveException (char const* description) throw ()
+      DescriptiveException (char const* description) noexcept
       {
         init (description);
       }
 
       inline DescriptiveException::
-      DescriptiveException (std::string const& description) throw ()
+      DescriptiveException (std::string const& description) noexcept
       {
         try
         {
@@ -35,7 +35,7 @@ namespace Utility
       }
 
       inline DescriptiveException::
-      DescriptiveException (DescriptiveException const& src) throw ()
+      DescriptiveException (DescriptiveException const& src) noexcept
         : std::exception (),
           Exception ()
       {
@@ -43,10 +43,10 @@ namespace Utility
       }
 
       inline DescriptiveException::
-      ~DescriptiveException () throw () = default;
+      ~DescriptiveException () noexcept = default;
 
       inline DescriptiveException& DescriptiveException::
-      operator= (DescriptiveException const& src) throw ()
+      operator= (DescriptiveException const& src) noexcept
       {
         init (src.what ());
         return *this;
@@ -56,7 +56,7 @@ namespace Utility
       // accessors / modifiers
 
       inline void
-      DescriptiveException::init (char const* description) throw ()
+      DescriptiveException::init (char const* description) noexcept
       {
         try
         {
@@ -83,7 +83,7 @@ namespace Utility
       }
 
       inline char const*
-      DescriptiveException::what () const throw ()
+      DescriptiveException::what () const noexcept
       {
         try
         {

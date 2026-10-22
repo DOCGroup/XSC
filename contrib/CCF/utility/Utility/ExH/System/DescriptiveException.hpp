@@ -21,32 +21,32 @@ namespace Utility
         typedef Exception Base;
 
         explicit
-        DescriptiveException (char const* description) throw ();
+        DescriptiveException (char const* description) noexcept;
 
         explicit
-        DescriptiveException (std::string const& description) throw ();
+        DescriptiveException (std::string const& description) noexcept;
 
         template <typename T>
         explicit
-        DescriptiveException (T const& description) throw ();
+        DescriptiveException (T const& description) noexcept;
 
-        DescriptiveException (DescriptiveException const& src) throw ();
+        DescriptiveException (DescriptiveException const& src) noexcept;
 
         virtual
-        ~DescriptiveException () throw ();
+        ~DescriptiveException () noexcept;
 
         DescriptiveException&
-        operator= (DescriptiveException const& src) throw ();
+        operator= (DescriptiveException const& src) noexcept;
 
       protected:
-        DescriptiveException () throw ();
+        DescriptiveException () noexcept;
 
         void
-        init (char const* description) throw ();
+        init (char const* description) noexcept;
 
       public:
         virtual char const*
-        what () const throw ();
+        what () const noexcept;
 
       private:
 

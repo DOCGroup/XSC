@@ -10,7 +10,7 @@ namespace Utility
     namespace Policy
     {
       inline NullGuard::
-      NullGuard (NullMutex&) throw ()
+      NullGuard (NullMutex&) noexcept
       {
       }
     }

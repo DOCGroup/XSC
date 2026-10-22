@@ -8,12 +8,12 @@ namespace Utility
   namespace ReferenceCounting
   {
     inline Interface::
-    ~Interface () throw ()
+    ~Interface () noexcept
     {
     }
 
     inline Interface::
-    Interface () throw ()
+    Interface () noexcept
     {
     }
   }

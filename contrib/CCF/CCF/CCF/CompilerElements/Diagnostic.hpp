@@ -183,8 +183,8 @@ namespace Diagnostic
 
   private:
     // Copy semanic is not supported.
-    Stream (Stream const&) throw ();
-    Stream& operator= (Stream const&) throw ();
+    Stream (Stream const&) noexcept;
+    Stream& operator= (Stream const&) noexcept;
   };
 }
 

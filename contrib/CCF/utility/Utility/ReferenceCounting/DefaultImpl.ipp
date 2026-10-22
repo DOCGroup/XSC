@@ -19,7 +19,7 @@ namespace Utility
 
     template <typename SynchPolicy>
     DefaultImpl<SynchPolicy>::
-    ~DefaultImpl () throw ()
+    ~DefaultImpl () noexcept
     {
     }
 
@@ -35,7 +35,7 @@ namespace Utility
 
     template <typename SynchPolicy>
     void DefaultImpl<SynchPolicy>::
-    remove_ref () const throw ()
+    remove_ref () const noexcept
     {
       bool destroy (false);
       try
@@ -96,7 +96,7 @@ namespace Utility
 
     template <typename SynchPolicy>
     typename SynchPolicy::Mutex& DefaultImpl<SynchPolicy>::
-    lock_i() const throw ()
+    lock_i() const noexcept
     {
       return lock_;
     }

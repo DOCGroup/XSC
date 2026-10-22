@@ -110,7 +110,7 @@ namespace CCF
       struct RecoveryDescriptor :
         public virtual ReferenceCounting::DefaultImpl <>
       {
-        virtual ~RecoveryDescriptor () throw () {}
+        virtual ~RecoveryDescriptor () noexcept {}
 
         RecoveryDescriptor (std::string d,
                             RecoveryMethod::Value recovery,

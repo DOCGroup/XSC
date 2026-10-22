@@ -13,7 +13,7 @@ namespace Utility
     {
       template <typename T>
       inline DescriptiveException::
-      DescriptiveException (T const& description) throw ()
+      DescriptiveException (T const& description) noexcept
       {
         init (converter<T> (description).c_str ());
       }

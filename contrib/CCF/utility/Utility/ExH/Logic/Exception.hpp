@@ -30,7 +30,7 @@ namespace Utility
         typedef System::Exception Base;
 
         virtual
-        ~Exception () throw ();
+        ~Exception () noexcept;
       };
     }
   }

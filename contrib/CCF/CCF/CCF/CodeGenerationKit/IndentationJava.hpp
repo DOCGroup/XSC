@@ -43,7 +43,7 @@ namespace Indentation
     }
 
     virtual
-    ~Java () throw () {}
+    ~Java () noexcept {}
 
   public:
     virtual int_type

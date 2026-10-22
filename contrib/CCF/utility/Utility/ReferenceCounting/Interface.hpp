@@ -38,16 +38,16 @@ namespace Utility
       add_ref () const = 0;
 
       virtual void
-      remove_ref () const throw () = 0;
+      remove_ref () const noexcept = 0;
 
       virtual count_t
       refcount_value () const = 0;
 
     protected:
-      Interface () throw ();
+      Interface () noexcept;
 
       virtual
-      ~Interface () throw ();
+      ~Interface () noexcept;
 
     protected:
       virtual void
@@ -61,9 +61,9 @@ namespace Utility
 
     private:
       // Copy semanic is not supported.
-      Interface (Interface const&) throw ();
+      Interface (Interface const&) noexcept;
       Interface&
-      operator= (Interface const&) throw ();
+      operator= (Interface const&) noexcept;
     };
 
     template <typename Type>

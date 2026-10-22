@@ -42,7 +42,7 @@ namespace Indentation
     }
 
     virtual
-    ~XML () throw () {}
+    ~XML () noexcept {}
 
   public:
     virtual int_type

@@ -26,7 +26,7 @@ namespace CCF
     {
     public:
       virtual
-      ~LexicalAnalyzer () throw () {}
+      ~LexicalAnalyzer () noexcept {}
 
     public:
 

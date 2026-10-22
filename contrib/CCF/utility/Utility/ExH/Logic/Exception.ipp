@@ -10,7 +10,7 @@ namespace Utility
     namespace Logic
     {
       inline Exception::
-      ~Exception () throw ()
+      ~Exception () noexcept
       {
       }
     }

@@ -11,14 +11,14 @@ namespace Utility
 
     template <typename T>
     SmartPtr<T>::
-    SmartPtr () throw ()
+    SmartPtr () noexcept
         : ptr_ (0)
     {
     }
 
     template <typename T>
     SmartPtr<T>::
-    SmartPtr (Type* ptr) throw ()
+    SmartPtr (Type* ptr) noexcept
         : ptr_ (ptr)
     {
     }
@@ -41,7 +41,7 @@ namespace Utility
 
     template <typename T>
     SmartPtr<T>::
-    ~SmartPtr () throw ()
+    ~SmartPtr () noexcept
     {
       // This is an additional catch-all layer to protect from
       // non-conformant Type.
@@ -58,7 +58,7 @@ namespace Utility
 
     template <typename T>
     SmartPtr<T>& SmartPtr<T>::
-    operator= (Type* ptr) throw ()
+    operator= (Type* ptr) noexcept
     {
       if (ptr_ != 0) ptr_->remove_ref ();
       ptr_ = ptr;
@@ -98,7 +98,7 @@ namespace Utility
 
     template <typename T>
     SmartPtr<T>::
-    operator T* () const throw ()
+    operator T* () const noexcept
     {
       return ptr_;
     }
@@ -121,14 +121,14 @@ namespace Utility
 
     template <typename T>
     T* SmartPtr<T>::
-    in () const throw ()
+    in () const noexcept
     {
       return ptr_;
     }
 
     template <typename T>
     T* SmartPtr<T>::
-    retn() throw ()
+    retn() noexcept
     {
       Type* ret (ptr_);
       ptr_ = 0;
