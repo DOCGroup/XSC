@@ -1,4 +1,4 @@
-# DanceX11 deployment schemas
+DanceX11 deployment schemas.
 
 This directory archives the XSD inputs listed in the `DANCEX11_XSC_XML_Generation`
 project in [DanceX11's config-handler build](https://github.com/RemedyIT/dancex11/blob/master/tools/config_handlers/config_handlers.mpc).

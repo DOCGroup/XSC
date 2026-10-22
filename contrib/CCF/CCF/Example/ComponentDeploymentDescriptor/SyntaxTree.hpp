@@ -23,9 +23,7 @@ namespace CDD
     //
     class Node;
 
-    typedef
-    StrictPtr<Node>
-    NodePtr;
+    using NodePtr = StrictPtr<Node>;
 
     class Node : public virtual Introspection::Object,
                  public virtual ReferenceCounting::DefaultImpl <>
@@ -53,9 +51,7 @@ namespace CDD
       static_type_info ();
     };
 
-    typedef
-    std::vector<NodePtr>
-    NodeList;
+    using NodeList = std::vector<NodePtr>;
 
 
     //
@@ -89,9 +85,7 @@ namespace CDD
       std::string name_;
     };
 
-    typedef
-    StrictPtr<PortInstance>
-    PortInstancePtr;
+    using PortInstancePtr = StrictPtr<PortInstance>;
 
     template <typename T>
     struct NameComparator
@@ -103,9 +97,7 @@ namespace CDD
       }
     };
 
-    typedef
-    std::set<PortInstancePtr, NameComparator<PortInstancePtr> >
-    PortInstanceSet;
+    using PortInstanceSet = std::set<PortInstancePtr, NameComparator<PortInstancePtr>>;
 
 
     //
@@ -114,9 +106,7 @@ namespace CDD
     class ComponentInstance : public virtual Node
     {
     public:
-      typedef
-      PortInstanceSet::const_iterator
-      Iterator;
+      using Iterator = PortInstanceSet::const_iterator;
 
     public:
 
@@ -178,9 +168,7 @@ namespace CDD
       PortInstanceSet ports_;
     };
 
-    typedef
-    StrictPtr<ComponentInstance>
-    ComponentInstancePtr;
+    using ComponentInstancePtr = StrictPtr<ComponentInstance>;
 
 
     //
@@ -223,9 +211,7 @@ namespace CDD
       PortInstancePtr right_;
     };
 
-    typedef
-    StrictPtr<Connection>
-    ConnectionPtr;
+    using ConnectionPtr = StrictPtr<Connection>;
 
 
     //
@@ -234,9 +220,7 @@ namespace CDD
     class Descriptor : public virtual Node
     {
     public:
-      typedef
-      NodeList::const_iterator
-      Iterator;
+      using Iterator = NodeList::const_iterator;
 
     public:
       virtual
@@ -275,9 +259,7 @@ namespace CDD
       NodeList nodes_;
     };
 
-    typedef
-    StrictPtr<Descriptor>
-    DescriptorPtr;
+    using DescriptorPtr = StrictPtr<Descriptor>;
   }
 }
 
