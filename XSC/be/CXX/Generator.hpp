@@ -35,18 +35,13 @@
 //@@ SemanticGraphFwd could be useful here.
 //
 #include "XSC/SemanticGraph.hpp"
-
-#include "boost/program_options.hpp"
+#include "XSC/Options.hpp"
 
 class CXX_Generator
 {
 public:
-  static void
-  options (boost::program_options::options_description &d);
-
-
   void
-  generate (boost::program_options::variables_map const& vm,
+  generate (XSC::Options const& options,
             XSC::SemanticGraph::Schema&,
             std::filesystem::path const& file);
 };

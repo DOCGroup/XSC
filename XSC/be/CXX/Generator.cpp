@@ -27,8 +27,6 @@
 
 
 using namespace XSC::SemanticGraph;
-namespace po = boost::program_options;
-
 namespace
 {
   // On some platforms std::toupper can be something other than a
@@ -40,103 +38,8 @@ namespace
   }
 }
 
- /**
- * @CXX_Generator::options
- *
- * @brief Adds CXX Generator specific options to the supplied program
- *  options object.
- */
-
 void CXX_Generator::
-options (po::options_description& d)
-{
-
-  d.add_options ()
-    ("cxx-char-type", po::value<std::string> ()->default_value ("ACE_TCHAR"),
-     "Generate code using provided character type instead of wchar_t.")
-    ("cxx-orb", po::value<std::string> ()->default_value ("tao"),
-     "Select the ORB integration: tao (default) or taox11.")
-    ("cxx-generate-writer-types",
-     "Generate code for serializing documents back to DOM.")
-    ("cxx-generate-extended-rtti",
-     "Generate extended run-time type identification")
-    ("cxx-generate-traversal-types",
-     "Generate traversal types that implement visitor-style "
-     "traversal of the graph. Usually useful for performing "
-     "operations on complex recursive and/or dynamically-typed "
-     "(ID/IDREF) graphs.")
-    ("cxx-generate-inline",
-     "Generate inline implementation for certain functions.")
-    ("cxx-namespace-regex", po::value< std::vector<std::string> > (),
-     "Add provided regular expression of the form /pattern/replacement/ to the list "
-     "of regular expressions used to translate XML Schema "
-     "namespace names to C++ namespace names. The first "
-     "successful substitution is used. The last specified "
-     "expression is considered first.")
-    ("cxx-header-suffix", po::value<std::string> ()->default_value (".hpp"),
-     "Use provided suffix instead of default `.hpp' "
-     "when constructing the name of the header file.")
-    ("cxx-inline-suffix", po::value<std::string> ()->default_value (".ipp"),
-     "Use provided suffix instead of default `.ipp' "
-     "when constructing the name of the inline file.")
-    ("cxx-source-suffix", po::value<std::string> ()->default_value (".cpp"),
-     "Use provided suffix instead of default `.cpp' "
-     "when constructing the name of the source file.")
-    ("cxx-header-regex", po::value<std::string> ()->default_value ("/\\..*$//"),
-     "Use provided regular expression of the form /pattern/replacement/ when constructing "
-     "the name of the header file.")
-    ("cxx-inline-regex", po::value<std::string> ()->default_value ("/\\..*$//"),
-     "Use provided regular expression of the form /pattern/replacemsnet when constructing "
-     "the name of the inline file.")
-    ("cxx-source-regex", po::value<std::string> ()->default_value ("/\\..*$//"),
-     "Use provided regular expression of the form /pattern/replacement/ when constructing "
-     "the name of the source file.")
-    ("cxx-header-guard", po::value<std::string> ()->default_value (""),
-     "Use this header include guard instead of the filename' "
-     "when constructing the name of the header file.")
-    ("cxx-banner-file", po::value<std::string> ()->default_value (""),
-     "Copy provided banner at the beginning of every generated "
-     "file for which file-specific banner is not provided.")
-    ("cxx-header-banner-file", po::value<std::string> ()->default_value (""),
-     "Copy provided banner at the beginning of the header file.")
-    ("cxx-inline-banner-file", po::value<std::string> ()->default_value (""),
-     "Copy provided banner at the beginning of the inline file.")
-    ("cxx-source-banner-file", po::value<std::string> ()->default_value (""),
-     "Copy provided banner at the beginning of the source file.")
-    ("cxx-export-symbol", po::value<std::string> ()->default_value (""),
-     "Export symbol for Win32 DLL export/import control.")
-    ("cxx-export-header", po::value<std::string> ()->default_value (""),
-     "Export header for Win32 DLL export/import control.")
-    ("cxx-enable-random-access-sequences",
-     "Generate code that allows random access to "
-     "sequence elements.  Trades off with less efficient"
-     "parsing.")
-
-    // -- cdr insertion and extraction
-    ("cxx-generate-cdr-writer-types",
-     "Generate code for writing types onto "
-     "CDR streams.")
-    ("cxx-generate-cdr-reader-types",
-     "Generate code for reading types from "
-     "CDR streams.")
-    ("cxx-cpp03",
-     "Generate code compatible with C++03.")
-    ("cxx-cpp11",
-     "Generate code that depends on C++11 features.")
-    ("cxx-cpp17",
-     "Generate code that depends on C++17 features.")
-    ;
-}
-
- /**
- * @CXX_Generator::generate
- *
- * @brief Creates the all output files (header, source, parser header, and
- *  parser source).
- */
-
-void CXX_Generator::
-generate (po::variables_map const& vm, Schema& schema, std::filesystem::path const& file_path)
+generate (XSC::Options const& options, Schema& schema, std::filesystem::path const& file_path)
 {
   //Name is the actual file name.
   std::string name (file_path.filename ().string ());
@@ -144,7 +47,7 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
   // Validate options that can otherwise fail after opening (and truncating)
   // the generated output files.
   ::Context::ORB orb_ { ::Context::ORB::TAO };
-  std::string const orb (vm["cxx-orb"].as<std::string> ());
+  std::string const orb (options.value ("cxx-orb"));
   if (orb == "taox11")
     {
       orb_ = ::Context::ORB::TAOX11;
@@ -155,15 +58,15 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
     }
 
   //Stores file suffixes (defaults are .hpp, ipp, and cpp)
-  std::string hxx_suffix (vm["cxx-header-suffix"].as<std::string> ());
-  std::string ixx_suffix (vm["cxx-inline-suffix"].as<std::string> ());
-  std::string cxx_suffix (vm["cxx-source-suffix"].as<std::string> ());
+  std::string hxx_suffix (options.value ("cxx-header-suffix"));
+  std::string ixx_suffix (options.value ("cxx-inline-suffix"));
+  std::string cxx_suffix (options.value ("cxx-source-suffix"));
 
   //Specifies a regular expression of the form pattern/replacement
   //when constructing the file names.
-  std::string hxx_expr (vm["cxx-header-regex"].as<std::string> ());
-  std::string ixx_expr (vm["cxx-inline-regex"].as<std::string> ());
-  std::string cxx_expr (vm["cxx-source-regex"].as<std::string> ());
+  std::string hxx_expr (options.value ("cxx-header-regex"));
+  std::string ixx_expr (options.value ("cxx-inline-regex"));
+  std::string cxx_expr (options.value ("cxx-source-regex"));
 
   // Output file names are named <name>.<suffix>
   std::string hxx_name (regex::perl_s (name, hxx_expr) + hxx_suffix);
@@ -191,7 +94,7 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
 
 
   //Boolean value set to the "cxx-generate-inline" option value
-  bool inline_ (vm.count ("cxx-generate-inline"));
+  bool inline_ (options.count ("cxx-generate-inline"));
 
   if (inline_)
   {
@@ -219,7 +122,7 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
   {
     using namespace std;
 
-    std::string name (vm["cxx-banner-file"].as<std::string> ());
+    std::string name (options.value ("cxx-banner-file"));
 
     std::wifstream banner;
 
@@ -238,7 +141,7 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
     // header
     //
     {
-      std::string bn (vm["cxx-header-banner-file"].as<std::string> ());
+      std::string bn (options.value ("cxx-header-banner-file"));
 
       if (!bn.empty ())
       {
@@ -266,7 +169,7 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
     //
     if (inline_)
     {
-      std::string bn (vm["cxx-inline-banner-file"].as<std::string> ());
+      std::string bn (options.value ("cxx-inline-banner-file"));
 
       if (!bn.empty ())
       {
@@ -293,7 +196,7 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
     // source
     //
     {
-      std::string bn (vm["cxx-header-banner-file"].as<std::string> ());
+      std::string bn (options.value ("cxx-header-banner-file"));
 
       if (!bn.empty ())
         {
@@ -325,7 +228,7 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
 
   {
     std::wostringstream ostr;
-    ostr << vm["cxx-char-type"].as <std::string> ().c_str ();
+    ostr << options.value ("cxx-char-type").c_str ();
 
     char_type = ostr.str ();
   }
@@ -337,34 +240,34 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
   Indentation::Implanter<Indentation::Cxx, wchar_t> ixx_guard (ixx);
   Indentation::Implanter<Indentation::Cxx, wchar_t> cxx_guard (cxx);
 
-  bool writer (vm.count ("cxx-generate-writer-types"));
+  bool writer (options.count ("cxx-generate-writer-types"));
 
-  bool traversal (vm.count ("cxx-generate-traversal-types") ||
+  bool traversal (options.count ("cxx-generate-traversal-types") ||
                   writer);
 
-  bool rtti (vm.count ("cxx-generate-extended-rtti") ||
+  bool rtti (options.count ("cxx-generate-extended-rtti") ||
              traversal);
 
   // Check if cdr reader/writer options are set
-  bool cdr_reader (vm.count ("cxx-generate-cdr-reader-types"));
-  bool cdr_writer (vm.count ("cxx-generate-cdr-writer-types"));
+  bool cdr_reader (options.count ("cxx-generate-cdr-reader-types"));
+  bool cdr_writer (options.count ("cxx-generate-cdr-writer-types"));
 
   ::Context::CPPMODE cppmode_ { ::Context::CPPMODE::CPP17 };
-  if (vm.count ("cxx-cpp03"))
+  if (options.count ("cxx-cpp03"))
     {
       cppmode_ = ::Context::CPPMODE::CPP03;
     }
-  if (vm.count ("cxx-cpp11"))
+  if (options.count ("cxx-cpp11"))
     {
       cppmode_ = ::Context::CPPMODE::CPP11;
     }
-  if (vm.count ("cxx-cpp17"))
+  if (options.count ("cxx-cpp17"))
     {
       cppmode_ = ::Context::CPPMODE::CPP17;
     }
 
   // Check about random access sequences
-  bool ra_sequences (vm.count ("cxx-enable-random-access-sequences"));
+  bool ra_sequences (options.count ("cxx-enable-random-access-sequences"));
 
   NamespaceMapping nsm;
 
@@ -372,12 +275,12 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
   //
   nsm.push_back (L"#^.* (.*?/)??" L"(([a-zA-Z_]\\w*)(/[a-zA-Z_]\\w*)*)$#$2#");
 
-  if (vm.count ("cxx-namespace-regex"))
+  if (options.count ("cxx-namespace-regex"))
     {
       // Custom mappings.
       //
-      const std::vector<std::string> &custom_nsm
-        (vm["cxx-namespace-regex"].as< std::vector <std::string> > ());
+      std::vector<std::string> const& custom_nsm
+        {options.values ("cxx-namespace-regex")};
 
       for (std::vector<std::string>::const_iterator i = custom_nsm.begin ();
            i != custom_nsm.end (); ++i)
@@ -393,14 +296,14 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
   string export_symbol;
   {
     std::wostringstream o;
-    o << vm["cxx-export-symbol"].as<std::string> ().c_str ();
+    o << options.value ("cxx-export-symbol").c_str ();
     export_symbol = o.str ();
   }
 
   // HXX
   //
   std::string guard (hxx_name);
-  std::string guard_flag (vm["cxx-header-guard"].as<std::string> ());
+  std::string guard_flag (options.value ("cxx-header-guard"));
   // When the userhas passed a special guard use that, else construct one
   if (!guard_flag.empty ())
   {
@@ -431,7 +334,7 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
 
   // Export header file
   {
-    std::string tmp (vm["cxx-export-header"].as<std::string> ());
+    std::string tmp (options.value ("cxx-export-header"));
 
     if (tmp != "")
       {

@@ -17,8 +17,6 @@
 
 using namespace XSC::SemanticGraph;
 
-namespace po = boost::program_options;
-
 namespace IDL
 {
   namespace
@@ -34,42 +32,13 @@ namespace IDL
   }
 
   void Generator::
-  options (po::options_description& d)
-  {
-    d.add_options ()
-      ("idl-char-type", po::value<std::string> ()->default_value ("wchar"),
-       "Generate code using provided character type "
-       "instead of default `wchar'.")
-
-      ("idl-namespace-regex", po::value< std::vector<std::string> > (),
-       "Add provided regular expression of the form /pattern/replacement/ to the list "
-       "of regular expressions used to translate XML Schema "
-       "namespace names to IDL module names. The first successful "
-       "substitution is used. The last specified expression "
-       "is considered first.")
-
-     ("idl-file-suffix", po::value<std::string> ()->default_value (".idl"),
-      "Use provided suffix instead of default `.idl' "
-      "when constructing the name of the IDL file.")
-
-     ("idl-file-regex", po::value<std::string> ()->default_value ("/\\..*$//"),
-      "Use provided regular expression in the format /pattern/replacement/  when constructing "
-      "the name of the IDL file.")
-
-     ("idl-banner-file", po::value<std::string> ()->default_value (""),
-       "Copy provided banner at the beginning of every generated "
-       "file for which file-specific banner is not provided.")
-      ;
-  }
-
-  void Generator::
-  generate (po::variables_map const& vm, Schema& schema, std::filesystem::path const& in_path)
+  generate (XSC::Options const& options, Schema& schema, std::filesystem::path const& in_path)
   {
     std::string in_name (in_path.filename ().string ());
 
-    std::string suffix (vm["idl-file-suffix"].as<std::string> ());
+    std::string suffix (options.value ("idl-file-suffix"));
 
-    std::string expr (vm["idl-file-regex"].as<std::string> ());
+    std::string expr (options.value ("idl-file-regex"));
     //, "/(\\..+)?$/" + suffix + "/"));
 
     std::string out_name (regex::perl_s (in_name, expr));
@@ -91,7 +60,7 @@ namespace IDL
     {
       using namespace std;
 
-      std::string name (vm["idl-banner-file"].as<std::string> ());
+      std::string name (options.value ("idl-banner-file"));
       std::wifstream banner;
 
       if (!name.empty ())
@@ -116,7 +85,7 @@ namespace IDL
 
     {
       std::wostringstream ostr;
-      ostr << vm["idl-char-type"].as<std::string> ().c_str ();
+      ostr << options.value ("idl-char-type").c_str ();
 
       char_type = ostr.str ();
     }
@@ -133,10 +102,10 @@ namespace IDL
 
     // Custom mappings.
     //
-    if (vm.count ("idl-namespace-regex"))
+    if (options.count ("idl-namespace-regex"))
       {
-        const std::vector<std::string> &custom_nsm
-          (vm["idl-namespace-regex"].as< std::vector <std::string> > ());
+        std::vector<std::string> const& custom_nsm
+          {options.values ("idl-namespace-regex")};
 
         for (std::vector<std::string>::const_iterator i = custom_nsm.begin ();
             i != custom_nsm.end (); ++i)

@@ -1,4 +1,4 @@
-project (xsc) : xsc_utils, xsc_be, xerces {
+project (xsc) : acelib, xsc_utils, xsc_be, xerces {
   exename   = xsc
   install   = $(XSC_ROOT)/bin
 

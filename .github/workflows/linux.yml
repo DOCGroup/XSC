@@ -51,15 +51,14 @@ jobs:
       if: matrix.Repo != ''
     - name: Add packages
       run: |
-        sudo apt-get --yes install libxerces-c-dev libssl-dev libboost-all-dev ${{ matrix.PackageDeps }}
+        sudo apt-get --yes install libxerces-c-dev libssl-dev ${{ matrix.PackageDeps }}
     - name: create $ACE_ROOT/ace/config.h
       run: |
         '#include "ace/config-linux.h"' > ${env:ACE_ROOT}/ace/config.h
       shell: pwsh
     - name: create $ACE_ROOT/include/makeinclude/platform_macros.GNU
       run: |
-        'boost=1' > ${env:ACE_ROOT}/include/makeinclude/platform_macros.GNU
-        'xerces3=1' >> ${env:ACE_ROOT}/include/makeinclude/platform_macros.GNU
+        'xerces3=1' > ${env:ACE_ROOT}/include/makeinclude/platform_macros.GNU
         'ssl=1' >> ${env:ACE_ROOT}/include/makeinclude/platform_macros.GNU
         'xsc=1' >> ${env:ACE_ROOT}/include/makeinclude/platform_macros.GNU
       shell: pwsh
@@ -74,8 +73,7 @@ jobs:
       shell: pwsh
     - name: create $ACE_ROOT/bin/MakeProjectCreator/config/default.features
       run: |
-        'boost=1' > ${env:ACE_ROOT}/bin/MakeProjectCreator/config/default.features
-        'xerces3=1' >> ${env:ACE_ROOT}/bin/MakeProjectCreator/config/default.features
+        'xerces3=1' > ${env:ACE_ROOT}/bin/MakeProjectCreator/config/default.features
         'xsc=1' >> ${env:ACE_ROOT}/bin/MakeProjectCreator/config/default.features
       shell: pwsh
     - name: Run mwc.pl on $(XSC_ROOT)/XSC.mwc
