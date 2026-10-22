@@ -57,7 +57,7 @@ namespace
     virtual void
     names_next (Type&)
     {
-      os << "," << endl;
+      os << "," << std::endl;
     }
 
     virtual void
@@ -75,7 +75,7 @@ namespace
 void IDL::
 generate_declaration (Context& ctx, SemanticGraph::Schema& schema)
 {
-  ctx.os << "// Forward declarations." << endl;
+  ctx.os << "// Forward declarations." << std::endl;
 
   Traversal::Schema traverser;
   Traversal::Sources sources;

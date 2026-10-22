@@ -352,7 +352,7 @@ struct Anonymous : Traversal::Element,
 
 {
   Anonymous (Context& c, Traversal::NodeDispatcher& d1)
-      : Context (c), complex_ (c, &d1, 0)
+      : Context (c), complex_ (c, &d1, nullptr)
   {
     edge_traverser (names_);
     names_.node_traverser (*this);

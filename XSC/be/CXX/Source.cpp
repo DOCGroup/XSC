@@ -341,12 +341,12 @@ namespace
       string type (type_name (c));
 
       if (type_is_boolean (type))
-        os << "stream.write_boolean (*this);" << endl;
+        os << "stream.write_boolean (*this);" << std::endl;
       else
         // Convert it to its base type. This will
         // have an operator << defined to
         // serialize this type
-        os << "stream << static_cast < const Base& > (*this);" << endl;
+        os << "stream << static_cast < const Base& > (*this);" << std::endl;
     }
 
     // Helper method implementation
@@ -357,11 +357,11 @@ namespace
       string type (type_name (e));
 
       // Write length first
-      os << "// " << name << endl;
+      os << "// " << name << std::endl;
       os << "size_t " << name << "_size = "
          << "this->" << name << "_.size ();"
          << "stream << " << name << "_size;"
-         << endl;
+         << std::endl;
 
       // Write each member next
       os << "for (" << name << "_const_iterator "
@@ -409,14 +409,14 @@ namespace
 
         //
         // one
-        os << "// " << name << endl;
+        os << "// " << name << std::endl;
 
         // check if the type is a boolean type
         if (type_is_boolean (type))
           os << "stream.write_boolean (this->" << name
-             << " ());" << endl;
+             << " ());" << std::endl;
         else
-          os << "stream << this->" << name << " ();" << endl;
+          os << "stream << this->" << name << " ();" << std::endl;
       }
     }
 
@@ -444,7 +444,7 @@ namespace
 
         // optional
         //
-        os << " // " << name << endl;
+        os << " // " << name << std::endl;
         os << "bool " << name << "_p = this->" << name << "_p ();";
         os << "stream.write_boolean (" << name << "_p" << ");";
 
@@ -454,11 +454,11 @@ namespace
         // check if the type is a boolean type
         if (type_is_boolean (type))
           os << "stream.write_boolean (this->" << name
-            << " ());" << endl;
+            << " ());" << std::endl;
         else
           os << "stream << this->" << name << " ();";
 
-        os << "}" << endl;
+        os << "}" << std::endl;
             }
             else
       {
@@ -467,12 +467,12 @@ namespace
 
   // check if the type is a boolean type
   if (type_is_boolean (type))
-    os << "// " << name << endl
+    os << "// " << name << std::endl
        << "stream.write_boolean (this->" << name
-       << " ());" << endl;
+       << " ());" << std::endl;
   else
-    os << "// " << name << endl
-       << "stream << this->" << name << " ();" << endl;
+    os << "// " << name << std::endl
+       << "stream << this->" << name << " ();" << std::endl;
       }
     }
 
@@ -507,20 +507,20 @@ namespace
                   string name (this->optional_element_list_[i]->name ());
                   string type (type_name (*this->optional_element_list_[i]));
 
-                  os << "// " << name << endl;
+                  os << "// " << name << std::endl;
 
                   // First write out the boolean value
                   os << "stream.write_boolean (" << name << "_p ());";
 
                   os << "if (" << name << "_p ())"
-                    << endl;
+                    << std::endl;
 
                   // check if the type is a boolean type
                   if (type_is_boolean (type))
                     os << "  stream.write_boolean (this->" << name
-                      << " ());" << endl;
+                      << " ());" << std::endl;
                   else
-                    os << "  stream << this->" << name << " ();" << endl;
+                    os << "  stream << this->" << name << " ();" << std::endl;
                 }
             }
         }
@@ -603,7 +603,7 @@ namespace
          << "auto_" << element_name << " (" << element_name << "_tmp);"
          << type << " " << element_name << " (" << element_name
          << "_tmp);"
-         << endl;
+         << std::endl;
     }
 
     /*
@@ -616,7 +616,7 @@ namespace
       os << "stream >> " << element_name << ";"
          << "std::auto_ptr < " << type << " > "
          << "auto_" << element_name << " (" << element_name << ");"
-         << endl;
+         << std::endl;
     }
 
     /*
@@ -640,7 +640,7 @@ namespace
 
       os << type << " " << element_name << " ("
          << element_name << "_tmp);"
-         << endl;
+         << std::endl;
     }
 
     void
@@ -742,7 +742,7 @@ namespace
       string type (type_name (e));
       string name (e.name ());
 
-      os << "// " << name << endl;
+      os << "// " << name << std::endl;
 
       SemanticGraph::Type& t (e.type ());
       if (SemanticGraph::Complex* c =
@@ -827,14 +827,14 @@ namespace
 
       // Pre: read the number of elements
       // in the sequence.
-      os << "// read " << name << endl
+      os << "// read " << name << std::endl
          << "size_t " << name << "_size;"
          << "stream >> " << name << "_size;"
-         << endl
+         << std::endl
          << "for (size_t " << name << "_counter (0);"
          << name << "_counter < " << name << "_size;"
          << "++ " << name << "_counter)"
-         << endl
+         << std::endl
          << "{" ;
 
       // Read the generic element type
@@ -934,7 +934,7 @@ namespace
      << this->type_name_list_[i];
       }
 
-      os << ");" << endl;
+      os << ");" << std::endl;
 
       // Add any sequence/optional attribute elements
       this->finally ();
@@ -946,7 +946,7 @@ namespace
       string type (type_name (a));
       string name (id (a.name ()));
 
-      os << "// " << name << endl;
+      os << "// " << name << std::endl;
 
       if (!a.optional ())
   read_attribute (name, type);
@@ -1022,7 +1022,7 @@ namespace
        j < this->optional_attribute_list_.size ();
        j++)
     pretty_print_optional_attribute (this->optional_attribute_list_[j]);
-  os << endl;
+  os << std::endl;
       }
 
       // Write the sequence elements
@@ -1048,7 +1048,7 @@ namespace
 
     // Add that type to the element
     os << "element->" << name << " (" << name << ");"
-       << endl;
+       << std::endl;
 
     os << "}";
   }
@@ -1141,14 +1141,14 @@ namespace
     {
       string type (type_name (c));
 
-      os << "// " << scope << endl
-         << endl;
+      os << "// " << scope << std::endl
+         << std::endl;
 
-      os << scope << "::" << endl
-         << name << " (" << xml_element_type << " const& element)" << endl
+      os << scope << "::" << std::endl
+         << name << " (" << xml_element_type << " const& element)" << std::endl
          << ":" << "Base (element)"
          << "{"
-         << endl;
+         << std::endl;
     }
 
     using Traversal::Complex::names;
@@ -1162,7 +1162,7 @@ namespace
       if (he || ha)
       {
         os << parser_type << " p (element);"
-           << endl;
+           << std::endl;
 
         if (he)
         {
@@ -1170,7 +1170,7 @@ namespace
              << "{"
              << xml_element_type << " e (p.next_element ());"
              << string_type << " n (::XSCRT::XML::uq_name (e.name ()));"
-             << endl;
+             << std::endl;
 
           names (c, names_elements_);
 
@@ -1225,8 +1225,8 @@ namespace
       {
 
         // pre
-        os << "// write " << name << endl;
-        os << "bool" << endl << name << "::write_" << name
+        os << "// write " << name << std::endl;
+        os << "bool" << std::endl << name << "::write_" << name
            << " (::XMLSchema::CDR_OutputStream &stream) const"
            << "{";
 
@@ -1244,17 +1244,17 @@ namespace
 
         // post
         os << "return stream.good_bit ();";
-        os << "}" << endl;
+        os << "}" << std::endl;
       }
 
       // Read the written types from the stream
       if (this->cdr_reader_generation_)
       {
         // pre
-        os << "// read " << name << endl;
-        os << "bool" << endl << name << "::" << endl
+        os << "// read " << name << std::endl;
+        os << "bool" << std::endl << name << "::" << std::endl
            << "read_" << name
-           << " (::XMLSchema::CDR_InputStream &stream," << endl;
+           << " (::XMLSchema::CDR_InputStream &stream," << std::endl;
 
         for (size_t j =0; j < name.length () + 5; j++)
           os << " ";
@@ -1271,7 +1271,7 @@ namespace
 
         // post
         os << "return stream.good_bit ();";
-        os << "}" << endl;
+        os << "}" << std::endl;
       }
 
     }
@@ -1350,10 +1350,10 @@ namespace
     virtual void
     pre (Type&)
     {
-      os << scope << "::" << endl
-         << name << " (" << xml_attribute_type << " const& a)" << endl
-         << ":" << endl
-         << "Base (a)" << endl
+      os << scope << "::" << std::endl
+         << name << " (" << xml_attribute_type << " const& a)" << std::endl
+         << ":" << std::endl
+         << "Base (a)" << std::endl
          << "{";
     }
 
@@ -1420,17 +1420,17 @@ namespace
 
       enter_scope (name);
 
-      os << "// " << scope << endl
-         << endl;
+      os << "// " << scope << std::endl
+         << std::endl;
 
       // c-tor (Element const&)
       //
-      os << scope << "::" << endl
-         << name << " (" << xml_element_type << " const& e)" << endl
-         << ": ::XSCRT::Type (e)" << endl
+      os << scope << "::" << std::endl
+         << name << " (" << xml_element_type << " const& e)" << std::endl
+         << ": ::XSCRT::Type (e)" << std::endl
          << "{"
          << string_type << " v (e.value ());"
-         << endl;
+         << std::endl;
 
       names (e, names_);
 
@@ -1439,12 +1439,12 @@ namespace
 
       // c-tor (Attribute const&)
       //
-      os << scope << "::" << endl
-         << name << " (" << xml_attribute_type << " const& a)" << endl
-         << ": ::XSCRT::Type (a)" << endl
+      os << scope << "::" << std::endl
+         << name << " (" << xml_attribute_type << " const& a)" << std::endl
+         << ": ::XSCRT::Type (a)" << std::endl
          << "{"
          << string_type << " v (a.value ());"
-         << endl;
+         << std::endl;
 
       names (e, names_);
 
@@ -1453,40 +1453,40 @@ namespace
 
       names (e, names_static_);
 
-      os << endl;
+      os << std::endl;
 
       // CDR reading/writing if enabled
       if (this->cdr_writer_generation_)
       {
   // pre
-  os << "// write " << name << endl;
-  os << "bool" << endl << name << "::write_" << name
+  os << "// write " << name << std::endl;
+  os << "bool" << std::endl << name << "::write_" << name
      << " (::XMLSchema::CDR_OutputStream &stream) const"
      << "{";
 
   // For enumerations marshal them using the
   // corresponding integer value
-        os << "// " << name << endl;
+        os << "// " << name << std::endl;
   os << "int " << name << "_integral = "
      << "this->integral ();"
      << "stream << " << name << "_integral;"
-     << endl;
+     << std::endl;
 
   // post
-  os << "return stream.good_bit ();" << endl;
-  os << "}" << endl;
+  os << "return stream.good_bit ();" << std::endl;
+  os << "}" << std::endl;
       }
 
       // CDR reading/writing if enabled
       if (this->cdr_reader_generation_)
       {
   // pre
-  os << "// read " << name << endl;
-  os << "bool" << endl << name << "::read_" << name
+  os << "// read " << name << std::endl;
+  os << "bool" << std::endl << name << "::read_" << name
      << " (::XMLSchema::CDR_InputStream &stream, "
-     << endl
+     << std::endl
      << "::XMLSchema::cdr_arg_traits < " << name
-     << " >::inout_type element)" << endl
+     << " >::inout_type element)" << std::endl
      << "{";
 
   // For enumerations demarshal them via the
@@ -1500,7 +1500,7 @@ namespace
   // post
   os << "return stream.good_bit ();"
      << "}"
-     << endl;
+     << std::endl;
       }
 
       leave_scope ();

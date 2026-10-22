@@ -44,14 +44,14 @@ namespace
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       idref_ptr = type.find(idref_str);
 
-      os << "// " << scope << endl;
+      os << "// " << scope << std::endl;
 
       if (e.min () == 0 && e.max () == 1)
       {
         // optional
         //
         os << i
-           << "bool " << scope << "::" << endl
+           << "bool " << scope << "::" << std::endl
            << name << "_p () const"
            << "{";
 
@@ -67,7 +67,7 @@ namespace
         os << "}";
 
         os << i
-           << type << " const& " << scope << "::" << endl
+           << type << " const& " << scope << "::" << std::endl
            << id (name) << " () const"
            << "{"
            << "return *" << id (name) << "_;"
@@ -95,14 +95,14 @@ namespace
         }
         /* Lets just have one accessor. WRO
         os << i
-           << type << "& " << scope << "::" << endl
+           << type << "& " << scope << "::" << std::endl
            << id (name) << " ()"
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
         */
         os << i
-           << "void " << scope << "::" << endl
+           << "void " << scope << "::" << std::endl
            << id (name) << " (" << type << " const& e)"
            << "{";
 
@@ -140,7 +140,7 @@ namespace
         // one
         //
         os << i
-           << type << " const& " << scope << "::" << endl
+           << type << " const& " << scope << "::" << std::endl
            << id (name) << " () const"
            << "{"
            << "return *" << id (name) << "_;"
@@ -166,7 +166,7 @@ namespace
         }
 
         os << i
-           << "void " << scope << "::" << endl
+           << "void " << scope << "::" << std::endl
            << id (name) << " (" << type << " const& e)"
            << "{"
            << "*" << id (name) << "_ = e;"
@@ -181,7 +181,7 @@ namespace
           // begin_typename
           //
           os << i
-            << scope << "::" << name << "_iterator " << scope << "::" << endl
+            << scope << "::" << name << "_iterator " << scope << "::" << std::endl
             << "begin_" << name << " ()"
             << "{"
             << "return " << id(name) << "_.begin ();"
@@ -190,7 +190,7 @@ namespace
           // end_typename
           //
           os << i
-            << scope << "::" << name << "_iterator " << scope << "::" << endl
+            << scope << "::" << name << "_iterator " << scope << "::" << std::endl
             << "end_" << name << " ()"
             << "{"
             << "return " << id(name) << "_.end ();"
@@ -199,7 +199,7 @@ namespace
 
         // begin_typename const
         os << i
-           << scope << "::" << name << "_const_iterator " << scope << "::" << endl
+           << scope << "::" << name << "_const_iterator " << scope << "::" << std::endl
            << "begin_" << name << " () const"
            << "{";
 
@@ -215,7 +215,7 @@ namespace
 
         // end_typename const
         os << i
-           << scope << "::" << name << "_const_iterator " << scope << "::" << endl
+           << scope << "::" << name << "_const_iterator " << scope << "::" << std::endl
            << "end_" << name << " () const"
            << "{";
 
@@ -252,14 +252,14 @@ namespace
         {
           // add_typename
           os << i
-            << "void " << scope << "::" << endl
+            << "void " << scope << "::" << std::endl
             << "add_" << name << " (" << scope << "::" << name << "_value_type const& e)"
             << "{";
           os << id(name) << "_.push_back (e);";
           os << "}";
           // del_typename
           os << i
-            << "void " << scope << "::" << endl
+            << "void " << scope << "::" << std::endl
             << "del_" << name << " (" << scope << "::" << name << "_value_type const& e)"
             << "{";
           os << id(name) << "_.remove (e);";
@@ -270,7 +270,7 @@ namespace
           // count_typename
           //
           os << i
-            << "size_t " << scope << "::" << endl
+            << "size_t " << scope << "::" << std::endl
             << "count_" << name << "() const"
             << "{"
             << "return " << id(name) << "_.size ();"
@@ -285,7 +285,7 @@ namespace
       string name (a.name ());
       string type (type_name (a));
 
-      os << "// " << scope << endl;
+      os << "// " << scope << std::endl;
 
       //Check if the type is an IDREF
       std::string::size_type idref_ptr = 0;
@@ -297,7 +297,7 @@ namespace
         if (this->cppmode_ != CPPMODE::CPP03)
         {
           os << i
-            << "bool " << scope << "::" << endl
+            << "bool " << scope << "::" << std::endl
             << name << "_p () const"
             << "{"
             << "return !!" << id (name) << "_;"
@@ -306,7 +306,7 @@ namespace
         else
         {
           os << i
-            << "bool " << scope << "::" << endl
+            << "bool " << scope << "::" << std::endl
             << name << "_p () const"
             << "{"
             << "return " << id (name) << "_.get () != 0;"
@@ -314,14 +314,14 @@ namespace
         }
 
         os << i
-           << type << " const& " << scope << "::" << endl
+           << type << " const& " << scope << "::" << std::endl
            << id (name) << " () const"
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
 
         os << i
-           << type << "& " << scope << "::" << endl
+           << type << "& " << scope << "::" << std::endl
            << id (name) << " ()"
            << "{"
            << "return *" << id (name) << "_;"
@@ -349,7 +349,7 @@ namespace
         }
 
         os << i
-           << "void " << scope << "::" << endl
+           << "void " << scope << "::" << std::endl
            << id (name) << " (" << type << " const& e)"
            << "{";
 
@@ -383,14 +383,14 @@ namespace
       else
       {
         os << i
-           << type << " const& " << scope << "::" << endl
+           << type << " const& " << scope << "::" << std::endl
            << id (name) << " () const"
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
 
         os << i
-           << type << "& " << scope << "::" << endl
+           << type << "& " << scope << "::" << std::endl
            << id (name) << " ()"
            << "{"
            << "return *" << id (name) << "_;"
@@ -418,7 +418,7 @@ namespace
         }
 
         os << i
-           << "void " << scope << "::" << endl
+           << "void " << scope << "::" << std::endl
            << id (name) << " (" << type << " const& e)"
            << "{"
            << "*" << id (name) << "_ = e;"
@@ -565,8 +565,8 @@ namespace
     {
       string type (name);
 
-      os << "// " << scope << endl
-         << endl;
+      os << "// " << scope << std::endl
+         << std::endl;
 
       // c-tor
       //
@@ -575,7 +575,7 @@ namespace
 
       ctor_args_.traverse (c);
 
-      os << ")" << endl;
+      os << ")" << std::endl;
 
       bool const has_base (c.inherits_begin () != c.inherits_end ());
 
@@ -599,11 +599,11 @@ namespace
       //
       os << i
          << scope << "::"
-         << name << " (" << type << " const& s)" << endl;
+         << name << " (" << type << " const& s)" << std::endl;
 
       if (!has_base)
       {
-        os << ": ::XSCRT::Type (s)" << endl;
+        os << ": ::XSCRT::Type (s)" << std::endl;
       }
 
       // Resets a flag that determines if a Complex Type's
@@ -634,7 +634,7 @@ namespace
       // operator=
       //
       os << i
-         << scope << "&" << endl
+         << scope << "&" << std::endl
          << scope << "::operator= (" << type << " const& s)"
          << "{"
          << selfcheck
@@ -647,13 +647,13 @@ namespace
          << "return *this;"
          << "}";
 
-      os << endl;
+      os << std::endl;
     }
 
     virtual void
     post (Type&)
     {
-      os << endl;
+      os << std::endl;
     }
 
     bool
@@ -682,29 +682,29 @@ namespace
       string type (type_name (c));
 
       if (this->cdr_reader_generation_)
-        os << "bool" << endl
+        os << "bool" << std::endl
            << "operator >> (::XMLSchema::CDR_InputStream &stream,"
-           << endl
+           << std::endl
            << "             ::XMLSchema::cdr_arg_traits < "
            << type << " >::inout_type element)"
-           << endl
+           << std::endl
            << "{"
            << "return " << type << "::read_"
            << name << " (stream, element);"
-           << endl
+           << std::endl
            << "}";
 
       if (this->cdr_writer_generation_)
-        os << "bool" << endl
+        os << "bool" << std::endl
            << "operator << (::XMLSchema::CDR_OutputStream &stream,"
-           << endl
+           << std::endl
            << "             ::XMLSchema::cdr_arg_traits < "
            << type << " >::in_type element)"
-           << endl
+           << std::endl
            << "{"
            << "return element.write_"
            << name << " (stream);"
-           << endl
+           << std::endl
            << "}";
     }
 
@@ -723,13 +723,13 @@ namespace
       virtual void
       traverse (SemanticGraph::Enumeration&)
       {
-        os << ": Base (b__)" << endl;
+        os << ": Base (b__)" << std::endl;
       }
 
       virtual void
       traverse (SemanticGraph::Type&)
       {
-        os << ": Base ()" << endl;
+        os << ": Base ()" << std::endl;
       }
 
       void
@@ -742,7 +742,7 @@ namespace
 
         args_.traverse (c);
 
-        os << ")" << endl;
+        os << ")" << std::endl;
       }
 
     private:
@@ -847,11 +847,11 @@ namespace
 
           if (this->cppmode_ != CPPMODE::CPP03)
           {
-            os << ", " << name << "_ (std::make_unique<" << type << "> (" << name << "__))" << endl;
+            os << ", " << name << "_ (std::make_unique<" << type << "> (" << name << "__))" << std::endl;
           }
           else
           {
-            os << ", " << name << "_ (new " << type << " (" << name << "__))" << endl;
+            os << ", " << name << "_ (new " << type << " (" << name << "__))" << std::endl;
           }
         }
         else if (e.min () >= 1)
@@ -860,7 +860,7 @@ namespace
           string name (id (e.name ()));
           string type (type_name (e));
 
-          os << ", " << name << "_ ("<< name << "__)" << endl;
+          os << ", " << name << "_ ("<< name << "__)" << std::endl;
         }
       }
 
@@ -881,11 +881,11 @@ namespace
 
           if (this->cppmode_ != CPPMODE::CPP03)
           {
-            os << ", " << name << "_ (std::make_unique<" << type << "> (" << name << "__))" << endl;
+            os << ", " << name << "_ (std::make_unique<" << type << "> (" << name << "__))" << std::endl;
           }
           else
           {
-            os << ", " << name << "_ (new " << type << " (" << name << "__))" << endl;
+            os << ", " << name << "_ (new " << type << " (" << name << "__))" << std::endl;
           }
         }
       }
@@ -895,7 +895,7 @@ namespace
       {
         if (!base_class_initialized_)
         {
-          os << ": ::XSCRT::Type ()" << endl;
+          os << ": ::XSCRT::Type ()" << std::endl;
           base_class_initialized_ = true;
         }
       }
@@ -952,7 +952,7 @@ namespace
       {
         if (!this->base_class_initialized_)
           {
-            os << ": Base (s)" << endl;
+            os << ": Base (s)" << std::endl;
             this->base_class_initialized_ = true;
           }
       }
@@ -987,13 +987,13 @@ namespace
             {
               os << ", " << name << "_ ("
                 << "s." << name << "_ ? "
-                << "std::make_unique<" << type << "> (*s." << name << "_) : " << nullptr_string << ")" << endl;
+                << "std::make_unique<" << type << "> (*s." << name << "_) : " << nullptr_string << ")" << std::endl;
             }
             else
             {
               os << ", " << name << "_ ("
                 << "s." << name << "_.get () ? "
-                << "new " << type << " (*s." << name << "_) : " << nullptr_string << ")" << endl;
+                << "new " << type << " (*s." << name << "_) : " << nullptr_string << ")" << std::endl;
             }
           }
         else if (e.min () == 1 && e.max () == 1)
@@ -1002,11 +1002,11 @@ namespace
             //
             if (this->cppmode_ != CPPMODE::CPP03)
             {
-              os << ", " << name << "_ (std::make_unique<" << type << "> (*s." << name << "_))" << endl;
+              os << ", " << name << "_ (std::make_unique<" << type << "> (*s." << name << "_))" << std::endl;
             }
             else
             {
-              os << ", " << name << "_ (new " << type << " (*s." << name << "_))" << endl;
+              os << ", " << name << "_ (new " << type << " (*s." << name << "_))" << std::endl;
             }
           }
         else
@@ -1014,7 +1014,7 @@ namespace
             // sequence
             //
 
-            os << ", " << name << "_ (s." << name << "_)" << endl;
+            os << ", " << name << "_ (s." << name << "_)" << std::endl;
           }
       }
 
@@ -1039,24 +1039,24 @@ namespace
           {
             os << ", " << name << "_ ("
               << "s." << name << "_ ? "
-              << "std::make_unique<" << type << "> (*s." << name << "_) : " << nullptr_string << ")" << endl;
+              << "std::make_unique<" << type << "> (*s." << name << "_) : " << nullptr_string << ")" << std::endl;
           }
           else
           {
             os << ", " << name << "_ ("
               << "s." << name << "_.get () ? "
-              << "new " << type << " (*s." << name << "_) : " << nullptr_string << ")" << endl;
+              << "new " << type << " (*s." << name << "_) : " << nullptr_string << ")" << std::endl;
           }
         }
         else
         {
           if (this->cppmode_ != CPPMODE::CPP03)
           {
-            os << ", " << name << "_ (std::make_unique<" << type << "> (*s." << name << "_))" << endl;
+            os << ", " << name << "_ (std::make_unique<" << type << "> (*s." << name << "_))" << std::endl;
           }
           else
           {
-            os << ", " << name << "_ (new " << type << " (*s." << name << "_))" << endl;
+            os << ", " << name << "_ (new " << type << " (*s." << name << "_))" << std::endl;
           }
         }
       }
@@ -1140,7 +1140,7 @@ namespace
       virtual void
       traverse (SemanticGraph::Type&)
       {
-        os << "Base::operator= (s);" << endl;
+        os << "Base::operator= (s);" << std::endl;
       }
 
       virtual void
@@ -1161,7 +1161,7 @@ namespace
                << "  " << name << " (*(s." << name << "_));"
                << "else" << std::endl
                << "  " << name << "_.release ();"
-               << endl;
+               << std::endl;
           }
           else
           {
@@ -1169,7 +1169,7 @@ namespace
               << "  " << name << " (*(s." << name << "_));"
               << "else" << std::endl
               << "  " << name << "_.reset (0);"
-              << endl;
+              << std::endl;
           }
         }
         else if (e.min () == 1 && e.max () == 1)
@@ -1180,7 +1180,7 @@ namespace
           //
 
           os << name << " (*s." << name << "_);"
-             << endl;
+             << std::endl;
         }
         else
         {
@@ -1204,20 +1204,20 @@ namespace
             os << "if (s." << name << "_) "
               << name << " (*(s." << name << "_));"
               << "else " << name << "_.release ();"
-              << endl;
+              << std::endl;
           }
           else
           {
             os << "if (s." << name << "_.get ()) "
               << name << " (*(s." << name << "_));"
               << "else " << name << "_.reset (0);"
-              << endl;
+              << std::endl;
           }
         }
         else
         {
           os << name << " (s." << name << " ());"
-             << endl;
+             << std::endl;
         }
       }
     };
@@ -1268,11 +1268,11 @@ namespace
 
       string type (type_name (e));
 
-      os << "// " << scope << endl
-         << endl;
+      os << "// " << scope << std::endl
+         << std::endl;
 
       os << i
-         << scope << "::Value " << scope << "::" <<  endl
+         << scope << "::Value " << scope << "::" << std::endl
          << "integral () const"
          << "{"
          << "return v_;"
@@ -1280,23 +1280,23 @@ namespace
 
 
       os << i
-         << "bool" << endl
+         << "bool" << std::endl
          << "operator== (" << type << " const& a, " << type << " const& b)"
          << "{"
          << "return a.v_ == b.v_;"
          << "}";
 
       os << i
-         << "bool" << endl
+         << "bool" << std::endl
          << "operator!= (" << type << " const& a, " << type << " const& b)"
          << "{"
          << "return a.v_ != b.v_;"
          << "}";
 
       os << i
-         << scope << "::" <<  endl
-         << name << " (" << scope << "::Value v)" << endl
-         << ": v_ (v)" << endl
+         << scope << "::" << std::endl
+         << name << " (" << scope << "::Value v)" << std::endl
+         << ": v_ (v)" << std::endl
          << "{"
          << "}";
 
@@ -1304,29 +1304,29 @@ namespace
 
       // CDR Insertion extraction operations if needed
       if (this->cdr_reader_generation_)
-        os << "bool" << endl
+        os << "bool" << std::endl
           << "operator >> (::XMLSchema::CDR_InputStream &stream,"
-          << endl
+          << std::endl
           << "             ::XMLSchema::cdr_arg_traits < "
           << type << " >::inout_type element)"
-          << endl
+          << std::endl
           << "{"
           << "return " << type << "::read_"
           << name << " (stream, element);"
-          << endl
+          << std::endl
           << "}";
 
       if (this->cdr_writer_generation_)
-        os << "bool" << endl
+        os << "bool" << std::endl
           << "operator << (::XMLSchema::CDR_OutputStream &stream,"
-          << endl
+          << std::endl
           << "             ::XMLSchema::cdr_arg_traits < "
           << type << " >::in_type element)"
-          << endl
+          << std::endl
           << "{"
           << "return element.write_"
           << name << " (stream);"
-          << endl
+          << std::endl
           << "}";
     }
 
@@ -1376,14 +1376,14 @@ generate_inline (Context& ctx, SemanticGraph::Schema& schema, bool i)
 {
   if (ctx.char_type == L"ACE_TCHAR")
   {
-    ctx.os << "#include \"ace/ace_wchar.h\"" << endl;
+    ctx.os << "#include \"ace/ace_wchar.h\"" << std::endl;
   }
 
   if (ctx.cppmode() == Context::CPPMODE::CPP03)
   {
-    ctx.os << "#include \"ace/Null_Mutex.h\"" << endl
-      << "#include \"ace/TSS_T.h\""<< endl
-      << "#include \"ace/Singleton.h\"" << endl << endl;
+    ctx.os << "#include \"ace/Null_Mutex.h\"" << std::endl
+      << "#include \"ace/TSS_T.h\""<< std::endl
+      << "#include \"ace/Singleton.h\"" << std::endl << std::endl;
   }
 
   Traversal::Schema traverser;

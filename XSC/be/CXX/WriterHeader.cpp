@@ -42,38 +42,38 @@ namespace
         if (this->cppmode_ == CPPMODE::CPP03)
         {
           // Borland post
-          os << "virtual void" << endl
-            << id (name)  << " (Type &o)" << endl
+          os << "virtual void" << std::endl
+            << id (name)  << " (Type &o)" << std::endl
             << "{"
             << "this->" << id (name) << " ("
-            << "const_cast <Type const &> (o));" << endl
+            << "const_cast <Type const &> (o));" << std::endl
             << "}";
         }
 
         // optional
         //
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << id (name) << " (Type const&);"
-           << endl;
+           << std::endl;
       }
       else if (e.min () == 1 && e.max () == 1)
       {
         if (this->cppmode_ == CPPMODE::CPP03)
         {
           // Borland post
-          os << "virtual void" << endl
-            << id (name)  << " (Type &o)" << endl
+          os << "virtual void" << std::endl
+            << id (name)  << " (Type &o)" << std::endl
             << "{"
             << "this->" << id (name) << " ("
-            << "const_cast <Type const &> (o));" << endl
+            << "const_cast <Type const &> (o));" << std::endl
             << "}";
         }
 
         // one
         //
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << id (name) << " (Type const&);"
-           << endl;
+           << std::endl;
       }
       else
       {
@@ -84,54 +84,54 @@ namespace
         //
         if (this->cppmode_ == CPPMODE::CPP03)
         {
-          os << "virtual void" << endl
-            << name << "_pre (Type &o)" << endl
+          os << "virtual void" << std::endl
+            << name << "_pre (Type &o)" << std::endl
             << "{"
             << "this->"  << name << "_pre ("
-            << "const_cast <Type const &> (o));" << endl
+            << "const_cast <Type const &> (o));" << std::endl
             << "}";
         }
 
         // pre
         //
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << name << "_pre (Type const&);"
-           << endl;
+           << std::endl;
 
         // non-const next
         //
         if (this->cppmode_ == CPPMODE::CPP03)
         {
-          os << "virtual void" << endl
-            << name << "_next (Type &o)" << endl
+          os << "virtual void" << std::endl
+            << name << "_next (Type &o)" << std::endl
             << "{"
             << "this->"  << name << "_next ("
-            << "const_cast <Type const &> (o));" << endl
+            << "const_cast <Type const &> (o));" << std::endl
             << "}";
         }
 
         // next
         //
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << name << "_next (Type const&);"
-           << endl;
+           << std::endl;
 
         //  post
         if (this->cppmode_ == CPPMODE::CPP03)
         {
-          os << "virtual void" << endl
-            << name << "_post (Type &o)" << endl
+          os << "virtual void" << std::endl
+            << name << "_post (Type &o)" << std::endl
             << "{"
             << "this->" << name << "_post ("
-            << "const_cast <Type const &> (o));" << endl
+            << "const_cast <Type const &> (o));" << std::endl
             << "}";
         }
 
         // post
         //
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << name << "_post (Type const&);"
-           << endl;
+           << std::endl;
       }
     }
 
@@ -148,17 +148,17 @@ namespace
       // Borland post
       if (this->cppmode_ == CPPMODE::CPP03)
       {
-        os << "virtual void" << endl
-          << id (name)  << " (Type &o)" << endl
+        os << "virtual void" << std::endl
+          << id (name)  << " (Type &o)" << std::endl
           << "{"
           << "this->" << id (name) << " ("
-          << "const_cast <Type const &> (o));" << endl
+          << "const_cast <Type const &> (o));" << std::endl
           << "}";
       }
 
-      os << "virtual void" << endl
+      os << "virtual void" << std::endl
          << id (name) << " (Type const&);"
-         << endl;
+         << std::endl;
     }
   };
 
@@ -176,14 +176,14 @@ namespace
     //{
     //  string type (type_name (t, L"Writer"));
 
-    //  os << "virtual " << type << "," << endl;
+    //  os << "virtual " << type << "," << std::endl;
     //}
 
     virtual void
     traverse (SemanticGraph::IdRef&)
     {
       os << "virtual ::XMLSchema::Writer::IDREF<" << char_type << ">, " <<
-        endl;
+        std::endl;
     }
 
     virtual void
@@ -192,7 +192,7 @@ namespace
       string name (id (t.name ()));
 
       os << "virtual ::XMLSchema::Writer::FundamentalType< " <<
-        "::XMLSchema::" << name << ", " << char_type << " >," << endl;
+        "::XMLSchema::" << name << ", " << char_type << " >," << std::endl;
     }
 
     void
@@ -202,7 +202,7 @@ namespace
 
       os << "virtual ::XMLSchema::Writer::FundamentalType< " <<
         "::XMLSchema::" << name << "< " << char_type << " >, " <<
-        char_type << " >," << endl;
+        char_type << " >," << std::endl;
     }
   };
 
@@ -246,7 +246,7 @@ namespace
     virtual void
     pre (Type& c)
     {
-      os << "struct " << name_ << " : Traversal::" << scope << "," << endl;
+      os << "struct " << name_ << " : Traversal::" << scope << "," << std::endl;
 
       inherits (c, inherits_);
 
@@ -267,13 +267,13 @@ namespace
       // c-tor
       //
       os << "explicit " << name_ << " (" << xml_element_type << "&);"
-         << endl;
+         << std::endl;
 
       // Non-const traverse for Borland
       if (this->cppmode_ == CPPMODE::CPP03)
       {
-        os << "virtual void" << endl
-          << "traverse (Type &o)" << endl
+        os << "virtual void" << std::endl
+          << "traverse (Type &o)" << std::endl
           << "{"
           << "this->traverse ("
           << "const_cast <Type const &> (o));"
@@ -284,16 +284,16 @@ namespace
 
       // traverse
       //
-      os << "virtual void" << endl
+      os << "virtual void" << std::endl
          << "traverse (Type const&)" << override_string << ";"
-         << endl;
+         << std::endl;
     }
 
     virtual void
     post (Type& )
     {
       string default_string (this->cppmode_ != CPPMODE::CPP03 ? L" = default" : L"");
-      os << "protected:" << endl
+      os << "protected:" << std::endl
          << name_ << " ()" << default_string << ";"
          <<"};";
     }
@@ -328,19 +328,19 @@ namespace
 
       if (name == L"") name = L"BAD NAME";
 
-      os << "struct " << name << " : Traversal::" << name << "," << endl
+      os << "struct " << name << " : Traversal::" << name << "," << std::endl
          << "virtual ::XSCRT::Writer<" << char_type << ">"
          << "{";
 
       // c-tor
       //
       os << "explicit " << name << " (" << xml_element_type << "&);"
-         << endl;
+         << std::endl;
 
       // Non-const traverse for Borland
       if (this->cppmode_ == CPPMODE::CPP03)
       {
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
           << "traverse (Type &o)"
           << "{"
           << "this->traverse ("
@@ -350,11 +350,11 @@ namespace
 
       // traverse
       //
-      os << "virtual void" << endl
+      os << "virtual void" << std::endl
          << "traverse (Type const&)" << override_string << ";"
-         << endl;
+         << std::endl;
 
-      os << "protected:" << endl
+      os << "protected:" << std::endl
          << name << " ()" << default_string << ";"
          << "};";
     }
@@ -408,10 +408,10 @@ namespace
       os << "namespace writer"
          << "{"
          << e
-         << "void" << endl
+         << "void" << std::endl
          << id (name) << " (" << type << " const&, xercesc::DOMDocument*);"
          << "}"
-         << endl;
+         << std::endl;
     }
 
   private:
@@ -434,10 +434,10 @@ namespace
       {
         string name (type_name (e));
 
-        os << "// anonymous type for " /* << scope << "::"*/ << name << endl;
+        os << "// anonymous type for " /* << scope << "::"*/ << name << std::endl;
 
         if (dynamic_cast<SemanticGraph::Type*> (&e.scope ()))
-          os << "public:" << endl;
+          os << "public:" << std::endl;
 
         Traversal::Belongs belongs;
         Complex complex (*this, *this, id (name));
@@ -459,8 +459,8 @@ namespace
 void
 generate_writer_header (Context& ctx, SemanticGraph::Schema& schema)
 {
-  ctx.os << "#include \"ace/XML_Utils/XMLSchema/Writer.hpp\"" << endl
-         << endl;
+  ctx.os << "#include \"ace/XML_Utils/XMLSchema/Writer.hpp\"" << std::endl
+         << std::endl;
 
   {
     Traversal::Schema traverser;

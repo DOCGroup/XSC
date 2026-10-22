@@ -38,14 +38,14 @@ namespace
 
       os << "namespace reader"
          << "{"
-         << type << endl
+         << type << std::endl
          << id (name) << " (xercesc::DOMDocument const* d)"
          << "{";
 
       if (this->cppmode_ == CPPMODE::CPP03)
       {
-         os << "// Initiate our Singleton as an ACE_TSS object (ensures thread" << endl
-            << "// specific storage" << endl
+         os << "// Initiate our Singleton as an ACE_TSS object (ensures thread" << std::endl
+            << "// specific storage" << std::endl
             << "ID_Map::TSS_ID_Map* TSS_ID_Map (ACE_Singleton<ID_Map::TSS_ID_Map, ACE_Null_Mutex>::instance());";
       }
 
@@ -61,7 +61,7 @@ namespace
 
      if (this->cppmode_ == CPPMODE::CPP03)
      {
-       os  << "(*TSS_ID_Map)->resolve_idref();" << endl;
+       os  << "(*TSS_ID_Map)->resolve_idref();" << std::endl;
      }
      os  << "return r;"
          << "}"

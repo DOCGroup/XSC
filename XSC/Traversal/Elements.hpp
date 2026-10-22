@@ -220,7 +220,7 @@ namespace XSC
       trampoline (SemanticGraph::Node& n) override
       {
         //cerr << "trampoline for " << &n << " to type "
-        //     << typeid (Type).name () << endl;
+        //     << typeid (Type).name () << std::endl;
 
         traverse (dynamic_cast<Type&> (n));
       }

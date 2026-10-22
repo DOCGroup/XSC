@@ -49,7 +49,7 @@ namespace
 void
 generate_forward (Context& ctx, SemanticGraph::Schema& schema)
 {
-  ctx.os << "// Forward declarations." << endl;
+  ctx.os << "// Forward declarations." << std::endl;
 
   Traversal::Schema traverser;
   Traversal::Sources sources;

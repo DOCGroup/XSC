@@ -39,11 +39,11 @@ namespace
       switch(this->cppmode_)
       {
         case CPPMODE::CPP03:
-          os << "typedef " << name << " Base;" << endl;
+          os << "typedef " << name << " Base;" << std::endl;
           break;
         case CPPMODE::CPP11:
         case CPPMODE::CPP17:
-          os << "using Base = " << name << ";" << endl;
+          os << "using Base = " << name << ";" << std::endl;
           break;
       }
     }
@@ -170,8 +170,8 @@ namespace
       else
         container = L"std::list";
 
-      os << "// " << name << endl
-         << "public:" << endl;
+      os << "// " << name << std::endl
+         << "public:" << std::endl;
 
 
       if (c.max () != 1)
@@ -228,8 +228,8 @@ namespace
 
         os << "size_t count_" << name << " () const;";
 
-        os << endl
-           << "protected:" << endl;
+        os << std::endl
+           << "protected:" << std::endl;
 
         os << name << "_container_type " << id(name) << "_;";
       }
@@ -249,8 +249,8 @@ namespace
            os << "void set_" << id (name) << "_ptr (const " << string_type << "& idref);";
         }
 
-        os << endl
-           << "protected:" << endl;
+        os << std::endl
+           << "protected:" << std::endl;
         switch(this->cppmode_)
         {
           case CPPMODE::CPP03:
@@ -279,8 +279,8 @@ namespace
            os << "void set_" << id(name) << "_ptr (const " << string_type << "& idref);";
         }
 
-        os << endl
-           << "protected:" << endl;
+        os << std::endl
+           << "protected:" << std::endl;
 
         switch(this->cppmode_)
         {
@@ -296,7 +296,7 @@ namespace
         }
       }
 
-      os << endl;
+      os << std::endl;
     }
   };
 
@@ -333,8 +333,8 @@ namespace
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       idref_ptr = type.find(idref_str);
 
-      os << "// " << name << endl
-         << "public:" << endl;
+      os << "// " << name << std::endl
+         << "public:" << std::endl;
 
 
       if (a.optional ())
@@ -351,8 +351,8 @@ namespace
            os << "void set_" << id(name) << "_ptr (const " << string_type << "& idref);";
         }
 
-        os << endl
-           << "protected:" << endl;
+        os << std::endl
+           << "protected:" << std::endl;
 
         switch(this->cppmode_)
         {
@@ -380,8 +380,8 @@ namespace
            os << "void set_" << id (name) << "_ptr (const " << string_type << "& idref);";
         }
 
-        os << endl
-           << "protected:" << endl;
+        os << std::endl
+           << "protected:" << std::endl;
 
         switch(this->cppmode_)
         {
@@ -397,7 +397,7 @@ namespace
         }
       }
 
-      os << endl;
+      os << std::endl;
     }
   };
 
@@ -455,11 +455,11 @@ namespace
       os << " : public ::XSCRT::Type"
          << "{"
          << (this->cppmode_ != CPPMODE::CPP03 ? "using Base = ::XSCRT::Type;" : "typedef ::XSCRT::Type Base;" )
-         << endl;
+         << std::endl;
       switch(this->cppmode_)
       {
         case CPPMODE::CPP03:
-          os << "public:" << endl;
+          os << "public:" << std::endl;
           os << "typedef ACE_Refcounted_Auto_Ptr < " << type_name (c) << ", ACE_Null_Mutex> _ptr;";
           break;
         case CPPMODE::CPP11:
@@ -473,9 +473,9 @@ namespace
     {
       if (this->cppmode_ == CPPMODE::CPP03)
       {
-        os << "public:" << endl;
+        os << "public:" << std::endl;
         os << "typedef ACE_Refcounted_Auto_Ptr < " << type_name(c) << ", ACE_Null_Mutex> _ptr;";
-        os << endl;
+        os << std::endl;
       }
     }
     // Helper function to determine if read/write & >> and <<
@@ -508,40 +508,40 @@ namespace
 
       if (this->cdr_reader_generation_)
       {
-        os << "// read" << endl;
+        os << "// read" << std::endl;
 
         reader = 1;
 
-        os << "public:" << endl;
-        os << "static bool" << endl
+        os << "public:" << std::endl;
+        os << "static bool" << std::endl
            << "read_" << name
            << " (::XMLSchema::CDR_InputStream &,"
-           << endl;
+           << std::endl;
 
         for (size_t j =0; j < name.length () + 5; j++)
           os << " ";
 
-        os << " ::XMLSchema::cdr_arg_traits < " << name << " >::inout_type);" << endl;
+        os << " ::XMLSchema::cdr_arg_traits < " << name << " >::inout_type);" << std::endl;
       }
 
       // CDR Extraction Operators
       if (this->cdr_writer_generation_)
       {
         if (!reader)
-          os << "public:" << endl;
+          os << "public:" << std::endl;
 
-        os << "// write" << endl
-           << "bool" << endl
+        os << "// write" << std::endl
+           << "bool" << std::endl
            << "write_" << name
            << " (::XMLSchema::CDR_OutputStream &) const;"
-           << endl;
+           << std::endl;
       }
     }
 
     virtual void
     post (Type& c)
     {
-      os << "public:" << endl;
+      os << "public:" << std::endl;
 
       // c-tor (all-non-optional-members)
       //
@@ -550,7 +550,7 @@ namespace
       ctor_args_.traverse (c);
 
       os <<  ");"
-         << endl;
+         << std::endl;
 
       // c-tor (Element const&)
       //
@@ -599,13 +599,13 @@ namespace
       // operator=
       //
       os << name << "& operator= (" << name << " const& s);"
-         << endl;
+         << std::endl;
 
       if (this->cppmode_ != CPPMODE::CPP03)
       {
         os << name << " (" << name << "&&) = default;";
         os << name << "& operator= (" << name << "&&) = default;"
-           << endl;
+           << std::endl;
       }
 
       // Closing brace for the class declaration
@@ -623,21 +623,21 @@ namespace
         return;
 
       if (this->cdr_reader_generation_)
-        os << "extern bool" << endl
+        os << "extern bool" << std::endl
           << "operator >> (::XMLSchema::CDR_InputStream &,"
-          << endl
+          << std::endl
           << "             ::XMLSchema::cdr_arg_traits < "
           << name << " >::inout_type);";
 
       if (this->cdr_writer_generation_)
-        os << "extern bool" << endl
+        os << "extern bool" << std::endl
            << "operator << (::XMLSchema::CDR_OutputStream &,"
-           << endl
+           << std::endl
            << "             ::XMLSchema::cdr_arg_traits < "
            << name << " >::in_type);"
-           << endl;
+           << std::endl;
       else
-        os << endl;
+        os << std::endl;
     }
 
   private:
@@ -720,7 +720,7 @@ namespace
 
       os << "class " << ex_sp_ << name << " : public ::XSCRT::Type"
          << "{"
-         << "public:" << endl;
+         << "public:" << std::endl;
 
       enter_scope (name);
 
@@ -732,11 +732,11 @@ namespace
       //
       os << "explicit " << name << " (" << xml_attribute_type << " const&);";
 
-      os << endl;
+      os << std::endl;
 
       names (e, names_enumerators_);
 
-      os << endl;
+      os << std::endl;
 
       os << "enum Value"
          << "{";
@@ -744,26 +744,26 @@ namespace
       label_.reset ();
       names (e, names_labels_);
 
-      os << endl << "};"
-         << endl;
+      os << std::endl << "};"
+         << std::endl;
 
-      os << "Value" << endl
+      os << "Value" << std::endl
          << "integral () const;"
-         << endl;
+         << std::endl;
 
-      os << "friend bool " << ex_ << endl
+      os << "friend bool " << ex_ << std::endl
          << "operator== (" << name << " const& a, " << name << " const& b);"
-         << endl;
+         << std::endl;
 
-      os << "friend bool " << ex_ << endl
+      os << "friend bool " << ex_ << std::endl
          << "operator!= (" << name << " const& a, " << name << " const& b);"
-         << endl;
+         << std::endl;
 
 
-      os << "private:" << endl;
+      os << "private:" << std::endl;
 
       os << name << " (Value v);"
-         << endl;
+         << std::endl;
 
       os << "Value v_;";
 
@@ -771,33 +771,33 @@ namespace
       bool reader = 0;
       if (this->cdr_reader_generation_)
       {
-        os << "// read" << endl;
+        os << "// read" << std::endl;
         reader = 1;
 
-        os << "public:" << endl;
-        os << "static bool" << endl
+        os << "public:" << std::endl;
+        os << "static bool" << std::endl
            << "read_" << name
            << " (::XMLSchema::CDR_InputStream &,"
-           << endl;
+           << std::endl;
 
         for (size_t j =0; j < name.length () + 5; j++)
           os << " ";
 
         os << " ::XMLSchema::cdr_arg_traits < " << name
-           << " >::inout_type);" << endl;
+           << " >::inout_type);" << std::endl;
       }
 
       // CDR Extraction Operators
       if (this->cdr_writer_generation_enabled ())
         {
           if (!reader)
-            os << "public:" << endl;
+            os << "public:" << std::endl;
 
-          os << "// write" << endl
-             << "bool" << endl
+          os << "// write" << std::endl
+             << "bool" << std::endl
              << "write_" << name
              << " (::XMLSchema::CDR_OutputStream &) const;"
-             << endl;
+             << std::endl;
         }
 
       leave_scope ();
@@ -807,27 +807,27 @@ namespace
 
       os << "bool " << ex_sp_
          << "operator== (" << name << " const &a, " << name << " const &b);"
-         << endl;
+         << std::endl;
 
       os << "bool " << ex_sp_
          << "operator!= (" << name << " const &a, " << name << " const &b);"
-         << endl;
+         << std::endl;
 
       if (this->cdr_reader_generation_)
-        os << "extern bool" << endl
+        os << "extern bool" << std::endl
            << "operator >> (::XMLSchema::CDR_InputStream &,"
-           << endl
+           << std::endl
            << "             ::XMLSchema::cdr_arg_traits < "
            << name << " >::inout_type);";
 
       if (this->cdr_writer_generation_enabled ())
-        os << "extern bool" << endl
+        os << "extern bool" << std::endl
            << "operator << (::XMLSchema::CDR_OutputStream &,"
-           << endl
+           << std::endl
            << "             ::XMLSchema::cdr_arg_traits < "
-           << name << " >::in_type);" << endl;
+           << name << " >::in_type);" << std::endl;
       else
-        os << endl;
+        os << std::endl;
     }
   private:
     string name;
@@ -858,11 +858,11 @@ namespace
       {
         string name (type_name (e));
 
-        os << "// anonymous type for " /* << scope << "::"*/ << name << endl;
+        os << "// anonymous type for " /* << scope << "::"*/ << name << std::endl;
 
         if (dynamic_cast<SemanticGraph::Type*> (&e.scope ()))
         {
-          os << "public:" << endl;
+          os << "public:" << std::endl;
         }
 
         Traversal::Belongs belongs;
@@ -909,8 +909,8 @@ namespace
       std::string name (regex::perl_s (f.string (), hxx_expr.c_str ()));
       name += hxx_suffix;
 
-      os << "#include \"" << name.c_str () << "\"" << endl
-         << endl;
+      os << "#include \"" << name.c_str () << "\"" << std::endl
+         << std::endl;
     }
 
   private:
@@ -922,27 +922,27 @@ void
 generate_header (Context& ctx,
                  SemanticGraph::Schema& schema)
 {
-  ctx.os << "#include <memory>" << endl;
-  ctx.os << "#include <string>" << endl;
+  ctx.os << "#include <memory>" << std::endl;
+  ctx.os << "#include <string>" << std::endl;
 
   if (ctx.generate_ra_sequences ())
-    ctx.os << "#include <vector>" << endl;
+    ctx.os << "#include <vector>" << std::endl;
   else
-    ctx.os << "#include <list>" << endl;
+    ctx.os << "#include <list>" << std::endl;
 
   //Added
-  ctx.os << "#include \"ace/XML_Utils/XMLSchema/Types.hpp\"" << endl
-         << "#include \"ace/XML_Utils/XMLSchema/id_map.hpp\"" << endl;
+  ctx.os << "#include \"ace/XML_Utils/XMLSchema/Types.hpp\"" << std::endl
+         << "#include \"ace/XML_Utils/XMLSchema/id_map.hpp\"" << std::endl;
 
   if (ctx.cppmode() == Context::CPPMODE::CPP03)
   {
-    ctx.os << "#include \"ace/Refcounted_Auto_Ptr.h\"" << endl
-          << "#include \"ace/Null_Mutex.h\"" << endl;
+    ctx.os << "#include \"ace/Refcounted_Auto_Ptr.h\"" << std::endl
+          << "#include \"ace/Null_Mutex.h\"" << std::endl;
   }
 
   if (ctx.char_type == L"ACE_TCHAR")
   {
-    ctx.os << "#include \"ace/ace_wchar.h\"" << endl << endl;
+    ctx.os << "#include \"ace/ace_wchar.h\"" << std::endl << std::endl;
   }
 
   // -- Include CDR Type headers if cdr generation is
@@ -950,18 +950,18 @@ generate_header (Context& ctx,
   if (ctx.cdr_reader_generation_enabled () ||
       ctx.cdr_writer_generation_enabled ())
   {
-    ctx.os << "#include \"XMLSchema/CDR_Types.hpp\"" << endl
-           << "#include \"XMLSchema/id_map.hpp\"" << endl
-           << endl;
+    ctx.os << "#include \"XMLSchema/CDR_Types.hpp\"" << std::endl
+           << "#include \"XMLSchema/id_map.hpp\"" << std::endl
+           << std::endl;
     if (ctx.cppmode() == Context::CPPMODE::CPP03)
     {
-      ctx.os << "#include \"ace/TSS_T.h\""<< endl;
+      ctx.os << "#include \"ace/TSS_T.h\""<< std::endl;
     }
   }
 
   if (ctx.orb() == Context::ORB::TAOX11)
   {
-    ctx.os << "#include \"tao/x11/base/stddef.h\"" << endl;
+    ctx.os << "#include \"tao/x11/base/stddef.h\"" << std::endl;
   }
 
   Traversal::Schema traverser;
@@ -972,13 +972,13 @@ generate_header (Context& ctx,
 
   if (ctx.cppmode() == Context::CPPMODE::CPP03)
   {
-    ctx.os << "#if !defined(XML_XSC_SMART_PTR)" << endl
-           << "# if defined(ACE_HAS_CPP11)" << endl
-           << "#   define XML_XSC_SMART_PTR(X) std::unique_ptr<X>" << endl
-           << "# else" << endl
-           << "#   define XML_XSC_SMART_PTR(X) std::auto_ptr<X>" << endl
-           << "# endif" << endl
-           << "#endif" << endl << endl;
+    ctx.os << "#if !defined(XML_XSC_SMART_PTR)" << std::endl
+           << "# if defined(ACE_HAS_CPP11)" << std::endl
+           << "#   define XML_XSC_SMART_PTR(X) std::unique_ptr<X>" << std::endl
+           << "# else" << std::endl
+           << "#   define XML_XSC_SMART_PTR(X) std::auto_ptr<X>" << std::endl
+           << "# endif" << std::endl
+           << "#endif" << std::endl << std::endl;
   }
 
   Namespace ns (ctx);

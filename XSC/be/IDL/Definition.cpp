@@ -66,7 +66,7 @@ namespace
       string name (c.name ());
       string type (type_name (c));
 
-      os << "// " << name << endl;
+      os << "// " << name << std::endl;
 
       if (c.max () != 1)
       {
@@ -92,7 +92,7 @@ namespace
         os << "public " << type << " " << id (name) << ";";
       }
 
-      os << endl;
+      os << std::endl;
     }
   };
 
@@ -110,7 +110,7 @@ namespace
       string name (a.name ());
       string type (type_name (a));
 
-      os << "// " << name << endl;
+      os << "// " << name << std::endl;
 
       if (a.optional ())
       {
@@ -122,7 +122,7 @@ namespace
         os << "public " << type << " " << id (name) << ";";
       }
 
-      os << endl;
+      os << std::endl;
     }
   };
 
@@ -207,8 +207,8 @@ namespace
     {
       std::string name (regex::perl_s (f.string (), expr_));
 
-      os << "#include \"" << name.c_str () << "\"" << endl
-         << endl;
+      os << "#include \"" << name.c_str () << "\"" << std::endl
+         << std::endl;
     }
 
   private:
@@ -223,8 +223,8 @@ generate_definition (Context& ctx,
 {
   ctx.os << "#include " << (ctx.char_type == L"wchar"
                             ? "<XMLSchema/WideTypes.idl>"
-                            : "<XMLSchema/NarrowTypes.idl>") << endl
-         << endl;
+                            : "<XMLSchema/NarrowTypes.idl>") << std::endl
+         << std::endl;
 
 
   Traversal::Schema traverser;
