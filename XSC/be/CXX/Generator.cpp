@@ -249,7 +249,8 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
              traversal);
 
   // Check if cdr reader/writer options are set
-  bool cdr_reader (options.count ("cxx-generate-cdr-reader-types"));
+  bool read_only (options.count ("cxx-read-only"));
+  bool cdr_reader (options.count ("cxx-generate-cdr-reader-types") && !read_only);
   bool cdr_writer (options.count ("cxx-generate-cdr-writer-types"));
 
   ::Context::CPPMODE cppmode_ { ::Context::CPPMODE::CPP17 };
@@ -355,6 +356,7 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
 
     ctx.cppmode (cppmode_);
     ctx.orb (orb_);
+    ctx.read_only (read_only);
 
     // Add additional information to the context:
     ctx.generate_ra_sequences (ra_sequences);
@@ -398,6 +400,7 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
 
     ctx.cppmode (cppmode_);
     ctx.orb (orb_);
+    ctx.read_only (read_only);
 
     // Add additional information to the context:
     ctx.generate_ra_sequences (ra_sequences);
@@ -423,6 +426,7 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
 
     ctx.cppmode (cppmode_);
     ctx.orb (orb_);
+    ctx.read_only (read_only);
 
     if (!inline_)
     {

@@ -72,7 +72,8 @@ public:
         cdr_writer_generation_ (false),
         cppmode_ (CPPMODE::CPP17),
         orb_ (ORB::TAO),
-        generate_ra_sequences_ (false)
+        generate_ra_sequences_ (false),
+        read_only_ (false)
   {
     if (char_type == L"wchar_t")
       {
@@ -119,7 +120,8 @@ protected:
         cdr_writer_generation_ (c.cdr_writer_generation_),
         cppmode_ (c.cppmode_),
         orb_ (c.orb_),
-        generate_ra_sequences_ (c.generate_ra_sequences_)
+        generate_ra_sequences_ (c.generate_ra_sequences_),
+        read_only_ (c.read_only_)
   {
   }
 
@@ -273,6 +275,18 @@ public:
     return this->generate_ra_sequences_;
   }
 
+  void
+  read_only (bool flag)
+  {
+    this->read_only_ = flag;
+  }
+
+  bool
+  read_only ()
+  {
+    return this->read_only_;
+  }
+
 public:
   std::wostream& os;
   string& scope;
@@ -342,6 +356,7 @@ protected:
   ORB orb_;
 
   bool generate_ra_sequences_;
+  bool read_only_;
 };
 
 struct Anonymous : Traversal::Element,

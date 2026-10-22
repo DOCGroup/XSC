@@ -26,8 +26,14 @@ namespace
   struct Element : Traversal::Element, protected virtual Context
   {
     explicit Element (Context& c)
-        : Context (c)
+        : Context (c), first_ (true)
     {
+    }
+
+    void
+    reset ()
+    {
+      first_ = true;
     }
 
     virtual void
@@ -55,8 +61,10 @@ namespace
 
       //@@ need to use FQ-names.
       //
-      os << "if (n == " << compare_name << ")"
+      os << (first_ ? "if (n == " : "else if (n == ")
+         << compare_name << ")"
          << "{";
+      first_ = false;
 
       if (c.max () != 1)
       {
@@ -64,8 +72,7 @@ namespace
         //
         if (this->cppmode_ != CPPMODE::CPP03)
         {
-          os << type << " t (e);";
-          os << id (name) << "_.push_back (t);";
+          os << id (name) << "_.emplace_back (e);";
 
         }
         else
@@ -78,8 +85,18 @@ namespace
       {
         // optional
         //
-        os << type << " t (e);"
-           << id (name) << " (t);";
+        if (this->read_only_)
+        {
+          if (this->cppmode_ != CPPMODE::CPP03)
+            os << id (name) << "_ = std::make_unique<" << type << "> (e);";
+          else
+            os << id (name) << "_ = " << scope << "::" << id(name)
+               << "_type (new " << type << " (e));"
+               << id (name) << "_->container (this);";
+        }
+        else
+          os << type << " t (e);"
+             << id (name) << " (t);";
       }
       else
       {
@@ -195,16 +212,24 @@ namespace
       }
 
 
-      os <<"}"
-         << "else ";
+      os << "}";
     }
+
+  private:
+    bool first_;
   };
 
   struct Attribute : Traversal::Attribute, protected virtual Context
   {
     explicit Attribute (Context& c)
-        : Context (c)
+        : Context (c), first_ (true)
     {
+    }
+
+    void
+    reset ()
+    {
+      first_ = true;
     }
 
     virtual void
@@ -215,13 +240,25 @@ namespace
 
       //@@ need to use FQ-names.
       //
-      os << "if (n == " << L << " (\"" << name << "\"))"
+      os << (first_ ? "if (n == " : "else if (n == ")
+         << L << " (\"" << name << "\"))"
          << "{";
+      first_ = false;
 
       if (a.optional ())
       {
-        os << type << " t (a);"
-           << id (name) << " (t);";
+        if (this->read_only_)
+        {
+          if (this->cppmode_ != CPPMODE::CPP03)
+            os << id (name) << "_ = std::make_unique<" << type << "> (a);";
+          else
+            os << id (name) << "_ = " << scope << "::" << id(name)
+               << "_type (new " << type << " (a));"
+               << id (name) << "_->container (this);";
+        }
+        else
+          os << type << " t (a);"
+             << id (name) << " (t);";
       }
       else
       {
@@ -294,9 +331,11 @@ namespace
               << ", this);";
       }
 
-      os << "}"
-         << "else ";
+      os << "}";
     }
+
+  private:
+    bool first_;
   };
 
   // Traverser for CDR write operations
@@ -1173,14 +1212,13 @@ namespace
     {
       string type (type_name (c));
 
-      os << "// " << scope << std::endl
-         << std::endl;
+      if (!this->read_only_)
+        os << "// " << scope << std::endl
+           << std::endl;
 
-      os << scope << "::" << std::endl
-         << name << " (" << xml_element_type << " const& element)" << std::endl
+      os << scope << "::" << name << " (" << xml_element_type << " const& element)" << std::endl
          << ":" << "Base (element)"
-         << "{"
-         << std::endl;
+         << "{";
     }
 
     using Traversal::Complex::names;
@@ -1201,13 +1239,13 @@ namespace
           os << "while (p.more_elements ())"
              << "{"
              << xml_element_type << " e (p.next_element ());"
-             << string_type << " n (::XSCRT::XML::uq_name (e.name ()));"
+             << string_type << " const n (::XSCRT::XML::uq_name (e.name ()));"
              << std::endl;
 
+          element_.reset ();
           names (c, names_elements_);
 
-          os << "{}"        // else block
-             << "}";        // while loop
+          os << "}";        // while loop
         }
 
         if (ha)
@@ -1215,12 +1253,12 @@ namespace
           os << "while (p.more_attributes ())"
              << "{"
              << xml_attribute_type << " a (p.next_attribute ());"
-             << string_type << " n (::XSCRT::XML::uq_name (a.name ()));";
+             << string_type << " const n (::XSCRT::XML::uq_name (a.name ()));";
 
+          attribute_.reset ();
           names (c, names_attributes_);
 
-          os << "{}"        // else block
-             << "}";        // while loop
+          os << "}";        // while loop
         }
       }
     }
@@ -1258,7 +1296,7 @@ namespace
 
         // pre
         os << "// write " << name << std::endl;
-        os << "bool" << std::endl << name << "::write_" << name
+        os << "bool " << name << "::write_" << name
            << " (::XMLSchema::CDR_OutputStream &stream) const"
            << "{";
 
@@ -1284,15 +1322,9 @@ namespace
       {
         // pre
         os << "// read " << name << std::endl;
-        os << "bool" << std::endl << name << "::" << std::endl
-           << "read_" << name
-           << " (::XMLSchema::CDR_InputStream &stream," << std::endl;
-
-        for (size_t j =0; j < name.length () + 5; j++)
-          os << " ";
-
-        os << "::XMLSchema::cdr_arg_traits < " << name
-           << " >::inout_type element)"
+        os << "bool " << name << "::read_" << name
+           << " (::XMLSchema::CDR_InputStream &stream, ::XMLSchema::cdr_arg_traits < "
+           << name << " >::inout_type element)"
            << "{";
 
         {
@@ -1382,8 +1414,7 @@ namespace
     virtual void
     pre (Type&)
     {
-      os << scope << "::" << std::endl
-         << name << " (" << xml_attribute_type << " const& a)" << std::endl
+      os << scope << "::" << name << " (" << xml_attribute_type << " const& a)" << std::endl
          << ":" << std::endl
          << "Base (a)" << std::endl
          << "{";
@@ -1452,13 +1483,13 @@ namespace
 
       enter_scope (name);
 
-      os << "// " << scope << std::endl
-         << std::endl;
+      if (!this->read_only_)
+        os << "// " << scope << std::endl
+           << std::endl;
 
       // c-tor (Element const&)
       //
-      os << scope << "::" << std::endl
-         << name << " (" << xml_element_type << " const& e)" << std::endl
+      os << scope << "::" << name << " (" << xml_element_type << " const& e)" << std::endl
          << ": ::XSCRT::Type (e)" << std::endl
          << "{"
          << string_type << " v (e.value ());"
@@ -1471,8 +1502,7 @@ namespace
 
       // c-tor (Attribute const&)
       //
-      os << scope << "::" << std::endl
-         << name << " (" << xml_attribute_type << " const& a)" << std::endl
+      os << scope << "::" << name << " (" << xml_attribute_type << " const& a)" << std::endl
          << ": ::XSCRT::Type (a)" << std::endl
          << "{"
          << string_type << " v (a.value ());"
@@ -1492,7 +1522,7 @@ namespace
       {
   // pre
   os << "// write " << name << std::endl;
-  os << "bool" << std::endl << name << "::write_" << name
+  os << "bool " << name << "::write_" << name
      << " (::XMLSchema::CDR_OutputStream &stream) const"
      << "{";
 
@@ -1514,10 +1544,8 @@ namespace
       {
   // pre
   os << "// read " << name << std::endl;
-  os << "bool" << std::endl << name << "::read_" << name
-     << " (::XMLSchema::CDR_InputStream &stream, "
-     << std::endl
-     << "::XMLSchema::cdr_arg_traits < " << name
+  os << "bool " << name << "::read_" << name
+     << " (::XMLSchema::CDR_InputStream &stream, ::XMLSchema::cdr_arg_traits < " << name
      << " >::inout_type element)" << std::endl
      << "{";
 

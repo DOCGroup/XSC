@@ -1,0 +1,22 @@
+project (xsc_test_readonly): xscdefaults {
+  requires += xsc
+  custom_only = 1
+  xscflags += --cxx-char-type char
+  xscflags += --cxx-read-only
+  xscflags += --cxx-generate-cdr-reader-types
+
+  XSC_Files {
+    readonly.xsd
+  }
+  Source_Files {
+  }
+}
+
+project (xsc_test_readonly_generated): xscrt {
+  after += xsc_test_readonly
+
+  Source_Files {
+    readonly.cpp
+    readonly_api.cpp
+  }
+}

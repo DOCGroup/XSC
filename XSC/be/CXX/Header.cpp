@@ -170,8 +170,7 @@ namespace
       else
         container = L"std::list";
 
-      os << "// " << name << std::endl
-         << "public:" << std::endl;
+      os << "public:" << std::endl;
 
 
       if (c.max () != 1)
@@ -192,17 +191,25 @@ namespace
         switch(this->cppmode_)
         {
           case CPPMODE::CPP03:
-            os << "typedef " << name << "_container_type::iterator " << name << "_iterator;";
+            if (!this->read_only_)
+              os << "typedef " << name << "_container_type::iterator " << name << "_iterator;";
             os << "typedef " << name << "_container_type::const_iterator " << name << "_const_iterator;";
-            os << name << "_iterator begin_" << name << " ();";
-            os << name << "_iterator end_" << name << " ();";
+            if (!this->read_only_)
+            {
+              os << name << "_iterator begin_" << name << " ();";
+              os << name << "_iterator end_" << name << " ();";
+            }
             break;
           case CPPMODE::CPP11:
           case CPPMODE::CPP17:
-            os << "using " << name << "_iterator = " << name << "_container_type::iterator;";
+            if (!this->read_only_)
+              os << "using " << name << "_iterator = " << name << "_container_type::iterator;";
             os << "using " << name << "_const_iterator = " << name << "_container_type::const_iterator;";
-            os << name << "_iterator begin_" << name << " ();";
-            os << name << "_iterator end_" << name << " ();";
+            if (!this->read_only_)
+            {
+              os << name << "_iterator begin_" << name << " ();";
+              os << name << "_iterator end_" << name << " ();";
+            }
             break;
         }
 
@@ -212,15 +219,19 @@ namespace
         switch(this->cppmode_)
         {
           case CPPMODE::CPP03:
-            os << "void add_" << name << " (" << name << "_value_type const&);";
-            os << "void del_" << name << " (" << name << "_value_type const&);";
+            if (!this->read_only_)
+            {
+              os << "void add_" << name << " (" << name << "_value_type const&);";
+              os << "void del_" << name << " (" << name << "_value_type const&);";
+            }
             break;
           case CPPMODE::CPP11:
           case CPPMODE::CPP17:
             break;
         }
         //Return referenced item if an IDREF
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+            !this->read_only_)
         {
           os << "XSCRT::Type* get_" << name << "_ptr (const " << string_type <<"& idref);";
           os << "void set_" << name << "_ptr (const " << string_type << "& idref);";
@@ -229,37 +240,47 @@ namespace
         os << "size_t count_" << name << " () const;";
 
         os << std::endl
-           << "protected:" << std::endl;
+           << (this->read_only_ ? "private:" : "protected:") << std::endl;
 
-        os << name << "_container_type " << id(name) << "_;";
+        os << name << "_container_type " << id(name) << "_"
+           << (this->read_only_ && this->cppmode_ != CPPMODE::CPP03 ? L" {};" : L";");
       }
       else if (c.min () == 0)
       {
         // optional
         //
-        if (this->cppmode_ == CPPMODE::CPP03)
+        if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
         {
           os << "bool " << name << "_p () const;";
           os << type << " const& " << id (name) << " () const;";
         }
         else
         {
-          os << "bool has_" << id (name) << " () const noexcept;";
-          os << type << " const* " << id (name) << "_if_set () const noexcept;";
-          os << type << "* " << id (name) << "_if_set () noexcept;";
+          string noexcept_suffix (this->cppmode_ == CPPMODE::CPP03 ? L"" : L" noexcept");
+          os << type << " const* " << id (name) << "_if_set () const"
+             << noexcept_suffix << ";";
+          if (!this->read_only_)
+            os << type << "* " << id (name) << "_if_set ()"
+               << noexcept_suffix << ";";
         }
         // os << type << "& " << id (name) << " ();";  // Lets just have one mutator
-        os << "void " << id (name) << " (" << type << " const&);";
+        if (this->read_only_)
+          os << "private:" << std::endl;
+        else
+          os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
         if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
         {
-           os << "::XSCRT::Type* get_" << id (name) << "_ptr ();\n";
-           os << "void set_" << id (name) << "_ptr (const " << string_type << "& idref);";
+          if (!this->read_only_)
+          {
+            os << "::XSCRT::Type* get_" << id (name) << "_ptr ();\n";
+            os << "void set_" << id (name) << "_ptr (const " << string_type << "& idref);";
+          }
         }
 
-        os << std::endl
-           << "protected:" << std::endl;
+        if (!this->read_only_)
+          os << std::endl << "protected:" << std::endl;
         switch(this->cppmode_)
         {
           case CPPMODE::CPP03:
@@ -269,7 +290,8 @@ namespace
           case CPPMODE::CPP11:
           case CPPMODE::CPP17:
             os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
-            os << id (name) << "_type " << id (name) << "_;";
+            os << id (name) << "_type " << id (name) << "_"
+               << (this->read_only_ ? L" {};" : L";");
             break;
         }
       }
@@ -279,17 +301,21 @@ namespace
         //
         os << type << " const& " << id (name) << " () const;";
         // os << type << "& " << id (name) << " ();"; // Lets just have one mutator.
-        os << "void " << id (name) << " (" << type << " const&);";
+        if (this->read_only_)
+          os << "private:" << std::endl;
+        else
+          os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+            !this->read_only_)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ( void );\n";
            os << "void set_" << id(name) << "_ptr (const " << string_type << "& idref);";
         }
 
-        os << std::endl
-           << "protected:" << std::endl;
+        if (!this->read_only_)
+          os << std::endl << "protected:" << std::endl;
 
         switch(this->cppmode_)
         {
@@ -300,7 +326,8 @@ namespace
           case CPPMODE::CPP11:
           case CPPMODE::CPP17:
             os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
-            os << id (name) << "_type " << id (name) << "_;";
+            os << id (name) << "_type " << id (name) << "_"
+               << (this->read_only_ ? L" {};" : L";");
             break;
         }
       }
@@ -342,13 +369,12 @@ namespace
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       idref_ptr = type.find(idref_str);
 
-      os << "// " << name << std::endl
-         << "public:" << std::endl;
+      os << "public:" << std::endl;
 
 
       if (a.optional ())
       {
-        if (this->cppmode_ == CPPMODE::CPP03)
+        if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
         {
           os << "bool " << name << "_p () const;";
           os << type << " const& " << id (name) << " () const;";
@@ -356,21 +382,28 @@ namespace
         }
         else
         {
-          os << "bool has_" << id (name) << " () const noexcept;";
-          os << type << " const* " << id (name) << "_if_set () const noexcept;";
-          os << type << "* " << id (name) << "_if_set () noexcept;";
+          string noexcept_suffix (this->cppmode_ == CPPMODE::CPP03 ? L"" : L" noexcept");
+          os << type << " const* " << id (name) << "_if_set () const"
+             << noexcept_suffix << ";";
+          if (!this->read_only_)
+            os << type << "* " << id (name) << "_if_set ()"
+               << noexcept_suffix << ";";
         }
-        os << "void " << id (name) << " (" << type << " const&);";
+        if (this->read_only_)
+          os << "private:" << std::endl;
+        else
+          os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+            !this->read_only_)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ();\n";
            os << "void set_" << id(name) << "_ptr (const " << string_type << "& idref);";
         }
 
-        os << std::endl
-           << "protected:" << std::endl;
+        if (!this->read_only_)
+          os << std::endl << "protected:" << std::endl;
 
         switch(this->cppmode_)
         {
@@ -381,25 +414,31 @@ namespace
           case CPPMODE::CPP11:
           case CPPMODE::CPP17:
             os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
-            os << id (name) << "_type " << id (name) << "_;";
+            os << id (name) << "_type " << id (name) << "_"
+               << (this->read_only_ ? L" {};" : L";");
             break;
         }
       }
       else
       {
         os << type << " const& " << id (name) << " () const;";
-        os << type << "& " << id (name) << " ();";
-        os << "void " << id (name) << " (" << type << " const&);";
+        if (!this->read_only_)
+          os << type << "& " << id (name) << " ();";
+        if (this->read_only_)
+          os << "private:" << std::endl;
+        else
+          os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+            !this->read_only_)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ( void );\n";
            os << "void set_" << id (name) << "_ptr (const " << string_type << "& idref);";
         }
 
-        os << std::endl
-           << "protected:" << std::endl;
+        if (!this->read_only_)
+          os << std::endl << "protected:" << std::endl;
 
         switch(this->cppmode_)
         {
@@ -410,7 +449,8 @@ namespace
           case CPPMODE::CPP11:
           case CPPMODE::CPP17:
             os << "using " << id (name) << "_type = std::unique_ptr<" << type << ">;";
-            os << id (name) << "_type " << id (name) << "_;";
+            os << id (name) << "_type " << id (name) << "_"
+               << (this->read_only_ ? L" {};" : L";");
             break;
         }
       }
@@ -563,6 +603,16 @@ namespace
 
       // c-tor (all-non-optional-members)
       //
+      if (this->read_only_)
+      {
+        if (this->cppmode_ == CPPMODE::CPP03)
+          os << "private:" << std::endl
+             << name << " ();"
+             << "public:" << std::endl;
+        else
+          os << name << " () = delete;";
+      }
+
       os << name << " (";
 
       ctor_args_.traverse (c);
@@ -612,19 +662,43 @@ namespace
 
       // copy c-tor
       //
-      os << name << " (" << name << " const& s);";
+      if (this->read_only_)
+      {
+        if (this->cppmode_ == CPPMODE::CPP03)
+          os << "private:" << std::endl
+             << name << " (" << name << " const&);";
+        else
+        {
+          os << name << " (" << name << " const&) = delete;";
+          os << name << " (" << name << "&&) = delete;";
+        }
+      }
+      else
+        os << name << " (" << name << " const& s);";
 
       // operator=
       //
-      os << name << "& operator= (" << name << " const& s);"
-         << std::endl;
-
-      if (this->cppmode_ != CPPMODE::CPP03)
+      if (this->read_only_)
       {
-        os << name << " (" << name << "&&) = default;";
-        os << name << "& operator= (" << name << "&&) = default;"
-           << std::endl;
+        if (this->cppmode_ == CPPMODE::CPP03)
+          os << "private:" << std::endl
+             << name << "& operator= (" << name << " const&);";
+        else
+        {
+          os << name << "& operator= (" << name << " const&) = delete;";
+          os << name << "& operator= (" << name << "&&) = delete;";
+        }
       }
+      else
+      {
+        os << name << "& operator= (" << name << " const& s);";
+        if (this->cppmode_ != CPPMODE::CPP03)
+        {
+          os << name << " (" << name << "&&) = default;";
+          os << name << "& operator= (" << name << "&&) = default;";
+        }
+      }
+      os << std::endl;
 
       // Closing brace for the class declaration
       // Example: class Foo {
@@ -742,6 +816,16 @@ namespace
 
       enter_scope (name);
 
+      if (this->read_only_)
+      {
+        if (this->cppmode_ == CPPMODE::CPP03)
+          os << "private:" << std::endl
+             << name << " ();"
+             << "public:" << std::endl;
+        else
+          os << name << " () = delete;";
+      }
+
       // c-tor (Element const&)
       //
       os << "explicit " << name << " (" << xml_element_type << " const&);";
@@ -768,6 +852,21 @@ namespace
       os << "Value" << std::endl
          << "integral () const;"
          << std::endl;
+
+      if (this->read_only_)
+      {
+        if (this->cppmode_ == CPPMODE::CPP03)
+          os << "private:" << std::endl
+             << name << " (" << name << " const&);"
+             << name << "& operator= (" << name << " const&);";
+        else
+        {
+          os << name << " (" << name << " const&) = delete;";
+          os << name << " (" << name << "&&) = delete;";
+          os << name << "& operator= (" << name << " const&) = delete;";
+          os << name << "& operator= (" << name << "&&) = delete;";
+        }
+      }
 
       os << "friend bool " << ex_ << std::endl
          << "operator== (" << name << " const& a, " << name << " const& b);"

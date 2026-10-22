@@ -51,7 +51,7 @@ jobs:
       if: matrix.Repo != ''
     - name: Add packages
       run: |
-        sudo apt-get --yes install libxerces-c-dev libssl-dev ${{ matrix.PackageDeps }}
+        sudo apt-get --yes install libxerces-c-dev ${{ matrix.PackageDeps }}
     - name: create $ACE_ROOT/ace/config.h
       run: |
         '#include "ace/config-linux.h"' > ${env:ACE_ROOT}/ace/config.h
@@ -59,7 +59,6 @@ jobs:
     - name: create $ACE_ROOT/include/makeinclude/platform_macros.GNU
       run: |
         'xerces3=1' > ${env:ACE_ROOT}/include/makeinclude/platform_macros.GNU
-        'ssl=1' >> ${env:ACE_ROOT}/include/makeinclude/platform_macros.GNU
         'xsc=1' >> ${env:ACE_ROOT}/include/makeinclude/platform_macros.GNU
       shell: pwsh
     - name: add optional optional macros

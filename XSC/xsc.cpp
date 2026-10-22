@@ -140,6 +140,8 @@ namespace
     {"cxx-cpp03", ACE_Get_Opt::NO_ARG, "Generate C++03-compatible code."},
     {"cxx-cpp11", ACE_Get_Opt::NO_ARG, "Generate C++11 code."},
     {"cxx-cpp17", ACE_Get_Opt::NO_ARG, "Generate C++17 code."},
+    {"cxx-read-only", ACE_Get_Opt::NO_ARG,
+     "Generate read-only C++ data types (omit CDR reader APIs)."},
     {"idl-char-type", ACE_Get_Opt::ARG_REQUIRED, "Generated IDL character type."},
     {"idl-namespace-regex", ACE_Get_Opt::ARG_REQUIRED, "IDL namespace mapping regex (repeatable)."},
     {"idl-file-suffix", ACE_Get_Opt::ARG_REQUIRED, "Generated IDL suffix."},

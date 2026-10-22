@@ -44,41 +44,39 @@ namespace
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       idref_ptr = type.find(idref_str);
 
-      os << "// " << scope << std::endl;
+      if (!this->read_only_)
+        os << "// " << scope << std::endl;
 
       if (e.min () == 0 && e.max () == 1)
       {
         // optional
         //
-        if (this->cppmode_ != CPPMODE::CPP03)
+        if (this->cppmode_ != CPPMODE::CPP03 || this->read_only_)
         {
-          os << i
-             << "bool " << scope << "::has_" << id (name) << " () const noexcept"
-             << "{return " << id (name) << "_ != nullptr;}";
-
+          string noexcept_suffix (this->cppmode_ == CPPMODE::CPP03 ? L"" : L" noexcept");
           os << i << type << " const* " << scope << "::" << id (name)
-             << "_if_set () const noexcept"
+             << "_if_set () const" << noexcept_suffix
              << "{return " << id (name) << "_.get ();}";
 
-          os << i << type << "* " << scope << "::" << id (name)
-             << "_if_set () noexcept"
-             << "{return " << id (name) << "_.get ();}";
+          if (!this->read_only_)
+            os << i << type << "* " << scope << "::" << id (name)
+               << "_if_set ()" << noexcept_suffix
+               << "{return " << id (name) << "_.get ();}";
         }
         else
         {
           os << i
-             << "bool " << scope << "::" << std::endl
-             << name << "_p () const"
+             << "bool " << scope << "::" << name << "_p () const"
              << "{return " << id (name) << "_.get () != 0;}";
 
           os << i
-             << type << " const& " << scope << "::" << std::endl
-             << id (name) << " () const"
+             << type << " const& " << scope << "::" << id (name) << " () const"
              << "{return *" << id (name) << "_;}";
         }
 
         // Return referenced item if an IDREF
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+            !this->read_only_)
         {
            os << i
               << "::XSCRT::Type* " << scope << "::get_"
@@ -99,15 +97,15 @@ namespace
         }
         /* Lets just have one accessor. WRO
         os << i
-           << type << "& " << scope << "::" << std::endl
-           << id (name) << " ()"
+           << type << "& " << scope << "::" << id (name) << " ()"
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
         */
+        if (!this->read_only_)
+        {
         os << i
-           << "void " << scope << "::" << std::endl
-           << id (name) << " (" << type << " const& e)"
+           << "void " << scope << "::" << id (name) << " (" << type << " const& e)"
            << "{";
 
         if (this->cppmode_ != CPPMODE::CPP03)
@@ -138,18 +136,19 @@ namespace
         }
         os << "}"
            << "}";
+        }
       }
       else if (e.min () == 1 && e.max () == 1)
       {
         // one
         //
         os << i
-           << type << " const& " << scope << "::" << std::endl
-           << id (name) << " () const"
+           << type << " const& " << scope << "::" << id (name) << " () const"
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+            !this->read_only_)
         {
            os << i
               << "::XSCRT::Type* " << scope << "::get_"
@@ -169,24 +168,24 @@ namespace
               << "}\n";
         }
 
-        os << i
-           << "void " << scope << "::" << std::endl
-           << id (name) << " (" << type << " const& e)"
-           << "{"
-           << "*" << id (name) << "_ = e;"
-           << "}";
+        if (!this->read_only_)
+          os << i
+             << "void " << scope << "::" << id (name) << " (" << type << " const& e)"
+             << "{"
+             << "*" << id (name) << "_ = e;"
+             << "}";
       }
       else
       {
         // sequence
         //
 
+        if (!this->read_only_)
         {
           // begin_typename
           //
           os << i
-            << scope << "::" << name << "_iterator " << scope << "::" << std::endl
-            << "begin_" << name << " ()"
+            << scope << "::" << name << "_iterator " << scope << "::begin_" << name << " ()"
             << "{"
             << "return " << id(name) << "_.begin ();"
             << "}";
@@ -194,8 +193,7 @@ namespace
           // end_typename
           //
           os << i
-            << scope << "::" << name << "_iterator " << scope << "::" << std::endl
-            << "end_" << name << " ()"
+            << scope << "::" << name << "_iterator " << scope << "::end_" << name << " ()"
             << "{"
             << "return " << id(name) << "_.end ();"
             << "}";
@@ -203,8 +201,7 @@ namespace
 
         // begin_typename const
         os << i
-           << scope << "::" << name << "_const_iterator " << scope << "::" << std::endl
-           << "begin_" << name << " () const"
+           << scope << "::" << name << "_const_iterator " << scope << "::begin_" << name << " () const"
            << "{";
 
         if (this->cppmode_ != CPPMODE::CPP03)
@@ -219,8 +216,7 @@ namespace
 
         // end_typename const
         os << i
-           << scope << "::" << name << "_const_iterator " << scope << "::" << std::endl
-           << "end_" << name << " () const"
+           << scope << "::" << name << "_const_iterator " << scope << "::end_" << name << " () const"
            << "{";
 
         if (this->cppmode_ != CPPMODE::CPP03)
@@ -234,7 +230,8 @@ namespace
         os << "}";
 
         // add IDREF access method
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+            !this->read_only_)
         {
            os << i
               << "XSCRT::Type* " << scope << "::get_" << name
@@ -252,19 +249,17 @@ namespace
               << "}\n";
         }
 
-        if (this->cppmode_ == CPPMODE::CPP03)
+        if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
         {
           // add_typename
           os << i
-            << "void " << scope << "::" << std::endl
-            << "add_" << name << " (" << scope << "::" << name << "_value_type const& e)"
+            << "void " << scope << "::add_" << name << " (" << scope << "::" << name << "_value_type const& e)"
             << "{";
           os << id(name) << "_.push_back (e);";
           os << "}";
           // del_typename
           os << i
-            << "void " << scope << "::" << std::endl
-            << "del_" << name << " (" << scope << "::" << name << "_value_type const& e)"
+            << "void " << scope << "::del_" << name << " (" << scope << "::" << name << "_value_type const& e)"
             << "{";
           os << id(name) << "_.remove (e);";
           os << "}";
@@ -274,8 +269,7 @@ namespace
           // count_typename
           //
           os << i
-            << "size_t " << scope << "::" << std::endl
-            << "count_" << name << "() const"
+            << "size_t " << scope << "::count_" << name << "() const"
             << "{"
             << "return " << id(name) << "_.size ();"
             << "}";
@@ -289,7 +283,8 @@ namespace
       string name (a.name ());
       string type (type_name (a));
 
-      os << "// " << scope << std::endl;
+      if (!this->read_only_)
+        os << "// " << scope << std::endl;
 
       //Check if the type is an IDREF
       std::string::size_type idref_ptr = 0;
@@ -298,45 +293,41 @@ namespace
 
       if (a.optional ())
       {
-        if (this->cppmode_ != CPPMODE::CPP03)
+        if (this->cppmode_ != CPPMODE::CPP03 || this->read_only_)
         {
-          os << i
-             << "bool " << scope << "::has_" << id (name) << " () const noexcept"
-             << "{return " << id (name) << "_ != nullptr;}";
-
+          string noexcept_suffix (this->cppmode_ == CPPMODE::CPP03 ? L"" : L" noexcept");
           os << i << type << " const* " << scope << "::" << id (name)
-             << "_if_set () const noexcept"
+             << "_if_set () const" << noexcept_suffix
              << "{return " << id (name) << "_.get ();}";
 
-          os << i << type << "* " << scope << "::" << id (name)
-             << "_if_set () noexcept"
-             << "{return " << id (name) << "_.get ();}";
+          if (!this->read_only_)
+            os << i << type << "* " << scope << "::" << id (name)
+               << "_if_set ()" << noexcept_suffix
+               << "{return " << id (name) << "_.get ();}";
         }
         else
         {
           os << i
-            << "bool " << scope << "::" << std::endl
-            << name << "_p () const"
+            << "bool " << scope << "::" << name << "_p () const"
             << "{"
             << "return " << id (name) << "_.get () != 0;"
             << "}";
         }
 
-        if (this->cppmode_ == CPPMODE::CPP03)
+        if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
         {
           os << i
-             << type << " const& " << scope << "::" << std::endl
-             << id (name) << " () const"
+             << type << " const& " << scope << "::" << id (name) << " () const"
              << "{return *" << id (name) << "_;}";
 
           os << i
-             << type << "& " << scope << "::" << std::endl
-             << id (name) << " ()"
+             << type << "& " << scope << "::" << id (name) << " ()"
              << "{return *" << id (name) << "_;}";
         }
 
         // Return a pointer to the referenced item
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+            !this->read_only_)
         {
            os << i
               << "::XSCRT::Type* " << scope << "::get_"
@@ -356,9 +347,10 @@ namespace
               << "}\n";
         }
 
+        if (!this->read_only_)
+        {
         os << i
-           << "void " << scope << "::" << std::endl
-           << id (name) << " (" << type << " const& e)"
+           << "void " << scope << "::" << id (name) << " (" << type << " const& e)"
            << "{";
 
         if (this->cppmode_ != CPPMODE::CPP03)
@@ -387,25 +379,26 @@ namespace
         }
         os << "}"
            << "}";
+        }
       }
       else
       {
         os << i
-           << type << " const& " << scope << "::" << std::endl
-           << id (name) << " () const"
+           << type << " const& " << scope << "::" << id (name) << " () const"
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
 
-        os << i
-           << type << "& " << scope << "::" << std::endl
-           << id (name) << " ()"
-           << "{"
-           << "return *" << id (name) << "_;"
-           << "}";
+        if (!this->read_only_)
+          os << i
+             << type << "& " << scope << "::" << id (name) << " ()"
+             << "{"
+             << "return *" << id (name) << "_;"
+             << "}";
 
         // Return a pointer to the referenced item
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
+        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+            !this->read_only_)
         {
            os << i
               << "::XSCRT::Type* " << scope << "::get_"
@@ -425,12 +418,12 @@ namespace
               << "}\n";
         }
 
-        os << i
-           << "void " << scope << "::" << std::endl
-           << id (name) << " (" << type << " const& e)"
-           << "{"
-           << "*" << id (name) << "_ = e;"
-           << "}";
+        if (!this->read_only_)
+          os << i
+             << "void " << scope << "::" << id (name) << " (" << type << " const& e)"
+             << "{"
+             << "*" << id (name) << "_ = e;"
+             << "}";
       }
     }
 
@@ -573,8 +566,9 @@ namespace
     {
       string type (name);
 
-      os << "// " << scope << std::endl
-         << std::endl;
+      if (!this->read_only_)
+        os << "// " << scope << std::endl
+           << std::endl;
 
       // c-tor
       //
@@ -603,59 +597,61 @@ namespace
 
       os << "}";
 
-      // copy c-tor
-      //
-      os << i
-         << scope << "::"
-         << name << " (" << type << " const& s)" << std::endl;
-
-      if (!has_base)
+      if (!this->read_only_)
       {
-        os << ": ::XSCRT::Type (s)" << std::endl;
+        // copy c-tor
+        //
+        os << i
+           << scope << "::"
+           << name << " (" << type << " const& s)" << std::endl;
+
+        if (!has_base)
+        {
+          os << ": ::XSCRT::Type (s)" << std::endl;
+        }
+
+        // Resets a flag that determines if a Complex Type's
+        // copy constructor has inherited from the base XSCRT::Type
+        // class.
+        copy_.reset_base_class_initialization ();
+
+        inherits (c, copy_base_);
+
+        names (c, copy_member_);
+
+        os << "{";
+
+        names (c, copy_body_member_);
+
+        os << "}";
+
+        std::wstring selfcheck;
+        if (this->cppmode_ != CPPMODE::CPP03)
+        {
+          selfcheck = L"if (std::addressof(s) != this)";
+        }
+        else
+        {
+          selfcheck = L"if (&s != this)";
+        }
+
+        // operator=
+        //
+        os << i
+           << scope << "& " << scope << "::operator= (" << type << " const& s)"
+           << "{"
+           << selfcheck
+           << "{";
+
+        inherits (c, assign_base_);
+        names (c, assign_member_);
+
+        os << "}"
+           << "return *this;"
+           << "}";
+
+        os << std::endl;
       }
-
-      // Resets a flag that determines if a Complex Type's
-      // copy constructor has inherited from the base XSCRT::Type
-      // class.
-      copy_.reset_base_class_initialization ();
-
-      inherits (c, copy_base_);
-
-      names (c, copy_member_);
-
-      os << "{";
-
-      names (c, copy_body_member_);
-
-      os << "}";
-
-      std::wstring selfcheck;
-      if (this->cppmode_ != CPPMODE::CPP03)
-      {
-        selfcheck = L"if (std::addressof(s) != this)";
-      }
-      else
-      {
-        selfcheck = L"if (&s != this)";
-      }
-
-      // operator=
-      //
-      os << i
-         << scope << "&" << std::endl
-         << scope << "::operator= (" << type << " const& s)"
-         << "{"
-         << selfcheck
-         << "{";
-
-      inherits (c, assign_base_);
-      names (c, assign_member_);
-
-      os << "}"
-         << "return *this;"
-         << "}";
-
-      os << std::endl;
     }
 
     void
@@ -690,10 +686,7 @@ namespace
       string type (type_name (c));
 
       if (this->cdr_reader_generation_)
-        os << "bool" << std::endl
-           << "operator >> (::XMLSchema::CDR_InputStream &stream,"
-           << std::endl
-           << "             ::XMLSchema::cdr_arg_traits < "
+        os << "bool operator >> (::XMLSchema::CDR_InputStream &stream, ::XMLSchema::cdr_arg_traits < "
            << type << " >::inout_type element)"
            << std::endl
            << "{"
@@ -703,10 +696,7 @@ namespace
            << "}";
 
       if (this->cdr_writer_generation_)
-        os << "bool" << std::endl
-           << "operator << (::XMLSchema::CDR_OutputStream &stream,"
-           << std::endl
-           << "             ::XMLSchema::cdr_arg_traits < "
+        os << "bool operator << (::XMLSchema::CDR_OutputStream &stream, ::XMLSchema::cdr_arg_traits < "
            << type << " >::in_type element)"
            << std::endl
            << "{"
@@ -1276,34 +1266,31 @@ namespace
 
       string type (type_name (e));
 
-      os << "// " << scope << std::endl
-         << std::endl;
+      if (!this->read_only_)
+        os << "// " << scope << std::endl
+           << std::endl;
 
       os << i
-         << scope << "::Value " << scope << "::" << std::endl
-         << "integral () const"
+         << scope << "::Value " << scope << "::integral () const"
          << "{"
          << "return v_;"
          << "}";
 
 
       os << i
-         << "bool" << std::endl
-         << "operator== (" << type << " const& a, " << type << " const& b)"
+         << "bool operator== (" << type << " const& a, " << type << " const& b)"
          << "{"
          << "return a.v_ == b.v_;"
          << "}";
 
       os << i
-         << "bool" << std::endl
-         << "operator!= (" << type << " const& a, " << type << " const& b)"
+         << "bool operator!= (" << type << " const& a, " << type << " const& b)"
          << "{"
          << "return a.v_ != b.v_;"
          << "}";
 
       os << i
-         << scope << "::" << std::endl
-         << name << " (" << scope << "::Value v)" << std::endl
+         << scope << "::" << name << " (" << scope << "::Value v)" << std::endl
          << ": v_ (v)" << std::endl
          << "{"
          << "}";
@@ -1312,10 +1299,7 @@ namespace
 
       // CDR Insertion extraction operations if needed
       if (this->cdr_reader_generation_)
-        os << "bool" << std::endl
-          << "operator >> (::XMLSchema::CDR_InputStream &stream,"
-          << std::endl
-          << "             ::XMLSchema::cdr_arg_traits < "
+        os << "bool operator >> (::XMLSchema::CDR_InputStream &stream, ::XMLSchema::cdr_arg_traits < "
           << type << " >::inout_type element)"
           << std::endl
           << "{"
@@ -1325,10 +1309,7 @@ namespace
           << "}";
 
       if (this->cdr_writer_generation_)
-        os << "bool" << std::endl
-          << "operator << (::XMLSchema::CDR_OutputStream &stream,"
-          << std::endl
-          << "             ::XMLSchema::cdr_arg_traits < "
+        os << "bool operator << (::XMLSchema::CDR_OutputStream &stream, ::XMLSchema::cdr_arg_traits < "
           << type << " >::in_type element)"
           << std::endl
           << "{"
