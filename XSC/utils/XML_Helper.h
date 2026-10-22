@@ -68,6 +68,11 @@ namespace XSC
       void terminate_parser (void);
 
     private:
+      XML_Helper (XML_Helper const&) = delete;
+      XML_Helper& operator= (XML_Helper const&) = delete;
+      XML_Helper (XML_Helper&&) = delete;
+      XML_Helper& operator= (XML_Helper&&) = delete;
+
       bool initialized_;
       xercesc::DOMImplementation *impl_;
       mutable std::unique_ptr<xercesc::XercesDOMParser> parser_;
