@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "xercesc/framework/LocalFileFormatTarget.hpp"
 
 namespace XSCRT
@@ -21,7 +23,7 @@ File_Writer_T (const CHAR_TYPE * ns,
 // File_Writer_T
 //
 template <typename T, typename CHAR_TYPE>
-File_Writer_T <T, CHAR_TYPE>::~File_Writer_T (void)
+File_Writer_T <T, CHAR_TYPE>::~File_Writer_T ()
 {
 
 }
@@ -32,8 +34,8 @@ File_Writer_T <T, CHAR_TYPE>::~File_Writer_T (void)
 template <typename T, typename CHAR_TYPE>
 bool File_Writer_T <T, CHAR_TYPE>::write (const CHAR_TYPE * filename)
 {
-  std::auto_ptr <xercesc::LocalFileFormatTarget>
-    target_file (new xercesc::LocalFileFormatTarget (XSC::XStr (filename)));
+  auto target_file = std::make_unique<xercesc::LocalFileFormatTarget> (
+    XSC::XStr (filename));
 
   // Write the element to the target.
   if (this->dom_writer_)

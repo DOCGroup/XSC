@@ -35,7 +35,7 @@ namespace CCF
       private:
         class PreprocessorImpl;
 
-        std::auto_ptr<PreprocessorImpl> impl_;
+        std::unique_ptr<PreprocessorImpl> impl_;
       };
     }
   }

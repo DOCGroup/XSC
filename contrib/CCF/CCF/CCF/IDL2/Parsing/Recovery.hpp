@@ -115,8 +115,8 @@ namespace CCF
         RecoveryDescriptor (std::string d,
                             RecoveryMethod::Value recovery,
                             DiagnosticType::Value diagnostic)
-            : action_one_ (0),
-              action_two_ (0),
+            : action_one_ (),
+              action_two_ (),
               description_ (d),
               recovery_ (recovery),
               diagnostic_ (diagnostic)
@@ -130,7 +130,7 @@ namespace CCF
                             Object& obj,
                             void (Object::*action_one)())
             : action_one_ (call_thunk (obj, action_one)),
-              action_two_ (0),
+              action_two_ (),
               description_ (d),
               recovery_ (recovery),
               diagnostic_ (diagnostic)
@@ -155,8 +155,8 @@ namespace CCF
         RecoveryDescriptor (RecoveryDescriptor const& rd)
           : ReferenceCounting::Interface (),
             ReferenceCounting::DefaultImpl<> (),
-            action_one_ (rd.action_one_.get () ? rd.action_one_->clone () : 0),
-            action_two_ (rd.action_two_.get () ? rd.action_two_->clone () : 0),
+            action_one_ (rd.action_one_ ? rd.action_one_->clone () : nullptr),
+            action_two_ (rd.action_two_ ? rd.action_two_->clone () : nullptr),
             description_ (rd.description_),
             recovery_ (rd.recovery_),
             diagnostic_ (rd.diagnostic_)
@@ -164,8 +164,8 @@ namespace CCF
         }
 
 
-        std::auto_ptr<Thunk> action_one_;
-        std::auto_ptr<Thunk> action_two_;
+        std::unique_ptr<Thunk> action_one_;
+        std::unique_ptr<Thunk> action_two_;
         std::string description_;
         RecoveryMethod::Value recovery_;
         DiagnosticType::Value diagnostic_;

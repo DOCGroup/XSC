@@ -5,6 +5,7 @@
 #define XSCRT_ELEMENTS_HPP
 
 #include <map>
+#include <memory>
 #include <string>
 #include <sstream>
 #include "ace/ace_wchar.h"
@@ -112,7 +113,7 @@ namespace XSCRT
 
       // Revoke registrations from our old container.
       //
-      if (container_ != 0 && map_.get ())
+      if (container_ != nullptr && map_)
       {
         for (Map_::iterator i (map_->begin ()); i != map_->end (); ++i)
         {
@@ -125,7 +126,7 @@ namespace XSCRT
 
       // Copy registrations to our new container.
       //
-      if (c != 0 && map_.get ())
+      if (c != nullptr && map_)
       {
         for (Map_::iterator i (map_->begin ()); i != map_->end (); ++i)
         {
@@ -146,9 +147,9 @@ namespace XSCRT
     void
     register_id (IdentityProvider const& id, Type* t)
     {
-      if (map_.get () == 0)
+      if (!map_)
       {
-        map_ = std::auto_ptr<Map_> (new Map_);
+        map_ = std::make_unique<Map_> ();
       }
 
       if (!map_->insert (
@@ -163,7 +164,7 @@ namespace XSCRT
     void
     unregister_id (IdentityProvider const& id)
     {
-      if (map_.get ())
+      if (map_)
       {
         Map_::iterator it (map_->find (&id));
 
@@ -183,7 +184,7 @@ namespace XSCRT
     Type*
     lookup_id (IdentityProvider const& id) const
     {
-      if (map_.get ())
+      if (map_)
       {
         Map_::const_iterator it (map_->find (&id));
 
@@ -193,7 +194,7 @@ namespace XSCRT
         }
       }
 
-      return 0;
+      return nullptr;
     }
 
     Type* get_idref (const std::basic_string<ACE_TCHAR>& name)
@@ -267,7 +268,7 @@ namespace XSCRT
     std::map<IdentityProvider const*, Type*, IdentityComparator>
     Map_;
 
-    std::auto_ptr<Map_> map_;
+    std::unique_ptr<Map_> map_;
   };
 
   // Fundamental types template.

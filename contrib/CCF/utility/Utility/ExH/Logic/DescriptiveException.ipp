@@ -43,9 +43,7 @@ namespace Utility
       }
 
       inline DescriptiveException::
-      ~DescriptiveException () throw ()
-      {
-      }
+      ~DescriptiveException () throw () = default;
 
       inline DescriptiveException& DescriptiveException::
       operator= (DescriptiveException const& src) throw ()
@@ -64,11 +62,11 @@ namespace Utility
         {
           if (description == 0 || description[0] == '\0')
           {
-            description_.reset (0);
+            description_.reset ();
           }
           else
           {
-            if (description_.get () != 0)
+            if (description_)
             {
               *description_ = description;
             }
@@ -80,7 +78,7 @@ namespace Utility
         }
         catch (...)
         {
-          description_.reset (0);
+          description_.reset ();
         }
       }
 
@@ -89,7 +87,7 @@ namespace Utility
       {
         try
         {
-          if (description_.get () != 0)
+          if (description_)
           {
             return description_->c_str ();
           }

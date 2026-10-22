@@ -7,13 +7,11 @@
 namespace IDL3
 {
   Generator::
-  ~Generator ()
-  {
-  }
+  ~Generator () = default;
 
   Generator::
   Generator ()
-      : pimpl_ (new GeneratorImpl), impl_ (*pimpl_)
+      : pimpl_ (std::make_unique<GeneratorImpl> ()), impl_ (*pimpl_)
   {
   }
 

@@ -654,5 +654,5 @@ namespace CCF
 std::ostream&
 operator<< (std::ostream& os, CCF::IDL2::SemanticGraph::Path const& path)
 {
-  return os << path.native_file_string ();
+  return os << path.string ();
 }

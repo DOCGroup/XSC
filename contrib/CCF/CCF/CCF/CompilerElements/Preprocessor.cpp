@@ -934,13 +934,11 @@ namespace CCF
       //
       //
       Preprocessor::
-      ~Preprocessor ()
-      {
-      }
+      ~Preprocessor () = default;
 
       Preprocessor::
       Preprocessor (TokenStream<char>& is, Symbols const& symbols)
-          : impl_ (new PreprocessorImpl (is, symbols))
+          : impl_ (std::make_unique<PreprocessorImpl> (is, symbols))
       {
       }
 

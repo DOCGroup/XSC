@@ -52,7 +52,7 @@ namespace Utility
         what () const throw ();
 
       private:
-        std::auto_ptr<std::string> description_;
+        std::unique_ptr<std::string> description_;
       };
     }
   }

@@ -25,7 +25,7 @@ namespace IDL2
     Generator (GeneratorImpl&);
 
   protected:
-    std::auto_ptr<GeneratorImpl> pimpl_;
+    std::unique_ptr<GeneratorImpl> pimpl_;
     GeneratorImpl& impl_;
   };
 }

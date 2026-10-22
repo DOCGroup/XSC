@@ -124,7 +124,7 @@ namespace CCF
           case Parsing::DiagnosticType::BEFORE:
             {
               Diagnostic::Error rec (
-                context_.get<fs::path> ("file-path").native_file_string (),
+                context_.get<fs::path> ("file-path").string (),
                 (*i)->line ());
 
               rec << "before \'" << (*i)->lexeme () << "\': "
@@ -138,7 +138,7 @@ namespace CCF
               i--;
 
               Diagnostic::Error rec (
-                context_.get<fs::path> ("file-path").native_file_string (),
+                context_.get<fs::path> ("file-path").string (),
                 (*i)->line ());
 
               rec << "after \'" << (*i)->lexeme () << "\': "
@@ -197,7 +197,7 @@ namespace CCF
               case Parsing::DiagnosticType::BEFORE:
                 {
                   Diagnostic::Error rec (
-                    context_.get<fs::path> ("file-path").native_file_string (),
+                    context_.get<fs::path> ("file-path").string (),
                     (*i)->line ());
 
                   rec << "before \'" << (*i)->lexeme () << "\': "
@@ -209,7 +209,7 @@ namespace CCF
               case Parsing::DiagnosticType::AFTER:
                 {
                   Diagnostic::Error rec (
-                    context_.get<fs::path> ("file-path").native_file_string (),
+                    context_.get<fs::path> ("file-path").string (),
                     (*i)->line ());
 
                   rec << "after \'" << (*i)->lexeme () << "\': "
@@ -272,7 +272,7 @@ namespace CCF
         handler (Object& obj,
                  void (Object::*action_one)())
             : action_one_ (Parsing::call_thunk (obj, action_one)),
-              action_two_ (0)
+              action_two_ ()
         {
         }
 
@@ -286,8 +286,8 @@ namespace CCF
         }
 
         handler (handler const& h)
-            : action_one_ (h.action_one_.get () ? h.action_one_->clone () : 0),
-              action_two_ (h.action_two_.get () ? h.action_two_->clone () : 0)
+            : action_one_ (h.action_one_ ? h.action_one_->clone () : nullptr),
+              action_two_ (h.action_two_ ? h.action_two_->clone () : nullptr)
         {
         }
 
@@ -301,15 +301,15 @@ namespace CCF
           );
           */
 
-          if (action_one_.get ()) action_one_->execute ();
-          if (action_two_.get ()) action_two_->execute ();
+          if (action_one_) action_one_->execute ();
+          if (action_two_) action_two_->execute ();
 
           // return RecoveryStatus (RecoveryStatus::rethrow);
           throw e;
         }
 
-        std::auto_ptr<Parsing::Thunk> action_one_;
-        std::auto_ptr<Parsing::Thunk> action_two_;
+        std::unique_ptr<Parsing::Thunk> action_one_;
+        std::unique_ptr<Parsing::Thunk> action_two_;
       };
 
       Guard guard;
