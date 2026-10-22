@@ -13,7 +13,7 @@
 #include "utils/XML_Helper.h"
 
 #include <cstdlib>  // std::wcstombs
-#include <memory>   // std::auto_ptr
+#include <memory>
 #include <iostream>
 #include <sstream>
 
@@ -37,7 +37,7 @@ namespace XSC
 
   using namespace SemanticGraph;
   using namespace Xerces;
-  using std::auto_ptr;
+  using std::unique_ptr;
 
   string const xsd = L"http://www.w3.org/2001/XMLSchema";
   string const xmi = L"http://www.omg.org/XMI";
@@ -273,7 +273,7 @@ namespace XSC
   Schema* Parser::
   parse (fs::path const& uri)
   {
-    auto_ptr<Schema> rs (new Schema);
+    unique_ptr<Schema> rs (new Schema);
 
     // Implied schema with fundamental types.
     //

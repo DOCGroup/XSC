@@ -24,7 +24,7 @@
  */
 //=============================================================================
 
-#include <memory> // std::auto_ptr
+#include <memory>
 #include <iostream>
 #include <vector>
 
@@ -40,7 +40,7 @@ using namespace XSC;
 
 using std::wcerr;
 using std::endl;
-using std::auto_ptr;
+using std::unique_ptr;
 
 wchar_t const* const version = L"0.0.8";
 
@@ -269,7 +269,7 @@ int main (int argc, char* argv[])
     Parser parser (vm.count ("trace"), search_paths);
 
     //File is parsed and loaded into the Semantic Graph::Schema (s)
-    auto_ptr <SemanticGraph::Schema> s (parser.parse (tu));
+    unique_ptr<SemanticGraph::Schema> s (parser.parse (tu));
 
     if (detector.error ())
       {
