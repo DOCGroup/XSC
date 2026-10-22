@@ -203,7 +203,7 @@ namespace
     }
 
     virtual void
-    traverse (fs::path const& f)
+    traverse (std::filesystem::path const& f)
     {
       std::string name (regex::perl_s (f.string (), expr_));
 

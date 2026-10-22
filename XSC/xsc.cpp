@@ -24,12 +24,12 @@
  */
 //=============================================================================
 
+#include <filesystem>
 #include <memory>
 #include <iostream>
 #include <vector>
 
 #include "boost/program_options.hpp"
-#include "XSC/FileSystem.hpp"
 #include "XSC/Parser.hpp"
 #include "XSC/be/CXX/Validator.hpp"
 #include "XSC/be/CXX/Generator.hpp"
@@ -214,7 +214,7 @@ int main (int argc, char* argv[])
     using SearchPaths = std::vector<std::string>;
 
     Parser::Paths search_paths;
-    search_paths.push_back (fs::path ());
+    search_paths.push_back (std::filesystem::path ());
 
     if (vm.count ("search-path"))
       {
@@ -224,7 +224,7 @@ int main (int argc, char* argv[])
           {
             try
               {
-                search_paths.push_back (fs::path (search_path));
+                search_paths.push_back (std::filesystem::path (search_path));
               }
             catch (...)
               {
@@ -257,7 +257,7 @@ int main (int argc, char* argv[])
     ErrorDetector detector (std::wcerr);
 
     //"tu" is set to the schema path provided in the command line.
-    fs::path tu (argument.c_str ());
+    std::filesystem::path tu (argument.c_str ());
 
     Parser parser (vm.count ("trace"), search_paths);
 

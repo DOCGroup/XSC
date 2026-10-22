@@ -65,7 +65,7 @@ namespace IDL
   }
 
   void Generator::
-  generate (po::variables_map const& vm, Schema& schema, fs::path const& in_path)
+  generate (po::variables_map const& vm, Schema& schema, std::filesystem::path const& in_path)
   {
     std::string in_name (in_path.filename ().string ());
 
@@ -77,7 +77,7 @@ namespace IDL
     std::string out_name (regex::perl_s (in_name, expr));
     out_name += suffix;
 
-    fs::path out_path (out_name);
+    std::filesystem::path out_path (out_name);
 
     std::wofstream idl (out_path, std::ios_base::out);
 

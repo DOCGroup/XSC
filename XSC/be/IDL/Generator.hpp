@@ -4,7 +4,7 @@
 #ifndef IDL_GENERATOR_HPP
 #define IDL_GENERATOR_HPP
 
-#include <CCF/CompilerElements/FileSystem.hpp>
+#include <filesystem>
 
 //@@ SemanticGraphFwd could be useful here.
 //
@@ -24,7 +24,7 @@ namespace IDL
     void
     generate (boost::program_options::variables_map const& vm,
               XSC::SemanticGraph::Schema&,
-              fs::path const& file);
+              std::filesystem::path const& file);
   };
 }
 

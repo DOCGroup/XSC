@@ -251,14 +251,14 @@ namespace XSC
   }
 
   Parser::
-  Parser (bool trace, const std::vector <fs::path> &include_paths)
+  Parser (bool trace, const std::vector <std::filesystem::path> &include_paths)
     : include_paths_ (include_paths)
   {
     trace_ = trace;
   }
 
   Schema* Parser::
-  parse (fs::path const& uri)
+  parse (std::filesystem::path const& uri)
   {
     std::unique_ptr<Schema> rs (std::make_unique<Schema> ());
 
@@ -266,7 +266,7 @@ namespace XSC
     //
     {
       Schema& s (rs->new_node<Schema> ());
-      rs->new_edge<Implies> (*rs, s, fs::path ("XMLSchema.xsd"));
+      rs->new_edge<Implies> (*rs, s, std::filesystem::path ("XMLSchema.xsd"));
 
       Namespace& ns (s.new_node<Namespace> ());
       s.new_edge<Names> (s, ns, xsd);
@@ -312,7 +312,7 @@ namespace XSC
     // Supported XMI features
     {
       Schema &s (rs->new_node<Schema> ());
-      rs->new_edge<Implies> (*rs, s, fs::path ("XMI.xsd"));
+      rs->new_edge<Implies> (*rs, s, std::filesystem::path ("XMI.xsd"));
       Namespace &ns (s.new_node<Namespace> ());
 
       s.new_edge<Names> (s, ns, xmi);
@@ -472,7 +472,7 @@ namespace XSC
     std::vector<char> str (len);
     std::wcstombs (str.data (), loc.c_str (), len);
 
-    fs::path path (str.data ());
+    std::filesystem::path path (str.data ());
 
     // Check to see if we have already parsed this file....
     if (file_map_.find (path) != file_map_.end ()) return;
@@ -519,7 +519,7 @@ namespace XSC
         std::size_t len (std::wcstombs (nullptr, loc.c_str (), 0) + 1);
         std::vector<char> str (len);
         std::wcstombs (str.data (), loc.c_str (), len);
-        fs::path path (str.data ());
+        std::filesystem::path path (str.data ());
 
         if (file_map_.find (path) != file_map_.end ()) return;
 
@@ -1499,7 +1499,7 @@ namespace XSC
       }
   }
 
-  DOMDocument* Parser::dom (fs::path const& tu)
+  DOMDocument* Parser::dom (std::filesystem::path const& tu)
   {
     try
       {
@@ -1558,7 +1558,7 @@ namespace XSC
         // Setup the entity resolver.
         XSC::XML::Path_Resolver < > path_resolver;
 
-        for (fs::path const& include_path : this->include_paths_)
+        for (std::filesystem::path const& include_path : this->include_paths_)
         {
           path_resolver.insert (include_path.string ().c_str ());
         }

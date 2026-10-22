@@ -30,7 +30,7 @@
 #ifndef CXX_GENERATOR_HPP
 #define CXX_GENERATOR_HPP
 
-#include "CCF/CompilerElements/FileSystem.hpp"
+#include <filesystem>
 
 //@@ SemanticGraphFwd could be useful here.
 //
@@ -48,7 +48,7 @@ public:
   void
   generate (boost::program_options::variables_map const& vm,
             XSC::SemanticGraph::Schema&,
-            fs::path const& file);
+            std::filesystem::path const& file);
 };
 
 #endif // CXX_GENERATOR_HPP

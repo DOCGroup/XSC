@@ -6,6 +6,7 @@
 #ifndef XSC_PARSER_HXX
 #define XSC_PARSER_HXX
 
+#include <filesystem>
 #include <memory>
 #include <stack>
 #include <string>
@@ -215,14 +216,14 @@ namespace XSC
   {
   public:
 
-    Parser (bool trace, const std::vector <fs::path> &include_paths);
+    Parser (bool trace, const std::vector <std::filesystem::path> &include_paths);
 
     SemanticGraph::Schema*
-    parse (fs::path const&);
+    parse (std::filesystem::path const&);
 
   private:
     Xerces::DOMDocument*
-    dom (fs::path const&);
+    dom (std::filesystem::path const&);
 
     void
     schema (XML::Element const&);
@@ -437,18 +438,18 @@ namespace XSC
     //
     struct FilePathComparator
     {
-      bool operator () (fs::path const& x, fs::path const& y) const
+      bool operator () (std::filesystem::path const& x, std::filesystem::path const& y) const
       {
         return x.string () < y.string ();
       }
     };
 
-    using FileMap_ = std::map<fs::path, string, FilePathComparator>;
+    using FileMap_ = std::map<std::filesystem::path, string, FilePathComparator>;
 
     FileMap_ file_map_;
 
   public:
-    using Paths = std::vector<fs::path>;
+    using Paths = std::vector<std::filesystem::path>;
 
   private:
     Paths include_paths_;

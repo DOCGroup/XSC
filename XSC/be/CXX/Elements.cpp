@@ -31,7 +31,7 @@ ns_name (SemanticGraph::Namespace& ns)
   {
     SemanticGraph::Contains& c (schema.contained ());
 
-    fs::path f;
+    std::filesystem::path f;
 
     if (Includes* i = dynamic_cast<Includes*> (&c)) f = i->file (); else
     if (Imports* i = dynamic_cast<Imports*> (&c)) f = i->file (); else

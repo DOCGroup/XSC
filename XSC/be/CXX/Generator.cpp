@@ -138,7 +138,7 @@ options (po::options_description& d)
  */
 
 void CXX_Generator::
-generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path)
+generate (po::variables_map const& vm, Schema& schema, std::filesystem::path const& file_path)
 {
   //Name is the actual file name.
   std::string name (file_path.filename ().string ());
@@ -173,9 +173,9 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   std::string cxx_name (regex::perl_s (name, cxx_expr) + cxx_suffix);
 
   // File handlers are created for each file name
-  fs::path hxx_path (hxx_name);
-  fs::path ixx_path (ixx_name);
-  fs::path cxx_path (cxx_name);
+  std::filesystem::path hxx_path (hxx_name);
+  std::filesystem::path ixx_path (ixx_name);
+  std::filesystem::path cxx_path (cxx_name);
 
   //Files are opened for output.  Note that the inline
   //file is only opened IF the inline_ value is true (otherwise

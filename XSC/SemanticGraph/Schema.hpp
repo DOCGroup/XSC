@@ -4,7 +4,7 @@
 #ifndef XSC_SEMANTIC_GRAPH_SCHEMA_HXX
 #define XSC_SEMANTIC_GRAPH_SCHEMA_HXX
 
-#include <XSC/FileSystem.hpp>
+#include <filesystem>
 
 #include <XSC/SemanticGraph/Elements.hpp>
 #include <XSC/SemanticGraph/Namespace.hpp>
@@ -22,7 +22,7 @@ namespace XSC
     class Implies : public virtual Contains
     {
     public:
-      fs::path
+      std::filesystem::path
       file () const
       {
         return file_;
@@ -34,14 +34,14 @@ namespace XSC
     protected:
       friend class Graph<Node, Edge>;
 
-      Implies (fs::path const& file)
+      Implies (std::filesystem::path const& file)
           : file_ (file)
       {
         type_info (static_type_info ());
       }
 
     private:
-      fs::path file_;
+      std::filesystem::path file_;
     };
 
     //
@@ -50,7 +50,7 @@ namespace XSC
     class Sources : public virtual Contains
     {
     public:
-      fs::path
+      std::filesystem::path
       file () const
       {
         return file_;
@@ -62,14 +62,14 @@ namespace XSC
     protected:
       friend class Graph<Node, Edge>;
 
-      Sources (fs::path const& file)
+      Sources (std::filesystem::path const& file)
           : file_ (file)
       {
         type_info (static_type_info ());
       }
 
     private:
-      fs::path file_;
+      std::filesystem::path file_;
     };
 
 
@@ -79,7 +79,7 @@ namespace XSC
     class Includes : public virtual Contains
     {
     public:
-      fs::path
+      std::filesystem::path
       file () const
       {
         return file_;
@@ -91,14 +91,14 @@ namespace XSC
     protected:
       friend class Graph<Node, Edge>;
 
-      Includes (fs::path const& file)
+      Includes (std::filesystem::path const& file)
           : file_ (file)
       {
         type_info (static_type_info ());
       }
 
     private:
-      fs::path file_;
+      std::filesystem::path file_;
     };
 
 
@@ -108,7 +108,7 @@ namespace XSC
     class Imports : public virtual Contains
     {
     public:
-      fs::path
+      std::filesystem::path
       file () const
       {
         return file_;
@@ -120,14 +120,14 @@ namespace XSC
     protected:
       friend class Graph<Node, Edge>;
 
-      Imports (fs::path const& file)
+      Imports (std::filesystem::path const& file)
           : file_ (file)
       {
         type_info (static_type_info ());
       }
 
     private:
-      fs::path file_;
+      std::filesystem::path file_;
     };
 
 
