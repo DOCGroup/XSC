@@ -6,6 +6,7 @@ workspace (Tests) {
   Anonymous
   Chameleon
   ComplexTypeImport
+  DanceX11
   Escape
   Group
   Import

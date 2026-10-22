@@ -1,0 +1,44 @@
+// Regression corpus imported from RemedyIT/DAnCEX11 etc/schema.
+// Keep this list aligned with tools/config_handlers/config_handlers.mpc.
+project (xsc_test_dancex11): xscdefaults {
+  requires += xsc
+  custom_only = 1
+
+  xscflags += --cxx-char-type char
+  xscflags += --search-path .
+
+  XSC_Files {
+    Basic_Deployment_Data.xsd
+    Deployment.xsd
+    XMI.xsd
+    ccd.xsd
+    cdd.xsd
+    cdp.xsd
+    cid.xsd
+    cpd.xsd
+    iad.xsd
+    pcd.xsd
+    toplevel.xsd
+  }
+
+  Source_Files {
+  }
+}
+
+project (xsc_test_dancex11_generated): xscrt {
+  after += xsc_test_dancex11
+
+  Source_Files {
+    Basic_Deployment_Data.cpp
+    Deployment.cpp
+    XMI.cpp
+    ccd.cpp
+    cdd.cpp
+    cdp.cpp
+    cid.cpp
+    cpd.cpp
+    iad.cpp
+    pcd.cpp
+    toplevel.cpp
+  }
+}
