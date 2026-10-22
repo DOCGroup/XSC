@@ -175,9 +175,9 @@ namespace
   invocation (int argc, char* argv[])
   {
     std::string result;
-    for (int i {}; i != argc; ++i)
+    for (int i {1}; i != argc; ++i)
       {
-        if (i != 0)
+        if (i != 1)
           result += ' ';
         result += shell_quote (argv[i]);
       }
@@ -217,7 +217,7 @@ int main (int argc, char* argv[])
 {
   try
   {
-    std::string const original_invocation {invocation (argc, argv)};
+    std::string const original_arguments {invocation (argc, argv)};
     XSC::Options command_line;
     ACE_Get_Opt get_opt (argc, argv, "", 1, 0, ACE_Get_Opt::PERMUTE_ARGS);
 
@@ -266,7 +266,7 @@ int main (int argc, char* argv[])
         return 1;
       }
 
-    command_line.set ("command-line", original_invocation);
+    command_line.set ("arguments", original_arguments);
     command_line.set ("input-file", get_opt.argv ()[get_opt.opt_ind ()]);
 
     auto set_default = [&command_line] (std::string const& name, std::string const& value)
