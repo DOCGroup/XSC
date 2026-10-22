@@ -25,8 +25,6 @@
 #include "WriterHeader.hpp"
 #include "WriterSource.hpp"
 
-using std::endl;
-using std::wcerr;
 
 using namespace XSC::SemanticGraph;
 namespace po = boost::program_options;
@@ -186,8 +184,8 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
 
   if (!hxx.is_open ())
   {
-    wcerr << hxx_name.c_str () << ": error: unable to open in write mode"
-          << endl;
+    std::wcerr << hxx_name.c_str () << ": error: unable to open in write mode"
+          << std::endl;
     return;
   }
 
@@ -201,16 +199,16 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
 
     if (!ixx.is_open ())
     {
-      wcerr << ixx_name.c_str () << ": error: unable to open in write mode"
-            << endl;
+      std::wcerr << ixx_name.c_str () << ": error: unable to open in write mode"
+            << std::endl;
       return;
     }
   }
 
   if (!cxx.is_open ())
   {
-    wcerr << cxx_name.c_str () << ": error: unable to open in write mode"
-          << endl;
+    std::wcerr << cxx_name.c_str () << ": error: unable to open in write mode"
+          << std::endl;
     return;
   }
 
@@ -231,8 +229,8 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
 
       if (!banner.is_open ())
       {
-        wcerr << name.c_str () << ": error: unable to open in read mode"
-              << endl;
+        std::wcerr << name.c_str () << ": error: unable to open in read mode"
+              << std::endl;
         return;
       }
     }
@@ -248,8 +246,8 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
 
         if (!b.is_open ())
         {
-          wcerr << bn.c_str () << ": error: unable to open in read mode"
-                << endl;
+          std::wcerr << bn.c_str () << ": error: unable to open in read mode"
+                << std::endl;
           return;
         }
 
@@ -276,8 +274,8 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
 
         if (!b.is_open ())
         {
-          wcerr << bn.c_str () << ": error: unable to open in read mode"
-                << endl;
+          std::wcerr << bn.c_str () << ": error: unable to open in read mode"
+                << std::endl;
           return;
         }
         //If the banner is not empty, put the text into the
@@ -303,8 +301,8 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
 
           if (!b.is_open ())
             {
-              wcerr << bn.c_str () << ": error: unable to open in read mode"
-                    << endl;
+              std::wcerr << bn.c_str () << ": error: unable to open in read mode"
+                    << std::endl;
               return;
             }
 
@@ -427,9 +425,9 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
     guard = regex::perl_s (guard, "/\\-/_/");
   }
 
-  hxx << "#ifndef " << guard.c_str () << endl
-      << "#define " << guard.c_str () << endl
-      << endl;
+  hxx << "#ifndef " << guard.c_str () << std::endl
+      << "#define " << guard.c_str () << std::endl
+      << std::endl;
 
   // Export header file
   {
@@ -437,7 +435,7 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
 
     if (tmp != "")
       {
-        hxx << "#include \"" << tmp.c_str () << '"' << endl;
+        hxx << "#include \"" << tmp.c_str () << '"' << std::endl;
       }
   }
 
@@ -479,11 +477,11 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
 
   if (inline_)
   {
-    hxx << "#include \"" << ixx_name.c_str () << "\"" << endl
-        << endl;
+    hxx << "#include \"" << ixx_name.c_str () << "\"" << std::endl
+        << std::endl;
   }
 
-  hxx << "#endif // " << guard.c_str () << endl;
+  hxx << "#endif // " << guard.c_str () << std::endl;
 
   // IXX
   //
@@ -507,8 +505,8 @@ generate (po::variables_map const& vm, Schema& schema, std::filesystem::path con
 
   // CXX
   //
-  cxx << "#include \"" << hxx_name.c_str () << "\"" << endl
-      << endl;
+  cxx << "#include \"" << hxx_name.c_str () << "\"" << std::endl
+      << std::endl;
 
   {
     ::Context ctx (cxx, char_type, export_symbol, nsm);

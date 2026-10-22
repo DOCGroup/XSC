@@ -14,8 +14,6 @@
 #include <ostream>
 #include <fstream>
 
-using std::endl;
-using std::wcerr;
 
 using namespace XSC::SemanticGraph;
 
@@ -83,8 +81,8 @@ namespace IDL
 
     if (!idl.is_open ())
     {
-      wcerr << out_name.c_str () << ": error: unable to open in write mode"
-            << endl;
+      std::wcerr << out_name.c_str () << ": error: unable to open in write mode"
+            << std::endl;
       return;
     }
 
@@ -102,8 +100,8 @@ namespace IDL
 
         if (!banner.is_open ())
         {
-          wcerr << name.c_str () << ": error: unable to open in read mode"
-                << endl;
+          std::wcerr << name.c_str () << ": error: unable to open in read mode"
+                << std::endl;
           return;
         }
 
@@ -164,9 +162,9 @@ namespace IDL
     guard = regex::perl_s (guard, "/\\./_/");
 
 
-    idl << "#ifndef " << guard.c_str () << endl
-        << "#define " << guard.c_str () << endl
-        << endl;
+    idl << "#ifndef " << guard.c_str () << std::endl
+        << "#define " << guard.c_str () << std::endl
+        << std::endl;
 
     {
       Context ctx (idl, false, char_type, nsm);
@@ -175,6 +173,6 @@ namespace IDL
       generate_definition (ctx, schema, expr); //@@ move expr to context
     }
 
-    idl << "#endif // " << guard.c_str () << endl;
+    idl << "#endif // " << guard.c_str () << std::endl;
   }
 }
