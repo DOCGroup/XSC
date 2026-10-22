@@ -675,14 +675,7 @@ namespace
           os << name << " (" << name << " const&) = delete;";
           os << name << " (" << name << "&&) = delete;";
         }
-      }
-      else
-        os << name << " (" << name << " const& s);";
 
-      // operator=
-      //
-      if (this->read_only_)
-      {
         if (this->cppmode_ == CPPMODE::CPP03)
           os << "private:" << std::endl
              << name << "& operator= (" << name << " const&);";
@@ -694,7 +687,17 @@ namespace
       }
       else
       {
-        os << name << "& operator= (" << name << " const& s);";
+        bool const default_copy (this->cppmode_ == CPPMODE::CPP17 &&
+                                 !has_copy_required_members (c));
+
+        os << name << " (" << name << " const& s)"
+           << (default_copy ? " = default;" : ";");
+
+        // operator=
+        //
+        os << name << "& operator= (" << name << " const& s)"
+           << (default_copy ? " = default;" : ";");
+
         if (this->cppmode_ != CPPMODE::CPP03)
         {
           os << name << " (" << name << "&&) = default;";

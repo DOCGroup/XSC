@@ -600,7 +600,10 @@ namespace
         os << "}";
       }
 
-      if (!this->read_only_)
+      bool const default_copy (this->cppmode_ == CPPMODE::CPP17 &&
+                               !has_copy_required_members (c));
+
+      if (!this->read_only_ && !default_copy)
       {
         // copy c-tor
         //
@@ -1161,7 +1164,7 @@ namespace
             os << "if (s." << name << "_)" << std::endl
                << "  " << name << " (*(s." << name << "_));"
                << "else" << std::endl
-               << "  " << name << "_.release ();"
+               << "  " << name << "_.reset ();"
                << std::endl;
           }
           else
@@ -1204,7 +1207,7 @@ namespace
           {
             os << "if (s." << name << "_) "
               << name << " (*(s." << name << "_));"
-              << "else " << name << "_.release ();"
+              << "else " << name << "_.reset ();"
               << std::endl;
           }
           else

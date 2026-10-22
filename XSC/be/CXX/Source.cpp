@@ -401,26 +401,40 @@ namespace
       // Write length first
       os << "// " << name << std::endl;
       os << "size_t " << name << "_size = "
-         << "this->" << name << "_.size ();"
+         << "this->" << id (name) << "_.size ();"
          << "stream << " << name << "_size;"
          << std::endl;
 
       // Write each member next
-      os << "for (" << name << "_const_iterator "
-         << name << "_iter = " << "this->begin_" << name << " ();"
-         << "    " << name << "_iter != this->end_" << name
-         << " ();"
-         << "    ++" << name << "_iter)"
-         << "{";
+      if (this->cppmode_ == CPPMODE::CPP03)
+      {
+        os << "for (" << name << "_const_iterator "
+           << name << "_iter = " << "this->begin_" << name << " ();"
+           << "    " << name << "_iter != this->end_" << name
+           << " ();"
+           << "    ++" << name << "_iter)"
+           << "{";
 
-      // Check if the type being written is a boolean
-      // type
-      if (type_is_boolean (type))
-        os << "stream.write_boolean (*" << name << ");";
+        if (type_is_boolean (type))
+          os << "stream.write_boolean (*" << name << "_iter);";
+        else
+          os << "stream << (*" << name << "_iter);";
+
+        os << "}";
+      }
       else
-        os << "stream << (*" << name << "_iter);";
+      {
+        os << "for (auto const& " << name << "_value : this->"
+           << id (name) << "_)"
+           << "{";
 
-      os << "}";
+        if (type_is_boolean (type))
+          os << "stream.write_boolean (" << name << "_value);";
+        else
+          os << "stream << " << name << "_value;";
+
+        os << "}";
+      }
     }
 
     virtual void
@@ -657,6 +671,20 @@ namespace
       }
     }
 
+    string
+    smart_pointer_type () const
+    {
+      return this->cppmode_ == CPPMODE::CPP03
+        ? L"std::auto_ptr"
+        : L"std::unique_ptr";
+    }
+
+    string
+    null_pointer () const
+    {
+      return this->cppmode_ == CPPMODE::CPP03 ? L"0" : L"nullptr";
+    }
+
     /*
      * Reading a pointer type.
      * A type which is read in via the pointer semantics. This
@@ -673,7 +701,7 @@ namespace
     read_pointer_type (string &element_name, string &type)
     {
       os << "stream >> " << element_name << "_tmp;"
-         << "std::auto_ptr < " << type << "::CDR_Type__ > "
+         << this->smart_pointer_type () << " < " << type << "::CDR_Type__ > "
          << "auto_" << element_name << " (" << element_name << "_tmp);"
          << type << " " << element_name << " (" << element_name
          << "_tmp);"
@@ -688,7 +716,7 @@ namespace
     read_complex_type (string &element_name, string &type)
     {
       os << "stream >> " << element_name << ";"
-         << "std::auto_ptr < " << type << " > "
+         << this->smart_pointer_type () << " < " << type << " > "
          << "auto_" << element_name << " (" << element_name << ");"
          << std::endl;
     }
@@ -727,7 +755,8 @@ namespace
       bool pointer_semantics = read_type_as_pointer (type);
 
       if (pointer_semantics)
-        os << type << "::CDR_Type__ *" << element_name << "_tmp (0)"
+        os << type << "::CDR_Type__ *" << element_name << "_tmp ("
+           << this->null_pointer () << ")"
            << ";" ;
       else
         os << type << "::CDR_Type__ " << element_name << "_tmp"
@@ -756,13 +785,18 @@ namespace
       bool pointer_semantics = read_type_as_pointer (type);
 
       if (pointer_semantics)
-  os << type << "::CDR_Type__ *" << element_name << "_tmp (0)"
-     << ";"
-     << "std::auto_ptr < " << type << "::CDR_Type__ > "
-     << "auto_" << element_name << " (" << element_name << "_tmp);";
+      {
+        os << type << "::CDR_Type__ *" << element_name << "_tmp ("
+           << this->null_pointer () << ")"
+           << ";"
+           << this->smart_pointer_type () << " < " << type << "::CDR_Type__ > "
+           << "auto_" << element_name << " (" << element_name << "_tmp);";
+      }
       else
-  os << type << "::CDR_Type__ " << element_name << "_tmp"
-     << ";" ;
+      {
+        os << type << "::CDR_Type__ " << element_name << "_tmp"
+           << ";";
+      }
 
       os << "if (" << element_name << "_p)"
    << "{";
@@ -828,7 +862,7 @@ namespace
 
   if (b == e)
   {
-    os << type << " *" << name << " (0);";
+    os << type << " *" << name << " (" << this->null_pointer () << ");";
     read_complex_type (name, type);
     this->type_name_list_.push_back (L"*" + name);
     return;
@@ -845,7 +879,7 @@ namespace
   if (has<Traversal::Attribute> (*c) ||
       dynamic_cast<SemanticGraph::Enumeration*> (&t))
   {
-    os << type << " *" << name << "(0);";
+    os << type << " *" << name << " (" << this->null_pointer () << ");";
     read_complex_type (name, type);
     this->type_name_list_.push_back (L"*" + name);
     return;
@@ -860,7 +894,8 @@ namespace
   string base_type (type_name ((**b).inheritee ()));
   if (read_type_as_pointer (base_type))
   {
-    os << base_type << "::CDR_Type__ *" << name << "_tmp (0);";
+    os << base_type << "::CDR_Type__ *" << name << "_tmp ("
+       << this->null_pointer () << ");";
     read_pointer_type (name, base_type);
   }
   else
@@ -876,7 +911,8 @@ namespace
   // Simple type: i.e. XMLSchema::boolean, XMLSchema::integer
   if (read_type_as_pointer (type))
   {
-    os << type << "::CDR_Type__ *" << name << "_tmp (0);";
+    os << type << "::CDR_Type__ *" << name << "_tmp ("
+       << this->null_pointer () << ");";
     read_pointer_type (name, type);
   }
   else

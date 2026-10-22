@@ -412,6 +412,7 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
   // CXX
   //
   cxx << "#include \"" << hxx_name.c_str () << "\"" << std::endl
+      << "#include <stdexcept>" << std::endl
       << std::endl;
 
   {

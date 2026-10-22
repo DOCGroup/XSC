@@ -495,6 +495,36 @@ has (Y& y)
   return r;
 }
 
+struct CopyRequiredMembers : Traversal::Element, Traversal::Attribute
+{
+  void
+  traverse (SemanticGraph::Element& e) override
+  {
+    if (e.max () == 1)
+      required = true;
+  }
+
+  void
+  traverse (SemanticGraph::Attribute&) override
+  {
+    required = true;
+  }
+
+  bool required {};
+};
+
+inline bool
+has_copy_required_members (SemanticGraph::Complex& c)
+{
+  CopyRequiredMembers t;
+  Traversal::Scope s;
+  Traversal::Names n;
+  s.edge_traverser (n);
+  n.node_traverser (t);
+  s.traverse (c);
+  return t.required;
+}
+
 // Fundamental type mapping helper.
 //
 struct Fundamental : Traversal::FundamentalType,

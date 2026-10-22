@@ -258,6 +258,7 @@ namespace
     virtual void
     pre (Type& c)
     {
+      string virtual_string (this->cppmode_ == CPPMODE::CPP03 ? L"virtual " : L"");
       string override_string (this->cppmode_ != CPPMODE::CPP03 ? L" override" : L"");
 
       os << "struct " << e << name_
@@ -266,11 +267,11 @@ namespace
 
       // traverse ()
       //
-      os << "virtual void" << std::endl
+      os << virtual_string << "void" << std::endl
          << "traverse (Type&)" << override_string << ";"
          << std::endl;
 
-      os << "virtual void" << std::endl
+      os << virtual_string << "void" << std::endl
          << "traverse (Type const&)" << override_string << ";"
          << std::endl;
 

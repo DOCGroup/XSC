@@ -540,12 +540,13 @@ namespace
          << "xercesc::DOMElement* dom_element = d->getDocumentElement ();"
          << "if (!dom_element)"
          << "{"
-         << "throw 1;"
+         << "throw std::runtime_error (\"XML document has no root element\");"
          << "}"
          << xml_element_type << " e (dom_element);"
          << "if (e.name () != " << L << " (\"" << name << "\"))"
          << "{"
-         << "throw 1;"
+         << "throw std::runtime_error (\"unexpected XML root element; expected <"
+         << name << ">\");"
          << "}";
 
       os << "struct W : ";

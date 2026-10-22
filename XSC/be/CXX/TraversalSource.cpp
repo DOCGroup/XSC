@@ -335,7 +335,7 @@ namespace
         else
           os << "if (o." << id (name) << "_if_set () != nullptr) "
              << id (name) << " (o);"
-             << "else " << id (name) << "_none (o);";
+             << "else " << name << "_none (o);";
       }
       else if (e.min () == 1 && e.max () == 1)
       {
@@ -370,7 +370,7 @@ namespace
         else
           os << "if (o." << id (name) << "_if_set () != nullptr) "
              << id (name) << " (o);"
-             << "else " << id (name) << "_none (o);";
+             << "else " << name << "_none (o);";
       }
       else
       {

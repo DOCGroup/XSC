@@ -280,11 +280,12 @@ namespace
           << "}";
       }
 
+      string virtual_string (this->cppmode_ == CPPMODE::CPP03 ? L"virtual " : L"");
       string override_string (this->cppmode_ != CPPMODE::CPP03 ? L" override" : L"");
 
       // traverse
       //
-      os << "virtual void" << std::endl
+      os << virtual_string << "void" << std::endl
          << "traverse (Type const&)" << override_string << ";"
          << std::endl;
     }
@@ -323,6 +324,7 @@ namespace
     {
       string name ((this->name_ != L"") ? name_ : id (e.name ()));
       string type (type_name (e));
+      string virtual_string (this->cppmode_ == CPPMODE::CPP03 ? L"virtual " : L"");
       string override_string (this->cppmode_ != CPPMODE::CPP03 ? L" override" : L"");
       string default_string (this->cppmode_ != CPPMODE::CPP03 ? L" = default" : L"");
 
@@ -350,7 +352,7 @@ namespace
 
       // traverse
       //
-      os << "virtual void" << std::endl
+      os << virtual_string << "void" << std::endl
          << "traverse (Type const&)" << override_string << ";"
          << std::endl;
 
