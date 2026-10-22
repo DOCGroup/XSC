@@ -18,6 +18,11 @@ ns_name (SemanticGraph::Namespace& ns)
   using SemanticGraph::Imports;
   using SemanticGraph::Implies;
 
+  // A schema without a target namespace maps to the global C++ namespace.
+  // Do not feed an empty name through the namespace mapping: the separator
+  // below would otherwise leave a space that is emitted as `:: `.
+  if (ns.name ().empty ()) return string ();
+
   string name, r;
 
   Schema& schema (dynamic_cast<Schema&> (ns.scope ()));
