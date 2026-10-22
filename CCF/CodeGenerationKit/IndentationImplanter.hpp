@@ -52,8 +52,6 @@ namespace Indentation
 
     using int_type = typename Buffer<C>::int_type;
 
-    using Exception = typename Buffer<C>::Exception;
-
   public:
     FromStreamBufAdapter (std::basic_streambuf<C>& b)
         : buffer_ (b)
@@ -77,7 +75,7 @@ namespace Indentation
       {
       }
 
-      throw Exception ("underlying std::streambuf::sync failed");
+      throw std::runtime_error ("underlying std::streambuf::sync failed");
     }
 
   private:

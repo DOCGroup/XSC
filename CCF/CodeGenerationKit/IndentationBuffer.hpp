@@ -4,8 +4,7 @@
 #ifndef CCF_CODE_GENERATION_KIT_INDENTATION_BUFFER_HPP
 #define CCF_CODE_GENERATION_KIT_INDENTATION_BUFFER_HPP
 
-#include "CCF/CompilerElements/ExH.hpp"
-
+#include <stdexcept>
 #include <string>
 
 namespace Indentation
@@ -15,10 +14,7 @@ namespace Indentation
   {
   public:
 
-    using Exception = ExH::Logic::DescriptiveException;
-
-    class EndOfStream_ {};
-    using EndOfStream = ExH::Compound<EndOfStream_, Exception>;
+    using EndOfStream = std::runtime_error;
 
   public:
     virtual
