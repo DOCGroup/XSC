@@ -66,15 +66,15 @@ public:
     os_.rdbuf (&prev_);
   }
 
-  virtual int_type
-  overflow (int_type c)
+  int_type
+  overflow (int_type c) override
   {
     error_ = true;
     return prev_.sputc (c);
   }
 
-  virtual int
-  sync ()
+  int
+  sync () override
   {
     return prev_.pubsync ();
   }

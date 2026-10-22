@@ -257,15 +257,11 @@ namespace XSC
   Parser (bool trace, const std::vector <fs::path> &include_paths)
     : root_schema_ (nullptr),
       cur_schema_ (nullptr),
+      include_paths_ (include_paths),
       qualify_attribute_ (false),
       qualify_element_ (false)
   {
     trace_ = trace;
-
-    this->include_paths_.resize (include_paths.size ());
-    std::copy (include_paths.begin (),
-               include_paths.end (),
-               this->include_paths_.begin ());
   }
 
   Schema* Parser::
@@ -384,8 +380,8 @@ namespace XSC
           belongs_.node_traverser (scope);
         }
 
-        virtual void
-        traverse (Type& e)
+        void
+        traverse (Type& e) override
         {
           if (e.typed () &&
               !e.type ().named () &&
