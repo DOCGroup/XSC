@@ -27,10 +27,10 @@ class File_Reader_T : public Reader_T <T, CHAR_TYPE>
 {
 public:
   /// Type definition of the character type.
-  typedef typename Reader_T <T, CHAR_TYPE>::char_type char_type;
+  using char_type = typename Reader_T<T, CHAR_TYPE>::char_type;
 
   /// Type definition of the entity type.
-  typedef typename Reader_T <T, CHAR_TYPE>::entity_type entity_type;
+  using entity_type = typename Reader_T<T, CHAR_TYPE>::entity_type;
 
   /**
    * Initializing constructor.
@@ -40,7 +40,7 @@ public:
   File_Reader_T (typename reader_function <T>::result_type reader);
 
   /// Destructor.
-  ~File_Reader_T (void);
+  ~File_Reader_T ();
 
   /**
    * Open the file for reading. This will open the \a filename if

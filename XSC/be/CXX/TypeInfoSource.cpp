@@ -75,7 +75,7 @@ namespace
          << "{"
          << "::XSCRT::TypeId id (typeid (" << fq_name (c) << "));"
          << "::XSCRT::ExtendedTypeInfo nf (id);"
-         << endl;
+         << std::endl;
     }
 
     virtual void
@@ -99,7 +99,7 @@ namespace
 
       os << "};"
          << name_ << "TypeInfoInitializer " << name_ << "TypeInfoInitializer_;"
-         << endl;
+         << std::endl;
     }
 
   private:
@@ -133,16 +133,16 @@ namespace
          << "{"
          << "::XSCRT::TypeId id (typeid (" << id (name) << "));"
          << "::XSCRT::ExtendedTypeInfo nf (id);"
-         << endl
+         << std::endl
          << "nf.add_base (::XSCRT::ExtendedTypeInfo::Access::public_, "
          << "false, typeid (::XSCRT::Type));"
-         << endl
+         << std::endl
          << "::XSCRT::extended_type_info_map ().insert ("
          << "std::make_pair (id, nf));"
          << "}"
          << "};"
          << name << "TypeInfoInitializer " << name << "TypeInfoInitializer_;"
-         << endl;
+         << std::endl;
     }
 
   private:
@@ -165,11 +165,11 @@ namespace
       {
         string name (type_name (e));
 
-        os << "// anonymous type for " /* << scope << "::"*/ << name << endl;
+        os << "// anonymous type for " /* << scope << "::"*/ << name << std::endl;
 
         if (dynamic_cast<SemanticGraph::Type*> (&e.scope ()))
         {
-          os << "public:" << endl;
+          os << "public:" << std::endl;
         }
 
         Traversal::Belongs belongs;
@@ -202,7 +202,7 @@ namespace
          << "{"
          << "::XMLSchema::TypeInfoInitializer < " << char_type << " > "
          << "XMLSchemaTypeInfoInitializer_ (::XSCRT::extended_type_info_map ());"
-         << endl;
+         << std::endl;
 
     }
 
@@ -220,8 +220,8 @@ namespace
 void
 generate_type_info_source (Context& ctx, SemanticGraph::Schema& schema)
 {
-  ctx.os << "#include \"ace/XML_Utils/XMLSchema/TypeInfo.hpp\"" << endl
-         << endl;
+  ctx.os << "#include \"ace/XML_Utils/XMLSchema/TypeInfo.hpp\"" << std::endl
+         << std::endl;
 
   Traversal::Schema traverser;
   Traversal::Sources sources;

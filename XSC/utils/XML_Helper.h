@@ -13,16 +13,11 @@
 
 #include "XML_Error_Handler.h"
 #include "XML_Schema_Resolver.h"
+
+#include <memory>
+
 #include "xercesc/util/XercesDefs.hpp"
 #include "xercesc/parsers/XercesDOMParser.hpp"
-
-namespace XERCES_CPP_NAMESPACE
-{
-  class DOMDocument;
-  class DOMWriter;
-  class DOMImplementation;
-  class DOMDocumentType;
-}
 
 namespace XSC
 {
@@ -38,44 +33,49 @@ namespace XSC
     class XML_Helper
     {
     public:
-      //      XML_Helper (void);
+      //      XML_Helper ();
 
       // Initialize the resolver we should use.
       XML_Helper (Resolver &resolver, Error_Handler &eh);
 
-      ~XML_Helper (void);
+      ~XML_Helper ();
 
       /// Create a DOM tree
-      XERCES_CPP_NAMESPACE::DOMDocument *
+      xercesc::DOMDocument *
       create_dom (const char *uri) const;
 
-      XERCES_CPP_NAMESPACE::DOMDocument *
+      xercesc::DOMDocument *
       create_dom (const char *root,
                   const char *ns,
-                  XERCES_CPP_NAMESPACE::DOMDocumentType * doctype = 0) const;
+                  xercesc::DOMDocumentType * doctype = nullptr) const;
 
-      XERCES_CPP_NAMESPACE::DOMDocumentType *
+      xercesc::DOMDocumentType *
       create_doctype (const char *qn,
                       const char *pid,
                       const char *sid) const;
 
       //Writes out a DOMDocument to an XML file
-      bool write_DOM (XERCES_CPP_NAMESPACE::DOMDocument *doc,
+      bool write_DOM (xercesc::DOMDocument *doc,
                       const char *file) const;
 
-      bool is_initialized (void) const;
+      bool is_initialized () const;
 
     protected:
       /// Intialize the parser
-      void init_parser (void);
+      void init_parser ();
 
       /// Terminate the parser
-      void terminate_parser (void);
+      void terminate_parser ();
 
     private:
-      bool initialized_;
-      XERCES_CPP_NAMESPACE::DOMImplementation *impl_;
-      mutable std::auto_ptr<XERCES_CPP_NAMESPACE::XercesDOMParser> parser_;
+      XML_Helper (XML_Helper const&) = delete;
+      XML_Helper& operator= (XML_Helper const&) = delete;
+      XML_Helper (XML_Helper&&) = delete;
+      XML_Helper& operator= (XML_Helper&&) = delete;
+
+      bool initialized_ {};
+      xercesc::DOMImplementation *impl_ {};
+      mutable std::unique_ptr<xercesc::XercesDOMParser> parser_;
 
       Resolver &resolver_;
       Error_Handler &e_handler_;

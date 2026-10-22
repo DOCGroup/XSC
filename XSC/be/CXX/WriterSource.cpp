@@ -47,7 +47,7 @@ namespace
 
         // pre
         //
-        os << "void " << scope << "::" << endl
+        os << "void " << scope << "::" << std::endl
            << name << "_pre (Type const&)"
            << "{"
            << "push_ (" << xml_element_type << " (" <<
@@ -58,7 +58,7 @@ namespace
 
         // next
         //
-        os << "void " << scope << "::" << endl
+        os << "void " << scope << "::" << std::endl
            << name << "_next (Type const& o)"
            << "{"
            << name << "_post (o);"
@@ -68,7 +68,7 @@ namespace
 
         // post
         //
-        os << "void " << scope << "::" << endl
+        os << "void " << scope << "::" << std::endl
            << name << "_post (Type const&)"
            << "{"
            << "pop_ ();"
@@ -78,7 +78,7 @@ namespace
       {
         // optional & one
         //
-        os << "void " << scope << "::" << endl
+        os << "void " << scope << "::" << std::endl
            << id (name) << " (Type const& o)"
            << "{"
            << "push_ (" << xml_element_type << " (" <<
@@ -114,7 +114,7 @@ namespace
 
       bool q (a.qualified ());
 
-      os << "void " << scope << "::" << endl
+      os << "void " << scope << "::" << std::endl
          << id (name) << " (Type const& o)"
          << "{"
          << xml_attribute_type << " a (" <<
@@ -229,13 +229,13 @@ namespace
     {
       string name (id (name_));
 
-      os << "// " << name << endl;
+      os << "// " << name << std::endl;
 
       // c-tor (XML::Element&)
       //
-      os << scope << "::" << endl
-         << name << " (" << xml_element_type << "& e)" << endl
-         << ": ::XSCRT::Writer<" << char_type << "> (e)" << endl
+      os << scope << "::" << std::endl
+         << name << " (" << xml_element_type << "& e)" << std::endl
+         << ": ::XSCRT::Writer<" << char_type << "> (e)" << std::endl
          << "{"
          << "}";
 
@@ -243,7 +243,7 @@ namespace
       //
       if (this->cppmode_ == CPPMODE::CPP03)
       {
-        os << scope << "::" << endl
+        os << scope << "::" << std::endl
           << name << " ()"
           << "{"
           << "}";
@@ -251,7 +251,7 @@ namespace
 
       // traverse
       //
-      os << "void " << scope << "::" << endl
+      os << "void " << scope << "::" << std::endl
          << "traverse (Type const& o)"
          << "{";
 
@@ -307,14 +307,14 @@ namespace
     {
       string name ((this->name_ != L"") ? id(name_) : id (c.name ()));
 
-      os << "// " << name << endl
-         << endl;
+      os << "// " << name << std::endl
+         << std::endl;
 
       // c-tor (XML::Element&)
       //
-      os << name << "::" << endl
-         << name << " (" << xml_element_type << "& e)" << endl
-         << ": ::XSCRT::Writer<" << char_type << "> (e)" << endl
+      os << name << "::" << std::endl
+         << name << " (" << xml_element_type << "& e)" << std::endl
+         << ": ::XSCRT::Writer<" << char_type << "> (e)" << std::endl
          << "{"
          << "}";
 
@@ -322,7 +322,7 @@ namespace
       //
       if (this->cppmode_ == CPPMODE::CPP03)
       {
-        os << name << "::" << endl
+        os << name << "::" << std::endl
           << name << " ()"
           << "{"
           << "}";
@@ -330,11 +330,11 @@ namespace
 
       // traverse
       //
-      os << "void " << name << "::" << endl
+      os << "void " << name << "::" << std::endl
          << "traverse (Type const& o)"
          << "{"
          << string_type << " s;"
-         << endl;
+         << std::endl;
 
       names (c, names_);
 
@@ -410,7 +410,7 @@ namespace
       if (check (c))
       {
 
-        os << "virtual " << fq_name (c, L"Writer") << "," << endl;
+        os << "virtual " << fq_name (c, L"Writer") << "," << std::endl;
 
         Traversal::Complex::traverse (c);
       }
@@ -421,7 +421,7 @@ namespace
     //{
     //  if (check (t))
     //  {
-    //    os << "virtual " << type_name (t, L"Writer") << "," << endl;
+    //    os << "virtual " << type_name (t, L"Writer") << "," << std::endl;
     //  }
     //}
 
@@ -431,7 +431,7 @@ namespace
       if (check (r))
       {
         os << "virtual ::XMLSchema::Writer::IDREF<" << char_type << ">, " <<
-          endl;
+          std::endl;
       }
     }
 
@@ -443,7 +443,7 @@ namespace
         string name (id (t.name ()));
 
         os << "virtual ::XMLSchema::Writer::FundamentalType< " <<
-          "::XMLSchema::" << name << ", " << char_type << " >," << endl;
+          "::XMLSchema::" << name << ", " << char_type << " >," << std::endl;
       }
     }
 
@@ -456,7 +456,7 @@ namespace
 
         os << "virtual ::XMLSchema::Writer::FundamentalType< " <<
           "::XMLSchema::" << name << "< " << char_type << " >, " <<
-          char_type << " >," << endl;
+          char_type << " >," << std::endl;
       }
     }
 
@@ -534,7 +534,7 @@ namespace
       //
       os << "namespace writer"
          << "{"
-         << "void" << endl
+         << "void" << std::endl
          << id (name) << " (" << fq_name (t) << " const& s, xercesc::DOMDocument* d)"
          << "{"
          << "xercesc::DOMElement* dom_element = d->getDocumentElement ();"
@@ -553,9 +553,9 @@ namespace
       WriterBase base (*this);
       base.dispatch (t);
 
-      os << "virtual ::XSCRT::Writer<" << char_type << ">" << endl
+      os << "virtual ::XSCRT::Writer<" << char_type << ">" << std::endl
          << "{"
-         << "explicit W (" << xml_element_type << "& e)" << endl
+         << "explicit W (" << xml_element_type << "& e)" << std::endl
          << ": ";
 
       os << "::XSCRT::Writer<" << char_type << "> (e)"

@@ -9,9 +9,6 @@
 
 #include "CCF/CodeGenerationKit/Regex.hpp"
 
-using std::endl;
-using std::wcerr;
-
 namespace
 {
   //@! Inheriting from Context is just wrong!
@@ -56,10 +53,10 @@ namespace
       {
         valid = false;
 
-        wcerr << "element `" << scope << "::" << e.name ()
-              << "' is of type `anyType'" << endl
-              << "`anyType' is not supported in this mapping" << endl
-              << "did you forget to specify `type' attribute?" << endl;
+        std::wcerr << "element `" << scope << "::" << e.name ()
+              << "' is of type `anyType'" << std::endl
+              << "`anyType' is not supported in this mapping" << std::endl
+              << "did you forget to specify `type' attribute?" << std::endl;
       }
     }
   };
@@ -80,10 +77,10 @@ namespace
       {
         valid = false;
 
-        wcerr << "attribute `" << scope << "::" << a.name ()
-              << "' is of type `anySimpleType'" << endl
-              << "`anySimpleType' is not supported in this mapping" << endl
-              << "did you forget to specify `type' attribute?" << endl;
+        std::wcerr << "attribute `" << scope << "::" << a.name ()
+              << "' is of type `anySimpleType'" << std::endl
+              << "`anySimpleType' is not supported in this mapping" << std::endl
+              << "did you forget to specify `type' attribute?" << std::endl;
       }
     }
   };
@@ -119,11 +116,11 @@ namespace
 
           string name (type_name (c));
 
-          wcerr << "type `" << name << "' inherits from a yet undefined "
-                << "type `" << type_name (t) << "'" << endl
+          std::wcerr << "type `" << name << "' inherits from a yet undefined "
+                << "type `" << type_name (t) << "'" << std::endl
                 << "inheritance from yet-undefined types is not supported in "
-                << "this mapping" << endl
-                << "re-arrange your schema and try again" << endl;
+                << "this mapping" << std::endl
+                << "re-arrange your schema and try again" << std::endl;
         }
       }
 

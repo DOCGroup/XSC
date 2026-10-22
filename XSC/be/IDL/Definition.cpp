@@ -31,22 +31,22 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Type& c)
+    void
+    traverse (SemanticGraph::Type& c) override
     {
       os << " :  " << type_name (c)
          << "{";
     }
 
-    virtual void
-    traverse (SemanticGraph::FundamentalType& c)
+    void
+    traverse (SemanticGraph::FundamentalType& c) override
     {
       os << " :  " << type_name (c, L"_value")
          << "{";
     }
 
-    virtual void
-    traverse (SemanticGraph::Enumeration& c)
+    void
+    traverse (SemanticGraph::Enumeration& c) override
     {
       os << " :  " << type_name (c, L"_value")
          << "{";
@@ -60,13 +60,13 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       string name (c.name ());
       string type (type_name (c));
 
-      os << "// " << name << endl;
+      os << "// " << name << std::endl;
 
       if (c.max () != 1)
       {
@@ -92,7 +92,7 @@ namespace
         os << "public " << type << " " << id (name) << ";";
       }
 
-      os << endl;
+      os << std::endl;
     }
   };
 
@@ -104,13 +104,13 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& a)
+    void
+    traverse (Type& a) override
     {
       string name (a.name ());
       string type (type_name (a));
 
-      os << "// " << name << endl;
+      os << "// " << name << std::endl;
 
       if (a.optional ())
       {
@@ -122,7 +122,7 @@ namespace
         os << "public " << type << " " << id (name) << ";";
       }
 
-      os << endl;
+      os << std::endl;
     }
   };
 
@@ -145,27 +145,27 @@ namespace
       names_.node_traverser (attribute_);
     }
 
-    virtual void
-    pre (SemanticGraph::Complex& c)
+    void
+    pre (SemanticGraph::Complex& c) override
     {
       os << "valuetype " << id (c.name ());
     }
 
-    virtual void
-    inherits_none (SemanticGraph::Complex&)
+    void
+    inherits_none (SemanticGraph::Complex&) override
     {
       os << " : ::XMLSchema::object_"
          << "{";
     }
 
-    virtual void
-    post (SemanticGraph::Complex&)
+    void
+    post (SemanticGraph::Complex&) override
     {
       os << "};";
     }
 
-    virtual void
-    traverse (SemanticGraph::Enumeration&)
+    void
+    traverse (SemanticGraph::Enumeration&) override
     {
     }
 
@@ -190,25 +190,25 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Imports& i)
+    void
+    traverse (SemanticGraph::Imports& i) override
+    {
+      traverse (i.file ());
+    }
+
+    void
+    traverse (SemanticGraph::Includes& i) override
     {
       traverse (i.file ());
     }
 
     virtual void
-    traverse (SemanticGraph::Includes& i)
-    {
-      traverse (i.file ());
-    }
-
-    virtual void
-    traverse (fs::path const& f)
+    traverse (std::filesystem::path const& f)
     {
       std::string name (regex::perl_s (f.string (), expr_));
 
-      os << "#include \"" << name.c_str () << "\"" << endl
-         << endl;
+      os << "#include \"" << name.c_str () << "\"" << std::endl
+         << std::endl;
     }
 
   private:
@@ -223,8 +223,8 @@ generate_definition (Context& ctx,
 {
   ctx.os << "#include " << (ctx.char_type == L"wchar"
                             ? "<XMLSchema/WideTypes.idl>"
-                            : "<XMLSchema/NarrowTypes.idl>") << endl
-         << endl;
+                            : "<XMLSchema/NarrowTypes.idl>") << std::endl
+         << std::endl;
 
 
   Traversal::Schema traverser;

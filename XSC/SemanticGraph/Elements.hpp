@@ -5,6 +5,7 @@
 #define XSC_SEMANTIC_GRAPH_ELEMENTS_HPP
 
 #include <string>
+#include <memory>
 
 #include <XSC/SemanticGraph/Graph.hpp>
 #include <XSC/SemanticGraph/Context.hpp>
@@ -50,10 +51,7 @@ namespace XSC
     protected:
       friend class Graph<Node, Edge>;
 
-      virtual
-      ~Edge ()
-      {
-      }
+      virtual ~Edge () = default;
 
 
       Edge ()
@@ -68,7 +66,7 @@ namespace XSC
     inline bool
     operator== (Edge const& x, Edge const& y)
     {
-      return &x == &y;
+      return std::addressof (x) == std::addressof (y);
     }
 
 
@@ -94,10 +92,7 @@ namespace XSC
     protected:
       friend class Graph<Node, Edge>;
 
-      virtual
-      ~Node ()
-      {
-      }
+      virtual ~Node () = default;
 
       Node ()
       {
@@ -126,15 +121,13 @@ namespace XSC
     inline bool
     operator== (Node const& x, Node const& y)
     {
-      return &x == &y;
+      return std::addressof (x) == std::addressof (y);
     }
 
     //
     //
     //
-    typedef
-    std::wstring
-    Name_;
+    using Name_ = std::wstring;
 
     //
     //
@@ -186,13 +179,13 @@ namespace XSC
       void
       set_left_node (Scope& n)
       {
-        scope_ = &n;
+        scope_ = std::addressof (n);
       }
 
       void
       set_right_node (Nameable& n)
       {
-        named_ = &n;
+        named_ = std::addressof (n);
       }
 
     private:
@@ -205,9 +198,7 @@ namespace XSC
 
     class Nameable : public virtual Node
     {
-      typedef
-      std::vector<Names*>
-      Named_;
+      using Named_ = std::vector<Names*>;
 
     public:
       bool
@@ -261,16 +252,14 @@ namespace XSC
       void
       add_edge_right (Names& e)
       {
-        named_.push_back (&e);
+        named_.push_back (std::addressof (e));
       }
 
     private:
       Named_ named_;
     };
 
-    typedef
-    std::set<Nameable*>
-    Nameables;
+    using Nameables = std::set<Nameable*>;
 
 
     //
@@ -279,24 +268,14 @@ namespace XSC
     class Scope : public virtual Nameable
     {
     protected:
-      typedef
-      std::vector<Names*>
-      Names_;
-
-      typedef
-      std::map<Name_, Names_>
-      NamesMap_;
+      using Names_ = std::vector<Names*>;
+      using NamesMap_ = std::map<Name_, Names_>;
 
     public:
       //
       //
-      typedef
-      Names_::const_iterator
-      NamesIterator;
-
-      typedef
-      std::pair <NamesIterator, NamesIterator>
-      NamesIteratorPair;
+      using NamesIterator = Names_::const_iterator;
+      using NamesIteratorPair = std::pair<NamesIterator, NamesIterator>;
 
       NamesIterator
       names_begin () const
@@ -340,8 +319,8 @@ namespace XSC
       void
       add_edge_left (Names& e)
       {
-        names_.push_back (&e);
-        names_map_[e.name ()].push_back (&e);
+        names_.push_back (std::addressof (e));
+        names_map_[e.name ()].push_back (std::addressof (e));
       }
 
       using Nameable::add_edge_right;
@@ -377,16 +356,14 @@ namespace XSC
       void
       add_edge_right (Belongs& e)
       {
-        slassifies_.push_back (&e);
+        slassifies_.push_back (std::addressof (e));
       }
 
       using Node::add_edge_right;
       //using Node::add_edge_left;
 
     private:
-      typedef
-      std::vector<Belongs*>
-      Classifies_;
+      using Classifies_ = std::vector<Belongs*>;
 
       Classifies_ slassifies_;
     };
@@ -407,7 +384,7 @@ namespace XSC
       bool
       typed () const
       {
-        return belongs_ != 0;
+        return belongs_ != nullptr;
       }
 
       static Introspection::TypeInfo const&
@@ -417,7 +394,6 @@ namespace XSC
       friend class Graph<Node, Edge>;
 
       Instance ()
-          : belongs_ (0)
       {
         type_info (static_type_info ());
       }
@@ -425,11 +401,11 @@ namespace XSC
       void
       add_edge_left (Belongs& e)
       {
-        belongs_ = &e;
+        belongs_ = std::addressof (e);
       }
 
     private:
-      Belongs* belongs_;
+      Belongs* belongs_ {};
     };
 
 
@@ -463,13 +439,13 @@ namespace XSC
       void
       set_left_node (Instance& n)
       {
-        instance_ = &n;
+        instance_ = std::addressof (n);
       }
 
       void
       set_right_node (Type& n)
       {
-        type_ = &n;
+        type_ = std::addressof (n);
       }
 
     private:
@@ -510,13 +486,13 @@ namespace XSC
       void
       set_left_node (Type& n)
       {
-        inheritor_ = &n;
+        inheritor_ = std::addressof (n);
       }
 
       void
       set_right_node (Type& n)
       {
-        inheritee_ = &n;
+        inheritee_ = std::addressof (n);
       }
 
     private:
@@ -553,13 +529,13 @@ namespace XSC
       void
       set_left_node (Container& n)
       {
-        container_ = &n;
+        container_ = std::addressof (n);
       }
 
       void
       set_right_node (Node& n)
       {
-        element_ = &n;
+        element_ = std::addressof (n);
       }
 
     private:
@@ -570,14 +546,10 @@ namespace XSC
 
     class Container : public virtual Node
     {
-      typedef
-      std::vector<Contains*>
-      Contains_;
+      using Contains_ = std::vector<Contains*>;
 
     public:
-      typedef
-      Contains_::const_iterator
-      ContainsIterator;
+      using ContainsIterator = Contains_::const_iterator;
 
       ContainsIterator
       contains_begin () const
@@ -605,7 +577,7 @@ namespace XSC
       void
       add_edge_left (Contains& e)
       {
-        contains_.push_back (&e);
+        contains_.push_back (std::addressof (e));
       }
 
     private:

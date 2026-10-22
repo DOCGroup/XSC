@@ -17,8 +17,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       os << "valuetype " << id (e.name ()) << ";";
     }
@@ -31,8 +31,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       os << id (e.name ());
     }
@@ -47,8 +47,8 @@ namespace
       names_.node_traverser (enumerator_);
     }
 
-    virtual void
-    pre (Type& e)
+    void
+    pre (Type& e) override
     {
       os << "enum " << id (e.name ())
          << "{";
@@ -57,11 +57,11 @@ namespace
     virtual void
     names_next (Type&)
     {
-      os << "," << endl;
+      os << "," << std::endl;
     }
 
-    virtual void
-    post (Type&)
+    void
+    post (Type&) override
     {
       os << "};";
     }
@@ -75,7 +75,7 @@ namespace
 void IDL::
 generate_declaration (Context& ctx, SemanticGraph::Schema& schema)
 {
-  ctx.os << "// Forward declarations." << endl;
+  ctx.os << "// Forward declarations." << std::endl;
 
   Traversal::Schema traverser;
   Traversal::Sources sources;

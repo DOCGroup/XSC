@@ -11,9 +11,7 @@ namespace  XSCRT
 
     template<typename  B>
     TraverserBase<B>::
-    ~TraverserBase ()
-    {
-    }
+    ~TraverserBase () = default;
 
     // DispatcherBase
     //
@@ -21,9 +19,7 @@ namespace  XSCRT
 
     template <typename B>
     DispatcherBase<B>::
-    ~DispatcherBase  ()
-    {
-    }
+    ~DispatcherBase  () = default;
 
     //@@ merge after dropping  VC6
     //

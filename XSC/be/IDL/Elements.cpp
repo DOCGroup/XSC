@@ -30,7 +30,7 @@ namespace IDL
     {
       SemanticGraph::Contains& c (schema.contained ());
 
-      fs::path f;
+      std::filesystem::path f;
 
       if (Includes* i = dynamic_cast<Includes*> (&c)) f = i->file (); else
         if (Imports* i = dynamic_cast<Imports*> (&c)) f = i->file (); else
@@ -142,8 +142,8 @@ namespace IDL
       {
       }
 
-      virtual void
-      traverse (SemanticGraph::Type& t)
+      void
+      traverse (SemanticGraph::Type& t) override
       {
         r  = fq_name (t, suffix_);
       }
@@ -298,7 +298,7 @@ namespace IDL
 
     else
       {
-        wcerr << "There can't be a named type inside an anonymous one!\n";
+        std::wcerr << "There can't be a named type inside an anonymous one!\n";
         throw;
       }
 

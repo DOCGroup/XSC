@@ -13,9 +13,10 @@ Buffer_Writer_T (const CHAR_TYPE * ns,
                const CHAR_TYPE * root,
                typename writer_function <T>::result_type writer)
 : Writer_T <T, CHAR_TYPE> (ns, root, writer),
-  target_ (new xercesc::MemBufFormatTarget ())
+  target_ (std::make_unique<xercesc::MemBufFormatTarget> ())
 {
-  this->output_.reset (((DOMImplementationLS*)this->impl_)->createLSOutput ());
+  this->output_.reset (
+    static_cast<xercesc::DOMImplementationLS*> (this->impl_)->createLSOutput ());
   this->output_->setByteStream (this->target_.get ());
 }
 
@@ -23,10 +24,7 @@ Buffer_Writer_T (const CHAR_TYPE * ns,
 // Buffer_Writer_T
 //
 template <typename T, typename CHAR_TYPE>
-Buffer_Writer_T <T, CHAR_TYPE>::~Buffer_Writer_T (void)
-{
-
-}
+Buffer_Writer_T <T, CHAR_TYPE>::~Buffer_Writer_T () = default;
 
 //
 // open
@@ -64,7 +62,7 @@ void Buffer_Writer_T <T, CHAR_TYPE>::operator <<= (const T & entity)
 // get_buffer_size
 //
 template <typename T, typename CHAR_TYPE>
-size_t Buffer_Writer_T <T, CHAR_TYPE>::get_buffer_size (void) const
+size_t Buffer_Writer_T <T, CHAR_TYPE>::get_buffer_size () const
 {
   return this->target_->getLen ();
 }

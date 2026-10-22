@@ -16,8 +16,8 @@ namespace XSC
     //
     struct Implies : Edge<SemanticGraph::Implies>
     {
-      virtual void
-      traverse (Type& e)
+      void
+      traverse (Type& e) override
       {
         this->node_traverser ().dispatch (e.element ());
       }
@@ -28,8 +28,8 @@ namespace XSC
     //
     struct Sources : Edge<SemanticGraph::Sources>
     {
-      virtual void
-      traverse (Type& e)
+      void
+      traverse (Type& e) override
       {
         this->node_traverser ().dispatch (e.element ());
       }
@@ -41,8 +41,8 @@ namespace XSC
     //
     struct Includes : Edge<SemanticGraph::Includes>
     {
-      virtual void
-      traverse (Type& e)
+      void
+      traverse (Type& e) override
       {
         this->node_traverser ().dispatch (e.element ());
       }
@@ -54,8 +54,8 @@ namespace XSC
     //
     struct Imports : Edge<SemanticGraph::Imports>
     {
-      virtual void
-      traverse (Type& e)
+      void
+      traverse (Type& e) override
       {
         this->node_traverser ().dispatch (e.element ());
       }
@@ -67,8 +67,8 @@ namespace XSC
     //
     struct Schema : ScopeTemplate<SemanticGraph::Schema>
     {
-      virtual void
-      traverse (Type& s)
+      void
+      traverse (Type& s) override
       {
         pre (s);
 

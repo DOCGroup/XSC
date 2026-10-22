@@ -4,7 +4,7 @@
 /**
  * @file          Reader_Writer_Base_T.h
  *
- * 
+ *
  *
  * @author        James H. Hill
  */
@@ -27,19 +27,19 @@ class Reader_Writer_Base_T
 {
 public:
   /// Type definition of the entity type.
-  typedef T entity_type;
+  using entity_type = T;
 
   /// Type definition of the char type.
-  typedef CHAR_TYPE char_type;
+  using char_type = CHAR_TYPE;
 
   /// Destructor.
-  ~Reader_Writer_Base_T (void);
+  ~Reader_Writer_Base_T ();
 
-  xercesc::DOMDocument * const document (void);
+  xercesc::DOMDocument * const document ();
 
 protected:
   /// Default constructor.
-  Reader_Writer_Base_T (void);
+  Reader_Writer_Base_T ();
 
   /// Implementation shared between all files.
   xercesc::DOMImplementation * impl_;

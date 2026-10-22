@@ -6,8 +6,11 @@
 #ifndef XSC_PARSER_HXX
 #define XSC_PARSER_HXX
 
+#include <filesystem>
+#include <memory>
 #include <stack>
 #include <string>
+#include <vector>
 #include "xercesc/dom/DOM.hpp"
 #include "xercesc/util/XMLString.hpp"
 #include "XSC/SemanticGraph/Schema.hpp"
@@ -44,20 +47,10 @@ namespace XSC
     {
     }
 
-    // conversion to bool
-    //
-  private:
-    void
-    true_ () const
-    {
-    }
-
-    typedef void (string::*bool_convertable)() const;
-
   public:
-    operator bool_convertable () const
+    explicit operator bool () const noexcept
     {
-      return empty () ? 0 : &string::true_;
+      return !empty ();
     }
   };
 
@@ -80,13 +73,13 @@ namespace XSC
 
 
     inline
-    XMLCh*
+    std::unique_ptr<XMLCh[]>
     transcode (string const& s)
     {
       std::size_t l (s.length ());
 
-      XMLCh* r (new XMLCh[l + 1]);
-      XMLCh* ir (r);
+      auto r = std::make_unique<XMLCh[]> (l + 1);
+      XMLCh* ir (r.get ());
 
       for (std::size_t i (0); i < l; ++ir, ++i)
       {
@@ -134,9 +127,8 @@ namespace XSC
       string
       operator[] (string const& s) const
       {
-        XMLCh* name (transcode (s));
-        XMLCh const* value (e_->getAttribute (name));
-        delete[] name;
+        auto name = transcode (s);
+        XMLCh const* value (e_->getAttribute (name.get ()));
 
         return transcode (value);
       }
@@ -184,15 +176,14 @@ namespace XSC
     string
     ns_name (Element const& e, string const& n)
     {
-      XMLCh* p (0);
+      std::unique_ptr<XMLCh[]> p;
 
       string wp (prefix (n));
 
       if (!wp.empty ()) p = transcode (wp);
 
-      XMLCh const* xns (e.dom_element ()->lookupNamespaceURI (p));
+      XMLCh const* xns (e.dom_element ()->lookupNamespaceURI (p.get ()));
       string ns (xns ? transcode (xns) : string (L""));
-      delete[] p;
       return ns;
     }
 
@@ -201,22 +192,12 @@ namespace XSC
     inline
     string
     ns_prefix (Element const& e,
-               string const& ns,
-               bool
-#if XERCES_VERSION_MAJOR != 3
-                    use_default
-#endif
-               )
+               string const& ns)
     {
-      XMLCh* p (transcode (ns));
+      auto p = transcode (ns);
 
-#if XERCES_VERSION_MAJOR == 3
-      XMLCh const* xns (e.dom_element ()->lookupPrefix (p));
-#else
-      XMLCh const* xns (e.dom_element ()->lookupNamespacePrefix (p, use_default));
-#endif
+      XMLCh const* xns (e.dom_element ()->lookupPrefix (p.get ()));
       string prefix (xns ? transcode (xns) : string (L""));
-      delete[] p;
       return prefix;
     }
 
@@ -235,14 +216,14 @@ namespace XSC
   {
   public:
 
-    Parser (bool trace, const std::vector <fs::path> &include_paths);
+    Parser (bool trace, const std::vector <std::filesystem::path> &include_paths);
 
     SemanticGraph::Schema*
-    parse (fs::path const&);
+    parse (std::filesystem::path const&);
 
   private:
     Xerces::DOMDocument*
-    dom (fs::path const&);
+    dom (std::filesystem::path const&);
 
     void
     schema (XML::Element const&);
@@ -353,7 +334,7 @@ namespace XSC
     void
     push_scope (SemanticGraph::Scope& s)
     {
-      scope_stack_.push (&s);
+      scope_stack_.push (std::addressof (s));
     }
 
     void
@@ -427,8 +408,8 @@ namespace XSC
     };
 
     std::stack<Iterator> iteration_state_;
-    SemanticGraph::Schema* root_schema_;   // root schema file
-    SemanticGraph::Schema* cur_schema_; // current schema file
+    SemanticGraph::Schema* root_schema_ {};   // root schema file
+    SemanticGraph::Schema* cur_schema_ {}; // current schema file
 
 
     //
@@ -457,33 +438,31 @@ namespace XSC
     //
     struct FilePathComparator
     {
-      bool operator () (fs::path const& x, fs::path const& y) const
+      bool operator () (std::filesystem::path const& x, std::filesystem::path const& y) const
       {
         return x.string () < y.string ();
       }
     };
 
-    typedef
-    std::map<fs::path, string, FilePathComparator>
-    FileMap_;
+    using FileMap_ = std::map<std::filesystem::path, string, FilePathComparator>;
 
     FileMap_ file_map_;
 
   public:
-    typedef std::vector <fs::path> Paths;
+    using Paths = std::vector<std::filesystem::path>;
 
   private:
     Paths include_paths_;
 
   private:
-    bool qualify_attribute_;
-    bool qualify_element_;
+    bool qualify_attribute_ {};
+    bool qualify_element_ {};
 
   private:
-    Parser (Parser const&);
-
-    void
-    operator= (Parser const&);
+    Parser (Parser const&) = delete;
+    Parser& operator= (Parser const&) = delete;
+    Parser (Parser&&) = delete;
+    Parser& operator= (Parser&&) = delete;
   };
 }
 

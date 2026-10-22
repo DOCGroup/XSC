@@ -1,5 +1,7 @@
 #include "XercesString.h"
+#include <cstddef>
 #include <ostream>
+#include <utility>
 
 using xercesc::XMLString;
 
@@ -9,9 +11,7 @@ namespace XSC
 //
 // XStr
 //
-XStr::XStr (void)
-  : wstr_ (0),
-    cstr_ (0)
+XStr::XStr ()
 {
 
 }
@@ -20,8 +20,6 @@ XStr::XStr (void)
 // XStr
 //
 XStr::XStr (const char* str)
-  : wstr_ (0),
-    cstr_ (0)
 {
   this->wstr_ = XMLString::transcode (str);
 }
@@ -30,8 +28,6 @@ XStr::XStr (const char* str)
 // XStr
 //
 XStr::XStr (XMLCh *wstr)
-  : wstr_ (0),
-    cstr_ (0)
 {
   this->wstr_ = XMLString::replicate (wstr);
 }
@@ -40,8 +36,6 @@ XStr::XStr (XMLCh *wstr)
 // XStr
 //
 XStr::XStr (const XMLCh* wstr)
-  : wstr_ (0),
-    cstr_ (0)
 {
   this->wstr_ = XMLString::replicate (wstr);
 }
@@ -50,21 +44,28 @@ XStr::XStr (const XMLCh* wstr)
 // XStr
 //
 XStr::XStr (const XStr &right)
-  : wstr_ (0),
-    cstr_ (0)
 {
   this->wstr_ = XMLString::replicate (right.wstr_);
 }
 
 //
+// XStr
+//
+XStr::XStr (XStr&& right) noexcept
+  : wstr_ (std::exchange (right.wstr_, nullptr)),
+    cstr_ (std::exchange (right.cstr_, nullptr))
+{
+}
+
+//
 // ~XStr
 //
-XStr::~XStr (void)
+XStr::~XStr ()
 {
-  if (0 != this->wstr_)
+  if (this->wstr_ != nullptr)
     XMLString::release (&this->wstr_);
 
-  if (0 != this->cstr_)
+  if (this->cstr_ != nullptr)
     XMLString::release (&this->cstr_);
 }
 
@@ -86,6 +87,26 @@ XStr& XStr::operator = (const XStr& rhs)
 //
 // operator =
 //
+XStr& XStr::operator = (XStr&& rhs) noexcept
+{
+  if (&rhs == this)
+    return *this;
+
+  if (this->wstr_ != nullptr)
+    XMLString::release (&this->wstr_);
+
+  if (this->cstr_ != nullptr)
+    XMLString::release (&this->cstr_);
+
+  this->wstr_ = std::exchange (rhs.wstr_, nullptr);
+  this->cstr_ = std::exchange (rhs.cstr_, nullptr);
+
+  return *this;
+}
+
+//
+// operator =
+//
 XStr& XStr::operator = (const char * rhs)
 {
   XStr temp (rhs);
@@ -98,7 +119,7 @@ XStr& XStr::operator = (const char * rhs)
 //
 // begin
 //
-const XMLCh* XStr::begin (void) const
+const XMLCh* XStr::begin () const
 {
   return this->wstr_;
 }
@@ -106,7 +127,7 @@ const XMLCh* XStr::begin (void) const
 //
 // end
 //
-const XMLCh* XStr::end (void) const
+const XMLCh* XStr::end () const
 {
   return this->wstr_ + this->size ();
 }
@@ -123,9 +144,10 @@ bool XStr::append (const XMLCh *tail)
   size_t length = iWorkLen + iTailLen + 1;
 
   XMLCh * result =
-    (XMLCh *) XMLPlatformUtils::fgMemoryManager->allocate (length * sizeof (XMLCh));
+    static_cast<XMLCh *> (XMLPlatformUtils::fgMemoryManager->allocate (
+      length * sizeof (XMLCh)));
 
-  bool bOK = result != 0;
+  bool bOK = result != nullptr;
 
   if (bOK)
   {
@@ -142,10 +164,10 @@ bool XStr::append (const XMLCh *tail)
     XMLString::release (&this->wstr_);
     this->wstr_ = result;
 
-    if (0 != this->cstr_)
+    if (this->cstr_ != nullptr)
     {
       XMLString::release (&this->cstr_);
-      this->cstr_ = 0;
+      this->cstr_ = nullptr;
     }
   }
 
@@ -160,9 +182,12 @@ bool XStr::erase (const XMLCh *head, const XMLCh *tail)
   bool bOK = head <= tail && head >= begin() && tail <= end();
   if (bOK)
     {
-      XMLCh *result = new XMLCh[ size() - (tail - head) + 1 ];
+      const std::size_t length = size () - (tail - head) + 1;
+      XMLCh *result =
+        static_cast<XMLCh *> (xercesc::XMLPlatformUtils::fgMemoryManager->allocate (
+          length * sizeof (XMLCh)));
       XMLCh *target = result;
-      bOK = target != NULL;
+      bOK = target != nullptr;
 
       if (bOK)
         {
@@ -176,10 +201,10 @@ bool XStr::erase (const XMLCh *head, const XMLCh *tail)
           XMLString::release (&this->wstr_);
           this->wstr_ = result;
 
-          if (0 != this->cstr_)
+          if (this->cstr_ != nullptr)
           {
             XMLString::release (&this->cstr_);
-            this->cstr_ = 0;
+            this->cstr_ = nullptr;
           }
         }
     }
@@ -189,7 +214,7 @@ bool XStr::erase (const XMLCh *head, const XMLCh *tail)
 //
 // size
 //
-int XStr::size (void) const
+int XStr::size () const
 {
   return XMLString::stringLen (this->wstr_);
 }
@@ -213,16 +238,16 @@ XMLCh XStr::operator [] (const int i) const
 //
 // release
 //
-XMLCh * XStr::release (void)
+XMLCh * XStr::release ()
 {
   XMLCh * temp = this->wstr_;
-  this->wstr_ = 0;
+  this->wstr_ = nullptr;
 
   // Release the C string.
-  if (0 != this->cstr_)
+  if (this->cstr_ != nullptr)
   {
     XMLString::release (&this->cstr_);
-    this->cstr_ = 0;
+    this->cstr_ = nullptr;
   }
 
   return temp;
@@ -231,9 +256,9 @@ XMLCh * XStr::release (void)
 //
 // c_str
 //
-const char * XStr::c_str (void)
+const char * XStr::c_str ()
 {
-  if (0 != this->cstr_)
+  if (this->cstr_ != nullptr)
     return this->cstr_;
 
   this->cstr_ = XMLString::transcode (this->wstr_);

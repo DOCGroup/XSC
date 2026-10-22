@@ -16,8 +16,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       if (e.named ())
         os << "class " << id (e.name ()) << ";";
@@ -35,8 +35,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       if (e.named ())
         os << "class " << id (e.name ()) << ";";
@@ -49,7 +49,7 @@ namespace
 void
 generate_forward (Context& ctx, SemanticGraph::Schema& schema)
 {
-  ctx.os << "// Forward declarations." << endl;
+  ctx.os << "// Forward declarations." << std::endl;
 
   Traversal::Schema traverser;
   Traversal::Sources sources;

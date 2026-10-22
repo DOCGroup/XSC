@@ -14,11 +14,9 @@
 
 using namespace XSC;
 
-using std::endl;
+using string = std::wstring;
 
-typedef std::wstring string;
-
-typedef std::vector<string> NamespaceMapping;
+using NamespaceMapping = std::vector<string>;
 
 //
 class Context
@@ -135,13 +133,13 @@ protected:
   }
 
   size_t
-  scope_depth (void)
+  scope_depth ()
   {
     return scope_stack.size ();
   }
 
   void
-  leave_scope (void)
+  leave_scope ()
   {
     scope_stack.pop_back ();
     update_scope ();
@@ -270,7 +268,7 @@ public:
   }
 
   bool
-  generate_ra_sequences (void)
+  generate_ra_sequences ()
   {
     return this->generate_ra_sequences_;
   }
@@ -314,9 +312,7 @@ public:
   string &esymbol;
 
 private:
-  typedef
-  std::deque <string>
-  Scope_;
+  using Scope_ = std::deque<string>;
 
   Scope_ scope_stack_;
 
@@ -354,7 +350,7 @@ struct Anonymous : Traversal::Element,
 
 {
   Anonymous (Context& c, Traversal::NodeDispatcher& d1)
-      : Context (c), complex_ (c, &d1, 0)
+      : Context (c), complex_ (c, &d1, nullptr)
   {
     edge_traverser (names_);
     names_.node_traverser (*this);
@@ -375,8 +371,8 @@ struct Anonymous : Traversal::Element,
     complex_.edge_traverser (names_);
   }
 
-  virtual void
-  traverse (SemanticGraph::Element& e)
+  void
+  traverse (SemanticGraph::Element& e) override
   {
     SemanticGraph::Type& t (e.type ());
 
@@ -405,8 +401,8 @@ private:
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Complex& c)
+    void
+    traverse (SemanticGraph::Complex& c) override
     {
       c.context ().set ("name", scope);
 
@@ -440,11 +436,11 @@ struct Namespace : Traversal::Namespace, protected virtual Context
   {
   }
 
-  virtual void
-  pre (Type& ns);
+  void
+  pre (Type& ns) override;
 
-  virtual void
-  post (Type&);
+  void
+  post (Type&) override;
 };
 
 template <typename T>
@@ -455,8 +451,8 @@ struct Traverser : T
   {
   }
 
-  virtual void
-  traverse (typename T::Type &)
+  void
+  traverse (typename T::Type &) override
   {
     v_ = true;
   }
@@ -504,68 +500,68 @@ struct Fundamental : Traversal::FundamentalType,
     virtual void
     fundamental_template (SemanticGraph::FundamentalType& t) = 0;
 
-    virtual void
-    traverse (SemanticGraph::FundamentalType& t)
+    void
+    traverse (SemanticGraph::FundamentalType& t) override
     {
       fundamental_type (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::String& t)
+    void
+    traverse (SemanticGraph::String& t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::NormalizedString& t)
+    void
+    traverse (SemanticGraph::NormalizedString& t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::Token& t)
+    void
+    traverse (SemanticGraph::Token& t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::Name& t)
+    void
+    traverse (SemanticGraph::Name& t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::NMTOKEN& t)
+    void
+    traverse (SemanticGraph::NMTOKEN& t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::NCName& t)
+    void
+    traverse (SemanticGraph::NCName& t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::QName& t)
+    void
+    traverse (SemanticGraph::QName& t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::AnyUri & t)
+    void
+    traverse (SemanticGraph::AnyUri & t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::Id& t)
+    void
+    traverse (SemanticGraph::Id& t) override
     {
       fundamental_template (t);
     }
 
-    virtual void
-    traverse (SemanticGraph::IdRef& t)
+    void
+    traverse (SemanticGraph::IdRef& t) override
     {
       fundamental_template (t);
     }

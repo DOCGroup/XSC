@@ -10,7 +10,7 @@ namespace utils
 template <typename T, typename CHAR_TYPE>
 Reader_T <T, CHAR_TYPE>::
 Reader_T (typename reader_function <T>::result_type reader)
-: parser_ (new xercesc::XercesDOMParser ()),
+: parser_ (std::make_unique<xercesc::XercesDOMParser> ()),
   reader_ (reader)
 {
 }
@@ -19,9 +19,7 @@ Reader_T (typename reader_function <T>::result_type reader)
 // ~File_Reader_T
 //
 template <typename T, typename CHAR_TYPE>
-Reader_T <T, CHAR_TYPE>::~Reader_T (void)
-{
-}
+Reader_T <T, CHAR_TYPE>::~Reader_T () = default;
 
 //
 // operator >>=
@@ -37,7 +35,7 @@ void Reader_T <T, CHAR_TYPE>::operator >>= (T & entity) const
 // parser
 //
 template <typename T, typename CHAR_TYPE>
-xercesc::XercesDOMParser * Reader_T <T, CHAR_TYPE>::operator -> (void)
+xercesc::XercesDOMParser * Reader_T <T, CHAR_TYPE>::operator -> ()
 {
   return this->parser_.get ();
 }

@@ -19,10 +19,7 @@ File_Reader_T (typename reader_function <T>::result_type reader)
 // ~File_Reader_T
 //
 template <typename T, typename CHAR_TYPE>
-File_Reader_T <T, CHAR_TYPE>::~File_Reader_T (void)
-{
-
-}
+File_Reader_T <T, CHAR_TYPE>::~File_Reader_T () = default;
 
 //
 // open
@@ -34,7 +31,7 @@ bool File_Reader_T <T, CHAR_TYPE>::read (const CHAR_TYPE * filename)
   this->parser_->parse (filename);
   this->document_ = this->parser_->adoptDocument ();
 
-  return this->document_ != 0;
+  return this->document_ != nullptr;
 }
 
 }

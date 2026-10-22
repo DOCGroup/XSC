@@ -29,7 +29,7 @@ template <typename T>
 struct reader_function
 {
   /// Type definition of the reading function signature.
-  typedef T (* result_type) (const xercesc::DOMDocument *);
+  using result_type = T (*) (const xercesc::DOMDocument *);
 };
 
 /**
@@ -42,13 +42,13 @@ class Reader_T : public Reader_Writer_Base_T <T, CHAR_TYPE>
 {
 public:
   /// Type definition of the entity type.
-  typedef typename Reader_Writer_Base_T <T, CHAR_TYPE>::entity_type entity_type;
+  using entity_type = typename Reader_Writer_Base_T<T, CHAR_TYPE>::entity_type;
 
   /// Type definition of the character type.
-  typedef typename Reader_Writer_Base_T <T, CHAR_TYPE>::char_type char_type;
+  using char_type = typename Reader_Writer_Base_T<T, CHAR_TYPE>::char_type;
 
   /// Destructor.
-  virtual ~Reader_T (void);
+  virtual ~Reader_T ();
 
   /**
    * Extraction operator.
@@ -63,7 +63,7 @@ public:
    *
    * @return            Pointer to the parser.
    */
-  xercesc::XercesDOMParser * operator -> (void);
+  xercesc::XercesDOMParser * operator -> ();
 
 protected:
   /**
@@ -74,7 +74,7 @@ protected:
   Reader_T (typename reader_function <T>::result_type reader);
 
   /// DOM parser for the reader.
-  std::auto_ptr <xercesc::XercesDOMParser> parser_;
+  std::unique_ptr<xercesc::XercesDOMParser> parser_;
 
   /// The entity read from the document.
   typename reader_function <T>::result_type reader_;

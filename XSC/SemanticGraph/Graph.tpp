@@ -55,11 +55,11 @@ namespace XSC
 
     template <typename N, typename E>
     void Graph<N, E>::
-    delete_node (N const& nr)
+    delete_node (N& nr)
     {
-      N* n (&nr);
+      N* n (std::addressof (nr));
 
-      for (E* e (n->remove_edge_ ()); e != 0; e = n->remove_edge_ ())
+      for (E* e (n->remove_edge_ ()); e != nullptr; e = n->remove_edge_ ())
       {
         // One endpoint of the edge has removed this edge from
         // its edge set. Now handle the other endpoint.
@@ -139,9 +139,9 @@ namespace XSC
 
     template <typename N, typename E>
     void Graph<N, E>::
-    delete_edge (E const& er)
+    delete_edge (E& er)
     {
-      E* e (&er);
+      E* e (std::addressof (er));
 
       e->left_ ()->remove_edge_ (e);
       e->right_ ()->remove_edge_ (e);
@@ -158,13 +158,11 @@ namespace XSC
     {
       //@@ auto
 
-      for (typename Edges_::iterator i (edges_.begin ()), end (edges_.end ());
-           i != end;
-           ++i) delete *i;
+      for (E* edge : edges_)
+        delete edge;
 
-      for (typename Nodes_::iterator i (nodes_.begin ()), end (nodes_.end ());
-           i != end;
-           ++i) delete *i;
+      for (N* node : nodes_)
+        delete node;
     }
   }
 }

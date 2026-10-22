@@ -5,6 +5,7 @@
 #define XSC_TRAVERSAL_ELEMENTS_HPP
 
 #include <map>
+#include <memory>
 #include <set>
 
 #include "Utility/Introspection/Introspection.hpp"
@@ -12,13 +13,6 @@
 #include "XSC/SemanticGraph/Elements.hpp"
 
 namespace Introspection = Utility::Introspection;
-
-/*
-#include <iostream>
-
-using std::cerr;
-using std::endl;
-*/
 
 namespace XSC
 {
@@ -59,21 +53,13 @@ namespace XSC
       map (Introspection::TypeId id, Traverser<T>& t)
       {
         Traversers& traversers (traversal_map_[id]);
-        traversers.push_back (&t);
+        traversers.push_back (std::addressof (t));
       }
 
     public:
-      typedef
-      std::vector<Traverser<T>*>
-      Traversers;
-
-      typedef
-      std::map<Introspection::TypeId, Traversers>
-      TraversalMap;
-
-      typedef
-      typename TraversalMap::const_iterator
-      Iterator;
+      using Traversers = std::vector<Traverser<T>*>;
+      using TraversalMap = std::map<Introspection::TypeId, Traversers>;
+      using Iterator = typename TraversalMap::const_iterator;
 
       Iterator
       begin () const
@@ -98,13 +84,10 @@ namespace XSC
         }
       };
 
-      typedef
-      std::map<Introspection::TypeInfo, unsigned long, TypeInfoComparator>
-      LevelMap;
-
-      typedef
-      std::set<Introspection::TypeInfo, TypeInfoComparator>
-      TypeInfoSet;
+      using LevelMap = std::map<Introspection::TypeInfo,
+                                unsigned long,
+                                TypeInfoComparator>;
+      using TypeInfoSet = std::set<Introspection::TypeInfo, TypeInfoComparator>;
 
       static unsigned long
       compute_levels (Introspection::TypeInfo const& ti,
@@ -122,13 +105,8 @@ namespace XSC
     //
     //
     //
-    typedef
-    Dispatcher<SemanticGraph::Node>
-    NodeDispatcherBase;
-
-    typedef
-    Dispatcher<SemanticGraph::Edge>
-    EdgeDispatcherBase;
+    using NodeDispatcherBase = Dispatcher<SemanticGraph::Node>;
+    using EdgeDispatcherBase = Dispatcher<SemanticGraph::Edge>;
 
 
     //
@@ -231,20 +209,18 @@ namespace XSC
     template <typename T>
     struct Node : Traverser<SemanticGraph::Node>, virtual NodeDispatcher
     {
-      typedef
-      T
-      Type;
+      using Type = T;
 
       Node ()
       {
         map (typeid (Type), *this);
       }
 
-      virtual void
-      trampoline (SemanticGraph::Node& n)
+      void
+      trampoline (SemanticGraph::Node& n) override
       {
         //cerr << "trampoline for " << &n << " to type "
-        //     << typeid (Type).name () << endl;
+        //     << typeid (Type).name () << std::endl;
 
         traverse (dynamic_cast<Type&> (n));
       }
@@ -257,17 +233,15 @@ namespace XSC
     template <typename T>
     struct Edge : Traverser <SemanticGraph::Edge>, virtual EdgeDispatcher
     {
-      typedef
-      T
-      Type;
+      using Type = T;
 
       Edge ()
       {
         map (typeid (Type), *this);
       }
 
-      virtual void
-      trampoline (SemanticGraph::Edge& e)
+      void
+      trampoline (SemanticGraph::Edge& e) override
       {
         traverse (dynamic_cast<Type&> (e));
       }
@@ -282,8 +256,8 @@ namespace XSC
     //
     struct Names : Edge<SemanticGraph::Names>
     {
-      virtual void
-      traverse (Type& e)
+      void
+      traverse (Type& e) override
       {
         node_traverser ().dispatch (e.named ());
       }
@@ -292,8 +266,8 @@ namespace XSC
 
     struct Belongs : Edge<SemanticGraph::Belongs>
     {
-      virtual void
-      traverse (Type& e)
+      void
+      traverse (Type& e) override
       {
         node_traverser ().dispatch (e.type ());
       }
@@ -312,8 +286,8 @@ namespace XSC
     struct ScopeTemplate : Node<T>
     {
     public:
-      virtual void
-      traverse (T& s)
+      void
+      traverse (T& s) override
       {
         names (s);
       }
@@ -361,9 +335,7 @@ namespace XSC
     //
     //
     //
-    typedef
-    ScopeTemplate<SemanticGraph::Scope>
-    Scope;
+    using Scope = ScopeTemplate<SemanticGraph::Scope>;
 
 
     //
@@ -371,8 +343,8 @@ namespace XSC
     //
     struct Type : Node<SemanticGraph::Type>
     {
-      virtual void
-      traverse (SemanticGraph::Type&) = 0;
+      void
+      traverse (SemanticGraph::Type&) override = 0;
     };
 
 
@@ -381,8 +353,8 @@ namespace XSC
     //
     struct Instance : Node<SemanticGraph::Instance>
     {
-      virtual void
-      traverse (Type&);
+      void
+      traverse (Type&) override;
 
       virtual void
       pre (Type&);
@@ -402,8 +374,8 @@ namespace XSC
     //
     struct Inherits : Edge<SemanticGraph::Inherits>
     {
-      virtual void
-      traverse (Type& e)
+      void
+      traverse (Type& e) override
       {
         node_traverser ().dispatch (e.inheritee ());
       }
@@ -414,8 +386,8 @@ namespace XSC
     //
     struct Contains : Edge<SemanticGraph::Contains>
     {
-      virtual void
-      traverse (Type& e)
+      void
+      traverse (Type& e) override
       {
         node_traverser ().dispatch (e.element ());
       }

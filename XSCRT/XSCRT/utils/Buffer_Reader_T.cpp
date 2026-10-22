@@ -24,10 +24,7 @@ Buffer_Reader_T (typename reader_function <T>::result_type reader,
 // ~Buffer_Reader_T
 //
 template <typename T, typename CHAR_TYPE>
-Buffer_Reader_T <T, CHAR_TYPE>::~Buffer_Reader_T (void)
-{
-
-}
+Buffer_Reader_T <T, CHAR_TYPE>::~Buffer_Reader_T () = default;
 
 //
 // open
@@ -46,7 +43,7 @@ bool Buffer_Reader_T <T, CHAR_TYPE>::read (const char * buffer, size_t size)
 
   // Get the document.
   this->document_ = this->parser_->adoptDocument ();
-  return this->document_ != 0;
+  return this->document_ != nullptr;
 }
 
 }

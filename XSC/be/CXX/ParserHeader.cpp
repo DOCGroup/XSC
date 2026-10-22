@@ -25,10 +25,10 @@ namespace
       os << "namespace reader"
          << "{"
          << e
-         << type << endl
+         << type << std::endl
          << id (name) << " (xercesc::DOMDocument const*);"
          << "}"
-         << endl;
+         << std::endl;
     }
 
   private:

@@ -11,130 +11,37 @@ namespace XSC
 {
   namespace Traversal
   {
-    typedef
-    Node<SemanticGraph::FundamentalType>
-    FundamentalType;
-
-    typedef
-    Node<SemanticGraph::AnyType>
-    AnyType;
-
-    typedef
-    Node<SemanticGraph::AnySimpleType>
-    AnySimpleType;
-
-    typedef
-    Node<SemanticGraph::AnyUri>
-    anyURI;
-
-    typedef
-    Node<SemanticGraph::Byte>
-    Byte;
-
-    typedef
-    Node<SemanticGraph::UnsignedByte>
-    UnsignedByte;
-
-    typedef
-    Node<SemanticGraph::Short>
-    Short;
-
-    typedef
-    Node<SemanticGraph::UnsignedShort>
-    UnsignedShort;
-
-    typedef
-    Node<SemanticGraph::Int>
-    Int;
-
-    typedef
-    Node<SemanticGraph::UnsignedInt>
-    UnsignedInt;
-
-    typedef
-    Node<SemanticGraph::Long>
-    Long;
-
-    typedef
-    Node<SemanticGraph::UnsignedLong>
-    UnsignedLong;
-
-    typedef
-    Node<SemanticGraph::Decimal>
-    Decimal;
-
-    typedef
-    Node<SemanticGraph::Integer>
-    Integer;
-
-    typedef
-    Node<SemanticGraph::NonPositiveInteger>
-    NonPositiveInteger;
-
-    typedef
-    Node<SemanticGraph::NonNegativeInteger>
-    NonNegativeInteger;
-
-    typedef
-    Node<SemanticGraph::PositiveInteger>
-    PositiveInteger;
-
-    typedef
-    Node<SemanticGraph::NegativeInteger>
-    NegativeInteger;
-
-    typedef
-    Node<SemanticGraph::Boolean>
-    Boolean;
-
-    typedef
-    Node<SemanticGraph::Float>
-    Float;
-
-    typedef
-    Node<SemanticGraph::Double>
-    Double;
-
-
-    typedef
-    Node<SemanticGraph::String>
-    String;
-
-    typedef
-    Node<SemanticGraph::NormalizedString>
-    NormalizedString;
-
-    typedef
-    Node<SemanticGraph::Token>
-    Token;
-
-    typedef
-    Node<SemanticGraph::Name>
-    Name;
-
-    typedef
-    Node<SemanticGraph::NMTOKEN>
-    NMTOKEN;
-
-    typedef
-    Node<SemanticGraph::NCName>
-    NCName;
-
-    typedef
-    Node<SemanticGraph::QName>
-    QName;
-
-    typedef
-    Node<SemanticGraph::Id>
-    Id;
-
-    typedef
-    Node<SemanticGraph::IdRef>
-    IdRef;
-
-    typedef
-    Node<SemanticGraph::Href>
-    Href;
+    using FundamentalType = Node<SemanticGraph::FundamentalType>;
+    using AnyType = Node<SemanticGraph::AnyType>;
+    using AnySimpleType = Node<SemanticGraph::AnySimpleType>;
+    using anyURI = Node<SemanticGraph::AnyUri>;
+    using Byte = Node<SemanticGraph::Byte>;
+    using UnsignedByte = Node<SemanticGraph::UnsignedByte>;
+    using Short = Node<SemanticGraph::Short>;
+    using UnsignedShort = Node<SemanticGraph::UnsignedShort>;
+    using Int = Node<SemanticGraph::Int>;
+    using UnsignedInt = Node<SemanticGraph::UnsignedInt>;
+    using Long = Node<SemanticGraph::Long>;
+    using UnsignedLong = Node<SemanticGraph::UnsignedLong>;
+    using Decimal = Node<SemanticGraph::Decimal>;
+    using Integer = Node<SemanticGraph::Integer>;
+    using NonPositiveInteger = Node<SemanticGraph::NonPositiveInteger>;
+    using NonNegativeInteger = Node<SemanticGraph::NonNegativeInteger>;
+    using PositiveInteger = Node<SemanticGraph::PositiveInteger>;
+    using NegativeInteger = Node<SemanticGraph::NegativeInteger>;
+    using Boolean = Node<SemanticGraph::Boolean>;
+    using Float = Node<SemanticGraph::Float>;
+    using Double = Node<SemanticGraph::Double>;
+    using String = Node<SemanticGraph::String>;
+    using NormalizedString = Node<SemanticGraph::NormalizedString>;
+    using Token = Node<SemanticGraph::Token>;
+    using Name = Node<SemanticGraph::Name>;
+    using NMTOKEN = Node<SemanticGraph::NMTOKEN>;
+    using NCName = Node<SemanticGraph::NCName>;
+    using QName = Node<SemanticGraph::QName>;
+    using Id = Node<SemanticGraph::Id>;
+    using IdRef = Node<SemanticGraph::IdRef>;
+    using Href = Node<SemanticGraph::Href>;
   }
 }
 

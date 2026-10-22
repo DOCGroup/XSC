@@ -20,6 +20,8 @@ namespace XSC
     class Graph
     {
     public:
+      Graph () = default;
+
       ~Graph ();
 
     public:
@@ -40,7 +42,7 @@ namespace XSC
       new_node (A0 const& a0, A1 const& a1, A2 const& a2);
 
       void
-      delete_node (N const& n);
+      delete_node (N& n);
 
     public:
       template <typename T, typename X, typename Y>
@@ -59,17 +61,23 @@ namespace XSC
       new_edge (X& left, Y& right, A0 const& a0, A1 const& a1);
 
       void
-      delete_edge (E const& e);
+      delete_edge (E& e);
 
     protected:
-      typedef N* NodePtr;
-      typedef E* EdgePtr;
+      using NodePtr = N*;
+      using EdgePtr = E*;
 
-      typedef std::set<NodePtr> Nodes_;
-      typedef std::set<EdgePtr> Edges_;
+      using Nodes_ = std::set<NodePtr>;
+      using Edges_ = std::set<EdgePtr>;
 
       Nodes_ nodes_;
       Edges_ edges_;
+
+    private:
+      Graph (Graph const&) = delete;
+      Graph& operator= (Graph const&) = delete;
+      Graph (Graph&&) = delete;
+      Graph& operator= (Graph&&) = delete;
     };
   }
 }

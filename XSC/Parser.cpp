@@ -8,12 +8,11 @@
 #include "xercesc/util/XMLString.hpp"
 #include "xercesc/validators/common/Grammar.hpp"
 #include "xercesc/validators/schema/XSDDOMParser.hpp"
-#include "boost/scoped_array.hpp"
 #include "utils/XML_Schema_Resolver.h"
 #include "utils/XML_Helper.h"
 
 #include <cstdlib>  // std::wcstombs
-#include <memory>   // std::auto_ptr
+#include <memory>
 #include <iostream>
 #include <sstream>
 
@@ -25,11 +24,6 @@
 #undef max
 #endif
 
-using std::wcout;
-using std::wcerr;
-using std::endl;
-
-using boost::scoped_array;
 
 namespace XSC
 {
@@ -37,8 +31,6 @@ namespace XSC
 
   using namespace SemanticGraph;
   using namespace Xerces;
-  using std::auto_ptr;
-
   string const xsd = L"http://www.w3.org/2001/XMLSchema";
   string const xmi = L"http://www.omg.org/XMI";
 
@@ -71,8 +63,8 @@ namespace XSC
               T& t (dynamic_cast<T&> ((*types.first)->named ()));
 
               if (trace_)
-                wcout << "successfully resolved `" << ns_name << '#' << uq_name
-                      << "'" << endl;
+                std::wcout << "successfully resolved `" << ns_name << '#' << uq_name
+                      << "'" << std::endl;
 
               return t;
             }
@@ -92,7 +84,7 @@ namespace XSC
       }
 
       void
-      traverse (SemanticGraph::Instance& i)
+      traverse (SemanticGraph::Instance& i) override
       {
         string ns_name;
         string uq_name;
@@ -130,24 +122,24 @@ namespace XSC
                   }
                 else
                   {
-                    wcerr << "referenced instance " << ns_name << "#"
-                          << uq_name << " is not typed" << endl;
+                    std::wcerr << "referenced instance " << ns_name << "#"
+                          << uq_name << " is not typed" << std::endl;
                   }
               }
           }
         catch (NotNamespace const&)
           {
-            wcerr << "unable to resolve namespace `" << ns_name << "'" << endl;
+            std::wcerr << "unable to resolve namespace `" << ns_name << "'" << std::endl;
           }
         catch (NotName const&)
           {
-            wcerr << "unable to resolve name `" << uq_name
-                  << "\' inside namespace `" << ns_name << "'" <<endl;
+            std::wcerr << "unable to resolve name `" << uq_name
+                  << "\' inside namespace `" << ns_name << "'" <<std::endl;
           }
       }
 
       void
-      traverse (SemanticGraph::Complex& c)
+      traverse (SemanticGraph::Complex& c) override
       {
         string ns_name;
         string uq_name;
@@ -219,8 +211,8 @@ namespace XSC
                         // What the heck?
                         //
                         if (trace_)
-                          wcout << "element `" << ns_name << "#" << uq_name
-                                << "' is in unexpected condition" << endl;
+                          std::wcout << "element `" << ns_name << "#" << uq_name
+                                << "' is in unexpected condition" << std::endl;
                       }
                   }
 
@@ -232,12 +224,12 @@ namespace XSC
           }
         catch (NotNamespace const&)
           {
-            wcerr << "unable to resolve namespace `" << ns_name << "'" << endl;
+            std::wcerr << "unable to resolve namespace `" << ns_name << "'" << std::endl;
           }
         catch (NotName const&)
           {
-            wcerr << "unable to resolve name `" << uq_name
-                  << "\' inside namespace `" << ns_name << "'" <<endl;
+            std::wcerr << "unable to resolve name `" << uq_name
+                  << "\' inside namespace `" << ns_name << "'" <<std::endl;
           }
 
         Traversal::Complex::traverse (c);
@@ -246,7 +238,7 @@ namespace XSC
       // We don't need to go inside enumerations.
       //
       void
-      traverse (SemanticGraph::Enumeration&)
+      traverse (SemanticGraph::Enumeration&) override
       {
       }
 
@@ -256,30 +248,22 @@ namespace XSC
   }
 
   Parser::
-  Parser (bool trace, const std::vector <fs::path> &include_paths)
-    : root_schema_ (0),
-      cur_schema_ (0),
-      qualify_attribute_ (false),
-      qualify_element_ (false)
+  Parser (bool trace, const std::vector <std::filesystem::path> &include_paths)
+    : include_paths_ (include_paths)
   {
     trace_ = trace;
-
-    this->include_paths_.resize (include_paths.size ());
-    std::copy (include_paths.begin (),
-               include_paths.end (),
-               this->include_paths_.begin ());
   }
 
   Schema* Parser::
-  parse (fs::path const& uri)
+  parse (std::filesystem::path const& uri)
   {
-    auto_ptr<Schema> rs (new Schema);
+    std::unique_ptr<Schema> rs (std::make_unique<Schema> ());
 
     // Implied schema with fundamental types.
     //
     {
       Schema& s (rs->new_node<Schema> ());
-      rs->new_edge<Implies> (*rs, s, fs::path ("XMLSchema.xsd"));
+      rs->new_edge<Implies> (*rs, s, std::filesystem::path ("XMLSchema.xsd"));
 
       Namespace& ns (s.new_node<Namespace> ());
       s.new_edge<Names> (s, ns, xsd);
@@ -325,7 +309,7 @@ namespace XSC
     // Supported XMI features
     {
       Schema &s (rs->new_node<Schema> ());
-      rs->new_edge<Implies> (*rs, s, fs::path ("XMI.xsd"));
+      rs->new_edge<Implies> (*rs, s, std::filesystem::path ("XMI.xsd"));
       Namespace &ns (s.new_node<Namespace> ());
 
       s.new_edge<Names> (s, ns, xmi);
@@ -341,7 +325,7 @@ namespace XSC
 
         string ns (root[L"targetNamespace"]);
 
-        if (trace_) wcout << "target namespace: " << ns << endl;
+        if (trace_) std::wcout << "target namespace: " << ns << std::endl;
 
         // Enter the file into file_map_.
         //
@@ -356,7 +340,7 @@ namespace XSC
 
         pop_scope ();
 
-        root_schema_ = cur_schema_ = 0;
+        root_schema_ = cur_schema_ = nullptr;
         d->release ();
       }
 
@@ -386,8 +370,8 @@ namespace XSC
           belongs_.node_traverser (scope);
         }
 
-        virtual void
-        traverse (Type& e)
+        void
+        traverse (Type& e) override
         {
           if (e.typed () &&
               !e.type ().named () &&
@@ -417,7 +401,7 @@ namespace XSC
       names.node_traverser (resolver);
 
       if (trace_)
-        wcout << "post-resolution pass #1" << endl;
+        std::wcout << "post-resolution pass #1" << std::endl;
 
       schema.traverse (*rs);
     }
@@ -448,7 +432,7 @@ namespace XSC
         XML::Element e (next ());
         string name (e.name ());
 
-        if (trace_) wcout << name << endl;
+        if (trace_) std::wcout << name << std::endl;
 
         if (name == L"annotation");
         else if (name == L"import")
@@ -467,7 +451,7 @@ namespace XSC
           attribute_group (e, true);
         else if (name == L"attribute")
           attribute (e, true);
-        else wcerr << "unexpected top-level element: " << name << endl;
+        else std::wcerr << "unexpected top-level element: " << name << std::endl;
       }
 
     pop ();
@@ -481,18 +465,18 @@ namespace XSC
   {
     string loc (i[L"schemaLocation"]);
 
-    size_t len (std::wcstombs (0, loc.c_str (), 0) + 1);
-    scoped_array <char> str (new char[len]);
-    std::wcstombs (str.get (), loc.c_str (), len);
+    std::size_t len (std::wcstombs (nullptr, loc.c_str (), 0) + 1);
+    std::vector<char> str (len);
+    std::wcstombs (str.data (), loc.c_str (), len);
 
-    fs::path path (str.get ());
+    std::filesystem::path path (str.data ());
 
     // Check to see if we have already parsed this file....
     if (file_map_.find (path) != file_map_.end ()) return;
 
     file_map_[path] = i[L"namespace"];
 
-    if (trace_) wcout << "importing " << path.string ().c_str () << endl;
+    if (trace_) std::wcout << "importing " << path.string ().c_str () << std::endl;
 
     if (DOMDocument* d  = dom (path))
       {
@@ -503,10 +487,10 @@ namespace XSC
 
         string ns (root[L"targetNamespace"]);
 
-        if (trace_) wcout << "target namespace: " << ns << endl;
+        if (trace_) std::wcout << "target namespace: " << ns << std::endl;
 
         Schema* old (cur_schema_);
-        cur_schema_ = &s;
+        cur_schema_ = std::addressof (s);
 
         push_scope (root_schema_->new_node<Namespace> ());
         root_schema_->new_edge<Names> (*cur_schema_, scope (), ns);
@@ -519,7 +503,7 @@ namespace XSC
         d->release ();
       }
     else
-      wcerr << "error: Unable to successfully parse " << path.string ().c_str ();
+      std::wcerr << "error: Unable to successfully parse " << path.string ().c_str ();
   }
 
   void Parser::
@@ -529,16 +513,16 @@ namespace XSC
       {
         string loc (i[L"schemaLocation"]);
 
-        size_t len (std::wcstombs (0, loc.c_str (), 0) + 1);
-        scoped_array <char> str (new char[len]);
-        std::wcstombs (str.get (), loc.c_str (), len);
-        fs::path path (str.get ());
+        std::size_t len (std::wcstombs (nullptr, loc.c_str (), 0) + 1);
+        std::vector<char> str (len);
+        std::wcstombs (str.data (), loc.c_str (), len);
+        std::filesystem::path path (str.data ());
 
         if (file_map_.find (path) != file_map_.end ()) return;
 
         file_map_[path] = L"not in use right now";
 
-        if (trace_) wcout << "including " << path.string ().c_str () << endl;
+        if (trace_) std::wcout << "including " << path.string ().c_str () << std::endl;
 
         if (DOMDocument* d  = dom (path))
           {
@@ -557,17 +541,17 @@ namespace XSC
                 ns = cur_ns;
                 root_schema_->new_edge<Sources> (*cur_schema_, s, path);
 
-                if (trace_) wcout << "handling chameleon schema" << endl;
+                if (trace_) std::wcout << "handling chameleon schema" << std::endl;
               }
             else
               {
                 root_schema_->new_edge<Includes> (*cur_schema_, s, path);
               }
 
-            if (trace_) wcout << "target namespace: " << ns << endl;
+            if (trace_) std::wcout << "target namespace: " << ns << std::endl;
 
             Schema* old (cur_schema_);
-            cur_schema_ = &s;
+            cur_schema_ = std::addressof (s);
             push_scope (root_schema_->new_node<Namespace> ());
             root_schema_->new_edge<Names> (*cur_schema_, scope (), ns);
             schema (root);
@@ -578,12 +562,12 @@ namespace XSC
           }
         else
           {
-            wcerr << "Document construction failed" << endl;
+            std::wcerr << "Document construction failed" << std::endl;
           }
       }
     catch (...)
       {
-        wcerr << "caught unknown exception in include" << endl;
+        std::wcerr << "caught unknown exception in include" << std::endl;
         throw;
       }
   }
@@ -605,15 +589,15 @@ namespace XSC
 
         name = e.name ();
 
-        if (trace_) wcout << name << endl;
+        if (trace_) std::wcout << name << std::endl;
 
         if (name == L"all") all (e);
         else if (name == L"choice") choice (e);
         else if (name == L"sequence") sequence (e);
         else
           {
-            wcerr << "expected `all' or `choice' or `sequence' instead of " << name
-                  << endl;
+            std::wcerr << "expected `all' or `choice' or `sequence' instead of " << name
+                  << std::endl;
           }
 
         pop ();
@@ -631,7 +615,7 @@ namespace XSC
         unsigned long min (g[L"minOccurs"] == L"0" ? 0 : this->min ()),
           max (g[L"maxOccurs"] && g[L"maxOccurs"] != L"1" ? 0 : this->max ());
 
-        if (trace_) wcout << "group min " << min << " max " << max << endl;
+        if (trace_) std::wcout << "group min " << min << " max " << max << std::endl;
 
 
         try
@@ -678,21 +662,21 @@ namespace XSC
                     // What the heck?
                     //
                     if (trace_)
-                      wcout << "element `" << ref << "' is in unexpected condition"
-                            << endl;
+                      std::wcout << "element `" << ref << "' is in unexpected condition"
+                            << std::endl;
                   }
               }
           }
         catch (NotNamespace const&)
           {
-            wcerr << "unable to resolve namespace `" << ns_name << "'" << endl;
+            std::wcerr << "unable to resolve namespace `" << ns_name << "'" << std::endl;
           }
         catch (NotName const&)
           {
             if (trace_)
-              wcout << "unable to resolve group name `" << uq_name
-                    << "' inside namespace `" << ns_name << "'" << endl
-                    << "deferring resolution until later" << endl;
+              std::wcout << "unable to resolve group name `" << uq_name
+                    << "' inside namespace `" << ns_name << "'" << std::endl
+                    << "deferring resolution until later" << std::endl;
 
             // Cannot resolve group at this point. Will have to try later.
             // The tricky part is that we have to save position where we will
@@ -722,8 +706,8 @@ namespace XSC
       }
     else
       {
-        wcerr << "`name' or `ref' attribute is missing for group declaration"
-              << endl;
+        std::wcerr << "`name' or `ref' attribute is missing for group declaration"
+              << std::endl;
         return;
       }
   }
@@ -734,7 +718,7 @@ namespace XSC
   Type* Parser::
   simple_type (XML::Element const& t, const string& anon_name)
   {
-    Type* r (0);
+    Type* r (nullptr);
 
     push (t);
 
@@ -750,8 +734,8 @@ namespace XSC
       }
     else
       {
-        wcerr << "expected `restriction' instead of " << name
-              << endl;
+        std::wcerr << "expected `restriction' instead of " << name
+              << std::endl;
       }
 
     pop ();
@@ -762,11 +746,11 @@ namespace XSC
   Type* Parser::
   simple_content_restriction (XML::Element const& r, const string& anon_name)
   {
-    Type* rv (0);
+    Type* rv (nullptr);
 
     string base (fq_name (r, r[L"base"]));
 
-    if (trace_) wcout << "restriction base: " << base << endl;
+    if (trace_) std::wcout << "restriction base: " << base << std::endl;
 
     push (r);
 
@@ -805,7 +789,7 @@ namespace XSC
 
             pop_scope ();
 
-            rv = &node;
+            rv = std::addressof (node);
           }
       }
 
@@ -827,7 +811,7 @@ namespace XSC
             root_schema_->new_edge<Names> (scope (), t, name);
           }
 
-        rv = &t;
+        rv = std::addressof (t);
       }
 
     pop ();
@@ -839,9 +823,9 @@ namespace XSC
   complex_content_restriction (XML::Element const& r)
   {
     // todo
-    wcerr << "complex content restriction is not supported yet" << endl;
+    std::wcerr << "complex content restriction is not supported yet" << std::endl;
 
-    Type* rv (0);
+    Type* rv (nullptr);
 
     push (r);
 
@@ -852,7 +836,7 @@ namespace XSC
 //         XML::Element e (next ());
 //
 //         string base1 (fq_name (e, e[L"base"]));
-//           wcout << "restriction base: " << base1 << endl;
+//           std::wcout << "restriction base: " << base1 << std::endl;
 //       }
 
     pop ();
@@ -865,7 +849,7 @@ namespace XSC
   {
     string value (e[L"value"]);
 
-    if (trace_) wcout << "enumeration value: " << value << endl;
+    if (trace_) std::wcout << "enumeration value: " << value << std::endl;
 
     Enumerator& node (root_schema_->new_node<Enumerator> ());
     root_schema_->new_edge<Names> (scope (), node, value);
@@ -875,11 +859,11 @@ namespace XSC
   Type* Parser::
   complex_type (XML::Element const& t, const string &anon_name)
   {
-    Type* r (0);
+    Type* r (nullptr);
 
     if (t[L"mixed"] == L"true")
       {
-        wcerr << "mixed content model is not supported" << endl;
+        std::wcerr << "mixed content model is not supported" << std::endl;
         return r;
       }
 
@@ -894,7 +878,7 @@ namespace XSC
         root_schema_->new_edge<Names> (scope (), node, name, false);
       }
 
-    r = &node;
+    r = std::addressof (node);
 
     push_scope (node);
     push (t);
@@ -906,7 +890,7 @@ namespace XSC
     string name = e.name ();
 
     if (trace_)
-      wcout << name << endl;
+      std::wcout << name << std::endl;
 
     if (name == L"group") group (e);
     else if (name == L"all") all (e);
@@ -918,7 +902,7 @@ namespace XSC
     else if (name == L"complexContent") complex_content (e);
     else
       {
-        wcerr << "expected `choice' or `sequence' instead of " << name << endl;
+        std::wcerr << "expected `choice' or `sequence' instead of " << name << std::endl;
         return r;
       }
 
@@ -929,7 +913,7 @@ namespace XSC
         if (e.name () == L"attribute") attribute (e); else
         if (e.name () == L"attributeGroup") attribute_group (e); else
           {
-            wcerr << "expected `attribute' instead of " << e.name () << endl;
+            std::wcerr << "expected `attribute' instead of " << e.name () << std::endl;
             return r;
           }
       }
@@ -961,7 +945,7 @@ namespace XSC
 
         if (name == L"element") element (e); else
           {
-            wcerr << "expected `element' instead of " << name << endl;
+            std::wcerr << "expected `element' instead of " << name << std::endl;
           }
       }
 
@@ -971,7 +955,7 @@ namespace XSC
   void Parser::
   choice (XML::Element const& c)
   {
-    if (trace_) wcout << "choice" << endl;
+    if (trace_) std::wcout << "choice" << std::endl;
 
     // Establish cardinality.
     // All choice elements have a min cardinality of 0
@@ -996,10 +980,10 @@ namespace XSC
 
     if (c[L"maxOccurs"] && c[L"maxOccurs"] != L"1")
       {
-        if (trace_) wcout << "choice cardinality is more than one" << endl;
+        if (trace_) std::wcout << "choice cardinality is more than one" << std::endl;
       }
     else
-      if (trace_) wcout << "choice cardinality is one" << endl;
+      if (trace_) std::wcout << "choice cardinality is one" << std::endl;
 
     push (c);
 
@@ -1015,8 +999,8 @@ namespace XSC
         else if (name == L"element") element (e);
         else
           {
-            wcerr << "expected `choice' or `sequence' or `element' instead of "
-                  << name << endl;
+            std::wcerr << "expected `choice' or `sequence' or `element' instead of "
+                  << name << std::endl;
           }
       }
 
@@ -1047,8 +1031,8 @@ namespace XSC
         else if (name == L"element") element (e);
         else
           {
-            wcerr << "expected `choice' or `sequence' or `element' instead of "
-                  << name << endl;
+            std::wcerr << "expected `choice' or `sequence' or `element' instead of "
+                  << name << std::endl;
           }
       }
 
@@ -1071,7 +1055,7 @@ namespace XSC
       }
     else
       {
-        wcerr << "expected `extension' instead of " << name << endl;
+        std::wcerr << "expected `extension' instead of " << name << std::endl;
         return;
       }
 
@@ -1083,7 +1067,7 @@ namespace XSC
   {
     if (c[L"mixed"] == L"true")
       {
-        wcerr << "mixed content model is not supported" << endl;
+        std::wcerr << "mixed content model is not supported" << std::endl;
         return;
       }
 
@@ -1102,7 +1086,7 @@ namespace XSC
       }
     else
       {
-        wcerr << "expected `extension' instead of " << name << endl;
+        std::wcerr << "expected `extension' instead of " << name << std::endl;
         return;
       }
 
@@ -1113,7 +1097,7 @@ namespace XSC
   simple_content_extension (XML::Element const& e)
   {
     if (trace_)
-      wcout << "extension base: " << fq_name (e, e[L"base"]) << endl;
+      std::wcout << "extension base: " << fq_name (e, e[L"base"]) << std::endl;
 
     set_type<Inherits> (e[L"base"], e, dynamic_cast<Complex&> (scope ()));
 
@@ -1127,7 +1111,7 @@ namespace XSC
 
         if (name == L"attribute") attribute (e); else
           {
-            wcerr << "expected `attribute' instead of " << name << endl;
+            std::wcerr << "expected `attribute' instead of " << name << std::endl;
           }
       }
 
@@ -1137,7 +1121,7 @@ namespace XSC
   void Parser::
   complex_content_extension (XML::Element const& e)
   {
-    if (trace_) wcout << "extension base: " << fq_name (e, e[L"base"]) << endl;
+    if (trace_) std::wcout << "extension base: " << fq_name (e, e[L"base"]) << std::endl;
 
     set_type<Inherits> (e[L"base"], e, dynamic_cast<Complex&> (scope ()));
 
@@ -1156,7 +1140,7 @@ namespace XSC
         else if (name == L"attribute") attribute (e);
         else
           {
-            wcerr << "expected `attribute' instead of " << name << endl;
+            std::wcerr << "expected `attribute' instead of " << name << std::endl;
           }
       }
 
@@ -1197,8 +1181,8 @@ namespace XSC
         qualified = form == L"qualified";
       }
 
-    if (trace_) wcout << "element min " << min << " max " << max
-                      << " qualified " << qualified << endl;
+    if (trace_) std::wcout << "element min " << min << " max " << max
+                      << " qualified " << qualified << std::endl;
 
     if (string name = e[L"name"])
       {
@@ -1207,7 +1191,7 @@ namespace XSC
 
         if (string type = e[L"type"])
           {
-            if (trace_) wcout << "element type " << XML::fq_name (e, type) << endl;
+            if (trace_) std::wcout << "element type " << XML::fq_name (e, type) << std::endl;
 
             set_type<Belongs> (type, e, node);
           }
@@ -1228,9 +1212,9 @@ namespace XSC
                 string anon_name (e.name ());
 
                 if (trace_)
-                  wcout << anon_name << endl;
+                  std::wcout << anon_name << std::endl;
 
-                Type* t (0);
+                Type* t (nullptr);
 
                 if (anon_name == L"simpleType")
                   t = simple_type (e, name);
@@ -1238,8 +1222,8 @@ namespace XSC
                   t = complex_type (e, name);
                 else
                   {
-                    wcerr << "expected `simpleType' or `complexType' instead of "
-                          << e.name () << endl;
+                    std::wcerr << "expected `simpleType' or `complexType' instead of "
+                          << e.name () << std::endl;
                   }
 
                 if (t)
@@ -1251,7 +1235,7 @@ namespace XSC
               {
                 // anyType almighty.
                 //
-                string prefix (ns_prefix (e, xsd, true));
+                string prefix (ns_prefix (e, xsd));
                 type =  prefix + (prefix.empty () ? L"" : L":") + L"anyType";
 
                 set_type<Belongs> (type, e, node);
@@ -1285,8 +1269,8 @@ namespace XSC
                 e.context ().set ("type-uq-name", uq_name);
 
                 if (trace_)
-                  wcout << "element `" << ref << "' is not typed`" << endl
-                        << "deferring resolution until later" << endl;
+                  std::wcout << "element `" << ref << "' is not typed`" << std::endl
+                        << "deferring resolution until later" << std::endl;
               }
             // Global element cannot reference.
             //
@@ -1295,13 +1279,13 @@ namespace XSC
                 // What the heck?
                 //
                 if (trace_)
-                  wcout << "element `" << ref << "' is in unexpected condition"
-                        << endl;
+                  std::wcout << "element `" << ref << "' is in unexpected condition"
+                        << std::endl;
               }
           }
         catch (NotNamespace const&)
           {
-            wcerr << "unable to resolve namespace `" << ns_name << "'" << endl;
+            std::wcerr << "unable to resolve namespace `" << ns_name << "'" << std::endl;
           }
         catch (NotName const&)
           {
@@ -1309,15 +1293,15 @@ namespace XSC
             node.context ().set ("instance-uq-name", uq_name);
 
             if (trace_)
-              wcout << "unable to resolve name `" << uq_name
-                    << "' inside namespace `" << ns_name << "'" << endl
-                    << "deferring resolution until later" << endl;
+              std::wcout << "unable to resolve name `" << uq_name
+                    << "' inside namespace `" << ns_name << "'" << std::endl
+                    << "deferring resolution until later" << std::endl;
           }
       }
     else
       {
-        wcerr << "`name' or `ref' attribute is missing for element declaration"
-              << endl;
+        std::wcerr << "`name' or `ref' attribute is missing for element declaration"
+              << std::endl;
       }
   }
 
@@ -1359,10 +1343,10 @@ namespace XSC
             XML::Element e (next ());
             string ch_name (e.name ());
 
-            if (trace_) wcout << ch_name << endl;
+            if (trace_) std::wcout << ch_name << std::endl;
             if (ch_name == L"attribute") attribute (e);
             else if (ch_name == L"attributeGroup") attribute_group (e);
-            else std::wcerr << "error: expected attribute child, got " << name << " instead." << endl;
+            else std::wcerr << "error: expected attribute child, got " << name << " instead." << std::endl;
           }
 
         pop ();
@@ -1390,17 +1374,17 @@ namespace XSC
                 if (prot.typed ())
                   root_schema_->new_edge<Belongs> (attr, prot.type ());
                 else
-                  std::wcerr << "error:  unexpected untyped attribute" << endl;
+                  std::wcerr << "error:  unexpected untyped attribute" << std::endl;
               }
           }
         catch (NotNamespace const&)
           {
-            wcerr << "unable to resolve namespace `" << ns_name << "'" << endl;
+            std::wcerr << "unable to resolve namespace `" << ns_name << "'" << std::endl;
           }
         catch (NotName const&)
           {
-            wcerr << "unable to resolve group name `" << uq_name
-                  << "' inside namespace `" << ns_name << "'" << endl;
+            std::wcerr << "unable to resolve group name `" << uq_name
+                  << "' inside namespace `" << ns_name << "'" << std::endl;
           }
       }
   }
@@ -1429,23 +1413,23 @@ namespace XSC
                 if (attr_ref.typed ())
                   root_schema_->new_edge<Belongs> (attr, attr_ref.type ());
                 else
-                  std::wcerr << "unexpected untyped attribute reference." << endl;
+                  std::wcerr << "unexpected untyped attribute reference." << std::endl;
               }
             catch (NotNamespace const&)
               {
-                wcerr << "unable to resolve namespace `" << ns_name << "'" << endl;
+                std::wcerr << "unable to resolve namespace `" << ns_name << "'" << std::endl;
               }
             catch (NotName const&)
               {
-                wcerr << "unable to resolve name `" << uq_name
-                      << "' inside namespace `" << ns_name << "'" << endl;
+                std::wcerr << "unable to resolve name `" << uq_name
+                      << "' inside namespace `" << ns_name << "'" << std::endl;
               }
 
             return;
           }
 
-        wcerr << "`name'  or `ref' attribute is missing for attribute declaration"
-              << endl;
+        std::wcerr << "`name'  or `ref' attribute is missing for attribute declaration"
+              << std::endl;
         return;
       }
 
@@ -1471,11 +1455,11 @@ namespace XSC
 
     if (!type)
       {
-        string prefix (ns_prefix (a, xsd, true));
+        string prefix (ns_prefix (a, xsd));
         type =  prefix + (prefix.empty () ? L"" : L":") + L"anySimpleType";
       }
 
-    if (trace_) wcout << "attribute type " << XML::fq_name (a, type) << endl;
+    if (trace_) std::wcout << "attribute type " << XML::fq_name (a, type) << std::endl;
 
     set_type<Belongs> (type, a, node);
   }
@@ -1496,7 +1480,7 @@ namespace XSC
       }
     catch (NotNamespace const&)
       {
-        wcerr << "unable to resolve namespace `" << ns_name << "'" << endl;
+        std::wcerr << "unable to resolve namespace `" << ns_name << "'" << std::endl;
       }
     catch (NotName const&)
       {
@@ -1505,14 +1489,14 @@ namespace XSC
 
         if (trace_)
           {
-            wcout << "unable to resolve name `" << uq_name
-                  << "' inside namespace `" << ns_name << "'" << endl
-                  << "deferring resolution until later" << endl;
+            std::wcout << "unable to resolve name `" << uq_name
+                  << "' inside namespace `" << ns_name << "'" << std::endl
+                  << "deferring resolution until later" << std::endl;
           }
       }
   }
 
-  DOMDocument* Parser::dom (fs::path const& tu)
+  DOMDocument* Parser::dom (std::filesystem::path const& tu)
   {
     try
       {
@@ -1566,22 +1550,20 @@ namespace XSC
 
         // Setup the error handler.
         XSC::XML::XML_Error_Handler eh;
-        parser.setErrorHandler (&eh);
+        parser.setErrorHandler (std::addressof (eh));
 
         // Setup the entity resolver.
         XSC::XML::Path_Resolver < > path_resolver;
 
-        for (std::vector <fs::path>::const_iterator iter = this->include_paths_.begin ();
-             iter != this->include_paths_.end ();
-             ++ iter)
+        for (std::filesystem::path const& include_path : this->include_paths_)
         {
-          path_resolver.insert (iter->string ().c_str ());
+          path_resolver.insert (include_path.string ().c_str ());
         }
 
         XSC::XML::XML_Schema_Resolver <
           XSC::XML::Path_Resolver < > > resolver (path_resolver);
 
-        parser.setEntityResolver (&resolver);
+        parser.setEntityResolver (std::addressof (resolver));
 
         // Load the grammer and validate it.
         std::string uri = tu.string ();
@@ -1590,8 +1572,8 @@ namespace XSC
         if (eh.getErrors ())
         {
           std::cerr << "encountered an error when loading grammar ["
-                    << uri << "]" << endl;
-          return 0;
+                    << uri << "]" << std::endl;
+          return nullptr;
         }
 
         // Now, let's parse the XSD file. Since we made it this far, then
@@ -1605,13 +1587,13 @@ namespace XSC
       }
     catch (Xerces::DOMException const & e)
       {
-        wcerr << "caught DOMException: " << e.code << endl;
+        std::wcerr << "caught DOMException: " << e.code << std::endl;
       }
     catch (Xerces::XMLException const & )
       {
-        wcerr << "caught XMLException" << endl;
+        std::wcerr << "caught XMLException" << std::endl;
       }
 
-    return 0;
+    return nullptr;
   }
 }

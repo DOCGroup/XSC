@@ -11,6 +11,8 @@
 #ifndef _XSCRT_BUFFER_WRITER_H_
 #define _XSCRT_BUFFER_WRITER_H_
 
+#include <memory>
+
 #include "Writer_T.h"
 #include "xercesc/framework/MemBufFormatTarget.hpp"
 
@@ -38,7 +40,7 @@ public:
                    typename writer_function <T>::result_type writer);
 
   /// Destructor.
-  ~Buffer_Writer_T (void);
+  ~Buffer_Writer_T ();
 
   bool write (char * buffer, size_t & size);
 
@@ -55,12 +57,12 @@ public:
    *
    * @return            Size of the buffer in bytes.
    */
-  size_t get_buffer_size (void) const;
+  size_t get_buffer_size () const;
 
 private:
-  std::auto_ptr <xercesc::MemBufFormatTarget> target_;
+  std::unique_ptr<xercesc::MemBufFormatTarget> target_;
 
-  std::auto_ptr <xercesc::DOMLSOutput> output_;
+  std::unique_ptr<xercesc::DOMLSOutput> output_;
 };
 
 }

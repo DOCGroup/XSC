@@ -3,7 +3,6 @@
 #include "XML_Schema_Resolver.h"
 #include "XercesString.h"
 #include "xercesc/dom/DOM.hpp"
-#include "xercesc/framework/LocalFileFormatTarget.hpp"
 #include "xercesc/util/XMLUniDefs.hpp"
 
 namespace XSC
@@ -15,16 +14,12 @@ namespace XSC
     using xercesc::DOMImplementation;
     using xercesc::DOMImplementationRegistry;
 //    using xercesc::DOMBuilder;
-    using xercesc::DOMImplementationLS;
-    using xercesc::XMLUni;
     using xercesc::DOMDocument;
     using xercesc::DOMException;
     using xercesc::DOMDocumentType;
-    using xercesc::XercesDOMParser;
 /*
     template <typename Resolver, typename Error>
-    XML_Helper<Resolver, Error>::XML_Helper (void)
-      : initialized_ (false)
+    XML_Helper<Resolver, Error>::XML_Helper ()
     {
       this->init_parser ();
     }
@@ -32,29 +27,28 @@ namespace XSC
     // TODO this is stub implementation
     template <typename Resolver, typename Error>
     XML_Helper<Resolver, Error>::XML_Helper (Resolver &resolver, Error &eh)
-      : initialized_ (false),
-        resolver_ (resolver),
+      : resolver_ (resolver),
         e_handler_ (eh)
     {
       this->init_parser ();
     }
 
     template <typename Resolver, typename Error>
-    XML_Helper<Resolver, Error>::~XML_Helper (void)
+    XML_Helper<Resolver, Error>::~XML_Helper ()
     {
       this->terminate_parser ();
     }
 
     template <typename Resolver, typename Error>
     bool
-    XML_Helper<Resolver, Error>::is_initialized (void) const
+    XML_Helper<Resolver, Error>::is_initialized () const
     {
       return this->initialized_ == true;
     }
 
     template <typename Resolver, typename Error>
     void
-    XML_Helper<Resolver, Error>::init_parser (void)
+    XML_Helper<Resolver, Error>::init_parser ()
     {
       if (this->initialized_)
         return;
@@ -71,7 +65,7 @@ namespace XSC
           char* message =
             XMLString::transcode (e.getMessage());
             //          ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
-            delete message;
+            XMLString::release (std::addressof (message));
 
           throw;
         }
@@ -99,13 +93,13 @@ namespace XSC
     }
 
     template <typename Resolver, typename Error>
-    XERCES_CPP_NAMESPACE::DOMDocument *
+    xercesc::DOMDocument *
     XML_Helper<Resolver, Error>::create_dom (const char *root,
                                              const char *ns,
                                              DOMDocumentType *doctype) const
     {
-      if (root == 0 || ns == 0)
-        return 0;
+      if (root == nullptr || ns == nullptr)
+        return nullptr;
 
       return this->impl_->createDocument (XStr (ns),
                                           XStr (root),
@@ -113,7 +107,7 @@ namespace XSC
     }
 
     template <typename Resolver, typename Error>
-    XERCES_CPP_NAMESPACE::DOMDocumentType *
+    xercesc::DOMDocumentType *
     XML_Helper<Resolver, Error>::create_doctype (const char *qn,
                                                  const char *pid,
                                                  const char *sid) const
@@ -123,17 +117,17 @@ namespace XSC
                                               XStr (sid));
     }
     template <typename Resolver, typename Error>
-    XERCES_CPP_NAMESPACE::DOMDocument *
+    xercesc::DOMDocument *
     XML_Helper<Resolver, Error>::create_dom (const char *url) const
     {
 
-      if (url == 0)
-        return 0;
+      if (url == nullptr)
+        return nullptr;
 
       try
         {
-          if (this->parser_.get () == 0)
-            this->parser_.reset ((new xercesc::XercesDOMParser ()));
+          if (this->parser_.get () == nullptr)
+            this->parser_ = std::make_unique<xercesc::XercesDOMParser> ();
 
           // Perform Namespace processing.
           this->parser_->setDoNamespaces (true);
@@ -169,14 +163,14 @@ namespace XSC
           // The parser will treat validation error as fatal and will exit.
           this->parser_->setValidationConstraintFatal (true);
 
-          this->parser_->setErrorHandler (&e_handler_);
+          this->parser_->setErrorHandler (std::addressof (e_handler_));
 
-          this->parser_->setEntityResolver (&resolver_);
+          this->parser_->setEntityResolver (std::addressof (resolver_));
 
           this->parser_->parse (url);
 
           if (e_handler_.getErrors ())
-            return 0;
+            return nullptr;
 
           return this->parser_->adoptDocument ();
         }
@@ -192,17 +186,17 @@ namespace XSC
               char* message =
                 XMLString::transcode (errText);
 //                              ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
-              delete message;
+              XMLString::release (std::addressof (message));
             }
-          return 0;
+          return nullptr;
 
         }
       catch (const XMLException& e)
         {
           char* message = XMLString::transcode (e.getMessage());
           //          ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
-          delete message;
-          throw 0;
+          XMLString::release (std::addressof (message));
+          throw;
         }
       catch (...)
         {
@@ -211,12 +205,12 @@ namespace XSC
           throw;
         }
 
-      return 0;
+      return nullptr;
     }
 
     template <typename Resolver, typename Error>
     void
-    XML_Helper<Resolver, Error>::terminate_parser (void)
+    XML_Helper<Resolver, Error>::terminate_parser ()
     {
       try
         {
@@ -227,7 +221,7 @@ namespace XSC
           char* message =
             XMLString::transcode (e.getMessage());
           //ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
-          delete message;
+          XMLString::release (std::addressof (message));
 
           throw;
         }
@@ -238,47 +232,11 @@ namespace XSC
 
     template <typename Resolver, typename Error>
     bool
-    XML_Helper<Resolver, Error>::write_DOM (XERCES_CPP_NAMESPACE::DOMDocument *doc,
+    XML_Helper<Resolver, Error>::write_DOM (xercesc::DOMDocument *doc,
                                             const char *file) const
     {
-      try
-        {
-          /*          bool retn;
-          std::auto_ptr <XERCES_CPP_NAMESPACE::DOMWriter> writer (impl_->createDOMWriter());
-
-          if (writer->canSetFeature (XMLUni::fgDOMWRTFormatPrettyPrint,
-                                     true))
-            writer->setFeature (XMLUni::fgDOMWRTFormatPrettyPrint, true);
-
-          std::auto_ptr <xercesc::XMLFormatTarget> ft (new xercesc::LocalFileFormatTarget(file));
-          retn = writer->writeNode(ft.get (), *doc);
-
-          return retn;*/
-        }
-      catch (const xercesc::XMLException &e)
-        {
-          /**
-          char* message =
-            XMLString::transcode (e.getMessage());
-          ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
-
-          char* name =
-            XMLString::transcode (e.getType());
-          ACE_Auto_Basic_Array_Ptr<char> cleanup_name (name);
-
-          ACE_ERROR ((LM_ERROR, "Caught exception while serializing DOM to file.\n"
-                      "Name: %s\n"
-                      "Message: %s\n"
-                      "SrcFile: %s\n"
-                      "SrcLine: %d\n",
-                      name,
-                      message,
-                      e.getSrcFile (),
-                      e.getSrcLine ()));
-          return false;
-          */
-        }
-
+      (void) doc;
+      (void) file;
       return false;
     }
   }

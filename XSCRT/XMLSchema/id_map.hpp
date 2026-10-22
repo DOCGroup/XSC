@@ -61,7 +61,7 @@
         explicit Unresolved_IDREF(const std::basic_string<ACE_TCHAR> &message) : message(message)
         {}
         ~Unresolved_IDREF(){}
-        std::basic_string<ACE_TCHAR> get_message ( void )
+        std::basic_string<ACE_TCHAR> get_message () const
         {
           return message;
         }
@@ -124,7 +124,7 @@
     //Sets the referencing elements XSCRT::Type::idref_ to point to the
     //referenced element.
     //Note: The pointer is of type "XSCRT::Type*"
-    void resolve_idref ( void )
+    void resolve_idref ()
     {
       //Declare iterators to navigate the maps
       ID_Map::id_iterator id_iterator;

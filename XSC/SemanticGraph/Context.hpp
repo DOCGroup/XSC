@@ -4,9 +4,9 @@
 #ifndef XSC_SEMANTIC_GRAPH_CONTEXT_HPP
 #define XSC_SEMANTIC_GRAPH_CONTEXT_HPP
 
+#include <any>
 #include <map>
 #include <string>
-#include <Utility/Hetero/Container.hpp>
 
 namespace XSC
 {
@@ -14,9 +14,7 @@ namespace XSC
   {
     class Context
     {
-      typedef
-      std::map<std::string, Utility::Hetero::Container>
-      Map;
+      using Map = std::map<std::string, std::any>;
 
     public:
       Context ()
@@ -28,7 +26,7 @@ namespace XSC
       class Typing {};
 
       Map::size_type
-      count (char const* key) const throw ()
+      count (char const* key) const noexcept
       {
         return map_.count (key);
       }
@@ -42,9 +40,9 @@ namespace XSC
 
         try
         {
-          return i->second. template value<T> ();
+          return std::any_cast<T const&> (i->second);
         }
-        catch (Utility::Hetero::Typing const&)
+        catch (std::bad_any_cast const&)
         {
           throw Typing ();
         }
@@ -60,9 +58,9 @@ namespace XSC
 
         try
         {
-          return i->second. template value<T> ();
+          return std::any_cast<T const&> (i->second);
         }
-        catch (Utility::Hetero::Typing const&)
+        catch (std::bad_any_cast const&)
         {
           throw Typing ();
         }
@@ -74,14 +72,13 @@ namespace XSC
       {
         try
         {
-          if (!map_.insert (std::pair<std::string,
-                            Utility::Hetero::Container>(key, value)).second)
+          if (!map_.emplace (key, value).second)
           {
             Map::iterator i = map_.find (key);
-            i->second.template value <T> () = value;
+            std::any_cast<T&> (i->second) = value;
           }
         }
-        catch (Utility::Hetero::Typing const&)
+        catch (std::bad_any_cast const&)
         {
           throw Typing ();
         }
@@ -101,9 +98,11 @@ namespace XSC
       Map map_;
 
     private:
-      // Copy semanic is not supported.
-      Context (Context const&) throw ();
-      Context& operator= (Context const&) throw ();
+      // Copy and move semantics are not supported.
+      Context (Context const&) = delete;
+      Context& operator= (Context const&) = delete;
+      Context (Context&&) = delete;
+      Context& operator= (Context&&) = delete;
     };
   }
 }

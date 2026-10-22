@@ -8,9 +8,9 @@ namespace utils
 // Reader_Writer_Base_T
 //
 template <typename T, typename CHAR_TYPE>
-Reader_Writer_Base_T <T, CHAR_TYPE>::Reader_Writer_Base_T (void)
-: impl_ (0),
-  document_ (0)
+Reader_Writer_Base_T <T, CHAR_TYPE>::Reader_Writer_Base_T ()
+: impl_ (nullptr),
+  document_ (nullptr)
 {
   xercesc::XMLPlatformUtils::Initialize ();
 
@@ -27,15 +27,15 @@ Reader_Writer_Base_T <T, CHAR_TYPE>::Reader_Writer_Base_T (void)
 // ~Reader_Writer_Base_T
 //
 template <typename T, typename CHAR_TYPE>
-Reader_Writer_Base_T <T, CHAR_TYPE>::~Reader_Writer_Base_T (void)
+Reader_Writer_Base_T <T, CHAR_TYPE>::~Reader_Writer_Base_T ()
 {
-  if (this->document_ != 0)
+  if (this->document_ != nullptr)
     this->document_->release ();
 }
 
 template <typename T, typename CHAR_TYPE>
 xercesc::DOMDocument * const
-Reader_Writer_Base_T <T, CHAR_TYPE>::document (void)
+Reader_Writer_Base_T <T, CHAR_TYPE>::document ()
 {
   return this->document_;
 }

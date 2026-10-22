@@ -31,7 +31,7 @@ ns_name (SemanticGraph::Namespace& ns)
   {
     SemanticGraph::Contains& c (schema.contained ());
 
-    fs::path f;
+    std::filesystem::path f;
 
     if (Includes* i = dynamic_cast<Includes*> (&c)) f = i->file (); else
     if (Imports* i = dynamic_cast<Imports*> (&c)) f = i->file (); else
@@ -157,8 +157,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Type& t)
+    void
+    traverse (SemanticGraph::Type& t) override
     {
       r  = fq_name (t, nss_);
     }
@@ -232,62 +232,62 @@ namespace
 
     */
 
-    virtual void
-    traverse (SemanticGraph::String&)
+    void
+    traverse (SemanticGraph::String&) override
     {
       r = schema_ns () + L"::string<" + char_type + L">";
     }
 
-    virtual void
-    traverse (SemanticGraph::NormalizedString&)
+    void
+    traverse (SemanticGraph::NormalizedString&) override
     {
       r = schema_ns () + L"::normalizedString<" + char_type + L">";
     }
 
-    virtual void
-    traverse (SemanticGraph::Token&)
+    void
+    traverse (SemanticGraph::Token&) override
     {
       r = schema_ns () + L"::token<" + char_type + L">";
     }
 
-    virtual void
-    traverse (SemanticGraph::Name&)
+    void
+    traverse (SemanticGraph::Name&) override
     {
       r = schema_ns () + L"::Name<" + char_type + L">";
     }
 
-    virtual void
-    traverse (SemanticGraph::NMTOKEN&)
+    void
+    traverse (SemanticGraph::NMTOKEN&) override
     {
       r = schema_ns () + L"::NMTOKEN<" + char_type + L">";
     }
 
-    virtual void
-    traverse (SemanticGraph::NCName&)
+    void
+    traverse (SemanticGraph::NCName&) override
     {
       r = schema_ns () + L"::NCName<" + char_type + L">";
     }
 
-    virtual void
-    traverse (SemanticGraph::AnyUri&)
+    void
+    traverse (SemanticGraph::AnyUri&) override
     {
       r = schema_ns () + L"::anyURI<" + char_type + L">";
     }
 
-    virtual void
-    traverse (SemanticGraph::QName&)
+    void
+    traverse (SemanticGraph::QName&) override
     {
       r = schema_ns () + L"::QName<" + char_type + L">";
     }
 
-    virtual void
-    traverse (SemanticGraph::Id&)
+    void
+    traverse (SemanticGraph::Id&) override
     {
       r = schema_ns () + L"::ID<" + char_type + L">";
     }
 
-    virtual void
-    traverse (SemanticGraph::IdRef&)
+    void
+    traverse (SemanticGraph::IdRef&) override
     {
       r = schema_ns () + L"::IDREF<" + char_type + L">";
     }

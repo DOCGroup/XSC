@@ -1,8 +1,7 @@
-project : xsc_ccf_root, boost_filesystem, boost_system, boost_regex, boost_program_options, xsc_static, utility, xsc_common {
+project : xsc_static, utility, xsc_common {
   after  += XSC_BE
 
-  includes += $(CCF_ROOT) $(CCF_ROOT)/CCF
-  libpaths += $(CCF_ROOT)/CCF
+  includes += $(XSC_ROOT)
 
   specific (prop:microsoft) {
     libs += XSC_BEs

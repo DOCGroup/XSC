@@ -37,7 +37,7 @@ public:
                  typename writer_function <T>::result_type writer);
 
   /// Destructor.
-  ~File_Writer_T (void);
+  ~File_Writer_T ();
 
   bool write (const CHAR_TYPE * filename);
 };

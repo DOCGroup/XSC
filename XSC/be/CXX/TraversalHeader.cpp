@@ -43,59 +43,59 @@ namespace
 
         // name
         //
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << id (name) << " (Type&);"
-           << endl;
+           << std::endl;
 
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << id (name) << " (Type const&);"
-           << endl;
+           << std::endl;
 
 
         // name_pre
         //
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << name << "_pre (Type&);"
-           << endl;
+           << std::endl;
 
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << name << "_pre (Type const&);"
-           << endl;
+           << std::endl;
 
 
         // name_next
         //
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << name << "_next (Type&);"
-           << endl;
+           << std::endl;
 
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << name << "_next (Type const&);"
-           << endl;
+           << std::endl;
 
 
         // name_post
         //
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << name << "_post (Type&);"
-           << endl;
+           << std::endl;
 
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << name << "_post (Type const&);"
-           << endl;
+           << std::endl;
 
 
         // name_none
         //
         if (e.min () == 0)
         {
-          os << "virtual void" << endl
+          os << "virtual void" << std::endl
              << name << "_none (Type&);"
-             << endl;
+             << std::endl;
 
-          os << "virtual void" << endl
+          os << "virtual void" << std::endl
              << name << "_none (Type const&);"
-             << endl;
+             << std::endl;
         }
       }
       else if (e.min () == 0)
@@ -105,24 +105,24 @@ namespace
 
         // name
         //
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << id (name) << " (Type&);"
-           << endl;
+           << std::endl;
 
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << id (name) << " (Type const&);"
-           << endl;
+           << std::endl;
 
         // name_none
         //
 
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << name << "_none (Type&);"
-           << endl;
+           << std::endl;
 
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << name << "_none (Type const&);"
-           << endl;
+           << std::endl;
       }
       else
       {
@@ -131,13 +131,13 @@ namespace
 
         // name
         //
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << id (name) << " (Type&);"
-           << endl;
+           << std::endl;
 
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << id (name) << " (Type const&);"
-           << endl;
+           << std::endl;
       }
     }
 
@@ -156,35 +156,35 @@ namespace
       {
         // name
         //
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << id (name) << " (Type&);"
-           << endl;
+           << std::endl;
 
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << id (name) << " (Type const&);"
-           << endl;
+           << std::endl;
 
         // name_none
         //
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << name << "_none (Type&);"
-           << endl;
+           << std::endl;
 
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << name << "_none (Type const&);"
-           << endl;
+           << std::endl;
       }
       else
       {
         // name
         //
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << id (name) << " (Type&);"
-           << endl;
+           << std::endl;
 
-        os << "virtual void" << endl
+        os << "virtual void" << std::endl
            << id (name) << " (Type const&);"
-           << endl;
+           << std::endl;
       }
     }
   };
@@ -206,7 +206,7 @@ namespace
     virtual void
     pre (Type& c)
     {
-      os << "// From " << type_name (c) << endl;
+      os << "// From " << type_name (c) << std::endl;
     }
 
   private:
@@ -266,23 +266,23 @@ namespace
 
       // traverse ()
       //
-      os << "virtual void" << endl
+      os << "virtual void" << std::endl
          << "traverse (Type&)" << override_string << ";"
-         << endl;
+         << std::endl;
 
-      os << "virtual void" << endl
+      os << "virtual void" << std::endl
          << "traverse (Type const&)" << override_string << ";"
-         << endl;
+         << std::endl;
 
       // pre ()
       //
-      os << "virtual void" << endl
+      os << "virtual void" << std::endl
          << "pre (Type&);"
-         << endl;
+         << std::endl;
 
-      os << "virtual void" << endl
+      os << "virtual void" << std::endl
          << "pre (Type const&);"
-         << endl;
+         << std::endl;
     }
 
     virtual void
@@ -290,13 +290,13 @@ namespace
     {
       // post ()
       //
-      os << "virtual void" << endl
+      os << "virtual void" << std::endl
          << "post (Type&);"
-         << endl;
+         << std::endl;
 
-      os << "virtual void" << endl
+      os << "virtual void" << std::endl
          << "post (Type const&);"
-         << endl;
+         << std::endl;
 
       os << "};";
     }
@@ -329,11 +329,11 @@ namespace
 
       if (this->cppmode_ != CPPMODE::CPP03)
       {
-        os << "using " << name << " = ::XMLSchema::Traversal::Traverser< " << type << ">;" << endl;
+        os << "using " << name << " = ::XMLSchema::Traversal::Traverser< " << type << ">;" << std::endl;
       }
       else
       {
-        os << "typedef ::XMLSchema::Traversal::Traverser< " << type << " >" << name << ";" << endl;
+        os << "typedef ::XMLSchema::Traversal::Traverser< " << type << " >" << name << ";" << std::endl;
       }
     }
 
@@ -383,11 +383,11 @@ namespace
       {
         string name (type_name (e));
 
-        os << "// anonymous type for " /* << scope << "::"*/ << name << endl;
+        os << "// anonymous type for " /* << scope << "::"*/ << name << std::endl;
 
         if (dynamic_cast<SemanticGraph::Type*> (&e.scope ()))
         {
-          os << "public:" << endl;
+          os << "public:" << std::endl;
         }
 
         Traversal::Belongs belongs;
@@ -410,8 +410,8 @@ namespace
 void
 generate_traversal_header (Context& ctx, SemanticGraph::Schema& schema)
 {
-  ctx.os << "#include \"ace/XML_Utils/XMLSchema/Traversal.hpp\"" << endl
-         << endl;
+  ctx.os << "#include \"ace/XML_Utils/XMLSchema/Traversal.hpp\"" << std::endl
+         << std::endl;
 
   Traversal::Schema traverser;
   Traversal::Sources sources;

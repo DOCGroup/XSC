@@ -13,8 +13,8 @@ namespace XSC
   {
     struct Enumeration : ScopeTemplate<SemanticGraph::Enumeration>
     {
-      virtual void
-      traverse (Type&);
+      void
+      traverse (Type&) override;
 
       virtual void
       pre (Type&);
@@ -28,8 +28,8 @@ namespace XSC
 
     struct Enumerator : Node<SemanticGraph::Enumerator>
     {
-      virtual void
-      traverse (Type&);
+      void
+      traverse (Type&) override;
 
       virtual void
       pre (Type&);
