@@ -6,6 +6,7 @@
 #ifndef XSC_PARSER_HXX
 #define XSC_PARSER_HXX
 
+#include <memory>
 #include <stack>
 #include <string>
 #include "xercesc/dom/DOM.hpp"
@@ -70,13 +71,13 @@ namespace XSC
 
 
     inline
-    XMLCh*
+    std::unique_ptr<XMLCh[]>
     transcode (string const& s)
     {
       std::size_t l (s.length ());
 
-      XMLCh* r (new XMLCh[l + 1]);
-      XMLCh* ir (r);
+      auto r = std::make_unique<XMLCh[]> (l + 1);
+      XMLCh* ir (r.get ());
 
       for (std::size_t i (0); i < l; ++ir, ++i)
       {
@@ -124,9 +125,8 @@ namespace XSC
       string
       operator[] (string const& s) const
       {
-        XMLCh* name (transcode (s));
-        XMLCh const* value (e_->getAttribute (name));
-        delete[] name;
+        auto name = transcode (s);
+        XMLCh const* value (e_->getAttribute (name.get ()));
 
         return transcode (value);
       }
@@ -174,15 +174,14 @@ namespace XSC
     string
     ns_name (Element const& e, string const& n)
     {
-      XMLCh* p (nullptr);
+      std::unique_ptr<XMLCh[]> p;
 
       string wp (prefix (n));
 
       if (!wp.empty ()) p = transcode (wp);
 
-      XMLCh const* xns (e.dom_element ()->lookupNamespaceURI (p));
+      XMLCh const* xns (e.dom_element ()->lookupNamespaceURI (p.get ()));
       string ns (xns ? transcode (xns) : string (L""));
-      delete[] p;
       return ns;
     }
 
@@ -198,15 +197,14 @@ namespace XSC
 #endif
                )
     {
-      XMLCh* p (transcode (ns));
+      auto p = transcode (ns);
 
 #if XERCES_VERSION_MAJOR == 3
-      XMLCh const* xns (e.dom_element ()->lookupPrefix (p));
+      XMLCh const* xns (e.dom_element ()->lookupPrefix (p.get ()));
 #else
-      XMLCh const* xns (e.dom_element ()->lookupNamespacePrefix (p, use_default));
+      XMLCh const* xns (e.dom_element ()->lookupNamespacePrefix (p.get (), use_default));
 #endif
       string prefix (xns ? transcode (xns) : string (L""));
-      delete[] p;
       return prefix;
     }
 
