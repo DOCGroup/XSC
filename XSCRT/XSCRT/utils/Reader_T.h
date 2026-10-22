@@ -63,7 +63,7 @@ public:
    *
    * @return            Pointer to the parser.
    */
-  xercesc::XercesDOMParser * operator -> (void);
+  xercesc::XercesDOMParser * operator -> ();
 
 protected:
   /**
@@ -74,7 +74,7 @@ protected:
   Reader_T (typename reader_function <T>::result_type reader);
 
   /// DOM parser for the reader.
-  std::auto_ptr <xercesc::XercesDOMParser> parser_;
+  std::unique_ptr<xercesc::XercesDOMParser> parser_;
 
   /// The entity read from the document.
   typename reader_function <T>::result_type reader_;

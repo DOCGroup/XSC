@@ -11,6 +11,8 @@
 #ifndef _XSCRT_BUFFER_WRITER_H_
 #define _XSCRT_BUFFER_WRITER_H_
 
+#include <memory>
+
 #include "Writer_T.h"
 #include "xercesc/framework/MemBufFormatTarget.hpp"
 
@@ -58,9 +60,9 @@ public:
   size_t get_buffer_size () const;
 
 private:
-  std::auto_ptr <xercesc::MemBufFormatTarget> target_;
+  std::unique_ptr<xercesc::MemBufFormatTarget> target_;
 
-  std::auto_ptr <xercesc::DOMLSOutput> output_;
+  std::unique_ptr<xercesc::DOMLSOutput> output_;
 };
 
 }

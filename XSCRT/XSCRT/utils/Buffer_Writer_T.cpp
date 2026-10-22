@@ -13,9 +13,10 @@ Buffer_Writer_T (const CHAR_TYPE * ns,
                const CHAR_TYPE * root,
                typename writer_function <T>::result_type writer)
 : Writer_T <T, CHAR_TYPE> (ns, root, writer),
-  target_ (new xercesc::MemBufFormatTarget ())
+  target_ (std::make_unique<xercesc::MemBufFormatTarget> ())
 {
-  this->output_.reset (((DOMImplementationLS*)this->impl_)->createLSOutput ());
+  this->output_.reset (
+    static_cast<xercesc::DOMImplementationLS*> (this->impl_)->createLSOutput ());
   this->output_->setByteStream (this->target_.get ());
 }
 
