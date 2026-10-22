@@ -4,8 +4,8 @@
 #ifndef CCF_RUNTIME_REGEX_HPP
 #define CCF_RUNTIME_REGEX_HPP
 
+#include <regex>
 #include <string>
-#include <boost/regex.hpp>
 
 namespace regex
 {
@@ -13,30 +13,24 @@ namespace regex
   std::basic_string<C>
   perl_s (std::basic_string<C> const& src, std::basic_string<C> const& e)
   {
-    typedef std::basic_string<C> string;
-    typedef typename string::size_type size;
+    using string = std::basic_string<C>;
+    using size = typename string::size_type;
 
     if (e.empty ())
       return src;
 
-    C delimiter (e[0]);
+    C const delimiter {e[0]};
 
-    size first = e.find (delimiter);
-    size middle = e.find (delimiter, first + 1);
-    size last = e.find (delimiter, middle + 1);
+    size const first {e.find (delimiter)};
+    size const middle {e.find (delimiter, first + 1)};
+    size const last {e.find (delimiter, middle + 1)};
 
-    string pattern (e, first + 1, middle - first - 1);
-    string format (e, middle + 1, last - middle - 1);
+    string const pattern {e, first + 1, middle - first - 1};
+    string const format {e, middle + 1, last - middle - 1};
 
-    //std::cout << pattern << "  " << format << std::endl;
+    std::basic_regex<C> const expr {pattern};
 
-    boost::basic_regex<C> expr (pattern);
-
-    return regex_merge (
-      src,
-      expr,
-      format,
-      boost::match_default | boost::format_all );
+    return std::regex_replace (src, expr, format);
   }
 
   template <typename C>

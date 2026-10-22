@@ -1,4 +1,4 @@
-project : boost_system, boost_regex, boost_program_options, xsc_static, utility, xsc_common {
+project : boost_system, boost_program_options, xsc_static, utility, xsc_common {
   after  += XSC_BE
 
   includes += $(XSC_ROOT)
