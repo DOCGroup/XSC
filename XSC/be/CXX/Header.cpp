@@ -240,7 +240,7 @@ namespace
       {
         // optional
         //
-        if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
+        if (!this->optional_via_if_set ())
         {
           os << "bool " << name << "_p () const;";
           os << type << " const& " << id (name) << " () const;";
@@ -365,7 +365,7 @@ namespace
 
       if (a.optional ())
       {
-        if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
+        if (!this->optional_via_if_set ())
         {
           os << "bool " << name << "_p () const;";
           os << type << " const& " << id (name) << " () const;";

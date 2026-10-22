@@ -58,6 +58,17 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
       throw std::invalid_argument ("invalid value for --cxx-orb: " + orb);
     }
 
+  ::Context::CPPMODE cppmode_ { ::Context::CPPMODE::CPP17 };
+  if (options.count ("cxx-cpp03"))
+    cppmode_ = ::Context::CPPMODE::CPP03;
+  if (options.count ("cxx-cpp11"))
+    cppmode_ = ::Context::CPPMODE::CPP11;
+  if (options.count ("cxx-cpp17"))
+    cppmode_ = ::Context::CPPMODE::CPP17;
+
+  if (options.count ("cxx-read-only") && cppmode_ != ::Context::CPPMODE::CPP17)
+    throw std::invalid_argument ("--cxx-read-only requires C++17 mode");
+
   //Stores file suffixes (defaults are .hpp, ipp, and cpp)
   std::string hxx_suffix (options.value ("cxx-header-suffix"));
   std::string ixx_suffix (options.value ("cxx-inline-suffix"));
@@ -269,20 +280,6 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
   bool read_only (options.count ("cxx-read-only"));
   bool cdr_reader (options.count ("cxx-generate-cdr-reader-types") && !read_only);
   bool cdr_writer (options.count ("cxx-generate-cdr-writer-types"));
-
-  ::Context::CPPMODE cppmode_ { ::Context::CPPMODE::CPP17 };
-  if (options.count ("cxx-cpp03"))
-    {
-      cppmode_ = ::Context::CPPMODE::CPP03;
-    }
-  if (options.count ("cxx-cpp11"))
-    {
-      cppmode_ = ::Context::CPPMODE::CPP11;
-    }
-  if (options.count ("cxx-cpp17"))
-    {
-      cppmode_ = ::Context::CPPMODE::CPP17;
-    }
 
   // Check about random access sequences
   bool ra_sequences (options.count ("cxx-enable-random-access-sequences"));

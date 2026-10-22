@@ -48,7 +48,7 @@ namespace
       {
         // optional
         //
-        if (this->cppmode_ != CPPMODE::CPP03 || this->read_only_)
+        if (this->optional_via_if_set ())
         {
           string noexcept_suffix (this->cppmode_ == CPPMODE::CPP03 ? L"" : L" noexcept");
           os << i << type << " const* " << scope << "::" << id (name)
@@ -246,7 +246,7 @@ namespace
               << "}\n";
         }
 
-        if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
+        if (!this->optional_via_if_set ())
         {
           // add_typename
           os << i
@@ -288,7 +288,7 @@ namespace
 
       if (a.optional ())
       {
-        if (this->cppmode_ != CPPMODE::CPP03 || this->read_only_)
+        if (this->optional_via_if_set ())
         {
           string noexcept_suffix (this->cppmode_ == CPPMODE::CPP03 ? L"" : L" noexcept");
           os << i << type << " const* " << scope << "::" << id (name)
@@ -309,7 +309,7 @@ namespace
             << "}";
         }
 
-        if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
+        if (!this->optional_via_if_set ())
         {
           os << i
              << type << " const& " << scope << "::" << id (name) << " () const"

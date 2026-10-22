@@ -32,9 +32,9 @@ namespace
       os << "void " << scope << "::"
          << id (name) << " (Type& o)" << "{";
 
-      if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
+      if (!this->optional_via_if_set ())
         os << "dispatch (o." << id (name) << " ());";
-      else if (this->cppmode_ == CPPMODE::CPP03 || this->read_only_)
+      else if (this->cppmode_ == CPPMODE::CPP03)
         os << type << " const* value = o." << id (name)
            << "_if_set (); if (value) dispatch (*value);";
       else
@@ -46,9 +46,9 @@ namespace
       os << "void " << scope << "::"
          << id (name) << " (Type const& o)" << "{";
 
-      if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
+      if (!this->optional_via_if_set ())
         os << "dispatch (o." << id (name) << " ());";
-      else if (this->cppmode_ == CPPMODE::CPP03)
+      else if (this->cppmode_ == CPPMODE::CPP03 || this->read_only_)
         os << type << " const* value = o." << id (name)
            << "_if_set (); if (value) dispatch (*value);";
       else
@@ -317,11 +317,12 @@ namespace
       {
         // optional
         //
-        if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
+        if (!this->optional_via_if_set ())
           os << "if (o." << name << "_p ()) " << id (name) << " (o);"
              << "else " << name << "_none (o);";
         else
-          os << "if (o." << id (name) << "_if_set () != nullptr) "
+          os << "if (o." << id (name) << "_if_set () != "
+             << (this->cppmode_ == CPPMODE::CPP03 ? "0" : "nullptr") << ") "
              << id (name) << " (o);"
              << "else " << name << "_none (o);";
       }
@@ -352,11 +353,12 @@ namespace
       {
         // optional
         //
-        if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
+        if (!this->optional_via_if_set ())
           os << "if (o." << name << "_p ()) " << id (name) << " (o);"
              << "else " << name << "_none (o);";
         else
-          os << "if (o." << id (name) << "_if_set () != nullptr) "
+          os << "if (o." << id (name) << "_if_set () != "
+             << (this->cppmode_ == CPPMODE::CPP03 ? "0" : "nullptr") << ") "
              << id (name) << " (o);"
              << "else " << name << "_none (o);";
       }

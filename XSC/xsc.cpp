@@ -27,6 +27,7 @@
 #include <filesystem>
 #include <memory>
 #include <iostream>
+#include <exception>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -383,6 +384,11 @@ int main (int argc, char* argv[])
     }
 
     return 0;
+  }
+  catch (std::exception const& e)
+  {
+    std::cerr << "error: " << e.what () << std::endl;
+    return 1;
   }
   catch (...)
   {

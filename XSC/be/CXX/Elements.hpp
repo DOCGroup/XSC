@@ -290,6 +290,12 @@ public:
     return this->read_only_;
   }
 
+  bool
+  optional_via_if_set ()
+  {
+    return this->cppmode_ != CPPMODE::CPP03 || this->read_only_;
+  }
+
 public:
   std::wostream& os;
   string& scope;

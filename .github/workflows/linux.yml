@@ -105,6 +105,17 @@ jobs:
           Pop-Location
         }
       shell: pwsh
+    - name: Run read-only mode compatibility tests
+      run: |
+        Push-Location ${env:XSC_ROOT}/Tests/ReadOnly
+        try {
+          perl run_test.pl
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        }
+        finally {
+          Pop-Location
+        }
+      shell: pwsh
     - name: Build XSC generated schema tests
       run: |
         Push-Location ${env:XSC_ROOT}/Tests

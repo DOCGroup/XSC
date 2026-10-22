@@ -501,7 +501,7 @@ namespace
         // optional
         //
         os << " // " << name << std::endl;
-        if (this->cppmode_ == CPPMODE::CPP03)
+        if (!this->optional_via_if_set ())
         {
           os << "bool " << name << "_p = this->" << name << "_p ();";
           os << "stream.write_boolean (" << name << "_p" << ");";
@@ -509,14 +509,20 @@ namespace
         }
         else
         {
-          os << "auto const* " << name << "_value = this->" << name
-             << "_if_set ();";
-          os << "stream.write_boolean (" << name << "_value != nullptr);";
-          os << "if (" << name << "_value != nullptr)" << "{";
+          if (this->cppmode_ == CPPMODE::CPP03)
+            os << type << " const* " << name << "_value = this->" << name
+               << "_if_set ();";
+          else
+            os << "auto const* " << name << "_value = this->" << name
+               << "_if_set ();";
+          os << "stream.write_boolean (" << name << "_value != "
+             << (this->cppmode_ == CPPMODE::CPP03 ? "0" : "nullptr") << ");";
+          os << "if (" << name << "_value != "
+             << (this->cppmode_ == CPPMODE::CPP03 ? "0" : "nullptr") << ")" << "{";
         }
 
         // check if the type is a boolean type
-        if (this->cppmode_ != CPPMODE::CPP03)
+        if (this->optional_via_if_set ())
         {
           if (type_is_boolean (type))
             os << "stream.write_boolean (*" << name << "_value);" << std::endl;
@@ -580,23 +586,31 @@ namespace
                   os << "// " << name << std::endl;
 
                   // First write out the boolean value
-                  if (this->cppmode_ == CPPMODE::CPP03)
+                  if (!this->optional_via_if_set ())
                   {
                     os << "stream.write_boolean (" << name << "_p ());";
                     os << "if (" << name << "_p ())" << std::endl;
                   }
                   else
                   {
-                    os << "auto const* " << id (name) << "_value = this->"
-                       << id (name) << "_if_set ();";
+                    if (this->cppmode_ == CPPMODE::CPP03)
+                      os << type << " const* " << id (name) << "_value = this->"
+                         << id (name) << "_if_set ();";
+                    else
+                      os << "auto const* " << id (name) << "_value = this->"
+                         << id (name) << "_if_set ();";
                     os << "stream.write_boolean (" << id (name)
-                       << "_value != nullptr);";
-                    os << "if (" << id (name) << "_value != nullptr)"
+                       << "_value != "
+                       << (this->cppmode_ == CPPMODE::CPP03 ? "0" : "nullptr")
+                       << ");";
+                    os << "if (" << id (name) << "_value != "
+                       << (this->cppmode_ == CPPMODE::CPP03 ? "0" : "nullptr")
+                       << ")"
                        << std::endl;
                   }
 
                   // check if the type is a boolean type
-                  if (this->cppmode_ != CPPMODE::CPP03)
+                  if (this->optional_via_if_set ())
                   {
                     if (type_is_boolean (type))
                       os << "  stream.write_boolean (*" << id (name)
