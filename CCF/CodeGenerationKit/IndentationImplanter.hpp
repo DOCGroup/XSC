@@ -26,14 +26,14 @@ namespace Indentation
     {
     }
 
-    virtual int_type
-    overflow (int_type c)
+    int_type
+    overflow (int_type c) override
     {
       return buffer_.put (traits_type::to_char_type (c));
     }
 
-    virtual int
-    sync ()
+    int
+    sync () override
     {
       return 0;
     }
@@ -58,14 +58,14 @@ namespace Indentation
     {
     }
 
-    virtual int_type
-    put (char_type c)
+    int_type
+    put (char_type c) override
     {
       return buffer_.sputc (c);
     }
 
-    virtual void
-    unbuffer ()
+    void
+    unbuffer () override
     {
       try
       {
@@ -120,6 +120,11 @@ namespace Indentation
 
       os_.rdbuf (prev_);
     }
+
+    Implanter (Implanter const&) = delete;
+    Implanter (Implanter&&) = delete;
+    Implanter& operator= (Implanter const&) = delete;
+    Implanter& operator= (Implanter&&) = delete;
 
   private:
     std::basic_ostream<C>& os_;

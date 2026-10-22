@@ -4,6 +4,7 @@
 #ifndef CCF_CODE_GENERATION_KIT_INDENTATION_IDL_HPP
 #define CCF_CODE_GENERATION_KIT_INDENTATION_IDL_HPP
 
+#include <cstddef>
 #include <deque>
 
 #include "CCF/CodeGenerationKit/IndentationBuffer.hpp"
@@ -25,18 +26,17 @@ namespace Indentation
   public:
     IDL (Buffer<C>& out)
         : out_ (out),
-          indentation_ (0),
+          indentation_ {},
           spaces_ (2),
           construct_ (OTHER)
     {
     }
 
-    virtual
-    ~IDL () noexcept {}
+    ~IDL () noexcept override = default;
 
   public:
-    virtual int_type
-    put (char_type c)
+    int_type
+    put (char_type c) override
     {
       int_type result = traits_type::to_int_type (c);
 
@@ -177,8 +177,8 @@ namespace Indentation
       return result;
     }
 
-    virtual void
-    unbuffer ()
+    void
+    unbuffer () override
     {
       int_type result;
 
@@ -214,7 +214,7 @@ namespace Indentation
     {
       if (!hold_.empty () && hold_.back () == '\n')
       {
-        for (unsigned long i = 0; i < indentation_ * spaces_; i++)
+        for (std::size_t i {}; i < indentation_ * spaces_; ++i)
         {
           write (' ');
         }
@@ -243,8 +243,8 @@ namespace Indentation
 
   private:
     Buffer<C>& out_;
-    unsigned long indentation_;
-    unsigned long spaces_;
+    std::size_t indentation_;
+    std::size_t spaces_;
 
     enum Construct
     {

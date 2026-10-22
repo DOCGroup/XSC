@@ -236,25 +236,32 @@ int main (int argc, char* argv[])
       }
 
     command_line.set ("input-file", get_opt.argv ()[get_opt.opt_ind ()]);
-    command_line.set ("cxx-char-type", command_line.count ("cxx-char-type") ? command_line.value ("cxx-char-type") : "ACE_TCHAR");
-    command_line.set ("cxx-orb", command_line.count ("cxx-orb") ? command_line.value ("cxx-orb") : "tao");
-    command_line.set ("cxx-header-suffix", command_line.count ("cxx-header-suffix") ? command_line.value ("cxx-header-suffix") : ".hpp");
-    command_line.set ("cxx-inline-suffix", command_line.count ("cxx-inline-suffix") ? command_line.value ("cxx-inline-suffix") : ".ipp");
-    command_line.set ("cxx-source-suffix", command_line.count ("cxx-source-suffix") ? command_line.value ("cxx-source-suffix") : ".cpp");
-    command_line.set ("cxx-header-regex", command_line.count ("cxx-header-regex") ? command_line.value ("cxx-header-regex") : "/\\..*$//");
-    command_line.set ("cxx-inline-regex", command_line.count ("cxx-inline-regex") ? command_line.value ("cxx-inline-regex") : "/\\..*$//");
-    command_line.set ("cxx-source-regex", command_line.count ("cxx-source-regex") ? command_line.value ("cxx-source-regex") : "/\\..*$//");
-    command_line.set ("cxx-header-guard", command_line.count ("cxx-header-guard") ? command_line.value ("cxx-header-guard") : "");
-    command_line.set ("cxx-banner-file", command_line.count ("cxx-banner-file") ? command_line.value ("cxx-banner-file") : "");
-    command_line.set ("cxx-header-banner-file", command_line.count ("cxx-header-banner-file") ? command_line.value ("cxx-header-banner-file") : "");
-    command_line.set ("cxx-inline-banner-file", command_line.count ("cxx-inline-banner-file") ? command_line.value ("cxx-inline-banner-file") : "");
-    command_line.set ("cxx-source-banner-file", command_line.count ("cxx-source-banner-file") ? command_line.value ("cxx-source-banner-file") : "");
-    command_line.set ("cxx-export-symbol", command_line.count ("cxx-export-symbol") ? command_line.value ("cxx-export-symbol") : "");
-    command_line.set ("cxx-export-header", command_line.count ("cxx-export-header") ? command_line.value ("cxx-export-header") : "");
-    command_line.set ("idl-char-type", command_line.count ("idl-char-type") ? command_line.value ("idl-char-type") : "wchar");
-    command_line.set ("idl-file-suffix", command_line.count ("idl-file-suffix") ? command_line.value ("idl-file-suffix") : ".idl");
-    command_line.set ("idl-file-regex", command_line.count ("idl-file-regex") ? command_line.value ("idl-file-regex") : "/\\..*$//");
-    command_line.set ("idl-banner-file", command_line.count ("idl-banner-file") ? command_line.value ("idl-banner-file") : "");
+
+    auto set_default = [&command_line] (std::string const& name, std::string const& value)
+      {
+        if (!command_line.count (name))
+          command_line.set (name, value);
+      };
+
+    set_default ("cxx-char-type", "ACE_TCHAR");
+    set_default ("cxx-orb", "tao");
+    set_default ("cxx-header-suffix", ".hpp");
+    set_default ("cxx-inline-suffix", ".ipp");
+    set_default ("cxx-source-suffix", ".cpp");
+    set_default ("cxx-header-regex", "/\\..*$//");
+    set_default ("cxx-inline-regex", "/\\..*$//");
+    set_default ("cxx-source-regex", "/\\..*$//");
+    set_default ("cxx-header-guard", "");
+    set_default ("cxx-banner-file", "");
+    set_default ("cxx-header-banner-file", "");
+    set_default ("cxx-inline-banner-file", "");
+    set_default ("cxx-source-banner-file", "");
+    set_default ("cxx-export-symbol", "");
+    set_default ("cxx-export-header", "");
+    set_default ("idl-char-type", "wchar");
+    set_default ("idl-file-suffix", ".idl");
+    set_default ("idl-file-regex", "/\\..*$//");
+    set_default ("idl-banner-file", "");
 
     // process search paths
     using SearchPaths = std::vector<std::string>;

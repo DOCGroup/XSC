@@ -41,7 +41,7 @@ namespace Utility
     inline void Object::
     type_info (TypeInfo const& tid) noexcept
     {
-      type_info_ = &tid;
+      type_info_ = std::addressof (tid);
     }
   }
 }

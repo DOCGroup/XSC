@@ -6,6 +6,7 @@
 #ifndef UTILITY_INTROSPECTION_TYPE_INFO_HPP
 #define UTILITY_INTROSPECTION_TYPE_INFO_HPP
 
+#include <memory>
 #include <vector>
 
 #include "Utility/Introspection/TypeId.hpp"
@@ -65,14 +66,10 @@ namespace Utility
     class TypeInfo
     {
     private:
-      typedef
-      std::vector<BaseInfo>
-      BaseInfoList;
+      using BaseInfoList = std::vector<BaseInfo>;
 
     public:
-      typedef
-      BaseInfoList::const_iterator
-      BaseIterator;
+      using BaseIterator = BaseInfoList::const_iterator;
 
     public:
       TypeInfo (TypeId const& tid);

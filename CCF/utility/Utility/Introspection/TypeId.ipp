@@ -9,7 +9,7 @@ namespace Utility
   {
     inline TypeId::
     TypeId (std::type_info const& tid)
-        : tid_ (&tid)
+        : tid_ (std::addressof (tid))
     {
     }
 

@@ -6,6 +6,8 @@
 #ifndef UTILITY_INTROSPECTION_OBJECT_HPP
 #define UTILITY_INTROSPECTION_OBJECT_HPP
 
+#include <memory>
+
 #include "Utility/Introspection/TypeInfo.hpp"
 
 namespace Utility

@@ -10,7 +10,7 @@ namespace Utility
     template<typename T>
     inline TypeId::
     TypeId (T const& t)
-        : tid_ (&typeid (t))
+        : tid_ (std::addressof (typeid (t)))
     {
     }
   }

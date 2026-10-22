@@ -17,8 +17,7 @@ namespace Indentation
     using EndOfStream = std::runtime_error;
 
   public:
-    virtual
-    ~Buffer () { }
+    virtual ~Buffer () = default;
 
   public:
     using traits_type = std::char_traits<C>;

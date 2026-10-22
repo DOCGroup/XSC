@@ -8,6 +8,7 @@
 
 #include <typeinfo>
 #include <iosfwd>
+#include <memory>
 
 namespace Utility
 {

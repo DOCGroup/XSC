@@ -13,7 +13,7 @@ namespace Utility
 
     inline BaseInfo::
     BaseInfo (Access::Value access, bool virtual_base, TypeInfo const& ti)
-        : ti_ (&ti),
+        : ti_ (std::addressof (ti)),
           virtual_base_ (virtual_base),
           access_ (access)
     {

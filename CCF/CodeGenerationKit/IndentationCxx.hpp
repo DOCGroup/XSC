@@ -4,6 +4,7 @@
 #ifndef CCF_CODE_GENERATION_KIT_INDENTATION_CXX_HPP
 #define CCF_CODE_GENERATION_KIT_INDENTATION_CXX_HPP
 
+#include <cstddef>
 #include <deque>
 #include <stack>
 
@@ -49,16 +50,14 @@ namespace Indentation
     }
 
     /// Destructor
-    virtual ~Cxx ()
-    {
-    }
+    ~Cxx () override = default;
 
   public:
     /**
      * Add a new character to the buffer. Based on the character, different
      * actions are taken. The newline always causes the buffer to be flushed.
      */
-    virtual int_type put (char_type c)
+    int_type put (char_type c) override
     {
       int_type result = traits_type::to_int_type (c);
 
@@ -165,7 +164,7 @@ namespace Indentation
             if (this->hold_.size () > 1 && this->hold_.back () == '\n')
             {
               bool pop_nl = false;
-              typedef typename Hold::reverse_iterator iterator;
+              using iterator = typename Hold::reverse_iterator;
 
               for (iterator i = this->hold_.rbegin (),
                    e = this->hold_.rend ();
@@ -333,7 +332,7 @@ namespace Indentation
      * Unbuffer the elements. This will remove the elements on
      * the holding queue to the target output stream.
      */
-    virtual void unbuffer ()
+    void unbuffer () override
     {
       int_type result;
 
@@ -375,7 +374,7 @@ namespace Indentation
     {
       if (!this->hold_.empty () && this->hold_.back () == '\n')
       {
-        for (unsigned long i = 0; i < this->indentation_.top (); i++)
+        for (std::size_t i {}; i < this->indentation_.top (); ++i)
           this->write (' ');
 
         this->position_ += this->indentation_.top ();
@@ -410,16 +409,16 @@ namespace Indentation
     Buffer <C> & out_;
 
     /// Current position on the line
-    unsigned long position_;
+    std::size_t position_;
 
     /// Balance the parenthesis
-    unsigned long paren_balance_;
+    std::size_t paren_balance_;
 
     /// Saved indentations based on state/scope.
-    std::stack <size_t> indentation_;
+    std::stack<std::size_t> indentation_;
 
     /// Number of space in a indentation.
-    unsigned long spaces_;
+    std::size_t spaces_;
 
     enum Construct
     {
