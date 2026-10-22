@@ -6,6 +6,7 @@
 #include "XSC/Traversal.hpp"
 
 #include <sstream>
+#include <stdexcept>
 
 // Namespace
 //
@@ -142,6 +143,7 @@ namespace
                     public Traversal::Double,
                     */
                     Traversal::String,
+                    Traversal::DateTime,
                     Traversal::NormalizedString,
                     Traversal::Token,
                     Traversal::Name,
@@ -236,6 +238,15 @@ namespace
     traverse (SemanticGraph::String&) override
     {
       r = schema_ns () + L"::string<" + char_type + L">";
+    }
+
+    void
+    traverse (SemanticGraph::DateTime&) override
+    {
+      if (cppmode () == CPPMODE::CPP17)
+        r = schema_ns () + L"::string<" + char_type + L">";
+      else
+        throw std::invalid_argument ("xs:dateTime requires C++17 code generation");
     }
 
     void

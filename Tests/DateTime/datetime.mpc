@@ -1,0 +1,18 @@
+project (xsc_test_datetime): xscdefaults {
+  requires += xsc
+  xscflags += --cxx-cpp17
+  custom_only = 1
+  XSC_Files {
+    datetime.xsd
+  }
+  Source_Files {
+  }
+}
+
+project (xsc_test_datetime_generated): xscrt {
+  after += xsc_test_datetime
+
+  Source_Files {
+    datetime.cpp
+  }
+}

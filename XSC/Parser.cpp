@@ -271,6 +271,7 @@ namespace XSC
       s.new_edge<Names> (ns, s.new_node<AnyType> (), L"anyType");
       s.new_edge<Names> (ns, s.new_node<AnySimpleType> (), L"anySimpleType");
       s.new_edge<Names> (ns, s.new_node<AnyUri> (), L"anyURI");
+      s.new_edge<Names> (ns, s.new_node<DateTime> (), L"dateTime");
 
       s.new_edge<Names> (ns, s.new_node<Byte> (), L"byte");
       s.new_edge<Names> (ns, s.new_node<UnsignedByte> (), L"unsignedByte");
