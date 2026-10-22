@@ -12,8 +12,6 @@ namespace XSC
 // XStr
 //
 XStr::XStr ()
-  : wstr_ (nullptr),
-    cstr_ (nullptr)
 {
 
 }
@@ -22,8 +20,6 @@ XStr::XStr ()
 // XStr
 //
 XStr::XStr (const char* str)
-  : wstr_ (nullptr),
-    cstr_ (nullptr)
 {
   this->wstr_ = XMLString::transcode (str);
 }
@@ -32,8 +28,6 @@ XStr::XStr (const char* str)
 // XStr
 //
 XStr::XStr (XMLCh *wstr)
-  : wstr_ (nullptr),
-    cstr_ (nullptr)
 {
   this->wstr_ = XMLString::replicate (wstr);
 }
@@ -42,8 +36,6 @@ XStr::XStr (XMLCh *wstr)
 // XStr
 //
 XStr::XStr (const XMLCh* wstr)
-  : wstr_ (nullptr),
-    cstr_ (nullptr)
 {
   this->wstr_ = XMLString::replicate (wstr);
 }
@@ -52,8 +44,6 @@ XStr::XStr (const XMLCh* wstr)
 // XStr
 //
 XStr::XStr (const XStr &right)
-  : wstr_ (nullptr),
-    cstr_ (nullptr)
 {
   this->wstr_ = XMLString::replicate (right.wstr_);
 }

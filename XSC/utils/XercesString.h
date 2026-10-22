@@ -55,10 +55,10 @@ namespace XSC
 
   private:
     /// Internal representation
-    XMLCh* wstr_;
+    XMLCh* wstr_ {};
 
     /// The C string version of the XercesString.
-    char * cstr_;
+    char * cstr_ {};
   };
 }
 
