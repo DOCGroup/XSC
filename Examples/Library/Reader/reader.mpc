@@ -1,5 +1,5 @@
 project (library_reader_xsd_gen): xscdefaults {
-  requires += xsc
+  requires += xsc dummy_label
 
   custom_only = 1
   xscflags += --cxx-generate-traversal-types

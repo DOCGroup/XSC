@@ -10,3 +10,11 @@ project (reference_xsd_gen): xscdefaults {
   Source_Files {
   }
 }
+
+project (reference_generated): xscrt {
+  after += reference_xsd_gen
+
+  Source_Files {
+    reference.cpp
+  }
+}

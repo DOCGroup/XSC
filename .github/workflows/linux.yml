@@ -104,7 +104,7 @@ jobs:
           Pop-Location
         }
       shell: pwsh
-    - name: Build XSC schema generation tests
+    - name: Build XSC generated schema tests
       run: |
         Push-Location ${env:XSC_ROOT}/Tests
         try {

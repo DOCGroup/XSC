@@ -7,3 +7,11 @@ project (xsc_test_chameleon): xscdefaults {
   Source_Files {
   }
 }
+
+project (xsc_test_chameleon_generated): xscrt {
+  after += xsc_test_chameleon
+
+  Source_Files {
+    includer.cpp
+  }
+}

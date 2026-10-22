@@ -2,8 +2,18 @@ project (xsc_test_include): xscdefaults {
   requires += xsc
   custom_only = 1
   XSC_Files {
+    includee.xsd
     includer.xsd
   }
   Source_Files {
+  }
+}
+
+project (xsc_test_include_generated): xscrt {
+  after += xsc_test_include
+
+  Source_Files {
+    includee.cpp
+    includer.cpp
   }
 }

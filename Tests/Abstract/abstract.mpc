@@ -1,5 +1,5 @@
 project (xsc_test_abstract): xscdefaults {
-  requires += xsc
+  requires += xsc dummy_label
   custom_only = 1
   XSC_Files {
     abstract.xsd

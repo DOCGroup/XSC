@@ -7,3 +7,11 @@ project (xsc_test_group): xscdefaults {
   Source_Files {
   }
 }
+
+project (xsc_test_group_generated): xscrt {
+  after += xsc_test_group
+
+  Source_Files {
+    test.cpp
+  }
+}

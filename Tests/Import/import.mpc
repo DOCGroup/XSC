@@ -2,8 +2,18 @@ project (xsc_test_import): xscdefaults {
   requires += xsc
   custom_only = 1
   XSC_Files {
+    importee.xsd
     importer.xsd
   }
   Source_Files {
+  }
+}
+
+project (xsc_test_import_generated): xscrt {
+  after += xsc_test_import
+
+  Source_Files {
+    importee.cpp
+    importer.cpp
   }
 }
