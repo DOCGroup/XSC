@@ -13,8 +13,8 @@ namespace XSC
   {
     struct Element : Node<SemanticGraph::Element>
     {
-      virtual void
-      traverse (Type&);
+      void
+      traverse (Type&) override;
 
       virtual void
       pre (Type&);

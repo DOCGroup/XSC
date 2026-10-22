@@ -16,8 +16,8 @@ namespace XSC
     //
     struct Attribute : Node<SemanticGraph::Attribute>
     {
-      virtual void
-      traverse (Type&);
+      void
+      traverse (Type&) override;
 
       virtual void
       pre (Type&);

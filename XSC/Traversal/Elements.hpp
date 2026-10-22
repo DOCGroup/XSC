@@ -222,8 +222,8 @@ namespace XSC
         map (typeid (Type), *this);
       }
 
-      virtual void
-      trampoline (SemanticGraph::Node& n)
+      void
+      trampoline (SemanticGraph::Node& n) override
       {
         //cerr << "trampoline for " << &n << " to type "
         //     << typeid (Type).name () << endl;
@@ -246,8 +246,8 @@ namespace XSC
         map (typeid (Type), *this);
       }
 
-      virtual void
-      trampoline (SemanticGraph::Edge& e)
+      void
+      trampoline (SemanticGraph::Edge& e) override
       {
         traverse (dynamic_cast<Type&> (e));
       }
@@ -262,8 +262,8 @@ namespace XSC
     //
     struct Names : Edge<SemanticGraph::Names>
     {
-      virtual void
-      traverse (Type& e)
+      void
+      traverse (Type& e) override
       {
         node_traverser ().dispatch (e.named ());
       }
@@ -272,8 +272,8 @@ namespace XSC
 
     struct Belongs : Edge<SemanticGraph::Belongs>
     {
-      virtual void
-      traverse (Type& e)
+      void
+      traverse (Type& e) override
       {
         node_traverser ().dispatch (e.type ());
       }
@@ -292,8 +292,8 @@ namespace XSC
     struct ScopeTemplate : Node<T>
     {
     public:
-      virtual void
-      traverse (T& s)
+      void
+      traverse (T& s) override
       {
         names (s);
       }
@@ -349,8 +349,8 @@ namespace XSC
     //
     struct Type : Node<SemanticGraph::Type>
     {
-      virtual void
-      traverse (SemanticGraph::Type&) = 0;
+      void
+      traverse (SemanticGraph::Type&) override = 0;
     };
 
 
@@ -359,8 +359,8 @@ namespace XSC
     //
     struct Instance : Node<SemanticGraph::Instance>
     {
-      virtual void
-      traverse (Type&);
+      void
+      traverse (Type&) override;
 
       virtual void
       pre (Type&);
@@ -380,8 +380,8 @@ namespace XSC
     //
     struct Inherits : Edge<SemanticGraph::Inherits>
     {
-      virtual void
-      traverse (Type& e)
+      void
+      traverse (Type& e) override
       {
         node_traverser ().dispatch (e.inheritee ());
       }
@@ -392,8 +392,8 @@ namespace XSC
     //
     struct Contains : Edge<SemanticGraph::Contains>
     {
-      virtual void
-      traverse (Type& e)
+      void
+      traverse (Type& e) override
       {
         node_traverser ().dispatch (e.element ());
       }

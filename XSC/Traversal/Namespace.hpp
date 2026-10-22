@@ -13,8 +13,8 @@ namespace XSC
   {
     struct Namespace : ScopeTemplate<SemanticGraph::Namespace>
     {
-      virtual void
-      traverse (Type& m)
+      void
+      traverse (Type& m) override
       {
         pre (m);
         name (m);

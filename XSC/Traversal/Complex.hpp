@@ -13,8 +13,8 @@ namespace XSC
   {
     struct Complex : ScopeTemplate<SemanticGraph::Complex>
     {
-      virtual void
-      traverse (Type&);
+      void
+      traverse (Type&) override;
 
       virtual void
       pre (Type&);
