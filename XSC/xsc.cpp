@@ -32,14 +32,13 @@
 
 #include "ace/Get_Opt.h"
 #include "XSC/Options.hpp"
+#include "XSC/Version.hpp"
 #include "XSC/Parser.hpp"
 #include "XSC/be/CXX/Validator.hpp"
 #include "XSC/be/CXX/Generator.hpp"
 #include "XSC/be/IDL/Generator.hpp"
 
 using namespace XSC;
-
-wchar_t const* const version = L"0.0.8";
 
  /**
  * @class ErrorDetector
@@ -221,7 +220,7 @@ int main (int argc, char* argv[])
 
     if (command_line.count ("version"))
       {
-        std::wcerr << "XML Schema compiler " << version << std::endl;
+        std::wcerr << "XML Schema compiler " << XSC::wide_version << std::endl;
         return 0;
       }
 

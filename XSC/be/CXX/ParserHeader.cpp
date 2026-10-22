@@ -25,7 +25,7 @@ namespace
       os << "namespace reader"
          << "{"
          << e
-         << type << std::endl
+         << type << " "
          << id (name) << " (xercesc::DOMDocument const*);"
          << "}"
          << std::endl;

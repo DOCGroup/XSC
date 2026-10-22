@@ -44,9 +44,6 @@ namespace
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       idref_ptr = type.find(idref_str);
 
-      if (!this->read_only_)
-        os << "// " << scope << std::endl;
-
       if (e.min () == 0 && e.max () == 1)
       {
         // optional
@@ -282,9 +279,6 @@ namespace
     {
       string name (a.name ());
       string type (type_name (a));
-
-      if (!this->read_only_)
-        os << "// " << scope << std::endl;
 
       //Check if the type is an IDREF
       std::string::size_type idref_ptr = 0;
@@ -565,10 +559,6 @@ namespace
     pre (Type& c) override
     {
       string type (name);
-
-      if (!this->read_only_)
-        os << "// " << scope << std::endl
-           << std::endl;
 
       bool const has_base (c.inherits_begin () != c.inherits_end ());
 
@@ -1271,10 +1261,6 @@ namespace
       enter_scope (name);
 
       string type (type_name (e));
-
-      if (!this->read_only_)
-        os << "// " << scope << std::endl
-           << std::endl;
 
       os << i
          << scope << "::Value " << scope << "::integral () const"

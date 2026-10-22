@@ -456,9 +456,6 @@ namespace
 
       //enter_scope (name);
 
-      os << "// " << scope << std::endl
-         << std::endl;
-
       // traverse (Type&)
       //
       os << "void " << scope << "::" << std::endl

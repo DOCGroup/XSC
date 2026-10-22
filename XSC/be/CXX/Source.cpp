@@ -1251,10 +1251,6 @@ namespace
     {
       string type (type_name (c));
 
-      if (!this->read_only_)
-        os << "// " << scope << std::endl
-           << std::endl;
-
       os << scope << "::" << name << " (" << xml_element_type << " const& element)" << std::endl
          << ":" << "Base (element)"
          << "{";
@@ -1521,10 +1517,6 @@ namespace
       if (e.named ()) name = id (e.name ());
 
       enter_scope (name);
-
-      if (!this->read_only_)
-        os << "// " << scope << std::endl
-           << std::endl;
 
       // c-tor (Element const&)
       //

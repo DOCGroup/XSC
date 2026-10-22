@@ -229,8 +229,6 @@ namespace
     {
       string name (id (name_));
 
-      os << "// " << name << std::endl;
-
       // c-tor (XML::Element&)
       //
       os << scope << "::" << std::endl
@@ -306,9 +304,6 @@ namespace
     traverse (Type& c)
     {
       string name ((this->name_ != L"") ? id(name_) : id (c.name ()));
-
-      os << "// " << name << std::endl
-         << std::endl;
 
       // c-tor (XML::Element&)
       //
