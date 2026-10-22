@@ -407,8 +407,8 @@ namespace XSC
     };
 
     std::stack<Iterator> iteration_state_;
-    SemanticGraph::Schema* root_schema_;   // root schema file
-    SemanticGraph::Schema* cur_schema_; // current schema file
+    SemanticGraph::Schema* root_schema_ {};   // root schema file
+    SemanticGraph::Schema* cur_schema_ {}; // current schema file
 
 
     //
@@ -454,8 +454,8 @@ namespace XSC
     Paths include_paths_;
 
   private:
-    bool qualify_attribute_;
-    bool qualify_element_;
+    bool qualify_attribute_ {};
+    bool qualify_element_ {};
 
   private:
     Parser (Parser const&) = delete;

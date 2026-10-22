@@ -252,11 +252,7 @@ namespace XSC
 
   Parser::
   Parser (bool trace, const std::vector <fs::path> &include_paths)
-    : root_schema_ (nullptr),
-      cur_schema_ (nullptr),
-      include_paths_ (include_paths),
-      qualify_attribute_ (false),
-      qualify_element_ (false)
+    : include_paths_ (include_paths)
   {
     trace_ = trace;
   }
