@@ -3,7 +3,6 @@
 #include "xercesc/dom/DOMLocator.hpp"
 #include "xercesc/sax/SAXParseException.hpp"
 #include "XercesString.h"
-#include <memory>
 #include <iostream>
 
 using xercesc::SAXParseException;
@@ -70,7 +69,7 @@ namespace XSC
     }
 
     bool
-    XML_Error_Handler::getErrors (void) const
+    XML_Error_Handler::getErrors (void) const noexcept
     {
       return this->errors_;
     }

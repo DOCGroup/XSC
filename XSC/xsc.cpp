@@ -58,7 +58,7 @@ public:
     os_.rdbuf (this);
   }
 
-  ~ErrorDetector ()
+  ~ErrorDetector () override
   {
     os_.rdbuf (&prev_);
   }
@@ -167,7 +167,7 @@ int main (int argc, char* argv[])
                    options(all_options).positional(p).run (), vm);
         po::notify (vm);
       }
-    catch (po::error &ex)
+    catch (const po::error &ex)
       {
         std::wcerr << "command line syntax error: " << ex.what () << std::endl;
         std::wcerr << "try " << argv[0] << " --help for usage information" << std::endl;
