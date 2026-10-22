@@ -28,10 +28,10 @@ class Buffer_Reader_T : public Reader_T <T, CHAR_TYPE>
 {
 public:
   /// Type definition of the character type.
-  typedef typename Reader_T <T, CHAR_TYPE>::char_type char_type;
+  using char_type = typename Reader_T<T, CHAR_TYPE>::char_type;
 
   /// Type definition of the entity type.
-  typedef typename Reader_T <T, CHAR_TYPE>::entity_type entity_type;
+  using entity_type = typename Reader_T<T, CHAR_TYPE>::entity_type;
 
   /**
    * Initializing constructor.

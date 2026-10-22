@@ -27,10 +27,10 @@ class Reader_Writer_Base_T
 {
 public:
   /// Type definition of the entity type.
-  typedef T entity_type;
+  using entity_type = T;
 
   /// Type definition of the char type.
-  typedef CHAR_TYPE char_type;
+  using char_type = CHAR_TYPE;
 
   /// Destructor.
   ~Reader_Writer_Base_T ();

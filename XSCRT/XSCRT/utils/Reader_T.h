@@ -29,7 +29,7 @@ template <typename T>
 struct reader_function
 {
   /// Type definition of the reading function signature.
-  typedef T (* result_type) (const xercesc::DOMDocument *);
+  using result_type = T (*) (const xercesc::DOMDocument *);
 };
 
 /**
@@ -42,10 +42,10 @@ class Reader_T : public Reader_Writer_Base_T <T, CHAR_TYPE>
 {
 public:
   /// Type definition of the entity type.
-  typedef typename Reader_Writer_Base_T <T, CHAR_TYPE>::entity_type entity_type;
+  using entity_type = typename Reader_Writer_Base_T<T, CHAR_TYPE>::entity_type;
 
   /// Type definition of the character type.
-  typedef typename Reader_Writer_Base_T <T, CHAR_TYPE>::char_type char_type;
+  using char_type = typename Reader_Writer_Base_T<T, CHAR_TYPE>::char_type;
 
   /// Destructor.
   virtual ~Reader_T ();

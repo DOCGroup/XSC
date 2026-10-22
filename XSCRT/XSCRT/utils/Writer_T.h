@@ -26,7 +26,7 @@ template <typename T>
 struct writer_function
 {
   /// Type definition of the writing function signature.
-  typedef void (* result_type) (T const &, xercesc::DOMDocument *);
+  using result_type = void (*) (T const &, xercesc::DOMDocument *);
 };
 
 /**
