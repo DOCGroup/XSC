@@ -590,6 +590,12 @@ namespace
         : L"std::unique_ptr";
     }
 
+    string
+    null_pointer () const
+    {
+      return this->cppmode_ == CPPMODE::CPP03 ? L"0" : L"nullptr";
+    }
+
     /*
      * Reading a pointer type.
      * A type which is read in via the pointer semantics. This
@@ -660,7 +666,8 @@ namespace
       bool pointer_semantics = read_type_as_pointer (type);
 
       if (pointer_semantics)
-        os << type << "::CDR_Type__ *" << element_name << "_tmp (0)"
+        os << type << "::CDR_Type__ *" << element_name << "_tmp ("
+           << this->null_pointer () << ")"
            << ";" ;
       else
         os << type << "::CDR_Type__ " << element_name << "_tmp"
@@ -690,7 +697,8 @@ namespace
 
       if (pointer_semantics)
       {
-        os << type << "::CDR_Type__ *" << element_name << "_tmp (0)"
+        os << type << "::CDR_Type__ *" << element_name << "_tmp ("
+           << this->null_pointer () << ")"
            << ";"
            << this->smart_pointer_type () << " < " << type << "::CDR_Type__ > "
            << "auto_" << element_name << " (" << element_name << "_tmp);";
@@ -765,7 +773,7 @@ namespace
 
   if (b == e)
   {
-    os << type << " *" << name << " (0);";
+    os << type << " *" << name << " (" << this->null_pointer () << ");";
     read_complex_type (name, type);
     this->type_name_list_.push_back (L"*" + name);
     return;
@@ -782,7 +790,7 @@ namespace
   if (has<Traversal::Attribute> (*c) ||
       dynamic_cast<SemanticGraph::Enumeration*> (&t))
   {
-    os << type << " *" << name << "(0);";
+    os << type << " *" << name << " (" << this->null_pointer () << ");";
     read_complex_type (name, type);
     this->type_name_list_.push_back (L"*" + name);
     return;
@@ -797,7 +805,8 @@ namespace
   string base_type (type_name ((**b).inheritee ()));
   if (read_type_as_pointer (base_type))
   {
-    os << base_type << "::CDR_Type__ *" << name << "_tmp (0);";
+    os << base_type << "::CDR_Type__ *" << name << "_tmp ("
+       << this->null_pointer () << ");";
     read_pointer_type (name, base_type);
   }
   else
@@ -813,7 +822,8 @@ namespace
   // Simple type: i.e. XMLSchema::boolean, XMLSchema::integer
   if (read_type_as_pointer (type))
   {
-    os << type << "::CDR_Type__ *" << name << "_tmp (0);";
+    os << type << "::CDR_Type__ *" << name << "_tmp ("
+       << this->null_pointer () << ");";
     read_pointer_type (name, type);
   }
   else
