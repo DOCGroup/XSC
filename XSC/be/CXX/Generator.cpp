@@ -141,11 +141,7 @@ void CXX_Generator::
 generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path)
 {
   //Name is the actual file name.
-#if BOOST_FILESYSTEM_VERSION == 2
-  std::string name (file_path.leaf ());
-#else
   std::string name (file_path.filename ().string ());
-#endif
 
   // Validate options that can otherwise fail after opening (and truncating)
   // the generated output files.
