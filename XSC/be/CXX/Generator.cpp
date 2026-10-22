@@ -180,9 +180,9 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
   //Files are opened for output.  Note that the inline
   //file is only opened IF the inline_ value is true (otherwise
   //the file is ignored).
-  fs::wofstream hxx (hxx_path, std::ios_base::out);
-  fs::wofstream ixx;
-  fs::wofstream cxx (cxx_path, std::ios_base::out);
+  std::wofstream hxx (hxx_path, std::ios_base::out);
+  std::wofstream ixx;
+  std::wofstream cxx (cxx_path, std::ios_base::out);
 
   if (!hxx.is_open ())
   {
@@ -223,7 +223,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
 
     std::string name (vm["cxx-banner-file"].as<std::string> ());
 
-    fs::wifstream banner;
+    std::wifstream banner;
 
     if (!name.empty ())
     {
@@ -244,7 +244,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
 
       if (!bn.empty ())
       {
-        fs::wifstream b (bn, ios_base::in | ios_base::binary);
+        std::wifstream b (bn, ios_base::in | ios_base::binary);
 
         if (!b.is_open ())
         {
@@ -272,7 +272,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
 
       if (!bn.empty ())
       {
-        fs::wifstream b (bn, ios_base::in | ios_base::binary);
+        std::wifstream b (bn, ios_base::in | ios_base::binary);
 
         if (!b.is_open ())
         {
@@ -299,7 +299,7 @@ generate (po::variables_map const& vm, Schema& schema, fs::path const& file_path
 
       if (!bn.empty ())
         {
-          fs::wifstream b (bn, ios_base::in | ios_base::binary);
+          std::wifstream b (bn, ios_base::in | ios_base::binary);
 
           if (!b.is_open ())
             {

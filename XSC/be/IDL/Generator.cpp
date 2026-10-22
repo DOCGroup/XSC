@@ -79,7 +79,7 @@ namespace IDL
 
     fs::path out_path (out_name);
 
-    fs::wofstream idl (out_path, std::ios_base::out);
+    std::wofstream idl (out_path, std::ios_base::out);
 
     if (!idl.is_open ())
     {
@@ -94,7 +94,7 @@ namespace IDL
       using namespace std;
 
       std::string name (vm["idl-banner-file"].as<std::string> ());
-      fs::wifstream banner;
+      std::wifstream banner;
 
       if (!name.empty ())
       {
