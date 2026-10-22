@@ -19,18 +19,18 @@ void postcondition (bool p)
 class Base
 {
 protected:
-  Base () throw ()
+  Base () noexcept
   {
   }
 
   void
-  init (char const* description) throw ()
+  init (char const* description) noexcept
   {
     str_ = description;
   }
 
   char const*
-  what () const throw ()
+  what () const noexcept
   {
     return str_.c_str ();
   }

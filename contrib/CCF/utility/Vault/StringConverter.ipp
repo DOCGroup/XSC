@@ -9,7 +9,7 @@ namespace Utility
   {
     template <>
     inline char const*
-    converter (std::string const& t) throw ()
+    converter (std::string const& t) noexcept
     {
       return t.c_str ();
     }

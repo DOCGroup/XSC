@@ -32,7 +32,7 @@ namespace CDD
     {
     protected:
       virtual
-      ~Node () throw () {}
+      ~Node () noexcept {}
 
       Node ()
       {
@@ -66,7 +66,7 @@ namespace CDD
     public:
 
       virtual
-      ~PortInstance () throw () {}
+      ~PortInstance () noexcept {}
 
       PortInstance (std::string name)
           : name_ (name)
@@ -121,7 +121,7 @@ namespace CDD
     public:
 
       virtual
-      ~ComponentInstance () throw () {}
+      ~ComponentInstance () noexcept {}
 
       ComponentInstance (std::string name,
                          std::string type)
@@ -190,7 +190,7 @@ namespace CDD
     {
     public:
       virtual
-      ~Connection () throw () {}
+      ~Connection () noexcept {}
 
       Connection (PortInstancePtr const& left,
                   PortInstancePtr const& right)
@@ -240,7 +240,7 @@ namespace CDD
 
     public:
       virtual
-      ~Descriptor () throw () {}
+      ~Descriptor () noexcept {}
 
       Descriptor ()
       {

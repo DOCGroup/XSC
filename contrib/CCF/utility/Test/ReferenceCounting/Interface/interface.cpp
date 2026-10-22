@@ -15,46 +15,46 @@ struct Obj : public virtual Interface
   }
 
   virtual
-  ~Obj () throw ()
+  ~Obj () noexcept
   {
   }
 
 public:
   virtual void
-  add_ref () const throw ()
+  add_ref () const noexcept
   {
     add_ref_i ();
   }
 
 
   virtual void
-  remove_ref () const throw ()
+  remove_ref () const noexcept
   {
     if (remove_ref_i ()) delete this;
   }
 
   virtual count_t
-  refcount_value () const throw ()
+  refcount_value () const noexcept
   {
     return refcount_value_i ();
   }
 
 protected:
   virtual void
-  add_ref_i () const throw ()
+  add_ref_i () const noexcept
   {
     ++ref_count_;
   }
 
 
   virtual bool
-  remove_ref_i () const throw ()
+  remove_ref_i () const noexcept
   {
     return --ref_count_ == 0;
   }
 
   virtual count_t
-  refcount_value_i () const throw ()
+  refcount_value_i () const noexcept
   {
     return ref_count_;
   }

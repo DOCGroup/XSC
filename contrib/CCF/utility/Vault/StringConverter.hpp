@@ -16,7 +16,7 @@ namespace Utility
   {
     template <>
     char const*
-    converter (std::string const& t) throw ();
+    converter (std::string const& t) noexcept;
   }
 }
 

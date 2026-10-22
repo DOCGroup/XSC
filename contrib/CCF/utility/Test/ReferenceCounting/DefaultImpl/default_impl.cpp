@@ -10,7 +10,7 @@ using namespace Utility::ReferenceCounting;
 struct Base : public virtual Interface
 {
   virtual
-  ~Base () throw ()
+  ~Base () noexcept
   {
   }
 };
@@ -33,7 +33,7 @@ public:
   }
 
   virtual
-  ~Impl () throw ()
+  ~Impl () noexcept
   {
     destroyed_ = true;
   }
