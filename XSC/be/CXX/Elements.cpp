@@ -338,6 +338,14 @@ type_name (SemanticGraph::Type& t, string const& nss)
 }
 
 string Context::
+base_type_name (SemanticGraph::Complex& t)
+{
+  auto b (t.inherits_begin ()), e (t.inherits_end ());
+
+  return b == e ? L"::XSCRT::Type" : type_name ((**b).inheritee ());
+}
+
+string Context::
 type_name (SemanticGraph::Instance& i, string const& nss)
 {
   SemanticGraph::Type& t (i.type ());

@@ -36,16 +36,6 @@ namespace
 
       os << " : public " << name
          << "{";
-      switch(this->cppmode_)
-      {
-        case CPPMODE::CPP03:
-          os << "typedef " << name << " Base;" << std::endl;
-          break;
-        case CPPMODE::CPP11:
-        case CPPMODE::CPP17:
-          os << "using Base = " << name << ";" << std::endl;
-          break;
-      }
     }
   };
 
@@ -511,9 +501,7 @@ namespace
     inherits_none (Type &c) override
     {
       os << " : public ::XSCRT::Type"
-         << "{"
-         << (this->cppmode_ != CPPMODE::CPP03 ? "using Base = ::XSCRT::Type;" : "typedef ::XSCRT::Type Base;" )
-         << std::endl;
+         << "{" << std::endl;
       switch(this->cppmode_)
       {
         case CPPMODE::CPP03:
@@ -619,7 +607,9 @@ namespace
 
         ctor_args_.traverse (c);
 
-        os <<  ");"
+        bool const default_constructor (this->cppmode_ != CPPMODE::CPP03 &&
+                                        !has_constructor_required_members (c));
+        os << ")" << (default_constructor ? " = default;" : ";")
            << std::endl;
       }
 
@@ -817,8 +807,7 @@ namespace
         name = id (e.name ());
 
       os << "class " << ex_sp_ << name << " : public ::XSCRT::Type"
-         << "{"
-         << "public:" << std::endl;
+         << "{" << "public:" << std::endl;
 
       enter_scope (name);
 
@@ -852,12 +841,7 @@ namespace
       label_.reset ();
       names (e, names_labels_);
 
-      os << std::endl << "};"
-         << std::endl;
-
-      os << "Value" << std::endl
-         << "integral () const;"
-         << std::endl;
+      os << L"};\nValue integral () const;\n";
 
       if (this->read_only_)
       {
@@ -874,13 +858,12 @@ namespace
         }
       }
 
-      os << "friend bool " << ex_ << std::endl
+      os << "friend bool " << ex_
          << "operator== (" << name << " const& a, " << name << " const& b);"
-         << std::endl;
-
-      os << "friend bool " << ex_ << std::endl
+         << L'\n'
+         << "friend bool " << ex_
          << "operator!= (" << name << " const& a, " << name << " const& b);"
-         << std::endl;
+         << L'\n';
 
 
       os << "private:" << std::endl;

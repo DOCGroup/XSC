@@ -26,6 +26,12 @@ namespace
     {
     }
 
+    void
+    declaration (string const& name, string const& type)
+    {
+      os << "virtual void " << name << " (" << type << ");" << std::endl;
+    }
+
     virtual void
     traverse (SemanticGraph::Element& e)
     {
@@ -43,59 +49,34 @@ namespace
 
         // name
         //
-        os << "virtual void" << std::endl
-           << id (name) << " (Type&);"
-           << std::endl;
-
-        os << "virtual void" << std::endl
-           << id (name) << " (Type const&);"
-           << std::endl;
+        declaration (id (name), L"Type&");
+        declaration (id (name), L"Type const&");
 
 
         // name_pre
         //
-        os << "virtual void" << std::endl
-           << name << "_pre (Type&);"
-           << std::endl;
-
-        os << "virtual void" << std::endl
-           << name << "_pre (Type const&);"
-           << std::endl;
+        declaration (name + L"_pre", L"Type&");
+        declaration (name + L"_pre", L"Type const&");
 
 
         // name_next
         //
-        os << "virtual void" << std::endl
-           << name << "_next (Type&);"
-           << std::endl;
-
-        os << "virtual void" << std::endl
-           << name << "_next (Type const&);"
-           << std::endl;
+        declaration (name + L"_next", L"Type&");
+        declaration (name + L"_next", L"Type const&");
 
 
         // name_post
         //
-        os << "virtual void" << std::endl
-           << name << "_post (Type&);"
-           << std::endl;
-
-        os << "virtual void" << std::endl
-           << name << "_post (Type const&);"
-           << std::endl;
+        declaration (name + L"_post", L"Type&");
+        declaration (name + L"_post", L"Type const&");
 
 
         // name_none
         //
         if (e.min () == 0)
         {
-          os << "virtual void" << std::endl
-             << name << "_none (Type&);"
-             << std::endl;
-
-          os << "virtual void" << std::endl
-             << name << "_none (Type const&);"
-             << std::endl;
+          declaration (name + L"_none", L"Type&");
+          declaration (name + L"_none", L"Type const&");
         }
       }
       else if (e.min () == 0)
@@ -105,24 +86,14 @@ namespace
 
         // name
         //
-        os << "virtual void" << std::endl
-           << id (name) << " (Type&);"
-           << std::endl;
-
-        os << "virtual void" << std::endl
-           << id (name) << " (Type const&);"
-           << std::endl;
+        declaration (id (name), L"Type&");
+        declaration (id (name), L"Type const&");
 
         // name_none
         //
 
-        os << "virtual void" << std::endl
-           << name << "_none (Type&);"
-           << std::endl;
-
-        os << "virtual void" << std::endl
-           << name << "_none (Type const&);"
-           << std::endl;
+        declaration (name + L"_none", L"Type&");
+        declaration (name + L"_none", L"Type const&");
       }
       else
       {
@@ -131,13 +102,8 @@ namespace
 
         // name
         //
-        os << "virtual void" << std::endl
-           << id (name) << " (Type&);"
-           << std::endl;
-
-        os << "virtual void" << std::endl
-           << id (name) << " (Type const&);"
-           << std::endl;
+        declaration (id (name), L"Type&");
+        declaration (id (name), L"Type const&");
       }
     }
 
@@ -156,35 +122,20 @@ namespace
       {
         // name
         //
-        os << "virtual void" << std::endl
-           << id (name) << " (Type&);"
-           << std::endl;
-
-        os << "virtual void" << std::endl
-           << id (name) << " (Type const&);"
-           << std::endl;
+        declaration (id (name), L"Type&");
+        declaration (id (name), L"Type const&");
 
         // name_none
         //
-        os << "virtual void" << std::endl
-           << name << "_none (Type&);"
-           << std::endl;
-
-        os << "virtual void" << std::endl
-           << name << "_none (Type const&);"
-           << std::endl;
+        declaration (name + L"_none", L"Type&");
+        declaration (name + L"_none", L"Type const&");
       }
       else
       {
         // name
         //
-        os << "virtual void" << std::endl
-           << id (name) << " (Type&);"
-           << std::endl;
-
-        os << "virtual void" << std::endl
-           << id (name) << " (Type const&);"
-           << std::endl;
+        declaration (id (name), L"Type&");
+        declaration (id (name), L"Type const&");
       }
     }
   };
@@ -267,23 +218,15 @@ namespace
 
       // traverse ()
       //
-      os << virtual_string << "void" << std::endl
-         << "traverse (Type&)" << override_string << ";"
+      os << virtual_string << "void traverse (Type&)" << override_string << ";"
          << std::endl;
-
-      os << virtual_string << "void" << std::endl
-         << "traverse (Type const&)" << override_string << ";"
+      os << virtual_string << "void traverse (Type const&)" << override_string << ";"
          << std::endl;
 
       // pre ()
       //
-      os << "virtual void" << std::endl
-         << "pre (Type&);"
-         << std::endl;
-
-      os << "virtual void" << std::endl
-         << "pre (Type const&);"
-         << std::endl;
+      os << "virtual void pre (Type&);" << std::endl;
+      os << "virtual void pre (Type const&);" << std::endl;
     }
 
     virtual void
@@ -291,13 +234,8 @@ namespace
     {
       // post ()
       //
-      os << "virtual void" << std::endl
-         << "post (Type&);"
-         << std::endl;
-
-      os << "virtual void" << std::endl
-         << "post (Type const&);"
-         << std::endl;
+      os << "virtual void post (Type&);" << std::endl;
+      os << "virtual void post (Type const&);" << std::endl;
 
       os << "};";
     }

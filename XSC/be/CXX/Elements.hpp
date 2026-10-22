@@ -173,6 +173,9 @@ protected:
   string
   type_name (SemanticGraph::Type& t, string const& ns_suffix = L"");
 
+  string
+  base_type_name (SemanticGraph::Complex& t);
+
 protected:
   string
   fq_name (SemanticGraph::Nameable& n, string const& ns_suffix = L"", bool mangle = true);
@@ -522,6 +525,48 @@ has_copy_required_members (SemanticGraph::Complex& c)
   s.edge_traverser (n);
   n.node_traverser (t);
   s.traverse (c);
+  return t.required;
+}
+
+struct ConstructorRequiredMembers : Traversal::Enumeration,
+                                   Traversal::Element,
+                                   Traversal::Attribute
+{
+  void
+  traverse (SemanticGraph::Enumeration&) override
+  {
+    required = true;
+  }
+
+  void
+  traverse (SemanticGraph::Element& e) override
+  {
+    if (e.min () >= 1)
+      required = true;
+  }
+
+  void
+  traverse (SemanticGraph::Attribute& a) override
+  {
+    if (!a.optional ())
+      required = true;
+  }
+
+  bool required {};
+};
+
+inline bool
+has_constructor_required_members (SemanticGraph::Complex& c)
+{
+  ConstructorRequiredMembers t;
+  Traversal::Complex complex;
+  Traversal::Inherits inherits;
+  Traversal::Names names;
+  complex.edge_traverser (inherits);
+  complex.edge_traverser (names);
+  inherits.node_traverser (t);
+  names.node_traverser (t);
+  complex.traverse (c);
   return t.required;
 }
 

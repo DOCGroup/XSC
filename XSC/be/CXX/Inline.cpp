@@ -561,8 +561,10 @@ namespace
       string type (name);
 
       bool const has_base (c.inherits_begin () != c.inherits_end ());
+      bool const default_constructor (this->cppmode_ != CPPMODE::CPP03 &&
+                                      !has_constructor_required_members (c));
 
-      if (!this->read_only_)
+      if (!this->read_only_ && !default_constructor)
       {
         // c-tor
         //
@@ -715,15 +717,15 @@ namespace
       }
 
       void
-      traverse (SemanticGraph::Enumeration&) override
+      traverse (SemanticGraph::Enumeration& e) override
       {
-        os << ": Base (b__)" << std::endl;
+        os << ": " << type_name (e) << " (b__)" << std::endl;
       }
 
       void
-      traverse (SemanticGraph::Type&) override
+      traverse (SemanticGraph::Type& t) override
       {
-        os << ": Base ()" << std::endl;
+        os << ": " << type_name (t) << " ()" << std::endl;
       }
 
       void
@@ -942,11 +944,11 @@ namespace
       }
 
       void
-      traverse (SemanticGraph::Type&) override
+      traverse (SemanticGraph::Type& t) override
       {
         if (!this->base_class_initialized_)
           {
-            os << ": Base (s)" << std::endl;
+            os << ": " << type_name (t) << " (s)" << std::endl;
             this->base_class_initialized_ = true;
           }
       }
@@ -1132,9 +1134,9 @@ namespace
       }
 
       void
-      traverse (SemanticGraph::Type&) override
+      traverse (SemanticGraph::Type& t) override
       {
-        os << "Base::operator= (s);" << std::endl;
+        os << type_name (t) << "::operator= (s);" << std::endl;
       }
 
       void

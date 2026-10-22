@@ -1252,7 +1252,7 @@ namespace
       string type (type_name (c));
 
       os << scope << "::" << name << " (" << xml_element_type << " const& element)" << std::endl
-         << ":" << "Base (element)"
+         << ": " << base_type_name (c) << " (element)"
          << "{";
     }
 
@@ -1447,11 +1447,11 @@ namespace
 
 
     virtual void
-    pre (Type&)
+    pre (Type& c)
     {
       os << scope << "::" << name << " (" << xml_attribute_type << " const& a)" << std::endl
          << ":" << std::endl
-         << "Base (a)" << std::endl
+         << base_type_name (c) << " (a)" << std::endl
          << "{";
     }
 

@@ -29,7 +29,7 @@ namespace
     void
     optional_member (string const& name, string const& type)
     {
-      os << "void " << scope << "::" << std::endl
+      os << "void " << scope << "::"
          << id (name) << " (Type& o)" << "{";
 
       if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
@@ -43,7 +43,7 @@ namespace
 
       os << "}";
 
-      os << "void " << scope << "::" << std::endl
+      os << "void " << scope << "::"
          << id (name) << " (Type const& o)" << "{";
 
       if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
@@ -81,12 +81,12 @@ namespace
 
         // name_none
         //
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << name << "_none (Type&)"
            << "{"
            << "}";
 
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << name << "_none (Type const&)"
            << "{"
            << "}";
@@ -98,11 +98,11 @@ namespace
 
         // name
         //
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << id (name) << " (Type& o)"
            << "{dispatch (o." << id (name) << " ());}";
 
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << id (name) << " (Type const& o)"
            << "{dispatch (o." << id (name) << " ());}";
       }
@@ -116,22 +116,15 @@ namespace
         string iterator_type (fq_name (e, L"", false));
         iterator_type += this->read_only_ ? L"_const_iterator" : L"_iterator";
 
-        os << "void " << scope << "::" << std::endl
-           << id (name) << " (Type& o)"
+        os << "void " << scope << "::" << id (name) << " (Type& o)"
            << "{"
-           << "// VC6 anathema strikes again" << std::endl
-           << iterator_type << " "
+           << (this->cppmode_ == CPPMODE::CPP03 ? iterator_type : L"auto") << " "
            << "b (o.begin_" << name << "()), "
            << "e (o.end_" << name << "());"
            << std::endl
            << "if (b != e)"
            << "{"
            << name << "_pre (o);"
-
-          //@@ VC6
-          //
-          // << "iterate_and_dispatch< " << scope << ", Type > " <<
-          //"(b, e, *this, &" << scope << "::" << name << "_next, o);"
 
            << "for (; b != e;)"
            << "{"
@@ -148,22 +141,17 @@ namespace
         os << "}";
 
 
-        os << "void " << scope << "::" << std::endl
-           << id (name) << " (Type const& o)"
+        os << "void " << scope << "::" << id (name) << " (Type const& o)"
            << "{"
-           << "// VC6 anathema strikes again" << std::endl
-           << fq_name (e, L"", false) << "_const_iterator "
+           << (this->cppmode_ == CPPMODE::CPP03
+                 ? fq_name (e, L"", false) + L"_const_iterator"
+                 : L"auto") << " "
            << "b (o.begin_" << name << "()), "
            << "e (o.end_" << name << "());"
            << std::endl
            << "if (b != e)"
            << "{"
            << name << "_pre (o);"
-
-          //@@ VC6
-          //
-          // << "iterate_and_dispatch< " << scope << ", Type const > " <<
-          //"(b, e, *this, &" << scope << "::" << name << "_next, o);"
 
            << "for (; b != e;)"
            << "{"
@@ -182,12 +170,12 @@ namespace
 
         // name_pre
         //
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << name << "_pre (Type&)"
            << "{"
            << "}";
 
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << name << "_pre (Type const&)"
            << "{"
            << "}";
@@ -195,12 +183,12 @@ namespace
 
         // name_next
         //
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << name << "_next (Type&)"
            << "{"
            << "}";
 
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << name << "_next (Type const&)"
            << "{"
            << "}";
@@ -208,12 +196,12 @@ namespace
 
         // name_post
         //
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << name << "_post (Type&)"
            << "{"
            << "}";
 
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << name << "_post (Type const&)"
            << "{"
            << "}";
@@ -222,12 +210,12 @@ namespace
         //
         if (e.min () == 0)
         {
-          os << "void " << scope << "::" << std::endl
+          os << "void " << scope << "::"
              << name << "_none (Type&)"
              << "{"
              << "}";
 
-          os << "void " << scope << "::" << std::endl
+          os << "void " << scope << "::"
              << name << "_none (Type const&)"
              << "{"
              << "}";
@@ -255,12 +243,12 @@ namespace
 
         // name_none
         //
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << name << "_none (Type&)"
            << "{"
            << "}";
 
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << name << "_none (Type const&)"
            << "{"
            << "}";
@@ -269,14 +257,14 @@ namespace
       {
         // name
         //
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << id (name) << " (Type& o)"
            << "{"
            << "dispatch (o." << id (name) << " ());"
            << "}";
 
 
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << id (name) << " (Type const& o)"
            << "{"
            << "dispatch (o." << id (name) << " ());"
@@ -458,7 +446,7 @@ namespace
 
       // traverse (Type&)
       //
-      os << "void " << scope << "::" << std::endl
+      os << "void " << scope << "::"
          << "traverse (Type& o)"
          << "{"
          << "pre (o);";
@@ -471,7 +459,7 @@ namespace
 
       // traverse (Type const&)
       //
-      os << "void " << scope << "::" << std::endl
+      os << "void " << scope << "::"
          << "traverse (Type const& o)"
          << "{"
          << "pre (o);";
@@ -485,12 +473,12 @@ namespace
 
       // pre ()
       //
-      os << "void " << scope << "::" << std::endl
+      os << "void " << scope << "::"
          << "pre (Type&)"
          << "{"
          << "}";
 
-      os << "void " << scope << "::" << std::endl
+      os << "void " << scope << "::"
          << "pre (Type const&)"
          << "{"
          << "}";
@@ -503,12 +491,12 @@ namespace
 
       // post ()
       //
-      os << "void " << scope << "::" << std::endl
+      os << "void " << scope << "::"
          << "post (Type&)"
          << "{"
          << "}";
 
-      os << "void " << scope << "::" << std::endl
+      os << "void " << scope << "::"
          << "post (Type const&)"
          << "{"
          << "}";
