@@ -13,13 +13,6 @@
 
 namespace Introspection = Utility::Introspection;
 
-/*
-#include <iostream>
-
-using std::cerr;
-using std::endl;
-*/
-
 namespace XSC
 {
   namespace Traversal

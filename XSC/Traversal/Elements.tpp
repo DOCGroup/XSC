@@ -3,11 +3,6 @@
 
 #ifndef XSC_ELEMENTS_TPP
 #define XSC_ELEMENTS_TPP
-#include <iostream>
-
-using std::wcerr;
-using std::endl;
-
 namespace XSC
 {
   namespace Traversal
@@ -40,11 +35,6 @@ namespace XSC
 
       unsigned long max = compute_levels (n.type_info (), 0, levels);
 
-
-      //wcerr << "starting dispatch process for "
-      //      << n.type_info ().type_id () << " with "
-      //      << max << " levels" << endl;
-
       for (unsigned long l = 0; l < max + 1; ++l)
       {
         TypeInfoSet dispatched;
@@ -60,10 +50,6 @@ namespace XSC
 
             if (v != traversal_map_.end ())
             {
-              //wcerr << "dispatching traversers for "
-              //      << n.type_info ().type_id () << " as "
-              //      << i->first.type_id () << endl;
-
               Traversers const& traversers (v->second);
               for (typename Traversers::const_iterator
                      ti (traversers.begin ()), te (traversers.end ());
