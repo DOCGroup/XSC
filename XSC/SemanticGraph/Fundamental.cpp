@@ -80,7 +80,7 @@ namespace XSC
     //
     namespace
     {
-      TypeInfo any_uri_init_ (void)
+      TypeInfo any_uri_init_ ()
       {
         TypeInfo ti (typeid (AnyUri));
 
@@ -95,7 +95,7 @@ namespace XSC
     }
 
     TypeInfo const & AnyUri::
-    static_type_info (void) { return any_uri_; }
+    static_type_info () { return any_uri_; }
 
     // Byte
     //

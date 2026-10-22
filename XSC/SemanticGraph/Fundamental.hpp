@@ -75,12 +75,12 @@ namespace XSC
     {
     public:
       static Introspection::TypeInfo const&
-      static_type_info (void);
+      static_type_info ();
 
     protected:
       friend class Graph<Node, Edge>;
 
-      AnyUri (void)
+      AnyUri ()
       {
         type_info (static_type_info ());
       }

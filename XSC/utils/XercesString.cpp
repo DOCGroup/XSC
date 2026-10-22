@@ -11,7 +11,7 @@ namespace XSC
 //
 // XStr
 //
-XStr::XStr (void)
+XStr::XStr ()
   : wstr_ (nullptr),
     cstr_ (nullptr)
 {
@@ -70,7 +70,7 @@ XStr::XStr (XStr&& right) noexcept
 //
 // ~XStr
 //
-XStr::~XStr (void)
+XStr::~XStr ()
 {
   if (this->wstr_ != nullptr)
     XMLString::release (&this->wstr_);
@@ -129,7 +129,7 @@ XStr& XStr::operator = (const char * rhs)
 //
 // begin
 //
-const XMLCh* XStr::begin (void) const
+const XMLCh* XStr::begin () const
 {
   return this->wstr_;
 }
@@ -137,7 +137,7 @@ const XMLCh* XStr::begin (void) const
 //
 // end
 //
-const XMLCh* XStr::end (void) const
+const XMLCh* XStr::end () const
 {
   return this->wstr_ + this->size ();
 }
@@ -224,7 +224,7 @@ bool XStr::erase (const XMLCh *head, const XMLCh *tail)
 //
 // size
 //
-int XStr::size (void) const
+int XStr::size () const
 {
   return XMLString::stringLen (this->wstr_);
 }
@@ -248,7 +248,7 @@ XMLCh XStr::operator [] (const int i) const
 //
 // release
 //
-XMLCh * XStr::release (void)
+XMLCh * XStr::release ()
 {
   XMLCh * temp = this->wstr_;
   this->wstr_ = nullptr;
@@ -266,7 +266,7 @@ XMLCh * XStr::release (void)
 //
 // c_str
 //
-const char * XStr::c_str (void)
+const char * XStr::c_str ()
 {
   if (this->cstr_ != nullptr)
     return this->cstr_;

@@ -12,7 +12,7 @@ namespace XSC
   class XSC_UTILS_Export XStr
   {
   public:
-    XStr (void);
+    XStr ();
 
     XStr (const char* str);
 
@@ -48,10 +48,10 @@ namespace XSC
 
     operator const XMLCh* () const { return wstr_; };
 
-    XMLCh * release (void);
+    XMLCh * release ();
 
     /// Get the C string version of the XercesString.
-    const char * c_str (void);
+    const char * c_str ();
 
   private:
     /// Internal representation
