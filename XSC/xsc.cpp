@@ -29,7 +29,6 @@
 #include <vector>
 
 #include "boost/program_options.hpp"
-#include "boost/exception/all.hpp"
 #include "XSC/FileSystem.hpp"
 #include "XSC/Parser.hpp"
 #include "XSC/be/CXX/Validator.hpp"
@@ -306,11 +305,6 @@ int main (int argc, char* argv[])
     {
       std::wcerr << "Bad program option" << std::endl;
     }
-//   catch (const boost::exception &ex)
-//     {
-//       std::cerr << boost::diagnostic_information (ex);
-//       wcerr << "Exception " << endl;
-//     }
   catch (...)
   {
     std::wcerr << "caught unknown exception" << std::endl;
