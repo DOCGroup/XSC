@@ -51,8 +51,7 @@ class ErrorDetector : public std::wstreambuf
 {
 public:
   ErrorDetector (std::wostream& os)
-      : error_ (false),
-        prev_ (*(os.rdbuf ())),
+      : prev_ (*(os.rdbuf ())),
         os_ (os)
   {
     os_.rdbuf (this);
@@ -60,7 +59,7 @@ public:
 
   ~ErrorDetector () override
   {
-    os_.rdbuf (&prev_);
+    os_.rdbuf (std::addressof (prev_));
   }
 
   int_type
@@ -89,7 +88,12 @@ public:
   }
 
 private:
-  bool error_;
+  ErrorDetector (ErrorDetector const&) = delete;
+  ErrorDetector& operator= (ErrorDetector const&) = delete;
+  ErrorDetector (ErrorDetector&&) = delete;
+  ErrorDetector& operator= (ErrorDetector&&) = delete;
+
+  bool error_ {};
   std::wstreambuf& prev_;
   std::wostream& os_;
 };

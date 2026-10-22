@@ -20,6 +20,8 @@ namespace XSC
     class Graph
     {
     public:
+      Graph () = default;
+
       ~Graph ();
 
     public:
@@ -70,6 +72,12 @@ namespace XSC
 
       Nodes_ nodes_;
       Edges_ edges_;
+
+    private:
+      Graph (Graph const&) = delete;
+      Graph& operator= (Graph const&) = delete;
+      Graph (Graph&&) = delete;
+      Graph& operator= (Graph&&) = delete;
     };
   }
 }

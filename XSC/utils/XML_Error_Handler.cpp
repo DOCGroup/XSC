@@ -11,14 +11,9 @@ namespace XSC
 {
   namespace XML
   {
-    XML_Error_Handler::XML_Error_Handler (void)
-      : errors_ (false)
-    {
-    }
+    XML_Error_Handler::XML_Error_Handler (void) = default;
 
-    XML_Error_Handler::~XML_Error_Handler()
-    {
-    }
+    XML_Error_Handler::~XML_Error_Handler() = default;
 
     void XML_Error_Handler::warning(const SAXParseException& toCatch)
     {

@@ -47,7 +47,7 @@ namespace XSC
       void
       add_edge_left (Inherits& e)
       {
-        inherits_.push_back (&e);
+        inherits_.push_back (std::addressof (e));
       }
 
     private:

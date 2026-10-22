@@ -5,6 +5,7 @@
 #define XSC_SEMANTIC_GRAPH_ELEMENTS_HPP
 
 #include <string>
+#include <memory>
 
 #include <XSC/SemanticGraph/Graph.hpp>
 #include <XSC/SemanticGraph/Context.hpp>
@@ -68,7 +69,7 @@ namespace XSC
     inline bool
     operator== (Edge const& x, Edge const& y)
     {
-      return &x == &y;
+      return std::addressof (x) == std::addressof (y);
     }
 
 
@@ -126,7 +127,7 @@ namespace XSC
     inline bool
     operator== (Node const& x, Node const& y)
     {
-      return &x == &y;
+      return std::addressof (x) == std::addressof (y);
     }
 
     //
@@ -184,13 +185,13 @@ namespace XSC
       void
       set_left_node (Scope& n)
       {
-        scope_ = &n;
+        scope_ = std::addressof (n);
       }
 
       void
       set_right_node (Nameable& n)
       {
-        named_ = &n;
+        named_ = std::addressof (n);
       }
 
     private:
@@ -257,7 +258,7 @@ namespace XSC
       void
       add_edge_right (Names& e)
       {
-        named_.push_back (&e);
+        named_.push_back (std::addressof (e));
       }
 
     private:
@@ -324,8 +325,8 @@ namespace XSC
       void
       add_edge_left (Names& e)
       {
-        names_.push_back (&e);
-        names_map_[e.name ()].push_back (&e);
+        names_.push_back (std::addressof (e));
+        names_map_[e.name ()].push_back (std::addressof (e));
       }
 
       using Nameable::add_edge_right;
@@ -361,7 +362,7 @@ namespace XSC
       void
       add_edge_right (Belongs& e)
       {
-        slassifies_.push_back (&e);
+        slassifies_.push_back (std::addressof (e));
       }
 
       using Node::add_edge_right;
@@ -407,7 +408,7 @@ namespace XSC
       void
       add_edge_left (Belongs& e)
       {
-        belongs_ = &e;
+        belongs_ = std::addressof (e);
       }
 
     private:
@@ -445,13 +446,13 @@ namespace XSC
       void
       set_left_node (Instance& n)
       {
-        instance_ = &n;
+        instance_ = std::addressof (n);
       }
 
       void
       set_right_node (Type& n)
       {
-        type_ = &n;
+        type_ = std::addressof (n);
       }
 
     private:
@@ -492,13 +493,13 @@ namespace XSC
       void
       set_left_node (Type& n)
       {
-        inheritor_ = &n;
+        inheritor_ = std::addressof (n);
       }
 
       void
       set_right_node (Type& n)
       {
-        inheritee_ = &n;
+        inheritee_ = std::addressof (n);
       }
 
     private:
@@ -535,13 +536,13 @@ namespace XSC
       void
       set_left_node (Container& n)
       {
-        container_ = &n;
+        container_ = std::addressof (n);
       }
 
       void
       set_right_node (Node& n)
       {
-        element_ = &n;
+        element_ = std::addressof (n);
       }
 
     private:
@@ -583,7 +584,7 @@ namespace XSC
       void
       add_edge_left (Contains& e)
       {
-        contains_.push_back (&e);
+        contains_.push_back (std::addressof (e));
       }
 
     private:

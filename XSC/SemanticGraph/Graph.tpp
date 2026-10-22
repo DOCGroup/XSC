@@ -57,7 +57,7 @@ namespace XSC
     void Graph<N, E>::
     delete_node (N const& nr)
     {
-      N* n (&nr);
+      N* n (std::addressof (nr));
 
       for (E* e (n->remove_edge_ ()); e != nullptr; e = n->remove_edge_ ())
       {
@@ -141,7 +141,7 @@ namespace XSC
     void Graph<N, E>::
     delete_edge (E const& er)
     {
-      E* e (&er);
+      E* e (std::addressof (er));
 
       e->left_ ()->remove_edge_ (e);
       e->right_ ()->remove_edge_ (e);

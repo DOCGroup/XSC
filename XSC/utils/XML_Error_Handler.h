@@ -46,7 +46,7 @@ namespace XSC
       XML_Error_Handler (XML_Error_Handler&&) = delete;
       XML_Error_Handler& operator= (XML_Error_Handler&&) = delete;
 
-      bool errors_;
+      bool errors_ {};
     };
   }
 }
