@@ -160,8 +160,8 @@ namespace XSC
         return *contained_;
       }
 
-      virtual NamesIteratorPair
-      find (Name_ const& name) const;
+      NamesIteratorPair
+      find (Name_ const& name) const override;
 
 
     protected:
