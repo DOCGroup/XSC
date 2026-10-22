@@ -138,7 +138,6 @@ namespace XSC
     {
     public:
       Schema ()
-          : contained_ (nullptr)
       {
         type_info (static_type_info ());
       }
@@ -183,7 +182,7 @@ namespace XSC
       void operator= (Schema const&);
 
     private:
-      Contains* contained_;
+      Contains* contained_ {};
 
       mutable Names_ names_;
 

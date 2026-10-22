@@ -20,7 +20,6 @@ namespace XSC
 /*
     template <typename Resolver, typename Error>
     XML_Helper<Resolver, Error>::XML_Helper ()
-      : initialized_ (false)
     {
       this->init_parser ();
     }
@@ -28,8 +27,7 @@ namespace XSC
     // TODO this is stub implementation
     template <typename Resolver, typename Error>
     XML_Helper<Resolver, Error>::XML_Helper (Resolver &resolver, Error &eh)
-      : initialized_ (false),
-        resolver_ (resolver),
+      : resolver_ (resolver),
         e_handler_ (eh)
     {
       this->init_parser ();

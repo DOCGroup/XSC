@@ -394,7 +394,6 @@ namespace XSC
       friend class Graph<Node, Edge>;
 
       Instance ()
-          : belongs_ (nullptr)
       {
         type_info (static_type_info ());
       }
@@ -406,7 +405,7 @@ namespace XSC
       }
 
     private:
-      Belongs* belongs_;
+      Belongs* belongs_ {};
     };
 
 
