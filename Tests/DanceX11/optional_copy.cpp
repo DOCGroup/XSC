@@ -3,6 +3,10 @@
 int
 main ()
 {
+  Deployment::DataValue sequence;
+  Deployment::DataValue sequence_copy (sequence);
+  sequence_copy = sequence;
+
   Deployment::IdRef destination;
   XMLSchema::string<char> href ("urn:destination");
   destination.href (href);

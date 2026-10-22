@@ -595,59 +595,65 @@ namespace
 
       os << "}";
 
-      // copy c-tor
-      //
-      os << i
-         << scope << "::"
-         << name << " (" << type << " const& s)" << std::endl;
+      bool const default_copy (this->cppmode_ == CPPMODE::CPP17 &&
+                               !has_copy_required_members (c));
 
-      if (!has_base)
+      if (!default_copy)
       {
-        os << ": ::XSCRT::Type (s)" << std::endl;
+        // copy c-tor
+        //
+        os << i
+           << scope << "::"
+           << name << " (" << type << " const& s)" << std::endl;
+
+        if (!has_base)
+        {
+          os << ": ::XSCRT::Type (s)" << std::endl;
+        }
+
+        // Resets a flag that determines if a Complex Type's
+        // copy constructor has inherited from the base XSCRT::Type
+        // class.
+        copy_.reset_base_class_initialization ();
+
+        inherits (c, copy_base_);
+
+        names (c, copy_member_);
+
+        os << "{";
+
+        names (c, copy_body_member_);
+
+        os << "}";
+
+        std::wstring selfcheck;
+        if (this->cppmode_ != CPPMODE::CPP03)
+        {
+          selfcheck = L"if (std::addressof(s) != this)";
+        }
+        else
+        {
+          selfcheck = L"if (&s != this)";
+        }
+
+        // operator=
+        //
+        os << i
+           << scope << "&" << std::endl
+           << scope << "::operator= (" << type << " const& s)"
+           << "{"
+           << selfcheck
+           << "{";
+
+        inherits (c, assign_base_);
+        names (c, assign_member_);
+
+        os << "}"
+           << "return *this;"
+           << "}";
+
+        os << std::endl;
       }
-
-      // Resets a flag that determines if a Complex Type's
-      // copy constructor has inherited from the base XSCRT::Type
-      // class.
-      copy_.reset_base_class_initialization ();
-
-      inherits (c, copy_base_);
-
-      names (c, copy_member_);
-
-      os << "{";
-
-      names (c, copy_body_member_);
-
-      os << "}";
-
-      std::wstring selfcheck;
-      if (this->cppmode_ != CPPMODE::CPP03)
-      {
-        selfcheck = L"if (std::addressof(s) != this)";
-      }
-      else
-      {
-        selfcheck = L"if (&s != this)";
-      }
-
-      // operator=
-      //
-      os << i
-         << scope << "&" << std::endl
-         << scope << "::operator= (" << type << " const& s)"
-         << "{"
-         << selfcheck
-         << "{";
-
-      inherits (c, assign_base_);
-      names (c, assign_member_);
-
-      os << "}"
-         << "return *this;"
-         << "}";
-
-      os << std::endl;
     }
 
     void

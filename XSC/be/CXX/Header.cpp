@@ -594,11 +594,16 @@ namespace
 
       // copy c-tor
       //
-      os << name << " (" << name << " const& s);";
+      bool const default_copy (this->cppmode_ == CPPMODE::CPP17 &&
+                               !has_copy_required_members (c));
+
+      os << name << " (" << name << " const& s)"
+         << (default_copy ? " = default;" : ";");
 
       // operator=
       //
-      os << name << "& operator= (" << name << " const& s);"
+      os << name << "& operator= (" << name << " const& s)"
+         << (default_copy ? " = default;" : ";")
          << std::endl;
 
       if (this->cppmode_ != CPPMODE::CPP03)
