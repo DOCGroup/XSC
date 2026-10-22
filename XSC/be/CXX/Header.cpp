@@ -237,8 +237,17 @@ namespace
       {
         // optional
         //
-        os << "bool " << name << "_p () const;";
-        os << type << " const& " << id (name) << " () const;";
+        if (this->cppmode_ == CPPMODE::CPP03)
+        {
+          os << "bool " << name << "_p () const;";
+          os << type << " const& " << id (name) << " () const;";
+        }
+        else
+        {
+          os << "bool has_" << id (name) << " () const noexcept;";
+          os << type << " const* " << id (name) << "_if_set () const noexcept;";
+          os << type << "* " << id (name) << "_if_set () noexcept;";
+        }
         // os << type << "& " << id (name) << " ();";  // Lets just have one mutator
         os << "void " << id (name) << " (" << type << " const&);";
 
@@ -339,9 +348,18 @@ namespace
 
       if (a.optional ())
       {
-        os << "bool " << name << "_p () const;";
-        os << type << " const& " << id (name) << " () const;";
-        os << type << "& " << id (name) << " ();";
+        if (this->cppmode_ == CPPMODE::CPP03)
+        {
+          os << "bool " << name << "_p () const;";
+          os << type << " const& " << id (name) << " () const;";
+          os << type << "& " << id (name) << " ();";
+        }
+        else
+        {
+          os << "bool has_" << id (name) << " () const noexcept;";
+          os << type << " const* " << id (name) << "_if_set () const noexcept;";
+          os << type << "* " << id (name) << "_if_set () noexcept;";
+        }
         os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case

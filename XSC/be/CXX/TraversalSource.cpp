@@ -45,17 +45,28 @@ namespace
 
         // name
         //
-        os << "void " << scope << "::" << std::endl
-           << id (name) << " (Type& o)"
-           << "{"
-           << "dispatch (o." << id (name) << " ());"
-           << "}";
+        if (this->cppmode_ == CPPMODE::CPP03)
+        {
+          os << "void " << scope << "::" << std::endl
+             << id (name) << " (Type& o)"
+             << "{dispatch (o." << id (name) << " ());}";
 
-        os << "void " << scope << "::" << std::endl
-           << id (name) << " (Type const& o)"
-           << "{"
-           << "dispatch (o." << id (name) << " ());"
-           << "}";
+          os << "void " << scope << "::" << std::endl
+             << id (name) << " (Type const& o)"
+             << "{dispatch (o." << id (name) << " ());}";
+        }
+        else
+        {
+          os << "void " << scope << "::" << std::endl
+             << id (name) << " (Type& o)"
+             << "{if (auto* value = o." << id (name)
+             << "_if_set ()) dispatch (*value);}";
+
+          os << "void " << scope << "::" << std::endl
+             << id (name) << " (Type const& o)"
+             << "{if (auto const* value = o." << id (name)
+             << "_if_set ()) dispatch (*value);}";
+        }
 
         // name_none
         //
@@ -76,17 +87,28 @@ namespace
 
         // name
         //
-        os << "void " << scope << "::" << std::endl
-           << id (name) << " (Type& o)"
-           << "{"
-           << "dispatch (o." << id (name) << " ());"
-           << "}";
+        if (this->cppmode_ == CPPMODE::CPP03)
+        {
+          os << "void " << scope << "::" << std::endl
+             << id (name) << " (Type& o)"
+             << "{dispatch (o." << id (name) << " ());}";
 
-        os << "void " << scope << "::" << std::endl
-           << id (name) << " (Type const& o)"
-           << "{"
-           << "dispatch (o." << id (name) << " ());"
-           << "}";
+          os << "void " << scope << "::" << std::endl
+             << id (name) << " (Type const& o)"
+             << "{dispatch (o." << id (name) << " ());}";
+        }
+        else
+        {
+          os << "void " << scope << "::" << std::endl
+             << id (name) << " (Type& o)"
+             << "{if (auto* value = o." << id (name)
+             << "_if_set ()) dispatch (*value);}";
+
+          os << "void " << scope << "::" << std::endl
+             << id (name) << " (Type const& o)"
+             << "{if (auto const* value = o." << id (name)
+             << "_if_set ()) dispatch (*value);}";
+        }
       }
       else
       {
@@ -318,8 +340,13 @@ namespace
       {
         // optional
         //
-        os << "if (o." << name << "_p ()) " << id (name) << " (o);"
-           << "else " << name << "_none (o);";
+        if (this->cppmode_ == CPPMODE::CPP03)
+          os << "if (o." << name << "_p ()) " << id (name) << " (o);"
+             << "else " << name << "_none (o);";
+        else
+          os << "if (o." << id (name) << "_if_set () != nullptr) "
+             << id (name) << " (o);"
+             << "else " << id (name) << "_none (o);";
       }
       else if (e.min () == 1 && e.max () == 1)
       {
@@ -348,8 +375,13 @@ namespace
       {
         // optional
         //
-        os << "if (o." << name << "_p ()) " << id (name) << " (o);"
-           << "else " << name << "_none (o);";
+        if (this->cppmode_ == CPPMODE::CPP03)
+          os << "if (o." << name << "_p ()) " << id (name) << " (o);"
+             << "else " << name << "_none (o);";
+        else
+          os << "if (o." << id (name) << "_if_set () != nullptr) "
+             << id (name) << " (o);"
+             << "else " << id (name) << "_none (o);";
       }
       else
       {

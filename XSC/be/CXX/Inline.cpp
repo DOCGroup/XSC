@@ -50,28 +50,32 @@ namespace
       {
         // optional
         //
-        os << i
-           << "bool " << scope << "::" << std::endl
-           << name << "_p () const"
-           << "{";
-
         if (this->cppmode_ != CPPMODE::CPP03)
         {
-          os << "return !!" << id (name) << "_;";
+          os << i
+             << "bool " << scope << "::has_" << id (name) << " () const noexcept"
+             << "{return " << id (name) << "_ != nullptr;}";
+
+          os << i << type << " const* " << scope << "::" << id (name)
+             << "_if_set () const noexcept"
+             << "{return " << id (name) << "_.get ();}";
+
+          os << i << type << "* " << scope << "::" << id (name)
+             << "_if_set () noexcept"
+             << "{return " << id (name) << "_.get ();}";
         }
         else
         {
-          os << "return " << id (name) << "_.get () != 0;";
+          os << i
+             << "bool " << scope << "::" << std::endl
+             << name << "_p () const"
+             << "{return " << id (name) << "_.get () != 0;}";
+
+          os << i
+             << type << " const& " << scope << "::" << std::endl
+             << id (name) << " () const"
+             << "{return *" << id (name) << "_;}";
         }
-
-        os << "}";
-
-        os << i
-           << type << " const& " << scope << "::" << std::endl
-           << id (name) << " () const"
-           << "{"
-           << "return *" << id (name) << "_;"
-           << "}";
 
         // Return referenced item if an IDREF
         if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
@@ -297,11 +301,16 @@ namespace
         if (this->cppmode_ != CPPMODE::CPP03)
         {
           os << i
-            << "bool " << scope << "::" << std::endl
-            << name << "_p () const"
-            << "{"
-            << "return !!" << id (name) << "_;"
-            << "}";
+             << "bool " << scope << "::has_" << id (name) << " () const noexcept"
+             << "{return " << id (name) << "_ != nullptr;}";
+
+          os << i << type << " const* " << scope << "::" << id (name)
+             << "_if_set () const noexcept"
+             << "{return " << id (name) << "_.get ();}";
+
+          os << i << type << "* " << scope << "::" << id (name)
+             << "_if_set () noexcept"
+             << "{return " << id (name) << "_.get ();}";
         }
         else
         {
@@ -313,19 +322,18 @@ namespace
             << "}";
         }
 
-        os << i
-           << type << " const& " << scope << "::" << std::endl
-           << id (name) << " () const"
-           << "{"
-           << "return *" << id (name) << "_;"
-           << "}";
+        if (this->cppmode_ == CPPMODE::CPP03)
+        {
+          os << i
+             << type << " const& " << scope << "::" << std::endl
+             << id (name) << " () const"
+             << "{return *" << id (name) << "_;}";
 
-        os << i
-           << type << "& " << scope << "::" << std::endl
-           << id (name) << " ()"
-           << "{"
-           << "return *" << id (name) << "_;"
-           << "}";
+          os << i
+             << type << "& " << scope << "::" << std::endl
+             << id (name) << " ()"
+             << "{return *" << id (name) << "_;}";
+        }
 
         // Return a pointer to the referenced item
         if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
