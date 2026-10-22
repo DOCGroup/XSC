@@ -388,7 +388,7 @@ namespace
         // Convert it to its base type. This will
         // have an operator << defined to
         // serialize this type
-        os << "stream << static_cast < const Base& > (*this);" << std::endl;
+        os << "stream << static_cast < const " << type << "& > (*this);" << std::endl;
     }
 
     // Helper method implementation

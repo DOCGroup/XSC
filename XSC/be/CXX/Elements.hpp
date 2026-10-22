@@ -5,6 +5,7 @@
 #define CXX_ELEMENTS_HXX
 
 #include <deque>
+#include <functional>
 #include <vector>
 #include <string>
 #include <ostream>
@@ -565,14 +566,21 @@ inline bool
 has_constructor_required_members (SemanticGraph::Complex& c)
 {
   ConstructorRequiredMembers t;
-  Traversal::Complex complex;
-  Traversal::Inherits inherits;
+  Traversal::Scope scope;
   Traversal::Names names;
-  complex.edge_traverser (inherits);
-  complex.edge_traverser (names);
-  inherits.node_traverser (t);
+  scope.edge_traverser (names);
   names.node_traverser (t);
-  complex.traverse (c);
+
+  std::function<void (SemanticGraph::Complex&)> visit = [&] (SemanticGraph::Complex& current)
+  {
+    for (auto i (current.inherits_begin ()); i != current.inherits_end (); ++i)
+      if (auto base = dynamic_cast<SemanticGraph::Complex*> (std::addressof ((**i).inheritee ())))
+        visit (*base);
+
+    scope.traverse (current);
+  };
+
+  visit (c);
   return t.required;
 }
 

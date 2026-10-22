@@ -859,10 +859,10 @@ namespace
         }
       }
 
-      os << "friend bool " << ex_
+      os << "friend bool " << ex_sp_
          << "operator== (" << name << " const& a, " << name << " const& b);"
          << L'\n'
-         << "friend bool " << ex_
+         << "friend bool " << ex_sp_
          << "operator!= (" << name << " const& a, " << name << " const& b);"
          << L'\n';
 

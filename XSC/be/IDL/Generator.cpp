@@ -60,7 +60,10 @@ namespace IDL
         << L"// Arguments: ";
     std::string const& arguments {options.value ("arguments")};
     for (char c : arguments)
-      idl << static_cast<wchar_t> (c);
+      {
+        unsigned char const u {static_cast<unsigned char> (c)};
+        idl << (u < 0x80 ? static_cast<wchar_t> (u) : L'?');
+      }
     idl << std::endl;
 
     // Banner.
