@@ -65,6 +65,7 @@ namespace XSC
 dnl
 fundamental_type(`any type')
 fundamental_type(`any simple type')
+fundamental_type(`date time')
 fundamental_type(`byte')
 fundamental_type(`unsigned byte')
 fundamental_type(`short')

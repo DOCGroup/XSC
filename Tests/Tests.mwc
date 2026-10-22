@@ -6,6 +6,7 @@ workspace (Tests) {
   Chameleon
   ComplexTypeImport
   DanceX11
+  DateTime
   Escape
   Group
   Import

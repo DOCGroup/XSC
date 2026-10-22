@@ -15,6 +15,7 @@ namespace XSC
     using AnyType = Node<SemanticGraph::AnyType>;
     using AnySimpleType = Node<SemanticGraph::AnySimpleType>;
     using anyURI = Node<SemanticGraph::AnyUri>;
+    using DateTime = Node<SemanticGraph::DateTime>;
     using Byte = Node<SemanticGraph::Byte>;
     using UnsignedByte = Node<SemanticGraph::UnsignedByte>;
     using Short = Node<SemanticGraph::Short>;

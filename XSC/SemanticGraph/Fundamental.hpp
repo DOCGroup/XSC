@@ -90,6 +90,25 @@ namespace XSC
     //
     //
     //
+    class DateTime : public virtual FundamentalType
+    {
+    public:
+      static Introspection::TypeInfo const&
+      static_type_info ();
+
+    protected:
+      friend class Graph<Node, Edge>;
+
+      DateTime ()
+      {
+        type_info (static_type_info ());
+      }
+    };
+
+
+    //
+    //
+    //
     class Byte : public virtual FundamentalType
     {
     public:
