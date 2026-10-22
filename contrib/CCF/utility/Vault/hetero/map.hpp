@@ -60,7 +60,7 @@ namespace Utility
 
         Pair ()
             : first (),
-              second_ (0)
+              second_ (nullptr)
         {
         }
 
@@ -75,7 +75,7 @@ namespace Utility
         second ()
         {
           Value<T>* v = dynamic_cast<Value<T>*> (second_);
-          if (v == 0) throw Typing ();
+          if (v == nullptr) throw Typing ();
 
           return v->t_;
         }
@@ -85,7 +85,7 @@ namespace Utility
         second () const
         {
           Value<T>* v = dynamic_cast<Value<T>*> (second_);
-          if (v == 0) throw Typing ();
+          if (v == nullptr) throw Typing ();
 
           return v->t_;
         }

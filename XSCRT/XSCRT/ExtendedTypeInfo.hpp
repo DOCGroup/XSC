@@ -5,6 +5,7 @@
 #define XSCRT_EXTENDED_TYPE_INFO_HPP
 
 #include <map>
+#include <memory>
 #include <vector>
 #include <typeinfo>
 

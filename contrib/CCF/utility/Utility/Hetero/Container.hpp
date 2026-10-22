@@ -46,7 +46,7 @@ namespace Utility
       operator= (T const& t)
       {
         delete holder_;
-        holder_ = 0;
+        holder_ = nullptr;
         holder_ = new TypedHolder<T> (t);
         return *this;
       }
@@ -55,7 +55,7 @@ namespace Utility
       operator= (Container const& c)
       {
         delete holder_;
-        holder_ = 0;
+        holder_ = nullptr;
         holder_ = c.holder_->clone ();
         return *this;
       }

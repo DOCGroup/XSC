@@ -12,7 +12,7 @@ namespace Utility
     template <typename T>
     StrictPtr<T>::
     StrictPtr () noexcept
-        : ptr_ (0)
+        : ptr_ (nullptr)
     {
     }
 
@@ -47,7 +47,7 @@ namespace Utility
       // non-conformant Type.
       try
       {
-        if (ptr_ != 0) ptr_->remove_ref ();
+        if (ptr_ != nullptr) ptr_->remove_ref ();
       }
       catch (...)
       {
@@ -60,7 +60,7 @@ namespace Utility
     StrictPtr<T>&
     StrictPtr<T>::operator= (Type* ptr) noexcept
     {
-      if (ptr_ != 0) ptr_->remove_ref ();
+      if (ptr_ != nullptr) ptr_->remove_ref ();
       ptr_ = ptr;
       return *this;
     }
@@ -71,7 +71,7 @@ namespace Utility
     {
       Type* old_ptr (ptr_);
       Type* new_ptr (add_ref (s_ptr.in ())); // this can throw
-      if (old_ptr != 0) old_ptr->remove_ref ();
+      if (old_ptr != nullptr) old_ptr->remove_ref ();
 
       ptr_ = new_ptr; // commit
 
@@ -86,7 +86,7 @@ namespace Utility
     {
       Type*  old_ptr (ptr_);
       Other* new_ptr (add_ref (s_ptr.in ())); // this can throw
-      if (old_ptr != 0) old_ptr->remove_ref ();
+      if (old_ptr != nullptr) old_ptr->remove_ref ();
 
       ptr_ = new_ptr; // commit
 
@@ -115,7 +115,7 @@ namespace Utility
     T* StrictPtr<T>::
     operator-> () const
     {
-      if (ptr_ == 0)
+      if (ptr_ == nullptr)
       {
         throw NotInitialized(
           "Utility::ReferenceCounting::StrictPtr::operator-> : "
@@ -136,7 +136,7 @@ namespace Utility
     retn() noexcept
     {
       Type* ret (ptr_);
-      ptr_ = 0;
+      ptr_ = nullptr;
       return ret;
     }
 
