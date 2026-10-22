@@ -19,7 +19,7 @@ Reader_T (typename reader_function <T>::result_type reader)
 // ~File_Reader_T
 //
 template <typename T, typename CHAR_TYPE>
-Reader_T <T, CHAR_TYPE>::~Reader_T (void)
+Reader_T <T, CHAR_TYPE>::~Reader_T ()
 {
 }
 

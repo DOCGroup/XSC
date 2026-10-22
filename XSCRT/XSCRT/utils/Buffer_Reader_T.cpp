@@ -24,7 +24,7 @@ Buffer_Reader_T (typename reader_function <T>::result_type reader,
 // ~Buffer_Reader_T
 //
 template <typename T, typename CHAR_TYPE>
-Buffer_Reader_T <T, CHAR_TYPE>::~Buffer_Reader_T (void)
+Buffer_Reader_T <T, CHAR_TYPE>::~Buffer_Reader_T ()
 {
 
 }

@@ -37,7 +37,7 @@ class Writer_T : public Reader_Writer_Base_T <T, CHAR_TYPE>
 {
 public:
   /// Destructor.
-  ~Writer_T (void);
+  ~Writer_T ();
 
   /**
    * Insertion operator.
@@ -47,7 +47,7 @@ public:
    */
   void operator <<= (const T & entity);
 
-  xercesc::DOMLSSerializer * const writer (void);
+  xercesc::DOMLSSerializer * const writer ();
 
 protected:
   /**

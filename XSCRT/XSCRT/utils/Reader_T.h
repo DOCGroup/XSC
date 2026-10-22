@@ -48,7 +48,7 @@ public:
   typedef typename Reader_Writer_Base_T <T, CHAR_TYPE>::char_type char_type;
 
   /// Destructor.
-  virtual ~Reader_T (void);
+  virtual ~Reader_T ();
 
   /**
    * Extraction operator.

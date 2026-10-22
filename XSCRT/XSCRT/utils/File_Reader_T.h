@@ -40,7 +40,7 @@ public:
   File_Reader_T (typename reader_function <T>::result_type reader);
 
   /// Destructor.
-  ~File_Reader_T (void);
+  ~File_Reader_T ();
 
   /**
    * Open the file for reading. This will open the \a filename if

@@ -303,7 +303,7 @@ namespace XMLSchema
     {
     }
 
-    virtual ~IdentityProvider (void)
+    virtual ~IdentityProvider ()
     {
 
     }
@@ -586,7 +586,7 @@ namespace XMLSchema
     //   to qualify it all the time.
     //
 
-    anyURI (void)
+    anyURI ()
     {
     }
 

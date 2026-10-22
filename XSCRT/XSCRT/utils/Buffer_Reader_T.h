@@ -42,7 +42,7 @@ public:
                    const CHAR_TYPE * fake_id);
 
   /// Destructor.
-  ~Buffer_Reader_T (void);
+  ~Buffer_Reader_T ();
 
   /**
    * Open the file for reading. This will open the \a filename if

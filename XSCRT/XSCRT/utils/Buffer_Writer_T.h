@@ -38,7 +38,7 @@ public:
                    typename writer_function <T>::result_type writer);
 
   /// Destructor.
-  ~Buffer_Writer_T (void);
+  ~Buffer_Writer_T ();
 
   bool write (char * buffer, size_t & size);
 
@@ -55,7 +55,7 @@ public:
    *
    * @return            Size of the buffer in bytes.
    */
-  size_t get_buffer_size (void) const;
+  size_t get_buffer_size () const;
 
 private:
   std::auto_ptr <xercesc::MemBufFormatTarget> target_;

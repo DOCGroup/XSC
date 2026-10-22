@@ -4,7 +4,7 @@
 /**
  * @file          Reader_Writer_Base_T.h
  *
- * 
+ *
  *
  * @author        James H. Hill
  */
@@ -33,13 +33,13 @@ public:
   typedef CHAR_TYPE char_type;
 
   /// Destructor.
-  ~Reader_Writer_Base_T (void);
+  ~Reader_Writer_Base_T ();
 
-  xercesc::DOMDocument * const document (void);
+  xercesc::DOMDocument * const document ();
 
 protected:
   /// Default constructor.
-  Reader_Writer_Base_T (void);
+  Reader_Writer_Base_T ();
 
   /// Implementation shared between all files.
   xercesc::DOMImplementation * impl_;

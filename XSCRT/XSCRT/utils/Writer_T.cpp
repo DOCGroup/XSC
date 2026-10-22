@@ -29,7 +29,7 @@ Writer_T (const CHAR_TYPE * ns,
 // ~Writer_T
 //
 template <typename T, typename CHAR_TYPE>
-Writer_T <T, CHAR_TYPE>::~Writer_T (void)
+Writer_T <T, CHAR_TYPE>::~Writer_T ()
 {
   if (this->dom_writer_ != 0)
     this->dom_writer_->release ();
@@ -49,7 +49,7 @@ void Writer_T <T, CHAR_TYPE>::operator <<= (const T & entity)
 // writer
 //
 template <typename T,  typename CHAR_TYPE>
-xercesc::DOMLSSerializer * const Writer_T <T, CHAR_TYPE>::writer (void)
+xercesc::DOMLSSerializer * const Writer_T <T, CHAR_TYPE>::writer ()
 {
   return this->dom_writer_;
 }
