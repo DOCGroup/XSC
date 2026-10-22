@@ -4,9 +4,9 @@
 #ifndef XSC_SEMANTIC_GRAPH_CONTEXT_HPP
 #define XSC_SEMANTIC_GRAPH_CONTEXT_HPP
 
+#include <any>
 #include <map>
 #include <string>
-#include <Utility/Hetero/Container.hpp>
 
 namespace XSC
 {
@@ -14,7 +14,7 @@ namespace XSC
   {
     class Context
     {
-      using Map = std::map<std::string, Utility::Hetero::Container>;
+      using Map = std::map<std::string, std::any>;
 
     public:
       Context ()
@@ -40,9 +40,9 @@ namespace XSC
 
         try
         {
-          return i->second. template value<T> ();
+          return std::any_cast<T const&> (i->second);
         }
-        catch (Utility::Hetero::Typing const&)
+        catch (std::bad_any_cast const&)
         {
           throw Typing ();
         }
@@ -58,9 +58,9 @@ namespace XSC
 
         try
         {
-          return i->second. template value<T> ();
+          return std::any_cast<T const&> (i->second);
         }
-        catch (Utility::Hetero::Typing const&)
+        catch (std::bad_any_cast const&)
         {
           throw Typing ();
         }
@@ -72,14 +72,13 @@ namespace XSC
       {
         try
         {
-          if (!map_.insert (std::pair<std::string,
-                            Utility::Hetero::Container>(key, value)).second)
+          if (!map_.emplace (key, value).second)
           {
             Map::iterator i = map_.find (key);
-            i->second.template value <T> () = value;
+            std::any_cast<T&> (i->second) = value;
           }
         }
-        catch (Utility::Hetero::Typing const&)
+        catch (std::bad_any_cast const&)
         {
           throw Typing ();
         }
