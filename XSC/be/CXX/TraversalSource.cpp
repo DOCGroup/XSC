@@ -114,7 +114,7 @@ namespace
 
            << "for (; b != e;)"
            << "{"
-           << "dispatch (*(*b));"
+           << (this->cppmode_ == CPPMODE::CPP03 ? "dispatch (*(*b));" : "dispatch (*b);")
            << "if (++b != e) " << name << "_next (o);"
            << "}"
 
@@ -146,7 +146,7 @@ namespace
 
            << "for (; b != e;)"
            << "{"
-           << "dispatch (*(*b));"
+           << (this->cppmode_ == CPPMODE::CPP03 ? "dispatch (*(*b));" : "dispatch (*b);")
            << "if (++b != e) " << name << "_next (o);"
            << "}"
 

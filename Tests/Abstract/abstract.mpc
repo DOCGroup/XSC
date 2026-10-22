@@ -1,9 +1,17 @@
 project (xsc_test_abstract): xscdefaults {
-  requires += xsc dummy_label
+  requires += xsc
   custom_only = 1
   XSC_Files {
     abstract.xsd
   }
   Source_Files {
+  }
+}
+
+project (xsc_test_abstract_generated): xscrt {
+  after += xsc_test_abstract
+
+  Source_Files {
+    abstract.cpp
   }
 }

@@ -199,7 +199,10 @@ namespace
             break;
           case CPPMODE::CPP11:
           case CPPMODE::CPP17:
+            os << "using " << name << "_iterator = " << name << "_container_type::iterator;";
             os << "using " << name << "_const_iterator = " << name << "_container_type::const_iterator;";
+            os << name << "_iterator begin_" << name << " ();";
+            os << name << "_iterator end_" << name << " ();";
             break;
         }
 

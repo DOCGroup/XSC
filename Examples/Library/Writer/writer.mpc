@@ -1,5 +1,5 @@
 project (library_writer_xsd_gen): xscdefaults {
-  requires += xsc dummy_label
+  requires += xsc
 
   custom_only = 1
 
@@ -8,5 +8,13 @@ project (library_writer_xsd_gen): xscdefaults {
   }
 
   Source_Files {
+  }
+}
+
+project (library_writer_generated): xscrt {
+  after += library_writer_xsd_gen
+
+  Source_Files {
+    library.cpp
   }
 }
