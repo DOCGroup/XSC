@@ -71,7 +71,7 @@ namespace XSC
           char* message =
             XMLString::transcode (e.getMessage());
             //          ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
-            delete message;
+            XMLString::release (&message);
 
           throw;
         }
@@ -192,7 +192,7 @@ namespace XSC
               char* message =
                 XMLString::transcode (errText);
 //                              ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
-              delete message;
+              XMLString::release (&message);
             }
           return nullptr;
 
@@ -201,7 +201,7 @@ namespace XSC
         {
           char* message = XMLString::transcode (e.getMessage());
           //          ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
-          delete message;
+          XMLString::release (&message);
           throw 0;
         }
       catch (...)
@@ -227,7 +227,7 @@ namespace XSC
           char* message =
             XMLString::transcode (e.getMessage());
           //ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
-          delete message;
+          XMLString::release (&message);
 
           throw;
         }
