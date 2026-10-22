@@ -950,7 +950,7 @@ generate_header (Context& ctx,
   if (ctx.cdr_reader_generation_enabled () ||
       ctx.cdr_writer_generation_enabled ())
   {
-    ctx.os << "#include \"ace/XML_Utils/XMLSchema/CDR_Types.hpp\"" << std::endl
+    ctx.os << "#include \"XMLSchema/CDR_Types.hpp\"" << std::endl
            << "#include \"XMLSchema/id_map.hpp\"" << std::endl
            << std::endl;
     if (ctx.cppmode() == Context::CPPMODE::CPP03)
