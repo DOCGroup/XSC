@@ -97,6 +97,26 @@ namespace XSC
     TypeInfo const & AnyUri::
     static_type_info () { return any_uri_; }
 
+
+    // DateTime
+    //
+    //
+    namespace
+    {
+      TypeInfo
+      date_time_init_ ()
+      {
+        TypeInfo ti (typeid (DateTime));
+        ti.add_base (Access::PUBLIC, true, FundamentalType::static_type_info ());
+        return ti;
+      }
+
+      TypeInfo date_time_ (date_time_init_ ());
+    }
+
+    TypeInfo const& DateTime::
+    static_type_info () { return date_time_; }
+
     // Byte
     //
     //
