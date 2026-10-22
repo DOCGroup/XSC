@@ -227,7 +227,8 @@ namespace
           os << "void set_" << name << "_ptr (const " << string_type << "& idref);";
         }
 
-        os << "size_t count_" << name << " () const;";
+        os << "size_t count_" << name << " () const"
+           << (this->cppmode_ == CPPMODE::CPP17 ? " noexcept;" : ";");
 
         os << std::endl
            << (this->read_only_ ? "private:" : "protected:") << std::endl;

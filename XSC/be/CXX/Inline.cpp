@@ -267,6 +267,7 @@ namespace
           //
           os << i
             << "size_t " << scope << "::count_" << name << "() const"
+            << (this->cppmode_ == CPPMODE::CPP17 ? " noexcept" : "")
             << "{"
             << "return " << id(name) << "_.size ();"
             << "}";
