@@ -497,7 +497,7 @@ namespace XSC
         if (trace_) wcout << "target namespace: " << ns << endl;
 
         Schema* old (cur_schema_);
-        cur_schema_ = &s;
+        cur_schema_ = std::addressof (s);
 
         push_scope (root_schema_->new_node<Namespace> ());
         root_schema_->new_edge<Names> (*cur_schema_, scope (), ns);
@@ -558,7 +558,7 @@ namespace XSC
             if (trace_) wcout << "target namespace: " << ns << endl;
 
             Schema* old (cur_schema_);
-            cur_schema_ = &s;
+            cur_schema_ = std::addressof (s);
             push_scope (root_schema_->new_node<Namespace> ());
             root_schema_->new_edge<Names> (*cur_schema_, scope (), ns);
             schema (root);
@@ -796,7 +796,7 @@ namespace XSC
 
             pop_scope ();
 
-            rv = &node;
+            rv = std::addressof (node);
           }
       }
 
@@ -818,7 +818,7 @@ namespace XSC
             root_schema_->new_edge<Names> (scope (), t, name);
           }
 
-        rv = &t;
+        rv = std::addressof (t);
       }
 
     pop ();
@@ -885,7 +885,7 @@ namespace XSC
         root_schema_->new_edge<Names> (scope (), node, name, false);
       }
 
-    r = &node;
+    r = std::addressof (node);
 
     push_scope (node);
     push (t);
@@ -1557,7 +1557,7 @@ namespace XSC
 
         // Setup the error handler.
         XSC::XML::XML_Error_Handler eh;
-        parser.setErrorHandler (&eh);
+        parser.setErrorHandler (std::addressof (eh));
 
         // Setup the entity resolver.
         XSC::XML::Path_Resolver < > path_resolver;
@@ -1572,7 +1572,7 @@ namespace XSC
         XSC::XML::XML_Schema_Resolver <
           XSC::XML::Path_Resolver < > > resolver (path_resolver);
 
-        parser.setEntityResolver (&resolver);
+        parser.setEntityResolver (std::addressof (resolver));
 
         // Load the grammer and validate it.
         std::string uri = tu.string ();

@@ -175,7 +175,7 @@ namespace XSC
       void
       add_edge_right (Contains& c)
       {
-        contained_ = &c;
+        contained_ = std::addressof (c);
       }
 
     private:

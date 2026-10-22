@@ -67,7 +67,7 @@ namespace XSC
           char* message =
             XMLString::transcode (e.getMessage());
             //          ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
-            XMLString::release (&message);
+            XMLString::release (std::addressof (message));
 
           throw;
         }
@@ -165,9 +165,9 @@ namespace XSC
           // The parser will treat validation error as fatal and will exit.
           this->parser_->setValidationConstraintFatal (true);
 
-          this->parser_->setErrorHandler (&e_handler_);
+          this->parser_->setErrorHandler (std::addressof (e_handler_));
 
-          this->parser_->setEntityResolver (&resolver_);
+          this->parser_->setEntityResolver (std::addressof (resolver_));
 
           this->parser_->parse (url);
 
@@ -188,7 +188,7 @@ namespace XSC
               char* message =
                 XMLString::transcode (errText);
 //                              ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
-              XMLString::release (&message);
+              XMLString::release (std::addressof (message));
             }
           return nullptr;
 
@@ -197,7 +197,7 @@ namespace XSC
         {
           char* message = XMLString::transcode (e.getMessage());
           //          ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
-          XMLString::release (&message);
+          XMLString::release (std::addressof (message));
           throw;
         }
       catch (...)
@@ -223,7 +223,7 @@ namespace XSC
           char* message =
             XMLString::transcode (e.getMessage());
           //ACE_Auto_Basic_Array_Ptr<char> cleanup_message (message);
-          XMLString::release (&message);
+          XMLString::release (std::addressof (message));
 
           throw;
         }

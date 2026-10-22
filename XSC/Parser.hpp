@@ -333,7 +333,7 @@ namespace XSC
     void
     push_scope (SemanticGraph::Scope& s)
     {
-      scope_stack_.push (&s);
+      scope_stack_.push (std::addressof (s));
     }
 
     void

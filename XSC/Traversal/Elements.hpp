@@ -5,6 +5,7 @@
 #define XSC_TRAVERSAL_ELEMENTS_HPP
 
 #include <map>
+#include <memory>
 #include <set>
 
 #include "Utility/Introspection/Introspection.hpp"
@@ -52,7 +53,7 @@ namespace XSC
       map (Introspection::TypeId id, Traverser<T>& t)
       {
         Traversers& traversers (traversal_map_[id]);
-        traversers.push_back (&t);
+        traversers.push_back (std::addressof (t));
       }
 
     public:
