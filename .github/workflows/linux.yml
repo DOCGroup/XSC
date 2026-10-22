@@ -74,11 +74,6 @@ jobs:
         'xerces3=1' >> ${env:ACE_ROOT}/bin/MakeProjectCreator/config/default.features
         'xsc=1' >> ${env:ACE_ROOT}/bin/MakeProjectCreator/config/default.features
       shell: pwsh
-    - name: add optional optional feature
-      run: |
-        '${{ matrix.optional_feature }}' >> ${env:ACE_ROOT}/bin/MakeProjectCreator/config/default.features
-      if: matrix.optional_feature != ''
-      shell: pwsh
     - name: Run mwc.pl on $(XSC_ROOT)/XSC.mwc
       run: |
         perl ${env:ACE_ROOT}/bin/mwc.pl -type gnuace ${env:XSC_ROOT}/XSC.mwc -workers 4
