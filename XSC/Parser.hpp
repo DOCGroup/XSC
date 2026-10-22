@@ -261,10 +261,10 @@ namespace XSC
     group (XML::Element const&);
 
     SemanticGraph::Type*
-    simple_type (XML::Element const&);
+    simple_type (XML::Element const&, const string& anon_name = L"");
 
     SemanticGraph::Type*
-    simple_content_restriction (XML::Element const&);
+    simple_content_restriction (XML::Element const&, const string& anon_name = L"");
 
     SemanticGraph::Type*
     complex_content_restriction (XML::Element const&);

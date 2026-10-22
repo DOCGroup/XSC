@@ -732,7 +732,7 @@ namespace XSC
   //
 
   Type* Parser::
-  simple_type (XML::Element const& t)
+  simple_type (XML::Element const& t, const string& anon_name)
   {
     Type* r (0);
 
@@ -746,7 +746,7 @@ namespace XSC
 
     if (name == L"restriction")
       {
-        r = simple_content_restriction (e);
+        r = simple_content_restriction (e, anon_name);
       }
     else
       {
@@ -760,7 +760,7 @@ namespace XSC
   }
 
   Type* Parser::
-  simple_content_restriction (XML::Element const& r)
+  simple_content_restriction (XML::Element const& r, const string& anon_name)
   {
     Type* rv (0);
 
@@ -787,7 +787,14 @@ namespace XSC
             Enumeration& node (root_schema_->new_node<Enumeration> ());
             set_type<Inherits> (r[L"base"], r, node);
 
-            if (string name = r.parent ()[L"name"])
+            if (!anon_name.empty ())
+              {
+                root_schema_->new_edge<Names> (scope (),
+                                                static_cast<Nameable&> (node),
+                                                anon_name,
+                                                true);
+              }
+            else if (string name = r.parent ()[L"name"])
               {
                 root_schema_->new_edge<Names> (scope (), static_cast<Nameable&> (node), name);
               }
@@ -1226,7 +1233,7 @@ namespace XSC
                 Type* t (0);
 
                 if (anon_name == L"simpleType")
-                  t = simple_type (e);
+                  t = simple_type (e, name);
                 else if (anon_name == L"complexType")
                   t = complex_type (e, name);
                 else
