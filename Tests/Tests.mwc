@@ -1,0 +1,16 @@
+workspace (Tests) {
+  cmdline += -include $XSC_ROOT/MPC/config
+  cmdline += -include $XSC_ROOT/contrib/CCF/CCF/MPC/config
+
+  Abstract
+  Anonymous
+  Chameleon
+  ComplexTypeImport
+  Escape
+  Group
+  Import
+  Include
+  NoNamespace
+  UnqualifiedImport
+  Validation
+}
