@@ -26,6 +26,38 @@ namespace
     {
     }
 
+    void
+    optional_member (string const& name, string const& type)
+    {
+      os << "void " << scope << "::" << std::endl
+         << id (name) << " (Type& o)" << "{";
+
+      if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
+        os << "dispatch (o." << id (name) << " ());";
+      else if (this->cppmode_ == CPPMODE::CPP03 || this->read_only_)
+        os << type << " const* value = o." << id (name)
+           << "_if_set (); if (value) dispatch (*value);";
+      else
+        os << "if (auto* value = o." << id (name)
+           << "_if_set ()) dispatch (*value);";
+
+      os << "}";
+
+      os << "void " << scope << "::" << std::endl
+         << id (name) << " (Type const& o)" << "{";
+
+      if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
+        os << "dispatch (o." << id (name) << " ());";
+      else if (this->cppmode_ == CPPMODE::CPP03)
+        os << type << " const* value = o." << id (name)
+           << "_if_set (); if (value) dispatch (*value);";
+      else
+        os << "if (auto const* value = o." << id (name)
+           << "_if_set ()) dispatch (*value);";
+
+      os << "}";
+    }
+
     virtual void
     traverse (SemanticGraph::Element& e)
     {
@@ -45,28 +77,7 @@ namespace
 
         // name
         //
-        if (this->cppmode_ == CPPMODE::CPP03)
-        {
-          os << "void " << scope << "::" << std::endl
-             << id (name) << " (Type& o)"
-             << "{dispatch (o." << id (name) << " ());}";
-
-          os << "void " << scope << "::" << std::endl
-             << id (name) << " (Type const& o)"
-             << "{dispatch (o." << id (name) << " ());}";
-        }
-        else
-        {
-          os << "void " << scope << "::" << std::endl
-             << id (name) << " (Type& o)"
-             << "{if (auto* value = o." << id (name)
-             << "_if_set ()) dispatch (*value);}";
-
-          os << "void " << scope << "::" << std::endl
-             << id (name) << " (Type const& o)"
-             << "{if (auto const* value = o." << id (name)
-             << "_if_set ()) dispatch (*value);}";
-        }
+        optional_member (name, type);
 
         // name_none
         //
@@ -87,28 +98,13 @@ namespace
 
         // name
         //
-        if (this->cppmode_ == CPPMODE::CPP03)
-        {
-          os << "void " << scope << "::" << std::endl
-             << id (name) << " (Type& o)"
-             << "{dispatch (o." << id (name) << " ());}";
+        os << "void " << scope << "::" << std::endl
+           << id (name) << " (Type& o)"
+           << "{dispatch (o." << id (name) << " ());}";
 
-          os << "void " << scope << "::" << std::endl
-             << id (name) << " (Type const& o)"
-             << "{dispatch (o." << id (name) << " ());}";
-        }
-        else
-        {
-          os << "void " << scope << "::" << std::endl
-             << id (name) << " (Type& o)"
-             << "{if (auto* value = o." << id (name)
-             << "_if_set ()) dispatch (*value);}";
-
-          os << "void " << scope << "::" << std::endl
-             << id (name) << " (Type const& o)"
-             << "{if (auto const* value = o." << id (name)
-             << "_if_set ()) dispatch (*value);}";
-        }
+        os << "void " << scope << "::" << std::endl
+           << id (name) << " (Type const& o)"
+           << "{dispatch (o." << id (name) << " ());}";
       }
       else
       {
@@ -117,11 +113,14 @@ namespace
 
         // name
         //
+        string iterator_type (fq_name (e, L"", false));
+        iterator_type += this->read_only_ ? L"_const_iterator" : L"_iterator";
+
         os << "void " << scope << "::" << std::endl
            << id (name) << " (Type& o)"
            << "{"
            << "// VC6 anathema strikes again" << std::endl
-           << fq_name (e, L"", false) << "_iterator "
+           << iterator_type << " "
            << "b (o.begin_" << name << "()), "
            << "e (o.end_" << name << "());"
            << std::endl
@@ -252,17 +251,7 @@ namespace
       {
         // name
         //
-        os << "void " << scope << "::" << std::endl
-           << id (name) << " (Type& o)"
-           << "{"
-           << "dispatch (o." << id (name) << " ());"
-           << "}";
-
-        os << "void " << scope << "::" << std::endl
-           << id (name) << " (Type const& o)"
-           << "{"
-           << "dispatch (o." << id (name) << " ());"
-           << "}";
+        optional_member (name, type_name (a));
 
         // name_none
         //
@@ -340,7 +329,7 @@ namespace
       {
         // optional
         //
-        if (this->cppmode_ == CPPMODE::CPP03)
+        if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
           os << "if (o." << name << "_p ()) " << id (name) << " (o);"
              << "else " << name << "_none (o);";
         else
@@ -375,7 +364,7 @@ namespace
       {
         // optional
         //
-        if (this->cppmode_ == CPPMODE::CPP03)
+        if (this->cppmode_ == CPPMODE::CPP03 && !this->read_only_)
           os << "if (o." << name << "_p ()) " << id (name) << " (o);"
              << "else " << name << "_none (o);";
         else

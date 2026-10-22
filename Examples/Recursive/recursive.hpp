@@ -6,7 +6,6 @@ namespace Recursive
 {
   class Element;
 }
-
 #include <memory>
 #include <string>
 #include <list>
@@ -20,7 +19,6 @@ namespace Recursive
   {
     using Base = ::XSCRT::Type;
 
-    // value
     public:
     using value_container_type = std::list<::XMLSchema::string<ACE_TCHAR>>;
     using value_iterator = value_container_type::iterator;
@@ -34,7 +32,6 @@ namespace Recursive
     protected:
     value_container_type value_;
 
-    // long
     public:
     using long_container_type = std::list<::XMLSchema::long_>;
     using long_iterator = long_container_type::iterator;
@@ -48,7 +45,6 @@ namespace Recursive
     protected:
     long_container_type long__;
 
-    // el
     public:
     using el_container_type = std::list<::Recursive::Element>;
     using el_iterator = el_container_type::iterator;
@@ -69,12 +65,10 @@ namespace Recursive
     explicit Element (::XSCRT::XML::Element<ACE_TCHAR> const&);
     Element (Element const& s);
     Element& operator= (Element const& s);
-
     Element (Element&&) = default;
     Element& operator= (Element&&) = default;
   };
 }
-
 namespace Recursive
 {
   namespace reader
@@ -83,5 +77,4 @@ namespace Recursive
     el (xercesc::DOMDocument const*);
   }
 }
-
 #endif // RECURSIVE_HPP

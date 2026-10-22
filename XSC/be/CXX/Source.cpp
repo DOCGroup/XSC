@@ -78,7 +78,10 @@ namespace
         else
         {
           os << name << "_value_type t (new " << type << " (e));";
-          os << "add_" << name << " (t);";
+          if (this->read_only_)
+            os << id (name) << "_.push_back (t);";
+          else
+            os << "add_" << name << " (t);";
         }
       }
       else if (c.min () == 0)

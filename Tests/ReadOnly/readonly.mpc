@@ -4,6 +4,7 @@ project (xsc_test_readonly): xscdefaults {
   xscflags += --cxx-char-type char
   xscflags += --cxx-read-only
   xscflags += --cxx-generate-cdr-reader-types
+  xscflags += --cxx-generate-traversal-types
 
   XSC_Files {
     readonly.xsd
@@ -18,5 +19,37 @@ project (xsc_test_readonly_generated): xscrt {
   Source_Files {
     readonly.cpp
     readonly_api.cpp
+  }
+}
+
+project (xsc_test_readonly_cpp03): xscdefaults {
+  requires += xsc
+  custom_only = 1
+
+  Modify_Custom (XSC) {
+    source_outputext = .cpp03.cpp,
+    header_outputext = .cpp03.hpp,
+  }
+
+  xscflags += --cxx-char-type char
+  xscflags += --cxx-cpp03
+  xscflags += --cxx-read-only
+  xscflags += --cxx-generate-traversal-types
+  xscflags += --cxx-header-suffix .cpp03.hpp
+  xscflags += --cxx-source-suffix .cpp03.cpp
+
+  XSC_Files {
+    readonly.xsd
+  }
+
+  Source_Files {
+  }
+}
+
+project (xsc_test_readonly_cpp03_generated): xscrt {
+  after += xsc_test_readonly_cpp03
+
+  Source_Files {
+    readonly.cpp03.cpp
   }
 }
