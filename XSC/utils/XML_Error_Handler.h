@@ -30,15 +30,15 @@ namespace XSC
     {
     public:
 
-      XML_Error_Handler (void);
+      XML_Error_Handler ();
 
-      ~XML_Error_Handler (void) override;
+      ~XML_Error_Handler () override;
 
       void warning(const SAXParseException& toCatch) override;
       void error(const SAXParseException& toCatch) override;
       void fatalError(const SAXParseException& toCatch) override;
       void resetErrors() override;
-      bool getErrors (void) const noexcept;
+      bool getErrors () const noexcept;
     private :
       // Disallow copying and moving.
       XML_Error_Handler (const XML_Error_Handler&) = delete;

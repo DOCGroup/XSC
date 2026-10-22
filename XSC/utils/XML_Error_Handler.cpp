@@ -11,7 +11,7 @@ namespace XSC
 {
   namespace XML
   {
-    XML_Error_Handler::XML_Error_Handler (void) = default;
+    XML_Error_Handler::XML_Error_Handler () = default;
 
     XML_Error_Handler::~XML_Error_Handler() = default;
 
@@ -64,7 +64,7 @@ namespace XSC
     }
 
     bool
-    XML_Error_Handler::getErrors (void) const noexcept
+    XML_Error_Handler::getErrors () const noexcept
     {
       return this->errors_;
     }

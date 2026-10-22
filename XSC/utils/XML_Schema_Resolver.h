@@ -45,7 +45,7 @@ namespace XSC
                                    const XMLCh *const systemId) override;
 
     private:
-      XML_Schema_Resolver (void) = delete;
+      XML_Schema_Resolver () = delete;
       XML_Schema_Resolver (XML_Schema_Resolver const&) = delete;
       XML_Schema_Resolver& operator= (XML_Schema_Resolver const&) = delete;
       XML_Schema_Resolver (XML_Schema_Resolver<Resolver> &&) = delete;
@@ -76,7 +76,7 @@ namespace XSC
       using char_type = CHAR;
 
       /// Defualt consturctor.
-      Basic_Resolver (void);
+      Basic_Resolver ();
 
       /**
        * Initailizing constructor
@@ -129,7 +129,7 @@ namespace XSC
       using string_type = std::basic_string<CHAR>;
       using path_type = std::vector<string_type>;
 
-      Path_Resolver (void);
+      Path_Resolver ();
 
       Path_Resolver (const path_type & paths);
 

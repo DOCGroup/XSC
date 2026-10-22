@@ -38,7 +38,7 @@ namespace XSC
       // Initialize the resolver we should use.
       XML_Helper (Resolver &resolver, Error_Handler &eh);
 
-      ~XML_Helper (void);
+      ~XML_Helper ();
 
       /// Create a DOM tree
       xercesc::DOMDocument *
@@ -58,14 +58,14 @@ namespace XSC
       bool write_DOM (xercesc::DOMDocument *doc,
                       const char *file) const;
 
-      bool is_initialized (void) const;
+      bool is_initialized () const;
 
     protected:
       /// Intialize the parser
-      void init_parser (void);
+      void init_parser ();
 
       /// Terminate the parser
-      void terminate_parser (void);
+      void terminate_parser ();
 
     private:
       XML_Helper (XML_Helper const&) = delete;
