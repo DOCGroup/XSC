@@ -1501,8 +1501,20 @@ namespace
   struct Enumerator : Traversal::Enumerator, protected virtual Context
   {
     Enumerator (Context& c)
-        : Context (c)
+        : Context (c), first_ (true)
     {
+    }
+
+    void
+    reset ()
+    {
+      first_ = true;
+    }
+
+    bool
+    has_enumerators () const
+    {
+      return !first_;
     }
 
     virtual void
@@ -1510,9 +1522,13 @@ namespace
     {
       string name (e.name ());
 
-      os << "if (v == " << L << " (\"" << name << "\")) v_ = " << id (name) << "_l;"
-         << "else ";
+      os << (first_ ? "if (v == " : "else if (v == ")
+         << L << " (\"" << name << "\")) v_ = " << id (name) << "_l;";
+      first_ = false;
     }
+
+  private:
+    bool first_;
   };
 
 
@@ -1540,8 +1556,10 @@ namespace
          << string_type << " v (e.value ());"
          << std::endl;
 
+      enumerator_.reset ();
       names (e, names_);
 
+      if (enumerator_.has_enumerators ()) os << "else" << std::endl;
       os << "{}" // else block
          << "}";
 
@@ -1553,8 +1571,10 @@ namespace
          << string_type << " v (a.value ());"
          << std::endl;
 
+      enumerator_.reset ();
       names (e, names_);
 
+      if (enumerator_.has_enumerators ()) os << "else" << std::endl;
       os << "{}" // else block
          << "}";
 
