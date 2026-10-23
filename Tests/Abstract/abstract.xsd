@@ -14,6 +14,13 @@
       <xsd:element name="SSN" type="xsd:string" />
     </xsd:sequence>
   </xsd:complexType>
+  <xsd:complexType name="StudentWithoutAdditionalFields">
+    <xsd:complexContent>
+      <xsd:extension base="xsc:Student">
+        <xsd:sequence />
+      </xsd:extension>
+    </xsd:complexContent>
+  </xsd:complexType>
   <xsd:complexType name="UndergraduateStudent">
     <xsd:complexContent>
       <xsd:extension base="xsc:Student">

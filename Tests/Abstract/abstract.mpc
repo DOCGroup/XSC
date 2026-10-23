@@ -1,6 +1,7 @@
 project (xsc_test_abstract): xscdefaults {
   requires += xsc
   custom_only = 1
+  xscflags += --cxx-generate-cdr-writer-types
   XSC_Files {
     abstract.xsd
   }
@@ -10,8 +11,10 @@ project (xsc_test_abstract): xscdefaults {
 
 project (xsc_test_abstract_generated): xscrt {
   after += xsc_test_abstract
+  includes += $(ACE_ROOT)/ace/XML_Utils
 
   Source_Files {
     abstract.cpp
+    abstract_api.cpp
   }
 }

@@ -51,7 +51,7 @@ jobs:
       if: matrix.Repo != ''
     - name: Add packages
       run: |
-        sudo apt-get --yes install libxerces-c-dev libssl-dev ${{ matrix.PackageDeps }}
+        sudo apt-get --yes install libxerces-c-dev ${{ matrix.PackageDeps }}
     - name: create $ACE_ROOT/ace/config.h
       run: |
         '#include "ace/config-linux.h"' > ${env:ACE_ROOT}/ace/config.h
@@ -59,7 +59,6 @@ jobs:
     - name: create $ACE_ROOT/include/makeinclude/platform_macros.GNU
       run: |
         'xerces3=1' > ${env:ACE_ROOT}/include/makeinclude/platform_macros.GNU
-        'ssl=1' >> ${env:ACE_ROOT}/include/makeinclude/platform_macros.GNU
         'xsc=1' >> ${env:ACE_ROOT}/include/makeinclude/platform_macros.GNU
       shell: pwsh
     - name: add optional optional macros
@@ -106,12 +105,34 @@ jobs:
           Pop-Location
         }
       shell: pwsh
+    - name: Run read-only mode compatibility tests
+      run: |
+        Push-Location ${env:XSC_ROOT}/Tests/ReadOnly
+        try {
+          perl run_test.pl
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+        }
+        finally {
+          Pop-Location
+        }
+      shell: pwsh
     - name: Build XSC generated schema tests
       run: |
         Push-Location ${env:XSC_ROOT}/Tests
         try {
           perl ${env:ACE_ROOT}/bin/mwc.pl -type gnuace Tests.mwc -workers 4
           make -j 6
+        }
+        finally {
+          Pop-Location
+        }
+      shell: pwsh
+    - name: Run DanceX11 generated-code test
+      run: |
+        Push-Location ${env:XSC_ROOT}/Tests/DanceX11
+        try {
+          perl run_test.pl
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
         }
         finally {
           Pop-Location

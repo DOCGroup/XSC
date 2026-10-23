@@ -19,3 +19,7 @@ Release/
 *.obj
 *.lib
 *.dll
+
+# Generated example output kept local.
+/Examples/Recursive/recursive.cpp
+/Examples/Recursive/recursive.hpp

@@ -26,8 +26,14 @@ namespace
   struct Element : Traversal::Element, protected virtual Context
   {
     explicit Element (Context& c)
-        : Context (c)
+        : Context (c), first_ (true)
     {
+    }
+
+    void
+    reset ()
+    {
+      first_ = true;
     }
 
     virtual void
@@ -55,8 +61,10 @@ namespace
 
       //@@ need to use FQ-names.
       //
-      os << "if (n == " << compare_name << ")"
+      os << (first_ ? "if (n == " : "else if (n == ")
+         << compare_name << ")"
          << "{";
+      first_ = false;
 
       if (c.max () != 1)
       {
@@ -64,22 +72,34 @@ namespace
         //
         if (this->cppmode_ != CPPMODE::CPP03)
         {
-          os << type << " t (e);";
-          os << id (name) << "_.push_back (t);";
+          os << id (name) << "_.emplace_back (e);";
 
         }
         else
         {
           os << name << "_value_type t (new " << type << " (e));";
-          os << "add_" << name << " (t);";
+          if (this->read_only_)
+            os << id (name) << "_.push_back (t);";
+          else
+            os << "add_" << name << " (t);";
         }
       }
       else if (c.min () == 0)
       {
         // optional
         //
-        os << type << " t (e);"
-           << id (name) << " (t);";
+        if (this->read_only_)
+        {
+          if (this->cppmode_ != CPPMODE::CPP03)
+            os << id (name) << "_ = std::make_unique<" << type << "> (e);";
+          else
+            os << id (name) << "_ = " << scope << "::" << id(name)
+               << "_type (new " << type << " (e));"
+               << id (name) << "_->container (this);";
+        }
+        else
+          os << type << " t (e);"
+             << id (name) << " (t);";
       }
       else
       {
@@ -195,16 +215,24 @@ namespace
       }
 
 
-      os <<"}"
-         << "else ";
+      os << "}";
     }
+
+  private:
+    bool first_;
   };
 
   struct Attribute : Traversal::Attribute, protected virtual Context
   {
     explicit Attribute (Context& c)
-        : Context (c)
+        : Context (c), first_ (true)
     {
+    }
+
+    void
+    reset ()
+    {
+      first_ = true;
     }
 
     virtual void
@@ -215,13 +243,25 @@ namespace
 
       //@@ need to use FQ-names.
       //
-      os << "if (n == " << L << " (\"" << name << "\"))"
+      os << (first_ ? "if (n == " : "else if (n == ")
+         << L << " (\"" << name << "\"))"
          << "{";
+      first_ = false;
 
       if (a.optional ())
       {
-        os << type << " t (a);"
-           << id (name) << " (t);";
+        if (this->read_only_)
+        {
+          if (this->cppmode_ != CPPMODE::CPP03)
+            os << id (name) << "_ = std::make_unique<" << type << "> (a);";
+          else
+            os << id (name) << "_ = " << scope << "::" << id(name)
+               << "_type (new " << type << " (a));"
+               << id (name) << "_->container (this);";
+        }
+        else
+          os << type << " t (a);"
+             << id (name) << " (t);";
       }
       else
       {
@@ -294,9 +334,11 @@ namespace
               << ", this);";
       }
 
-      os << "}"
-         << "else ";
+      os << "}";
     }
+
+  private:
+    bool first_;
   };
 
   // Traverser for CDR write operations
@@ -346,7 +388,7 @@ namespace
         // Convert it to its base type. This will
         // have an operator << defined to
         // serialize this type
-        os << "stream << static_cast < const Base& > (*this);" << std::endl;
+        os << "stream << static_cast < const " << type << "& > (*this);" << std::endl;
     }
 
     // Helper method implementation
@@ -359,26 +401,40 @@ namespace
       // Write length first
       os << "// " << name << std::endl;
       os << "size_t " << name << "_size = "
-         << "this->" << name << "_.size ();"
+         << "this->" << id (name) << "_.size ();"
          << "stream << " << name << "_size;"
          << std::endl;
 
       // Write each member next
-      os << "for (" << name << "_const_iterator "
-         << name << "_iter = " << "this->begin_" << name << " ();"
-         << "    " << name << "_iter != this->end_" << name
-         << " ();"
-         << "    ++" << name << "_iter)"
-         << "{";
+      if (this->cppmode_ == CPPMODE::CPP03)
+      {
+        os << "for (" << name << "_const_iterator "
+           << name << "_iter = " << "this->begin_" << name << " ();"
+           << "    " << name << "_iter != this->end_" << name
+           << " ();"
+           << "    ++" << name << "_iter)"
+           << "{";
 
-      // Check if the type being written is a boolean
-      // type
-      if (type_is_boolean (type))
-        os << "stream.write_boolean (*" << name << ");";
+        if (type_is_boolean (type))
+          os << "stream.write_boolean (*" << name << "_iter);";
+        else
+          os << "stream << (*" << name << "_iter);";
+
+        os << "}";
+      }
       else
-        os << "stream << (*" << name << "_iter);";
+      {
+        os << "for (auto const& " << name << "_value : this->"
+           << id (name) << "_)"
+           << "{";
 
-      os << "}";
+        if (type_is_boolean (type))
+          os << "stream.write_boolean (" << name << "_value);";
+        else
+          os << "stream << " << name << "_value;";
+
+        os << "}";
+      }
     }
 
     virtual void
@@ -445,16 +501,36 @@ namespace
         // optional
         //
         os << " // " << name << std::endl;
-        os << "bool " << name << "_p = this->" << name << "_p ();";
-        os << "stream.write_boolean (" << name << "_p" << ");";
-
-        os << "if (" << name << "_p)"
-          << "{";
+        if (!this->optional_via_if_set ())
+        {
+          os << "bool " << name << "_p = this->" << name << "_p ();";
+          os << "stream.write_boolean (" << name << "_p" << ");";
+          os << "if (" << name << "_p)" << "{";
+        }
+        else
+        {
+          if (this->cppmode_ == CPPMODE::CPP03)
+            os << type << " const* " << name << "_value = this->" << name
+               << "_if_set ();";
+          else
+            os << "auto const* " << name << "_value = this->" << name
+               << "_if_set ();";
+          os << "stream.write_boolean (" << name << "_value != "
+             << (this->cppmode_ == CPPMODE::CPP03 ? "0" : "nullptr") << ");";
+          os << "if (" << name << "_value != "
+             << (this->cppmode_ == CPPMODE::CPP03 ? "0" : "nullptr") << ")" << "{";
+        }
 
         // check if the type is a boolean type
-        if (type_is_boolean (type))
-          os << "stream.write_boolean (this->" << name
-            << " ());" << std::endl;
+        if (this->optional_via_if_set ())
+        {
+          if (type_is_boolean (type))
+            os << "stream.write_boolean (*" << name << "_value);" << std::endl;
+          else
+            os << "stream << *" << name << "_value;";
+        }
+        else if (type_is_boolean (type))
+          os << "stream.write_boolean (this->" << name << " ());" << std::endl;
         else
           os << "stream << this->" << name << " ();";
 
@@ -510,13 +586,39 @@ namespace
                   os << "// " << name << std::endl;
 
                   // First write out the boolean value
-                  os << "stream.write_boolean (" << name << "_p ());";
-
-                  os << "if (" << name << "_p ())"
-                    << std::endl;
+                  if (!this->optional_via_if_set ())
+                  {
+                    os << "stream.write_boolean (" << name << "_p ());";
+                    os << "if (" << name << "_p ())" << std::endl;
+                  }
+                  else
+                  {
+                    if (this->cppmode_ == CPPMODE::CPP03)
+                      os << type << " const* " << id (name) << "_value = this->"
+                         << id (name) << "_if_set ();";
+                    else
+                      os << "auto const* " << id (name) << "_value = this->"
+                         << id (name) << "_if_set ();";
+                    os << "stream.write_boolean (" << id (name)
+                       << "_value != "
+                       << (this->cppmode_ == CPPMODE::CPP03 ? "0" : "nullptr")
+                       << ");";
+                    os << "if (" << id (name) << "_value != "
+                       << (this->cppmode_ == CPPMODE::CPP03 ? "0" : "nullptr")
+                       << ")"
+                       << std::endl;
+                  }
 
                   // check if the type is a boolean type
-                  if (type_is_boolean (type))
+                  if (this->optional_via_if_set ())
+                  {
+                    if (type_is_boolean (type))
+                      os << "  stream.write_boolean (*" << id (name)
+                         << "_value);" << std::endl;
+                    else
+                      os << "  stream << *" << id (name) << "_value;" << std::endl;
+                  }
+                  else if (type_is_boolean (type))
                     os << "  stream.write_boolean (this->" << name
                       << " ());" << std::endl;
                   else
@@ -583,6 +685,20 @@ namespace
       }
     }
 
+    string
+    smart_pointer_type () const
+    {
+      return this->cppmode_ == CPPMODE::CPP03
+        ? L"std::auto_ptr"
+        : L"std::unique_ptr";
+    }
+
+    string
+    null_pointer () const
+    {
+      return this->cppmode_ == CPPMODE::CPP03 ? L"0" : L"nullptr";
+    }
+
     /*
      * Reading a pointer type.
      * A type which is read in via the pointer semantics. This
@@ -599,7 +715,7 @@ namespace
     read_pointer_type (string &element_name, string &type)
     {
       os << "stream >> " << element_name << "_tmp;"
-         << "std::auto_ptr < " << type << "::CDR_Type__ > "
+         << this->smart_pointer_type () << " < " << type << "::CDR_Type__ > "
          << "auto_" << element_name << " (" << element_name << "_tmp);"
          << type << " " << element_name << " (" << element_name
          << "_tmp);"
@@ -614,7 +730,7 @@ namespace
     read_complex_type (string &element_name, string &type)
     {
       os << "stream >> " << element_name << ";"
-         << "std::auto_ptr < " << type << " > "
+         << this->smart_pointer_type () << " < " << type << " > "
          << "auto_" << element_name << " (" << element_name << ");"
          << std::endl;
     }
@@ -653,7 +769,8 @@ namespace
       bool pointer_semantics = read_type_as_pointer (type);
 
       if (pointer_semantics)
-        os << type << "::CDR_Type__ *" << element_name << "_tmp (0)"
+        os << type << "::CDR_Type__ *" << element_name << "_tmp ("
+           << this->null_pointer () << ")"
            << ";" ;
       else
         os << type << "::CDR_Type__ " << element_name << "_tmp"
@@ -682,13 +799,18 @@ namespace
       bool pointer_semantics = read_type_as_pointer (type);
 
       if (pointer_semantics)
-  os << type << "::CDR_Type__ *" << element_name << "_tmp (0)"
-     << ";"
-     << "std::auto_ptr < " << type << "::CDR_Type__ > "
-     << "auto_" << element_name << " (" << element_name << "_tmp);";
+      {
+        os << type << "::CDR_Type__ *" << element_name << "_tmp ("
+           << this->null_pointer () << ")"
+           << ";"
+           << this->smart_pointer_type () << " < " << type << "::CDR_Type__ > "
+           << "auto_" << element_name << " (" << element_name << "_tmp);";
+      }
       else
-  os << type << "::CDR_Type__ " << element_name << "_tmp"
-     << ";" ;
+      {
+        os << type << "::CDR_Type__ " << element_name << "_tmp"
+           << ";";
+      }
 
       os << "if (" << element_name << "_p)"
    << "{";
@@ -754,7 +876,7 @@ namespace
 
   if (b == e)
   {
-    os << type << " *" << name << " (0);";
+    os << type << " *" << name << " (" << this->null_pointer () << ");";
     read_complex_type (name, type);
     this->type_name_list_.push_back (L"*" + name);
     return;
@@ -771,7 +893,7 @@ namespace
   if (has<Traversal::Attribute> (*c) ||
       dynamic_cast<SemanticGraph::Enumeration*> (&t))
   {
-    os << type << " *" << name << "(0);";
+    os << type << " *" << name << " (" << this->null_pointer () << ");";
     read_complex_type (name, type);
     this->type_name_list_.push_back (L"*" + name);
     return;
@@ -786,7 +908,8 @@ namespace
   string base_type (type_name ((**b).inheritee ()));
   if (read_type_as_pointer (base_type))
   {
-    os << base_type << "::CDR_Type__ *" << name << "_tmp (0);";
+    os << base_type << "::CDR_Type__ *" << name << "_tmp ("
+       << this->null_pointer () << ");";
     read_pointer_type (name, base_type);
   }
   else
@@ -802,7 +925,8 @@ namespace
   // Simple type: i.e. XMLSchema::boolean, XMLSchema::integer
   if (read_type_as_pointer (type))
   {
-    os << type << "::CDR_Type__ *" << name << "_tmp (0);";
+    os << type << "::CDR_Type__ *" << name << "_tmp ("
+       << this->null_pointer () << ");";
     read_pointer_type (name, type);
   }
   else
@@ -1141,14 +1265,9 @@ namespace
     {
       string type (type_name (c));
 
-      os << "// " << scope << std::endl
-         << std::endl;
-
-      os << scope << "::" << std::endl
-         << name << " (" << xml_element_type << " const& element)" << std::endl
-         << ":" << "Base (element)"
-         << "{"
-         << std::endl;
+      os << scope << "::" << name << " (" << xml_element_type << " const& element)" << std::endl
+         << ": " << base_type_name (c) << " (element)"
+         << "{";
     }
 
     using Traversal::Complex::names;
@@ -1169,13 +1288,13 @@ namespace
           os << "while (p.more_elements ())"
              << "{"
              << xml_element_type << " e (p.next_element ());"
-             << string_type << " n (::XSCRT::XML::uq_name (e.name ()));"
+             << string_type << " const n (::XSCRT::XML::uq_name (e.name ()));"
              << std::endl;
 
+          element_.reset ();
           names (c, names_elements_);
 
-          os << "{}"        // else block
-             << "}";        // while loop
+          os << "}";        // while loop
         }
 
         if (ha)
@@ -1183,12 +1302,12 @@ namespace
           os << "while (p.more_attributes ())"
              << "{"
              << xml_attribute_type << " a (p.next_attribute ());"
-             << string_type << " n (::XSCRT::XML::uq_name (a.name ()));";
+             << string_type << " const n (::XSCRT::XML::uq_name (a.name ()));";
 
+          attribute_.reset ();
           names (c, names_attributes_);
 
-          os << "{}"        // else block
-             << "}";        // while loop
+          os << "}";        // while loop
         }
       }
     }
@@ -1226,7 +1345,7 @@ namespace
 
         // pre
         os << "// write " << name << std::endl;
-        os << "bool" << std::endl << name << "::write_" << name
+        os << "bool " << name << "::write_" << name
            << " (::XMLSchema::CDR_OutputStream &stream) const"
            << "{";
 
@@ -1252,15 +1371,9 @@ namespace
       {
         // pre
         os << "// read " << name << std::endl;
-        os << "bool" << std::endl << name << "::" << std::endl
-           << "read_" << name
-           << " (::XMLSchema::CDR_InputStream &stream," << std::endl;
-
-        for (size_t j =0; j < name.length () + 5; j++)
-          os << " ";
-
-        os << "::XMLSchema::cdr_arg_traits < " << name
-           << " >::inout_type element)"
+        os << "bool " << name << "::read_" << name
+           << " (::XMLSchema::CDR_InputStream &stream, ::XMLSchema::cdr_arg_traits < "
+           << name << " >::inout_type element)"
            << "{";
 
         {
@@ -1348,12 +1461,11 @@ namespace
 
 
     virtual void
-    pre (Type&)
+    pre (Type& c)
     {
-      os << scope << "::" << std::endl
-         << name << " (" << xml_attribute_type << " const& a)" << std::endl
+      os << scope << "::" << name << " (" << xml_attribute_type << " const& a)" << std::endl
          << ":" << std::endl
-         << "Base (a)" << std::endl
+         << base_type_name (c) << " (a)" << std::endl
          << "{";
     }
 
@@ -1420,13 +1532,9 @@ namespace
 
       enter_scope (name);
 
-      os << "// " << scope << std::endl
-         << std::endl;
-
       // c-tor (Element const&)
       //
-      os << scope << "::" << std::endl
-         << name << " (" << xml_element_type << " const& e)" << std::endl
+      os << scope << "::" << name << " (" << xml_element_type << " const& e)" << std::endl
          << ": ::XSCRT::Type (e)" << std::endl
          << "{"
          << string_type << " v (e.value ());"
@@ -1439,8 +1547,7 @@ namespace
 
       // c-tor (Attribute const&)
       //
-      os << scope << "::" << std::endl
-         << name << " (" << xml_attribute_type << " const& a)" << std::endl
+      os << scope << "::" << name << " (" << xml_attribute_type << " const& a)" << std::endl
          << ": ::XSCRT::Type (a)" << std::endl
          << "{"
          << string_type << " v (a.value ());"
@@ -1460,7 +1567,7 @@ namespace
       {
   // pre
   os << "// write " << name << std::endl;
-  os << "bool" << std::endl << name << "::write_" << name
+  os << "bool " << name << "::write_" << name
      << " (::XMLSchema::CDR_OutputStream &stream) const"
      << "{";
 
@@ -1482,10 +1589,8 @@ namespace
       {
   // pre
   os << "// read " << name << std::endl;
-  os << "bool" << std::endl << name << "::read_" << name
-     << " (::XMLSchema::CDR_InputStream &stream, "
-     << std::endl
-     << "::XMLSchema::cdr_arg_traits < " << name
+  os << "bool " << name << "::read_" << name
+     << " (::XMLSchema::CDR_InputStream &stream, ::XMLSchema::cdr_arg_traits < " << name
      << " >::inout_type element)" << std::endl
      << "{";
 

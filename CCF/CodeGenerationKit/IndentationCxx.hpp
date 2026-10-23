@@ -44,7 +44,9 @@ namespace Indentation
       position_ (0),
       paren_balance_ (0),
       spaces_ (2),
-      construct_ (OTHER)
+      construct_ (OTHER),
+      last_non_whitespace_ (0),
+      inline_initializer_ (false)
     {
       indentation_.push (0);
     }
@@ -94,6 +96,16 @@ namespace Indentation
           if (this->construct_ != CXX_COMMENT &&
               this->construct_ != STRING_LITERAL)
           {
+            if (this->last_non_whitespace_ == '=' ||
+                this->last_non_whitespace_ == '_')
+            {
+              this->output_indentation ();
+              result = this->write (c);
+              ++ this->position_;
+              this->inline_initializer_ = true;
+              break;
+            }
+
             // Make sure there is a new line in the buffer. We then need to
             // move the correct position on the newline.
             this->ensure_new_line ();
@@ -114,6 +126,15 @@ namespace Indentation
         case '}':
           if (!(this->construct_ == CXX_COMMENT || this->construct_ == STRING_LITERAL))
           {
+            if (this->inline_initializer_)
+            {
+              this->output_indentation ();
+              result = this->write (c);
+              ++ this->position_;
+              this->inline_initializer_ = false;
+              break;
+            }
+
             // Remove the current indentation value, if it exists.
             if (this->indentation_.size () > 1)
               this->indentation_.pop ();
@@ -138,8 +159,7 @@ namespace Indentation
             this->hold_.push_back (c);
 
 
-            // Add double newline after '}'.
-            this->hold_.push_back ('\n');
+            // Add a newline after '}'.
             this->hold_.push_back ('\n');
 
             // Set position to the start of the line.
@@ -319,6 +339,9 @@ namespace Indentation
           // Update the position.
           ++ this->position_;
         }
+
+        if (c != ' ' && c != '\t' && c != '\n' && c != '\r')
+          this->last_non_whitespace_ = c;
       }
       catch (const Full &)
       {
@@ -430,6 +453,12 @@ namespace Indentation
 
     /// The type of construct.
     Construct construct_;
+
+    /// Last non-whitespace input character.
+    char_type last_non_whitespace_;
+
+    /// Whether the current brace pair is an inline initializer.
+    bool inline_initializer_;
 
     /// Type definition of the holding queue.
     using Hold = std::deque<int_type>;

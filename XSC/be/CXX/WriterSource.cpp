@@ -47,7 +47,7 @@ namespace
 
         // pre
         //
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << name << "_pre (Type const&)"
            << "{"
            << "push_ (" << xml_element_type << " (" <<
@@ -58,7 +58,7 @@ namespace
 
         // next
         //
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << name << "_next (Type const& o)"
            << "{"
            << name << "_post (o);"
@@ -68,7 +68,7 @@ namespace
 
         // post
         //
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << name << "_post (Type const&)"
            << "{"
            << "pop_ ();"
@@ -78,7 +78,7 @@ namespace
       {
         // optional & one
         //
-        os << "void " << scope << "::" << std::endl
+        os << "void " << scope << "::"
            << id (name) << " (Type const& o)"
            << "{"
            << "push_ (" << xml_element_type << " (" <<
@@ -114,7 +114,7 @@ namespace
 
       bool q (a.qualified ());
 
-      os << "void " << scope << "::" << std::endl
+      os << "void " << scope << "::"
          << id (name) << " (Type const& o)"
          << "{"
          << xml_attribute_type << " a (" <<
@@ -229,11 +229,9 @@ namespace
     {
       string name (id (name_));
 
-      os << "// " << name << std::endl;
-
       // c-tor (XML::Element&)
       //
-      os << scope << "::" << std::endl
+      os << scope << "::"
          << name << " (" << xml_element_type << "& e)" << std::endl
          << ": ::XSCRT::Writer<" << char_type << "> (e)" << std::endl
          << "{"
@@ -243,7 +241,7 @@ namespace
       //
       if (this->cppmode_ == CPPMODE::CPP03)
       {
-        os << scope << "::" << std::endl
+        os << scope << "::"
           << name << " ()"
           << "{"
           << "}";
@@ -251,7 +249,7 @@ namespace
 
       // traverse
       //
-      os << "void " << scope << "::" << std::endl
+      os << "void " << scope << "::"
          << "traverse (Type const& o)"
          << "{";
 
@@ -286,9 +284,9 @@ namespace
       string name (e.name ());
       string type (type_name (e));
 
-      os << "if (o == " << type << "::" << id (name) << ") " <<
-        "s = " << L << " (\"" << name << "\")" << ";"
-         << "else ";
+      os << "case " << type << "::" << id (name) << "_l: "
+         << "s = " << L << " (\"" << name << "\"); "
+         << "break;";
     }
   };
 
@@ -307,12 +305,9 @@ namespace
     {
       string name ((this->name_ != L"") ? id(name_) : id (c.name ()));
 
-      os << "// " << name << std::endl
-         << std::endl;
-
       // c-tor (XML::Element&)
       //
-      os << name << "::" << std::endl
+      os << name << "::"
          << name << " (" << xml_element_type << "& e)" << std::endl
          << ": ::XSCRT::Writer<" << char_type << "> (e)" << std::endl
          << "{"
@@ -322,7 +317,7 @@ namespace
       //
       if (this->cppmode_ == CPPMODE::CPP03)
       {
-        os << name << "::" << std::endl
+        os << name << "::"
           << name << " ()"
           << "{"
           << "}";
@@ -330,15 +325,17 @@ namespace
 
       // traverse
       //
-      os << "void " << name << "::" << std::endl
+      os << "void " << name << "::"
          << "traverse (Type const& o)"
          << "{"
          << string_type << " s;"
-         << std::endl;
+         << "switch (o.integral ())"
+         << "{";
 
       names (c, names_);
 
-      os << "{}"
+      os << "default: break;"
+         << "}"
          << "if (::XSCRT::XML::Attribute< " << char_type << " >* a = attr_ ())"
          << "{"
          << "a->value (s);"
@@ -540,12 +537,13 @@ namespace
          << "xercesc::DOMElement* dom_element = d->getDocumentElement ();"
          << "if (!dom_element)"
          << "{"
-         << "throw 1;"
+         << "throw std::runtime_error (\"XML document has no root element\");"
          << "}"
          << xml_element_type << " e (dom_element);"
          << "if (e.name () != " << L << " (\"" << name << "\"))"
          << "{"
-         << "throw 1;"
+         << "throw std::runtime_error (\"unexpected XML root element; expected <"
+         << name << ">\");"
          << "}";
 
       os << "struct W : ";

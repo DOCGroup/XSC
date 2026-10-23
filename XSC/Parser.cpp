@@ -8,8 +8,8 @@
 #include "xercesc/util/XMLString.hpp"
 #include "xercesc/validators/common/Grammar.hpp"
 #include "xercesc/validators/schema/XSDDOMParser.hpp"
+#include "utils/XML_Error_Handler.h"
 #include "utils/XML_Schema_Resolver.h"
-#include "utils/XML_Helper.h"
 
 #include <cstdlib>  // std::wcstombs
 #include <memory>

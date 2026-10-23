@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="ReadOnlyType">
+    <xs:sequence>
+      <xs:element name="name" type="xs:string"/>
+      <xs:element name="item" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+      <xs:element name="optionalValue" type="xs:string" minOccurs="0"/>
+    </xs:sequence>
+    <xs:attribute name="requiredAttribute" type="xs:string" use="required"/>
+    <xs:attribute name="optionalAttribute" type="xs:string"/>
+  </xs:complexType>
+</xs:schema>

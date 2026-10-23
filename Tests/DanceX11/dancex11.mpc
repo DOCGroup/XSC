@@ -4,7 +4,9 @@ project (xsc_test_dancex11): xscdefaults {
   requires += xsc
   custom_only = 1
 
+  xscflags += --cxx-cpp17
   xscflags += --cxx-char-type char
+  xscflags += --cxx-generate-writer-types
   xscflags += --search-path .
 
   XSC_Files {
@@ -40,5 +42,67 @@ project (xsc_test_dancex11_generated): xscrt {
     iad.cpp
     pcd.cpp
     toplevel.cpp
+  }
+}
+
+project (xsc_test_dancex11_readonly): xscdefaults {
+  requires += xsc
+  custom_only = 1
+
+  Modify_Custom (XSC) {
+    source_outputext = .readonly.cpp,
+    header_outputext = .readonly.hpp,
+  }
+
+  xscflags += --cxx-char-type char
+  xscflags += --search-path .
+  xscflags += --cxx-read-only
+  xscflags += --cxx-header-suffix .readonly.hpp
+  xscflags += --cxx-source-suffix .readonly.cpp
+
+  XSC_Files {
+    Basic_Deployment_Data.xsd
+    Deployment.xsd
+    XMI.xsd
+    ccd.xsd
+    cdd.xsd
+    cdp.xsd
+    cid.xsd
+    cpd.xsd
+    iad.xsd
+    pcd.xsd
+    toplevel.xsd
+  }
+
+  Source_Files {
+  }
+}
+
+project (xsc_test_dancex11_readonly_generated): xscrt {
+  after += xsc_test_dancex11_readonly
+
+  Source_Files {
+    Basic_Deployment_Data.readonly.cpp
+    Deployment.readonly.cpp
+    XMI.readonly.cpp
+    ccd.readonly.cpp
+    cdd.readonly.cpp
+    cdp.readonly.cpp
+    cid.readonly.cpp
+    cpd.readonly.cpp
+    iad.readonly.cpp
+    pcd.readonly.cpp
+    toplevel.readonly.cpp
+    readonly_api.cpp
+  }
+}
+
+project (xsc_test_dancex11_optional_copy): xscrt {
+  after += xsc_test_dancex11_generated
+  libs += CXX IDL
+
+  Source_Files {
+    Basic_Deployment_Data.cpp
+    optional_copy.cpp
   }
 }

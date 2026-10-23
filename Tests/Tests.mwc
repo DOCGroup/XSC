@@ -12,6 +12,7 @@ workspace (Tests) {
   Import
   Include
   NoNamespace
+  ReadOnly
   UnqualifiedImport
   Validation
 }

@@ -52,22 +52,30 @@ namespace
       os << "xercesc::DOMElement* dom_element = d->getDocumentElement ();"
          << "if (!dom_element)"
          << "{"
-         << "throw 1;"
+         << "throw std::runtime_error (\"XML document has no root element\");"
          << "}"
          << xml_element_type << " e (dom_element);"
          << "if (e.name () == " << compare_name << ")"
-         << "{"
-         << type << " r (e);\n";
+         << "{";
+
+     if (!this->read_only_)
+       os << type << " r (e);";
 
      if (this->cppmode_ == CPPMODE::CPP03)
      {
        os  << "(*TSS_ID_Map)->resolve_idref();" << std::endl;
      }
-     os  << "return r;"
-         << "}"
+
+     if (this->read_only_)
+       os << "return " << type << " (e);";
+     else
+       os << "return r;";
+
+     os << "}"
          << "else"
          << "{"
-         << "throw 1;"
+         << "throw std::runtime_error (\"unexpected XML root element; expected <"
+         << name << ">\");"
          << "}"
          << "}"
          << "}";

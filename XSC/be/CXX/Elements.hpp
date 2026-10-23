@@ -5,6 +5,7 @@
 #define CXX_ELEMENTS_HXX
 
 #include <deque>
+#include <functional>
 #include <vector>
 #include <string>
 #include <ostream>
@@ -72,7 +73,8 @@ public:
         cdr_writer_generation_ (false),
         cppmode_ (CPPMODE::CPP17),
         orb_ (ORB::TAO),
-        generate_ra_sequences_ (false)
+        generate_ra_sequences_ (false),
+        read_only_ (false)
   {
     if (char_type == L"wchar_t")
       {
@@ -119,7 +121,8 @@ protected:
         cdr_writer_generation_ (c.cdr_writer_generation_),
         cppmode_ (c.cppmode_),
         orb_ (c.orb_),
-        generate_ra_sequences_ (c.generate_ra_sequences_)
+        generate_ra_sequences_ (c.generate_ra_sequences_),
+        read_only_ (c.read_only_)
   {
   }
 
@@ -170,6 +173,9 @@ protected:
 
   string
   type_name (SemanticGraph::Type& t, string const& ns_suffix = L"");
+
+  string
+  base_type_name (SemanticGraph::Complex& t);
 
 protected:
   string
@@ -273,6 +279,24 @@ public:
     return this->generate_ra_sequences_;
   }
 
+  void
+  read_only (bool flag)
+  {
+    this->read_only_ = flag;
+  }
+
+  bool
+  read_only ()
+  {
+    return this->read_only_;
+  }
+
+  bool
+  optional_via_if_set ()
+  {
+    return this->cppmode_ != CPPMODE::CPP03 || this->read_only_;
+  }
+
 public:
   std::wostream& os;
   string& scope;
@@ -342,6 +366,7 @@ protected:
   ORB orb_;
 
   bool generate_ra_sequences_;
+  bool read_only_;
 };
 
 struct Anonymous : Traversal::Element,
@@ -478,6 +503,85 @@ has (Y& y)
   s.traverse (y);
 
   return r;
+}
+
+struct CopyRequiredMembers : Traversal::Element, Traversal::Attribute
+{
+  void
+  traverse (SemanticGraph::Element& e) override
+  {
+    if (e.max () == 1)
+      required = true;
+  }
+
+  void
+  traverse (SemanticGraph::Attribute&) override
+  {
+    required = true;
+  }
+
+  bool required {};
+};
+
+inline bool
+has_copy_required_members (SemanticGraph::Complex& c)
+{
+  CopyRequiredMembers t;
+  Traversal::Scope s;
+  Traversal::Names n;
+  s.edge_traverser (n);
+  n.node_traverser (t);
+  s.traverse (c);
+  return t.required;
+}
+
+struct ConstructorRequiredMembers : Traversal::Enumeration,
+                                   Traversal::Element,
+                                   Traversal::Attribute
+{
+  void
+  traverse (SemanticGraph::Enumeration&) override
+  {
+    required = true;
+  }
+
+  void
+  traverse (SemanticGraph::Element& e) override
+  {
+    if (e.min () >= 1)
+      required = true;
+  }
+
+  void
+  traverse (SemanticGraph::Attribute& a) override
+  {
+    if (!a.optional ())
+      required = true;
+  }
+
+  bool required {};
+};
+
+inline bool
+has_constructor_required_members (SemanticGraph::Complex& c)
+{
+  ConstructorRequiredMembers t;
+
+  std::function<void (SemanticGraph::Complex&)> visit = [&] (SemanticGraph::Complex& current)
+  {
+    for (auto i (current.inherits_begin ()); i != current.inherits_end (); ++i)
+      if (auto base = dynamic_cast<SemanticGraph::Complex*> (std::addressof ((**i).inheritee ())))
+        visit (*base);
+
+    Traversal::Complex complex;
+    Traversal::Names names;
+    complex.edge_traverser (names);
+    names.node_traverser (t);
+    complex.traverse (current);
+  };
+
+  visit (c);
+  return t.required;
 }
 
 // Fundamental type mapping helper.

@@ -1,0 +1,57 @@
+project (xsc_test_readonly): xscdefaults {
+  requires += xsc
+  custom_only = 1
+  xscflags += --cxx-char-type char
+  xscflags += --cxx-read-only
+  xscflags += --cxx-generate-cdr-reader-types
+  xscflags += --cxx-generate-cdr-writer-types
+  xscflags += --cxx-generate-traversal-types
+
+  XSC_Files {
+    readonly.xsd
+  }
+  Source_Files {
+  }
+}
+
+project (xsc_test_readonly_generated): xscrt {
+  after += xsc_test_readonly
+  includes += $(ACE_ROOT)/ace/XML_Utils
+
+  Source_Files {
+    readonly.cpp
+    readonly_api.cpp
+  }
+}
+
+project (xsc_test_cpp03_compatibility): xscdefaults {
+  requires += xsc
+  custom_only = 1
+
+  Modify_Custom (XSC) {
+    source_outputext = .cpp03.cpp,
+    header_outputext = .cpp03.hpp,
+  }
+
+  xscflags += --cxx-char-type char
+  xscflags += --cxx-cpp03
+  xscflags += --cxx-generate-traversal-types
+  xscflags += --cxx-header-suffix .cpp03.hpp
+  xscflags += --cxx-source-suffix .cpp03.cpp
+
+  XSC_Files {
+    readonly.xsd
+  }
+
+  Source_Files {
+  }
+}
+
+project (xsc_test_cpp03_compatibility_generated): xscrt {
+  after += xsc_test_cpp03_compatibility
+  includes += $(ACE_ROOT)/ace/XML_Utils
+
+  Source_Files {
+    readonly.cpp03.cpp
+  }
+}

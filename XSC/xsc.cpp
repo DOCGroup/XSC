@@ -27,19 +27,20 @@
 #include <filesystem>
 #include <memory>
 #include <iostream>
+#include <exception>
+#include <string>
 #include <string_view>
 #include <vector>
 
 #include "ace/Get_Opt.h"
 #include "XSC/Options.hpp"
+#include "XSC/Version.hpp"
 #include "XSC/Parser.hpp"
 #include "XSC/be/CXX/Validator.hpp"
 #include "XSC/be/CXX/Generator.hpp"
 #include "XSC/be/IDL/Generator.hpp"
 
 using namespace XSC;
-
-wchar_t const* const version = L"0.0.8";
 
  /**
  * @class ErrorDetector
@@ -140,6 +141,8 @@ namespace
     {"cxx-cpp03", ACE_Get_Opt::NO_ARG, "Generate C++03-compatible code."},
     {"cxx-cpp11", ACE_Get_Opt::NO_ARG, "Generate C++11 code."},
     {"cxx-cpp17", ACE_Get_Opt::NO_ARG, "Generate C++17 code."},
+    {"cxx-read-only", ACE_Get_Opt::NO_ARG,
+     "Generate read-only C++ data types (omit CDR reader APIs)."},
     {"idl-char-type", ACE_Get_Opt::ARG_REQUIRED, "Generated IDL character type."},
     {"idl-namespace-regex", ACE_Get_Opt::ARG_REQUIRED, "IDL namespace mapping regex (repeatable)."},
     {"idl-file-suffix", ACE_Get_Opt::ARG_REQUIRED, "Generated IDL suffix."},
@@ -152,6 +155,34 @@ namespace
   {
     return name == "search-path" || name == "cxx-namespace-regex" ||
            name == "idl-namespace-regex";
+  }
+
+  std::string
+  shell_quote (std::string_view argument)
+  {
+    std::string quoted ("'");
+    for (char c : argument)
+      {
+        if (c == '\'')
+          quoted += "'\\''";
+        else
+          quoted += c;
+      }
+    quoted += '\'';
+    return quoted;
+  }
+
+  std::string
+  invocation (int argc, char* argv[])
+  {
+    std::string result;
+    for (int i {1}; i != argc; ++i)
+      {
+        if (i != 1)
+          result += ' ';
+        result += shell_quote (argv[i]);
+      }
+    return result;
   }
 
   void
@@ -187,6 +218,7 @@ int main (int argc, char* argv[])
 {
   try
   {
+    std::string const original_arguments {invocation (argc, argv)};
     XSC::Options command_line;
     ACE_Get_Opt get_opt (argc, argv, "", 1, 0, ACE_Get_Opt::PERMUTE_ARGS);
 
@@ -219,7 +251,7 @@ int main (int argc, char* argv[])
 
     if (command_line.count ("version"))
       {
-        std::wcerr << "XML Schema compiler " << version << std::endl;
+        std::wcerr << "XML Schema compiler " << XSC::wide_version << std::endl;
         return 0;
       }
 
@@ -235,6 +267,7 @@ int main (int argc, char* argv[])
         return 1;
       }
 
+    command_line.set ("arguments", original_arguments);
     command_line.set ("input-file", get_opt.argv ()[get_opt.opt_ind ()]);
 
     auto set_default = [&command_line] (std::string const& name, std::string const& value)
@@ -351,6 +384,11 @@ int main (int argc, char* argv[])
     }
 
     return 0;
+  }
+  catch (std::exception const& e)
+  {
+    std::cerr << "error: " << e.what () << std::endl;
+    return 1;
   }
   catch (...)
   {
