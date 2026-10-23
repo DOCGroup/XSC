@@ -165,6 +165,8 @@ namespace
 
       if (c.max () != 1)
       {
+        string accessor_name (sequence_accessor_name (c));
+
         // sequence
         //
         switch(this->cppmode_)
@@ -181,8 +183,8 @@ namespace
         if (this->cppmode_ == CPPMODE::CPP17)
         {
           if (!this->read_only_)
-            os << name << "_container_type& " << name << "_values () noexcept;";
-          os << name << "_container_type const& " << name << "_values () const noexcept;";
+            os << name << "_container_type& " << accessor_name << " () noexcept;";
+          os << name << "_container_type const& " << accessor_name << " () const noexcept;";
         }
         else
         {

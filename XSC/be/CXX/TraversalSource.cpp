@@ -111,6 +111,8 @@ namespace
         // sequence
         //
 
+        string accessor_name (sequence_accessor_name (e));
+
         // name
         //
         string iterator_type (fq_name (e, L"", false));
@@ -120,8 +122,8 @@ namespace
            << "{";
 
         if (this->cppmode_ == CPPMODE::CPP17)
-          os << "auto b (o." << name << "_values ().begin ()), "
-             << "e (o." << name << "_values ().end ());";
+          os << "auto b (o." << accessor_name << " ().begin ()), "
+             << "e (o." << accessor_name << " ().end ());";
         else
           os << (this->cppmode_ == CPPMODE::CPP03 ? iterator_type : L"auto") << " "
              << "b (o.begin_" << name << "()), "
@@ -152,8 +154,8 @@ namespace
            << "{";
 
         if (this->cppmode_ == CPPMODE::CPP17)
-          os << "auto b (o." << name << "_values ().cbegin ()), "
-             << "e (o." << name << "_values ().cend ());";
+          os << "auto b (o." << accessor_name << " ().cbegin ()), "
+             << "e (o." << accessor_name << " ().cend ());";
         else
           os << (this->cppmode_ == CPPMODE::CPP03
                    ? fq_name (e, L"", false) + L"_const_iterator"

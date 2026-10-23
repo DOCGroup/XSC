@@ -13,6 +13,7 @@ workspace (Tests) {
   Include
   NoNamespace
   ReadOnly
+  SequenceAccessorCollision
   UnqualifiedImport
   Validation
 }

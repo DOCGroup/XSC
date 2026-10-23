@@ -177,6 +177,9 @@ protected:
   string
   base_type_name (SemanticGraph::Complex& t);
 
+  string
+  sequence_accessor_name (SemanticGraph::Element& e);
+
 protected:
   string
   fq_name (SemanticGraph::Nameable& n, string const& ns_suffix = L"", bool mangle = true);

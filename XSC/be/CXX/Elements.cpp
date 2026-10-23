@@ -346,6 +346,40 @@ base_type_name (SemanticGraph::Complex& t)
 }
 
 string Context::
+sequence_accessor_name (SemanticGraph::Element& e)
+{
+  auto conflicts = [this, &e] (string const& candidate)
+  {
+    for (auto i (e.scope ().names_begin ()), end (e.scope ().names_end ()); i != end; ++i)
+    {
+      SemanticGraph::Names& name (**i);
+
+      if (id (name.name ()) == candidate)
+        return true;
+
+      SemanticGraph::Element* other (
+        dynamic_cast<SemanticGraph::Element*> (std::addressof (name.named ())));
+      if (other != nullptr && other != std::addressof (e) && other->max () != 1 &&
+          id (name.name ()) + L"_values" == candidate)
+        return true;
+    }
+
+    return false;
+  };
+
+  string name (id (e.name ()) + L"_values");
+  if (!conflicts (name))
+    return name;
+
+  name = id (e.name ()) + L"_sequence_values";
+  size_t suffix (2);
+  while (conflicts (name))
+    name = id (e.name ()) + L"_sequence_values_" + std::to_wstring (suffix++);
+
+  return name;
+}
+
+string Context::
 type_name (SemanticGraph::Instance& i, string const& nss)
 {
   SemanticGraph::Type& t (i.type ());

@@ -177,15 +177,17 @@ namespace
         // sequence
         //
 
+        string accessor_name (sequence_accessor_name (e));
+
         if (this->cppmode_ == CPPMODE::CPP17)
         {
           if (!this->read_only_)
             os << i << scope << "::" << name << "_container_type& " << scope << "::"
-               << name << "_values () noexcept"
+               << accessor_name << " () noexcept"
                << "{return " << id(name) << "_;}";
 
           os << i << scope << "::" << name << "_container_type const& " << scope << "::"
-             << name << "_values () const noexcept"
+             << accessor_name << " () const noexcept"
              << "{return " << id(name) << "_;}";
         }
         else
