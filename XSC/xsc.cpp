@@ -300,7 +300,7 @@ int main (int argc, char* argv[])
     using SearchPaths = std::vector<std::string>;
 
     Parser::Paths search_paths;
-    search_paths.push_back (std::filesystem::path ());
+    search_paths.emplace_back ();
 
     if (command_line.count ("search-path"))
       {
@@ -310,7 +310,7 @@ int main (int argc, char* argv[])
           {
             try
               {
-                search_paths.push_back (std::filesystem::path (search_path));
+                search_paths.emplace_back (search_path);
               }
             catch (...)
               {
