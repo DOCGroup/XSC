@@ -354,6 +354,19 @@ base_type_name (SemanticGraph::Complex& t)
 }
 
 string Context::
+fundamental_type_name (SemanticGraph::FundamentalType& t)
+{
+  string name (t.name ());
+
+  // The XMLSchema runtime uses trailing underscores for these fundamental types.
+  if (name == L"double" || name == L"float" || name == L"int" ||
+      name == L"long" || name == L"short")
+    name += L'_';
+
+  return name;
+}
+
+string Context::
 sequence_accessor_name (SemanticGraph::Element& e)
 {
   auto conflicts = [this, &e] (string const& candidate)
