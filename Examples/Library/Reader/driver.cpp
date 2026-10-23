@@ -2,6 +2,8 @@
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
 
 #include <iostream>
+#include <type_traits>
+#include <utility>
 
 #include "../dom.hpp"
 #include "library.hpp"
@@ -29,37 +31,37 @@ main (int argc, char* argv[])
   {
     using namespace Lib;
 
+    static_assert (std::is_same_v<decltype (std::declval<Library&> ().book_values ()),
+                                  Library::book_container_type&>);
+    static_assert (std::is_same_v<decltype (std::declval<Library const&> ().book_values ()),
+                                  Library::book_container_type const&>);
+
     Library const& lib = library (doc);
 
-    for (Library::book_const_iterator b (lib.begin_book ());
-         b != lib.end_book (); ++b)
+    for (Book const& b : lib.book_values ())
     {
       wcerr << endl
-            << L"ISBN       : " << b->isbn () << endl
-            << L"Title      : " << b->title ()  << endl;
+            << L"ISBN       : " << b.isbn () << endl
+            << L"Title      : " << b.title ()  << endl;
 
-      for (Book::author_const_iterator a (b->begin_author ());
-           a != b->end_author ();
-           ++a)
+      for (Author const& a : b.author_values ())
       {
-        wcerr << L"Author     : " << a->name () << endl;
+        wcerr << L"Author     : " << a.name () << endl;
 
-        if (a->recommends_p () /* @@ VC7.1 && a->recommends () */)
+        if (a.recommends_p () /* @@ VC7.1 && a.recommends () */)
         {
-          Book const& rec = static_cast<Book const&> (*(a->recommends ()));
+          Book const& rec = static_cast<Book const&> (*(a.recommends ()));
           wcerr << L"Recommends : " << rec.title () << endl;
         }
       }
 
-      for (Book::character_const_iterator c (b->begin_character ());
-           c != b->end_character ();
-           ++c)
+      for (Character const& c : b.character_values ())
       {
-        wcerr << L"Character  : " << c->name () << L" - "
-              << c->qualification () << endl;
+        wcerr << L"Character  : " << c.name () << L" - "
+              << c.qualification () << endl;
       }
 
-      wcerr << L"Available  : " << b->available () << endl;
+      wcerr << L"Available  : " << b.available () << endl;
     }
 
     // Example of traversal usage. Here we are going to dump

@@ -178,33 +178,45 @@ namespace
             os << "using " << name << "_container_type = " << container  << "<" << type << ">;";
             break;
         }
-        switch(this->cppmode_)
+        if (this->cppmode_ == CPPMODE::CPP17)
         {
-          case CPPMODE::CPP03:
-            if (!this->read_only_)
-              os << "typedef " << name << "_container_type::iterator " << name << "_iterator;";
-            os << "typedef " << name << "_container_type::const_iterator " << name << "_const_iterator;";
-            if (!this->read_only_)
-            {
-              os << name << "_iterator begin_" << name << " ();";
-              os << name << "_iterator end_" << name << " ();";
-            }
-            break;
-          case CPPMODE::CPP11:
-          case CPPMODE::CPP17:
-            if (!this->read_only_)
-              os << "using " << name << "_iterator = " << name << "_container_type::iterator;";
-            os << "using " << name << "_const_iterator = " << name << "_container_type::const_iterator;";
-            if (!this->read_only_)
-            {
-              os << name << "_iterator begin_" << name << " ();";
-              os << name << "_iterator end_" << name << " ();";
-            }
-            break;
+          if (!this->read_only_)
+            os << name << "_container_type& " << name << "_values () noexcept;";
+          os << name << "_container_type const& " << name << "_values () const noexcept;";
         }
+        else
+        {
+          switch(this->cppmode_)
+          {
+            case CPPMODE::CPP03:
+              if (!this->read_only_)
+                os << "typedef " << name << "_container_type::iterator " << name << "_iterator;";
+              os << "typedef " << name << "_container_type::const_iterator "
+                 << name << "_const_iterator;";
+              if (!this->read_only_)
+              {
+                os << name << "_iterator begin_" << name << " ();";
+                os << name << "_iterator end_" << name << " ();";
+              }
+              break;
+            case CPPMODE::CPP11:
+              if (!this->read_only_)
+                os << "using " << name << "_iterator = " << name << "_container_type::iterator;";
+              os << "using " << name << "_const_iterator = "
+                 << name << "_container_type::const_iterator;";
+              if (!this->read_only_)
+              {
+                os << name << "_iterator begin_" << name << " ();";
+                os << name << "_iterator end_" << name << " ();";
+              }
+              break;
+            case CPPMODE::CPP17:
+              break;
+          }
 
-        os << name << "_const_iterator begin_" << name << " () const;";
-        os << name << "_const_iterator end_" << name << " () const;";
+          os << name << "_const_iterator begin_" << name << " () const;";
+          os << name << "_const_iterator end_" << name << " () const;";
+        }
 
         switch(this->cppmode_)
         {
@@ -227,8 +239,8 @@ namespace
           os << "void set_" << name << "_ptr (const " << string_type << "& idref);";
         }
 
-        os << "size_t count_" << name << " () const"
-           << (this->cppmode_ == CPPMODE::CPP17 ? " noexcept;" : ";");
+        if (this->cppmode_ != CPPMODE::CPP17)
+          os << "size_t count_" << name << " () const;";
 
         os << std::endl
            << (this->read_only_ ? "private:" : "protected:") << std::endl;

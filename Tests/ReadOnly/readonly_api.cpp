@@ -28,6 +28,29 @@ namespace
   {
   };
 
+  template <typename T, typename = void>
+  struct has_item_iterators : std::false_type
+  {
+  };
+
+  template <typename T>
+  struct has_item_iterators<T, std::void_t<decltype (std::declval<T const&> ().begin_item ()),
+                                           decltype (std::declval<T const&> ().end_item ())>>
+    : std::true_type
+  {
+  };
+
+  template <typename T, typename = void>
+  struct has_item_count : std::false_type
+  {
+  };
+
+  template <typename T>
+  struct has_item_count<T, std::void_t<decltype (std::declval<T const&> ().count_item ())>>
+    : std::true_type
+  {
+  };
+
   using ReadOnly = ReadOnlyType;
 
   static_assert (!std::is_default_constructible_v<ReadOnly>);
@@ -37,12 +60,14 @@ namespace
   static_assert (!std::is_move_assignable_v<ReadOnly>);
   static_assert (!has_name_setter<ReadOnly>::value);
   static_assert (!has_optionalValue_presence_accessor<ReadOnly>::value);
+  static_assert (!has_item_iterators<ReadOnly>::value);
+  static_assert (!has_item_count<ReadOnly>::value);
   static_assert (std::is_same_v<ReadOnly::item_container_type,
                                 std::list<::XMLSchema::string<char>>>);
   static_assert (std::is_same_v<decltype (std::declval<ReadOnly&> ().name ()),
                                 ::XMLSchema::string<char> const&>);
   static_assert (std::is_same_v<decltype (std::declval<ReadOnly&> ().optionalValue_if_set ()),
                                 ::XMLSchema::string<char> const*>);
-  static_assert (std::is_same_v<decltype (*std::declval<ReadOnly&> ().begin_item ()),
-                                ::XMLSchema::string<char> const&>);
+  static_assert (std::is_same_v<decltype (std::declval<ReadOnly&> ().item_values ()),
+                                ReadOnly::item_container_type const&>);
 }

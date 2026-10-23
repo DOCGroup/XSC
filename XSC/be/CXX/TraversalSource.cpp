@@ -117,10 +117,17 @@ namespace
         iterator_type += this->read_only_ ? L"_const_iterator" : L"_iterator";
 
         os << "void " << scope << "::" << id (name) << " (Type& o)"
-           << "{"
-           << (this->cppmode_ == CPPMODE::CPP03 ? iterator_type : L"auto") << " "
-           << "b (o.begin_" << name << "()), "
-           << "e (o.end_" << name << "());"
+           << "{";
+
+        if (this->cppmode_ == CPPMODE::CPP17)
+          os << "auto b (o." << name << "_values ().begin ()), "
+             << "e (o." << name << "_values ().end ());";
+        else
+          os << (this->cppmode_ == CPPMODE::CPP03 ? iterator_type : L"auto") << " "
+             << "b (o.begin_" << name << "()), "
+             << "e (o.end_" << name << "());";
+
+        os
            << std::endl
            << "if (b != e)"
            << "{"
@@ -142,12 +149,19 @@ namespace
 
 
         os << "void " << scope << "::" << id (name) << " (Type const& o)"
-           << "{"
-           << (this->cppmode_ == CPPMODE::CPP03
-                 ? fq_name (e, L"", false) + L"_const_iterator"
-                 : L"auto") << " "
-           << "b (o.begin_" << name << "()), "
-           << "e (o.end_" << name << "());"
+           << "{";
+
+        if (this->cppmode_ == CPPMODE::CPP17)
+          os << "auto b (o." << name << "_values ().cbegin ()), "
+             << "e (o." << name << "_values ().cend ());";
+        else
+          os << (this->cppmode_ == CPPMODE::CPP03
+                   ? fq_name (e, L"", false) + L"_const_iterator"
+                   : L"auto") << " "
+             << "b (o.begin_" << name << "()), "
+             << "e (o.end_" << name << "());";
+
+        os
            << std::endl
            << "if (b != e)"
            << "{"
