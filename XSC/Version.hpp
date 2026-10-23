@@ -3,7 +3,7 @@
 
 namespace XSC
 {
-  inline constexpr wchar_t wide_version[] {L"2.0.0"};
+  inline constexpr wchar_t wide_version[] {L"2.0.1"};
 }
 
 #endif // XSC_VERSION_HPP
