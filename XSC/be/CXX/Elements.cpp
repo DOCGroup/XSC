@@ -111,7 +111,15 @@ fq_name (SemanticGraph::Nameable& n, string const& nss, bool mangle)
     string name;
 
     if (mangle)
+    {
       name = id (n.name ());
+
+      // The runtime uses trailing underscores for its fundamental type names.
+      if (xs_ns_name (n) == L"http://www.w3.org/2001/XMLSchema" &&
+          (n.name () == L"double" || n.name () == L"float" || n.name () == L"int" ||
+           n.name () == L"long" || n.name () == L"short"))
+        name = n.name () + L'_';
+    }
     else name = n.name ();
 
     if (n.named ())
@@ -484,7 +492,12 @@ id (string const& name)
 {
   std::size_t const size (sizeof (keywords) / sizeof (wchar_t*));
 
-  if (std::binary_search (keywords, keywords + size, name)) return name + L'_';
+  if (std::binary_search (keywords, keywords + size, name))
+  {
+    if (cppmode () == CPPMODE::CPP03) return name + L'_';
+
+    return L"_cxx_" + name;
+  }
 
   return name;
 }
