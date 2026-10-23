@@ -36,7 +36,7 @@ main (int argc, char* argv[])
     static_assert (std::is_same_v<decltype (std::declval<Library const&> ().book_values ()),
                                   Library::book_container_type const&>);
 
-    Library const& lib = library (doc);
+    Library const& lib = reader::library (doc);
 
     for (Book const& b : lib.book_values ())
     {
@@ -48,9 +48,10 @@ main (int argc, char* argv[])
       {
         wcerr << L"Author     : " << a.name () << endl;
 
-        if (a.recommends_p () /* @@ VC7.1 && a.recommends () */)
+        ::XMLSchema::IDREF<ACE_TCHAR> const* recommends_if_set_ptr = a.recommends_if_set ();
+        if (recommends_if_set_ptr)
         {
-          Book const& rec = static_cast<Book const&> (*(a.recommends ()));
+          Book const& rec = static_cast<Book const&> (**recommends_if_set_ptr);
           wcerr << L"Recommends : " << rec.title () << endl;
         }
       }
