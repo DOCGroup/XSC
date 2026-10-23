@@ -1,6 +1,7 @@
 project (xsc_test_escape): xscdefaults {
   requires += xsc
   custom_only = 1
+  xscflags += --cxx-cpp17
   XSC_Files {
     test.xsd
   }
@@ -13,5 +14,6 @@ project (xsc_test_escape_generated): xscrt {
 
   Source_Files {
     test.cpp
+    escape_api.cpp
   }
 }

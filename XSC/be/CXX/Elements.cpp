@@ -111,7 +111,15 @@ fq_name (SemanticGraph::Nameable& n, string const& nss, bool mangle)
     string name;
 
     if (mangle)
+    {
       name = id (n.name ());
+
+      // The runtime uses trailing underscores for its fundamental type names.
+      if (xs_ns_name (n) == L"http://www.w3.org/2001/XMLSchema" &&
+          (n.name () == L"double" || n.name () == L"float" || n.name () == L"int" ||
+           n.name () == L"long" || n.name () == L"short"))
+        name = n.name () + L'_';
+    }
     else name = n.name ();
 
     if (n.named ())
@@ -346,6 +354,53 @@ base_type_name (SemanticGraph::Complex& t)
 }
 
 string Context::
+fundamental_type_name (SemanticGraph::FundamentalType& t)
+{
+  string name (t.name ());
+
+  // The XMLSchema runtime uses trailing underscores for these fundamental types.
+  if (name == L"double" || name == L"float" || name == L"int" ||
+      name == L"long" || name == L"short")
+    name += L'_';
+
+  return name;
+}
+
+string Context::
+sequence_accessor_name (SemanticGraph::Element& e)
+{
+  auto conflicts = [this, &e] (string const& candidate)
+  {
+    for (auto i (e.scope ().names_begin ()), end (e.scope ().names_end ()); i != end; ++i)
+    {
+      SemanticGraph::Names& name (**i);
+
+      SemanticGraph::Element* other (
+        dynamic_cast<SemanticGraph::Element*> (std::addressof (name.named ())));
+      if (other != std::addressof (e) && id (name.name ()) == candidate)
+        return true;
+    }
+
+    return false;
+  };
+
+  string name (id (e.name ()));
+  if (!conflicts (name))
+    return name;
+
+  name += L"_values";
+  if (!conflicts (name))
+    return name;
+
+  name = id (e.name ()) + L"_sequence_values";
+  size_t suffix (2);
+  while (conflicts (name))
+    name = id (e.name ()) + L"_sequence_values_" + std::to_wstring (suffix++);
+
+  return name;
+}
+
+string Context::
 type_name (SemanticGraph::Instance& i, string const& nss)
 {
   SemanticGraph::Type& t (i.type ());
@@ -450,7 +505,12 @@ id (string const& name)
 {
   std::size_t const size (sizeof (keywords) / sizeof (wchar_t*));
 
-  if (std::binary_search (keywords, keywords + size, name)) return name + L'_';
+  if (std::binary_search (keywords, keywords + size, name))
+  {
+    if (cppmode () == CPPMODE::CPP03) return name + L'_';
+
+    return L"_cxx_" + name;
+  }
 
   return name;
 }

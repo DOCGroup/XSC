@@ -175,7 +175,13 @@ protected:
   type_name (SemanticGraph::Type& t, string const& ns_suffix = L"");
 
   string
+  fundamental_type_name (SemanticGraph::FundamentalType& t);
+
+  string
   base_type_name (SemanticGraph::Complex& t);
+
+  string
+  sequence_accessor_name (SemanticGraph::Element& e);
 
 protected:
   string

@@ -1,0 +1,23 @@
+project (xsc_test_sequence_accessor_collision): xscdefaults {
+  requires += xsc
+  custom_only = 1
+  xscflags += --cxx-cpp17
+  xscflags += --cxx-char-type char
+  xscflags += --cxx-generate-traversal-types
+
+  XSC_Files {
+    test.xsd
+  }
+
+  Source_Files {
+  }
+}
+
+project (xsc_test_sequence_accessor_collision_generated): xscrt {
+  after += xsc_test_sequence_accessor_collision
+
+  Source_Files {
+    test.cpp
+    sequence_accessor_collision_api.cpp
+  }
+}

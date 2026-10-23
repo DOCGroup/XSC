@@ -189,7 +189,7 @@ namespace
     virtual void
     fundamental_type (SemanticGraph::FundamentalType & t)
     {
-      string name (id (t.name ()));
+      string name (fundamental_type_name (t));
 
       os << "virtual ::XMLSchema::Writer::FundamentalType< " <<
         "::XMLSchema::" << name << ", " << char_type << " >," << std::endl;

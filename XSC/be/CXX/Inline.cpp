@@ -177,54 +177,62 @@ namespace
         // sequence
         //
 
-        if (!this->read_only_)
+        string accessor_name (sequence_accessor_name (e));
+
+        if (this->cppmode_ == CPPMODE::CPP17)
         {
-          // begin_typename
-          //
-          os << i
-            << scope << "::" << name << "_iterator " << scope << "::begin_" << name << " ()"
-            << "{"
-            << "return " << id(name) << "_.begin ();"
-            << "}";
+          if (!this->read_only_)
+            os << i << scope << "::" << name << "_container_type& " << scope << "::"
+               << accessor_name << " () noexcept"
+               << "{return " << id(name) << "_;}";
 
-          // end_typename
-          //
-          os << i
-            << scope << "::" << name << "_iterator " << scope << "::end_" << name << " ()"
-            << "{"
-            << "return " << id(name) << "_.end ();"
-            << "}";
-        }
-
-        // begin_typename const
-        os << i
-           << scope << "::" << name << "_const_iterator " << scope << "::begin_" << name << " () const"
-           << "{";
-
-        if (this->cppmode_ != CPPMODE::CPP03)
-        {
-          os << "return " << id(name) << "_.cbegin ();";
+          os << i << scope << "::" << name << "_container_type const& " << scope << "::"
+             << accessor_name << " () const noexcept"
+             << "{return " << id(name) << "_;}";
         }
         else
         {
-          os << "return " << id(name) << "_.begin ();";
-        }
-        os << "}";
+          if (!this->read_only_)
+          {
+            // begin_typename
+            //
+            os << i
+              << scope << "::" << name << "_iterator " << scope << "::begin_" << name << " ()"
+              << "{"
+              << "return " << id(name) << "_.begin ();"
+              << "}";
 
-        // end_typename const
-        os << i
-           << scope << "::" << name << "_const_iterator " << scope << "::end_" << name << " () const"
-           << "{";
+            // end_typename
+            //
+            os << i
+              << scope << "::" << name << "_iterator " << scope << "::end_" << name << " ()"
+              << "{"
+              << "return " << id(name) << "_.end ();"
+              << "}";
+          }
 
-        if (this->cppmode_ != CPPMODE::CPP03)
-        {
-           os << "return " << id(name) << "_.cend ();";
+          // begin_typename const
+          os << i
+             << scope << "::" << name << "_const_iterator " << scope << "::begin_" << name << " () const"
+             << "{";
+
+          if (this->cppmode_ != CPPMODE::CPP03)
+            os << "return " << id(name) << "_.cbegin ();";
+          else
+            os << "return " << id(name) << "_.begin ();";
+          os << "}";
+
+          // end_typename const
+          os << i
+             << scope << "::" << name << "_const_iterator " << scope << "::end_" << name << " () const"
+             << "{";
+
+          if (this->cppmode_ != CPPMODE::CPP03)
+            os << "return " << id(name) << "_.cend ();";
+          else
+            os << "return " << id(name) << "_.end ();";
+          os << "}";
         }
-        else
-        {
-           os << "return " << id(name) << "_.end ();";
-        }
-        os << "}";
 
         // add IDREF access method
         if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
@@ -262,6 +270,7 @@ namespace
           os << "}";
         }
 
+        if (this->cppmode_ != CPPMODE::CPP17)
         {
           // count_typename
           //

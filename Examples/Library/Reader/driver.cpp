@@ -2,6 +2,8 @@
 // author    : Boris Kolpackov <boris@dre.vanderbilt.edu>
 
 #include <iostream>
+#include <type_traits>
+#include <utility>
 
 #include "../dom.hpp"
 #include "library.hpp"
@@ -29,37 +31,38 @@ main (int argc, char* argv[])
   {
     using namespace Lib;
 
-    Library const& lib = library (doc);
+    static_assert (std::is_same_v<decltype (std::declval<Library&> ().book ()),
+                                  Library::book_container_type&>);
+    static_assert (std::is_same_v<decltype (std::declval<Library const&> ().book ()),
+                                  Library::book_container_type const&>);
 
-    for (Library::book_const_iterator b (lib.begin_book ());
-         b != lib.end_book (); ++b)
+    Library const& lib = reader::library (doc);
+
+    for (Book const& b : lib.book ())
     {
       wcerr << endl
-            << L"ISBN       : " << b->isbn () << endl
-            << L"Title      : " << b->title ()  << endl;
+            << L"ISBN       : " << b.isbn () << endl
+            << L"Title      : " << b.title ()  << endl;
 
-      for (Book::author_const_iterator a (b->begin_author ());
-           a != b->end_author ();
-           ++a)
+      for (Author const& a : b.author ())
       {
-        wcerr << L"Author     : " << a->name () << endl;
+        wcerr << L"Author     : " << a.name () << endl;
 
-        if (a->recommends_p () /* @@ VC7.1 && a->recommends () */)
+        ::XMLSchema::IDREF<ACE_TCHAR> const* recommends_if_set_ptr = a.recommends_if_set ();
+        if (recommends_if_set_ptr)
         {
-          Book const& rec = static_cast<Book const&> (*(a->recommends ()));
+          Book const& rec = static_cast<Book const&> (**recommends_if_set_ptr);
           wcerr << L"Recommends : " << rec.title () << endl;
         }
       }
 
-      for (Book::character_const_iterator c (b->begin_character ());
-           c != b->end_character ();
-           ++c)
+      for (Character const& c : b.character ())
       {
-        wcerr << L"Character  : " << c->name () << L" - "
-              << c->qualification () << endl;
+        wcerr << L"Character  : " << c.name () << L" - "
+              << c.qualification () << endl;
       }
 
-      wcerr << L"Available  : " << b->available () << endl;
+      wcerr << L"Available  : " << b.available () << endl;
     }
 
     // Example of traversal usage. Here we are going to dump
