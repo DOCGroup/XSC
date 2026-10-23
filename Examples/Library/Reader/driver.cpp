@@ -31,20 +31,20 @@ main (int argc, char* argv[])
   {
     using namespace Lib;
 
-    static_assert (std::is_same_v<decltype (std::declval<Library&> ().book_values ()),
+    static_assert (std::is_same_v<decltype (std::declval<Library&> ().book ()),
                                   Library::book_container_type&>);
-    static_assert (std::is_same_v<decltype (std::declval<Library const&> ().book_values ()),
+    static_assert (std::is_same_v<decltype (std::declval<Library const&> ().book ()),
                                   Library::book_container_type const&>);
 
     Library const& lib = reader::library (doc);
 
-    for (Book const& b : lib.book_values ())
+    for (Book const& b : lib.book ())
     {
       wcerr << endl
             << L"ISBN       : " << b.isbn () << endl
             << L"Title      : " << b.title ()  << endl;
 
-      for (Author const& a : b.author_values ())
+      for (Author const& a : b.author ())
       {
         wcerr << L"Author     : " << a.name () << endl;
 
@@ -56,7 +56,7 @@ main (int argc, char* argv[])
         }
       }
 
-      for (Character const& c : b.character_values ())
+      for (Character const& c : b.character ())
       {
         wcerr << L"Character  : " << c.name () << L" - "
               << c.qualification () << endl;

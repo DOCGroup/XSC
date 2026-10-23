@@ -68,6 +68,6 @@ namespace
                                 ::XMLSchema::string<char> const&>);
   static_assert (std::is_same_v<decltype (std::declval<ReadOnly&> ().optionalValue_if_set ()),
                                 ::XMLSchema::string<char> const*>);
-  static_assert (std::is_same_v<decltype (std::declval<ReadOnly&> ().item_values ()),
+  static_assert (std::is_same_v<decltype (std::declval<ReadOnly&> ().item ()),
                                 ReadOnly::item_container_type const&>);
 }

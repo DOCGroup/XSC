@@ -354,20 +354,20 @@ sequence_accessor_name (SemanticGraph::Element& e)
     {
       SemanticGraph::Names& name (**i);
 
-      if (id (name.name ()) == candidate)
-        return true;
-
       SemanticGraph::Element* other (
         dynamic_cast<SemanticGraph::Element*> (std::addressof (name.named ())));
-      if (other != nullptr && other != std::addressof (e) && other->max () != 1 &&
-          id (name.name ()) + L"_values" == candidate)
+      if (other != std::addressof (e) && id (name.name ()) == candidate)
         return true;
     }
 
     return false;
   };
 
-  string name (id (e.name ()) + L"_values");
+  string name (id (e.name ()));
+  if (!conflicts (name))
+    return name;
+
+  name += L"_values";
   if (!conflicts (name))
     return name;
 
