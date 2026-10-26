@@ -15,6 +15,7 @@
 #include <memory>
 #include <iostream>
 #include <sstream>
+#include <system_error>
 
 #if defined (min)
 #undef min
@@ -1501,6 +1502,25 @@ namespace XSC
   {
     try
       {
+        std::filesystem::path schema_path (tu);
+        std::error_code ec;
+        if (!std::filesystem::exists (schema_path, ec))
+          {
+            for (std::filesystem::path const& include_path : this->include_paths_)
+              {
+                if (include_path.empty ())
+                  continue;
+
+                std::filesystem::path candidate (include_path / tu);
+                if (std::filesystem::exists (candidate, ec))
+                  {
+                    schema_path = std::move (candidate);
+                    break;
+                  }
+                ec.clear ();
+              }
+          }
+
         // Initialize Xerces runtime
         //
         XMLPlatformUtils::Initialize();
@@ -1567,7 +1587,7 @@ namespace XSC
         parser.setEntityResolver (std::addressof (resolver));
 
         // Load the grammer and validate it.
-        std::string uri = tu.string ();
+        std::string uri = schema_path.string ();
         parser.loadGrammar (uri.c_str (), Grammar::SchemaGrammarType);
 
         if (eh.getErrors ())
