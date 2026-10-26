@@ -32,6 +32,18 @@ namespace Indentation
       return buffer_.put (traits_type::to_char_type (c));
     }
 
+    void
+    indent ()
+    {
+      buffer_.indent ();
+    }
+
+    void
+    unindent ()
+    {
+      buffer_.unindent ();
+    }
+
     int
     sync () override
     {
@@ -41,6 +53,24 @@ namespace Indentation
   private:
     Buffer<C>& buffer_;
   };
+
+  template <typename C>
+  std::basic_ostream<C>&
+  indent (std::basic_ostream<C>& os)
+  {
+    if (auto* adapter = dynamic_cast<ToStreamBufAdapter<C>*> (os.rdbuf ()))
+      adapter->indent ();
+    return os;
+  }
+
+  template <typename C>
+  std::basic_ostream<C>&
+  unindent (std::basic_ostream<C>& os)
+  {
+    if (auto* adapter = dynamic_cast<ToStreamBufAdapter<C>*> (os.rdbuf ()))
+      adapter->unindent ();
+    return os;
+  }
 
   template <typename C>
   class FromStreamBufAdapter : public Buffer<C>

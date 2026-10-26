@@ -284,8 +284,11 @@ namespace
       string name (e.name ());
       string type (type_name (e));
 
-      os << "case " << type << "::" << id (name) << "_l: "
-         << "s = " << L << " (\"" << name << "\"); "
+      os << "case " << type << "::" << enumerator_name (e);
+      if (this->cppmode_ != CPPMODE::CPP17)
+        os << "_l";
+      os << ": "
+         << "s = " << string_literal (name) << "; "
          << "break;";
     }
   };
@@ -334,7 +337,7 @@ namespace
 
       names (c, names_);
 
-      os << "default: break;"
+      os << "default: throw std::invalid_argument (\"invalid " << name << " value\");"
          << "}"
          << "if (::XSCRT::XML::Attribute< " << char_type << " >* a = attr_ ())"
          << "{"
@@ -540,7 +543,7 @@ namespace
          << "throw std::runtime_error (\"XML document has no root element\");"
          << "}"
          << xml_element_type << " e (dom_element);"
-         << "if (e.name () != " << L << " (\"" << name << "\"))"
+         << "if (e.name () != " << string_literal (name) << ")"
          << "{"
          << "throw std::runtime_error (\"unexpected XML root element; expected <"
          << name << ">\");"

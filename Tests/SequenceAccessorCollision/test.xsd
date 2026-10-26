@@ -6,4 +6,13 @@
       <xs:element name="value_values" type="xs:string"/>
     </xs:sequence>
   </xs:complexType>
+  <xs:simpleType name="EnumCollision">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="integral"/>
+      <xs:enumeration value="Value"/>
+      <xs:enumeration value="v_"/>
+      <xs:enumeration value="EnumCollision"/>
+      <xs:enumeration value="_cxx_integral"/>
+    </xs:restriction>
+  </xs:simpleType>
 </xs:schema>

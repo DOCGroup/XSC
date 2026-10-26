@@ -12,6 +12,7 @@
 
 #include "XSC/SemanticGraph.hpp"
 #include "XSC/Traversal.hpp"
+#include "CCF/CodeGenerationKit/IndentationImplanter.hpp"
 
 using namespace XSC;
 
@@ -183,6 +184,9 @@ protected:
   string
   sequence_accessor_name (SemanticGraph::Element& e);
 
+  string
+  enumerator_name (SemanticGraph::Enumerator& e);
+
 protected:
   string
   fq_name (SemanticGraph::Nameable& n, string const& ns_suffix = L"", bool mangle = true);
@@ -301,6 +305,15 @@ public:
   optional_via_if_set ()
   {
     return this->cppmode_ != CPPMODE::CPP03 || this->read_only_;
+  }
+
+  string
+  string_literal (string const& value)
+  {
+    if (L.empty ())
+      return L"\"" + value + L"\"";
+
+    return L + L"(\"" + value + L"\")";
   }
 
 public:

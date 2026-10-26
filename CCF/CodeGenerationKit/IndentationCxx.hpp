@@ -4,9 +4,11 @@
 #ifndef CCF_CODE_GENERATION_KIT_INDENTATION_CXX_HPP
 #define CCF_CODE_GENERATION_KIT_INDENTATION_CXX_HPP
 
+#include <algorithm>
 #include <cstddef>
 #include <deque>
 #include <stack>
+#include <string>
 
 #include "CCF/CodeGenerationKit/IndentationBuffer.hpp"
 
@@ -370,6 +372,19 @@ namespace Indentation
       }
     }
 
+    void
+    indent () override
+    {
+      this->indentation_.push (this->indentation_.top () + this->spaces_);
+    }
+
+    void
+    unindent () override
+    {
+      if (this->indentation_.size () > 1)
+        this->indentation_.pop ();
+    }
+
   private:
     class Full {};
 
@@ -395,12 +410,17 @@ namespace Indentation
      */
     void output_indentation ()
     {
+      this->output_indentation (this->indentation_.top ());
+    }
+
+    void output_indentation (std::size_t indentation)
+    {
       if (!this->hold_.empty () && this->hold_.back () == '\n')
       {
-        for (std::size_t i {}; i < this->indentation_.top (); ++i)
+        for (std::size_t i {}; i < indentation; ++i)
           this->write (' ');
 
-        this->position_ += this->indentation_.top ();
+        this->position_ += indentation;
       }
     }
 
