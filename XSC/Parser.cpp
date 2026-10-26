@@ -15,6 +15,7 @@
 #include <memory>
 #include <iostream>
 #include <sstream>
+#include <system_error>
 
 #if defined (min)
 #undef min
@@ -1501,6 +1502,34 @@ namespace XSC
   {
     try
       {
+        std::filesystem::path schema_path (tu);
+        std::error_code ec;
+        bool schema_exists = std::filesystem::exists (schema_path, ec);
+        if (ec)
+          throw std::filesystem::filesystem_error (
+            "unable to check schema path", schema_path, ec);
+
+        if (!schema_exists)
+          {
+            for (std::filesystem::path const& include_path : this->include_paths_)
+              {
+                if (include_path.empty ())
+                  continue;
+
+                std::filesystem::path candidate (include_path / tu);
+                bool candidate_exists = std::filesystem::exists (candidate, ec);
+                if (ec)
+                  throw std::filesystem::filesystem_error (
+                    "unable to check schema path", candidate, ec);
+
+                if (candidate_exists)
+                  {
+                    schema_path = std::move (candidate);
+                    break;
+                  }
+              }
+          }
+
         // Initialize Xerces runtime
         //
         XMLPlatformUtils::Initialize();
@@ -1567,7 +1596,7 @@ namespace XSC
         parser.setEntityResolver (std::addressof (resolver));
 
         // Load the grammer and validate it.
-        std::string uri = tu.string ();
+        std::string uri = schema_path.string ();
         parser.loadGrammar (uri.c_str (), Grammar::SchemaGrammarType);
 
         if (eh.getErrors ())
@@ -1593,6 +1622,11 @@ namespace XSC
     catch (Xerces::XMLException const & )
       {
         std::wcerr << "caught XMLException" << std::endl;
+      }
+    catch (std::filesystem::filesystem_error const& e)
+      {
+        std::cerr << "caught filesystem_error while locating schema: "
+                  << e.what () << std::endl;
       }
 
     return nullptr;
