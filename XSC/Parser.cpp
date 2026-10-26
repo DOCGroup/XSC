@@ -1504,7 +1504,12 @@ namespace XSC
       {
         std::filesystem::path schema_path (tu);
         std::error_code ec;
-        if (!std::filesystem::exists (schema_path, ec))
+        bool schema_exists = std::filesystem::exists (schema_path, ec);
+        if (ec)
+          throw std::filesystem::filesystem_error (
+            "unable to check schema path", schema_path, ec);
+
+        if (!schema_exists)
           {
             for (std::filesystem::path const& include_path : this->include_paths_)
               {
@@ -1512,12 +1517,16 @@ namespace XSC
                   continue;
 
                 std::filesystem::path candidate (include_path / tu);
-                if (std::filesystem::exists (candidate, ec))
+                bool candidate_exists = std::filesystem::exists (candidate, ec);
+                if (ec)
+                  throw std::filesystem::filesystem_error (
+                    "unable to check schema path", candidate, ec);
+
+                if (candidate_exists)
                   {
                     schema_path = std::move (candidate);
                     break;
                   }
-                ec.clear ();
               }
           }
 
@@ -1613,6 +1622,11 @@ namespace XSC
     catch (Xerces::XMLException const & )
       {
         std::wcerr << "caught XMLException" << std::endl;
+      }
+    catch (std::filesystem::filesystem_error const& e)
+      {
+        std::cerr << "caught filesystem_error while locating schema: "
+                  << e.what () << std::endl;
       }
 
     return nullptr;
