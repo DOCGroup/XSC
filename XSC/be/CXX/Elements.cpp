@@ -401,6 +401,42 @@ sequence_accessor_name (SemanticGraph::Element& e)
 }
 
 string Context::
+enumerator_name (SemanticGraph::Enumerator& e)
+{
+  string name (id (e.name ()));
+  if (this->cppmode_ != CPPMODE::CPP17)
+    return name;
+
+  string class_name (scope);
+  string::size_type separator (class_name.rfind (L"::"));
+  if (separator != string::npos)
+    class_name.erase (0, separator + 2);
+
+  auto conflicts = [&] (string const& candidate)
+  {
+    if (candidate == class_name || candidate == L"integral" ||
+        candidate == L"Value" || candidate == L"v_")
+      return true;
+
+    for (auto i (e.scope ().names_begin ()), end (e.scope ().names_end ()); i != end; ++i)
+    {
+      SemanticGraph::Names& named (**i);
+      SemanticGraph::Enumerator* other (
+        dynamic_cast<SemanticGraph::Enumerator*> (std::addressof (named.named ())));
+      if (other != nullptr && other != std::addressof (e) && id (named.name ()) == candidate)
+        return true;
+    }
+
+    return false;
+  };
+
+  while (conflicts (name))
+    name = L"_cxx_" + name;
+
+  return name;
+}
+
+string Context::
 type_name (SemanticGraph::Instance& i, string const& nss)
 {
   SemanticGraph::Type& t (i.type ());

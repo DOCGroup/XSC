@@ -1520,7 +1520,7 @@ namespace
       string name (e.name ());
 
       os << (first_ ? "if (v == " : "else if (v == ")
-         << string_literal (name) << ") v_ = " << id (name);
+         << string_literal (name) << ") v_ = " << enumerator_name (e);
       if (this->cppmode_ != CPPMODE::CPP17)
         os << "_l";
       os << ";";
@@ -1559,6 +1559,8 @@ namespace
       enumerator_.reset ();
       names (e, names_);
 
+      os << "else" << std::endl
+         << "throw std::invalid_argument (\"invalid " << name << " value\");";
       os << "}";
 
       // c-tor (Attribute const&)
@@ -1572,6 +1574,8 @@ namespace
       enumerator_.reset ();
       names (e, names_);
 
+      os << "else" << std::endl
+         << "throw std::invalid_argument (\"invalid " << name << " value\");";
       os << "}";
 
       names (e, names_static_);

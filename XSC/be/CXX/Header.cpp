@@ -788,7 +788,7 @@ namespace
         }
       else first_ = false;
 
-      os << id (e.name ());
+      os << enumerator_name (e);
       if (this->cppmode_ != CPPMODE::CPP17)
         os << "_l";
     }

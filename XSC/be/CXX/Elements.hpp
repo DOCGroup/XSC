@@ -184,6 +184,9 @@ protected:
   string
   sequence_accessor_name (SemanticGraph::Element& e);
 
+  string
+  enumerator_name (SemanticGraph::Enumerator& e);
+
 protected:
   string
   fq_name (SemanticGraph::Nameable& n, string const& ns_suffix = L"", bool mangle = true);
