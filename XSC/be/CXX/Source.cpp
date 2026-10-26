@@ -244,7 +244,7 @@ namespace
       //@@ need to use FQ-names.
       //
       os << (first_ ? "if (n == " : "else if (n == ")
-         << L << " (\"" << name << "\"))"
+         << string_literal (name) << ")"
          << "{";
       first_ = false;
 
@@ -1514,19 +1514,13 @@ namespace
       first_ = true;
     }
 
-    bool
-    has_enumerators () const
-    {
-      return !first_;
-    }
-
     virtual void
     traverse (Type& e)
     {
       string name (e.name ());
 
       os << (first_ ? "if (v == " : "else if (v == ")
-         << L << " (\"" << name << "\")) v_ = " << id (name);
+         << string_literal (name) << ") v_ = " << id (name);
       if (this->cppmode_ != CPPMODE::CPP17)
         os << "_l";
       os << ";";
@@ -1565,9 +1559,7 @@ namespace
       enumerator_.reset ();
       names (e, names_);
 
-      if (enumerator_.has_enumerators ()) os << "else" << std::endl;
-      os << "{}" // else block
-         << "}";
+      os << "}";
 
       // c-tor (Attribute const&)
       //
@@ -1580,9 +1572,7 @@ namespace
       enumerator_.reset ();
       names (e, names_);
 
-      if (enumerator_.has_enumerators ()) os << "else" << std::endl;
-      os << "{}" // else block
-         << "}";
+      os << "}";
 
       names (e, names_static_);
 

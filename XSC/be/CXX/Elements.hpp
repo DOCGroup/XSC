@@ -304,6 +304,15 @@ public:
     return this->cppmode_ != CPPMODE::CPP03 || this->read_only_;
   }
 
+  string
+  string_literal (string const& value)
+  {
+    if (L.empty ())
+      return L"\"" + value + L"\"";
+
+    return L + L"(\"" + value + L"\")";
+  }
+
 public:
   std::wostream& os;
   string& scope;

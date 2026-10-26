@@ -288,7 +288,7 @@ namespace
       if (this->cppmode_ != CPPMODE::CPP17)
         os << "_l";
       os << ": "
-         << "s = " << L << " (\"" << name << "\"); "
+         << "s = " << string_literal (name) << "; "
          << "break;";
     }
   };
@@ -543,7 +543,7 @@ namespace
          << "throw std::runtime_error (\"XML document has no root element\");"
          << "}"
          << xml_element_type << " e (dom_element);"
-         << "if (e.name () != " << L << " (\"" << name << "\"))"
+         << "if (e.name () != " << string_literal (name) << ")"
          << "{"
          << "throw std::runtime_error (\"unexpected XML root element; expected <"
          << name << ">\");"
