@@ -284,7 +284,10 @@ namespace
       string name (e.name ());
       string type (type_name (e));
 
-      os << "case " << type << "::" << id (name) << "_l: "
+      os << "case " << type << "::" << id (name);
+      if (this->cppmode_ != CPPMODE::CPP17)
+        os << "_l";
+      os << ": "
          << "s = " << L << " (\"" << name << "\"); "
          << "break;";
     }

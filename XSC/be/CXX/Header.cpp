@@ -516,11 +516,11 @@ namespace
     inherits_none (Type &c) override
     {
       os << " : public ::XSCRT::Type"
-         << "{" << std::endl;
+         << "{";
       switch(this->cppmode_)
       {
         case CPPMODE::CPP03:
-          os << "public:" << std::endl;
+          os << std::endl << "public:" << std::endl;
           os << "typedef ACE_Refcounted_Auto_Ptr < " << type_name (c) << ", ACE_Null_Mutex> _ptr;";
           break;
         case CPPMODE::CPP11:
@@ -767,7 +767,8 @@ namespace
     void
     traverse (Type& e) override
     {
-      os << "static " << scope << " const " << id (e.name ()) << ";";
+      if (this->cppmode_ != CPPMODE::CPP17)
+        os << "static " << scope << " const " << id (e.name ()) << ";";
     }
   };
 
@@ -788,7 +789,9 @@ namespace
         }
       else first_ = false;
 
-      os << id (e.name ()) << "_l";
+      os << id (e.name ());
+      if (this->cppmode_ != CPPMODE::CPP17)
+        os << "_l";
     }
 
     void reset ()
@@ -822,7 +825,7 @@ namespace
         name = id (e.name ());
 
       os << "class " << ex_sp_ << name << " : public ::XSCRT::Type"
-         << "{" << "public:" << std::endl;
+         << "{" << "public:";
 
       enter_scope (name);
 
@@ -848,7 +851,8 @@ namespace
 
       names (e, names_enumerators_);
 
-      os << std::endl;
+      if (this->cppmode_ != CPPMODE::CPP17)
+        os << std::endl;
 
       os << "enum Value"
          << "{";
@@ -856,7 +860,10 @@ namespace
       label_.reset ();
       names (e, names_labels_);
 
-      os << L"};\nValue integral () const;\n";
+      os << L"};Value integral () const;\n";
+
+      if (this->cppmode_ == CPPMODE::CPP17)
+        os << name << " (Value v);";
 
       if (this->read_only_)
       {
@@ -875,7 +882,6 @@ namespace
 
       os << "friend bool " << ex_sp_
          << "operator== (" << name << " const& a, " << name << " const& b);"
-         << L'\n'
          << "friend bool " << ex_sp_
          << "operator!= (" << name << " const& a, " << name << " const& b);"
          << L'\n';
@@ -883,10 +889,10 @@ namespace
 
       os << "private:" << std::endl;
 
-      os << name << " (Value v);"
-         << std::endl;
+      if (this->cppmode_ != CPPMODE::CPP17)
+        os << name << " (Value v);" << std::endl;
 
-      os << "Value v_;";
+      os << "Value v_" << (this->cppmode_ == CPPMODE::CPP03 ? L";" : L" {};");
 
       // CDR Insertion/Extraction Operators
       bool reader = 0;
@@ -927,12 +933,10 @@ namespace
       os << "};";
 
       os << "bool " << ex_sp_
-         << "operator== (" << name << " const &a, " << name << " const &b);"
-         << std::endl;
+         << "operator== (" << name << " const &a, " << name << " const &b);";
 
       os << "bool " << ex_sp_
-         << "operator!= (" << name << " const &a, " << name << " const &b);"
-         << std::endl;
+         << "operator!= (" << name << " const &a, " << name << " const &b);";
 
       if (this->cdr_reader_generation_)
         os << "extern bool" << std::endl

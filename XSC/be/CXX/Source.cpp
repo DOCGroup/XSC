@@ -1489,12 +1489,15 @@ namespace
     virtual void
     traverse (Type& e)
     {
-      string name (id (e.name ()));
+      if (this->cppmode_ != CPPMODE::CPP17)
+        {
+          string name (id (e.name ()));
 
-      bool anon (!e.type ().named ());
+          bool anon (!e.type ().named ());
 
-      os << (anon ? "class " : "" ) << scope << " const " <<  scope << "::"
-         << name << " (" << scope << "::" << name << "_l);";
+          os << (anon ? "class " : "" ) << scope << " const " <<  scope << "::"
+             << name << " (" << scope << "::" << name << "_l);";
+        }
     }
   };
 
@@ -1523,7 +1526,10 @@ namespace
       string name (e.name ());
 
       os << (first_ ? "if (v == " : "else if (v == ")
-         << L << " (\"" << name << "\")) v_ = " << id (name) << "_l;";
+         << L << " (\"" << name << "\")) v_ = " << id (name);
+      if (this->cppmode_ != CPPMODE::CPP17)
+        os << "_l";
+      os << ";";
       first_ = false;
     }
 
