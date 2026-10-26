@@ -39,6 +39,16 @@ namespace Indentation
     //
     virtual void
     unbuffer () = 0;
+
+    virtual void
+    indent ()
+    {
+    }
+
+    virtual void
+    unindent ()
+    {
+    }
   };
 }
 

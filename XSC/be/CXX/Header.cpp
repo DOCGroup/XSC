@@ -160,7 +160,7 @@ namespace
       else
         container = L"std::list";
 
-      os << "public:" << std::endl;
+      os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
 
 
       if (c.max () != 1)
@@ -244,8 +244,9 @@ namespace
         if (this->cppmode_ != CPPMODE::CPP17)
           os << "size_t count_" << name << " () const;";
 
-        os << std::endl
-           << (this->read_only_ ? "private:" : "protected:") << std::endl;
+        os << std::endl << Indentation::unindent
+           << (this->read_only_ ? "private:" : "protected:") << std::endl
+           << Indentation::indent;
 
         os << name << "_container_type " << id(name) << "_"
            << (this->read_only_ && this->cppmode_ != CPPMODE::CPP03 ? L" {};" : L";");
@@ -270,7 +271,7 @@ namespace
         }
         // os << type << "& " << id (name) << " ();";  // Lets just have one mutator
         if (this->read_only_)
-          os << "private:" << std::endl;
+          os << Indentation::unindent << "private:" << std::endl << Indentation::indent;
         else
           os << "void " << id (name) << " (" << type << " const&);";
 
@@ -285,7 +286,7 @@ namespace
         }
 
         if (!this->read_only_)
-          os << std::endl << "protected:" << std::endl;
+          os << std::endl << Indentation::unindent << "protected:" << std::endl << Indentation::indent;
         switch(this->cppmode_)
         {
           case CPPMODE::CPP03:
@@ -307,7 +308,7 @@ namespace
         os << type << " const& " << id (name) << " () const;";
         // os << type << "& " << id (name) << " ();"; // Lets just have one mutator.
         if (this->read_only_)
-          os << "private:" << std::endl;
+          os << Indentation::unindent << "private:" << std::endl << Indentation::indent;
         else
           os << "void " << id (name) << " (" << type << " const&);";
 
@@ -320,7 +321,7 @@ namespace
         }
 
         if (!this->read_only_)
-          os << std::endl << "protected:" << std::endl;
+          os << std::endl << Indentation::unindent << "protected:" << std::endl << Indentation::indent;
 
         switch(this->cppmode_)
         {
@@ -374,7 +375,7 @@ namespace
       std::wstring idref_str (L"::XMLSchema::IDREF<");
       idref_ptr = type.find(idref_str);
 
-      os << "public:" << std::endl;
+      os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
 
 
       if (a.optional ())
@@ -395,7 +396,7 @@ namespace
                << noexcept_suffix << ";";
         }
         if (this->read_only_)
-          os << "private:" << std::endl;
+          os << Indentation::unindent << "private:" << std::endl << Indentation::indent;
         else
           os << "void " << id (name) << " (" << type << " const&);";
 
@@ -408,7 +409,7 @@ namespace
         }
 
         if (!this->read_only_)
-          os << std::endl << "protected:" << std::endl;
+          os << std::endl << Indentation::unindent << "protected:" << std::endl << Indentation::indent;
 
         switch(this->cppmode_)
         {
@@ -430,7 +431,7 @@ namespace
         if (!this->read_only_)
           os << type << "& " << id (name) << " ();";
         if (this->read_only_)
-          os << "private:" << std::endl;
+          os << Indentation::unindent << "private:" << std::endl << Indentation::indent;
         else
           os << "void " << id (name) << " (" << type << " const&);";
 
@@ -443,7 +444,7 @@ namespace
         }
 
         if (!this->read_only_)
-          os << std::endl << "protected:" << std::endl;
+          os << std::endl << Indentation::unindent << "protected:" << std::endl << Indentation::indent;
 
         switch(this->cppmode_)
         {
@@ -520,7 +521,7 @@ namespace
       switch(this->cppmode_)
       {
         case CPPMODE::CPP03:
-          os << std::endl << "public:" << std::endl;
+          os << std::endl << Indentation::unindent << "public:" << std::endl << Indentation::indent;
           os << "typedef ACE_Refcounted_Auto_Ptr < " << type_name (c) << ", ACE_Null_Mutex> _ptr;";
           break;
         case CPPMODE::CPP11:
@@ -534,7 +535,7 @@ namespace
     {
       if (this->cppmode_ == CPPMODE::CPP03)
       {
-        os << "public:" << std::endl;
+        os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
         os << "typedef ACE_Refcounted_Auto_Ptr < " << type_name(c) << ", ACE_Null_Mutex> _ptr;";
         os << std::endl;
       }
@@ -573,7 +574,7 @@ namespace
 
         reader = 1;
 
-        os << "public:" << std::endl;
+        os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
         os << "static bool" << std::endl
            << "read_" << name
            << " (::XMLSchema::CDR_InputStream &,"
@@ -589,7 +590,7 @@ namespace
       if (this->cdr_writer_generation_)
       {
         if (!reader)
-          os << "public:" << std::endl;
+          os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
 
         os << "// write" << std::endl
            << "bool" << std::endl
@@ -602,16 +603,16 @@ namespace
     void
     post (Type& c) override
     {
-      os << "public:" << std::endl;
+      os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
 
       // c-tor (all-non-optional-members)
       //
       if (this->read_only_)
       {
         if (this->cppmode_ == CPPMODE::CPP03)
-          os << "private:" << std::endl
+          os << Indentation::unindent << "private:" << std::endl << Indentation::indent
              << name << " ();"
-             << "public:" << std::endl;
+             << Indentation::unindent << "public:" << std::endl << Indentation::indent;
         else
           os << name << " () = delete;";
       }
@@ -673,7 +674,7 @@ namespace
       if (this->read_only_)
       {
         if (this->cppmode_ == CPPMODE::CPP03)
-          os << "private:" << std::endl
+          os << Indentation::unindent << "private:" << std::endl << Indentation::indent
              << name << " (" << name << " const&);";
         else
         {
@@ -682,7 +683,7 @@ namespace
         }
 
         if (this->cppmode_ == CPPMODE::CPP03)
-          os << "private:" << std::endl
+          os << Indentation::unindent << "private:" << std::endl << Indentation::indent
              << name << "& operator= (" << name << " const&);";
         else
         {
@@ -823,16 +824,16 @@ namespace
         name = id (e.name ());
 
       os << "class " << ex_sp_ << name << " : public ::XSCRT::Type"
-         << "{" << "public:" << std::endl;
+         << "{" << Indentation::unindent << "public:" << std::endl << Indentation::indent;
 
       enter_scope (name);
 
       if (this->read_only_)
       {
         if (this->cppmode_ == CPPMODE::CPP03)
-          os << "private:" << std::endl
+          os << Indentation::unindent << "private:" << std::endl << Indentation::indent
              << name << " ();"
-             << "public:" << std::endl;
+             << Indentation::unindent << "public:" << std::endl << Indentation::indent;
         else
           os << name << " () = delete;";
       }
@@ -866,7 +867,7 @@ namespace
       if (this->read_only_)
       {
         if (this->cppmode_ == CPPMODE::CPP03)
-          os << "private:" << std::endl
+          os << Indentation::unindent << "private:" << std::endl << Indentation::indent
              << name << " (" << name << " const&);"
              << name << "& operator= (" << name << " const&);";
         else
@@ -885,7 +886,7 @@ namespace
          << L'\n';
 
 
-      os << "private:" << std::endl;
+      os << Indentation::unindent << "private:" << std::endl << Indentation::indent;
 
       if (this->cppmode_ != CPPMODE::CPP17)
         os << name << " (Value v);" << std::endl;
@@ -899,7 +900,7 @@ namespace
         os << "// read" << std::endl;
         reader = 1;
 
-        os << "public:" << std::endl;
+        os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
         os << "static bool" << std::endl
            << "read_" << name
            << " (::XMLSchema::CDR_InputStream &,"
@@ -916,7 +917,7 @@ namespace
       if (this->cdr_writer_generation_enabled ())
         {
           if (!reader)
-            os << "public:" << std::endl;
+            os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
 
           os << "// write" << std::endl
              << "bool" << std::endl
@@ -985,7 +986,7 @@ namespace
 
         if (dynamic_cast<SemanticGraph::Type*> (&e.scope ()))
         {
-          os << "public:" << std::endl;
+          os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
         }
 
         Traversal::Belongs belongs;

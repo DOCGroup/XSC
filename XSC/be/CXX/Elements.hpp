@@ -12,6 +12,7 @@
 
 #include "XSC/SemanticGraph.hpp"
 #include "XSC/Traversal.hpp"
+#include "CCF/CodeGenerationKit/IndentationImplanter.hpp"
 
 using namespace XSC;
 

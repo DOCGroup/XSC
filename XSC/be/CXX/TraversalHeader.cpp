@@ -326,7 +326,7 @@ namespace
 
         if (dynamic_cast<SemanticGraph::Type*> (&e.scope ()))
         {
-          os << "public:" << std::endl;
+          os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
         }
 
         Traversal::Belongs belongs;

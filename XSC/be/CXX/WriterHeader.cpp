@@ -294,7 +294,7 @@ namespace
     post (Type& )
     {
       string default_string (this->cppmode_ != CPPMODE::CPP03 ? L" = default" : L"");
-      os << "protected:" << std::endl
+      os << Indentation::unindent << "protected:" << std::endl << Indentation::indent
          << name_ << " ()" << default_string << ";"
          <<"};";
     }
@@ -356,7 +356,7 @@ namespace
          << "traverse (Type const&)" << override_string << ";"
          << std::endl;
 
-      os << "protected:" << std::endl
+      os << Indentation::unindent << "protected:" << std::endl << Indentation::indent
          << name << " ()" << default_string << ";"
          << "};";
     }
@@ -439,7 +439,7 @@ namespace
         os << "// anonymous type for " /* << scope << "::"*/ << name << std::endl;
 
         if (dynamic_cast<SemanticGraph::Type*> (&e.scope ()))
-          os << "public:" << std::endl;
+          os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
 
         Traversal::Belongs belongs;
         Complex complex (*this, *this, id (name));

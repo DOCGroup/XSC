@@ -67,42 +67,6 @@ namespace Indentation
 
       try
       {
-        if (!this->access_label_.empty ())
-        {
-          if (c == ':' && this->is_access_label ())
-          {
-            std::size_t indentation (this->indentation_.top ());
-            if (indentation >= this->spaces_)
-              indentation -= this->spaces_;
-
-            this->output_indentation (indentation);
-            for (char_type character : this->access_label_)
-            {
-              result = this->write (character);
-              ++ this->position_;
-            }
-            result = this->write (c);
-            ++ this->position_;
-            this->last_non_whitespace_ = c;
-            this->access_label_.clear ();
-            return result;
-          }
-
-          this->access_label_.push_back (c);
-          if (this->is_access_label_prefix ())
-            return result;
-
-          this->access_label_.pop_back ();
-          this->flush_access_label (result);
-        }
-
-        if (this->construct_ == OTHER && c == 'p' && this->position_ == 0 &&
-            !this->hold_.empty () && this->hold_.back () == '\n')
-        {
-          this->access_label_.push_back (c);
-          return result;
-        }
-
         bool defaulting = false;
 
         if (!this->hold_.empty () && this->hold_.back () == '(')
@@ -408,50 +372,21 @@ namespace Indentation
       }
     }
 
-  private:
-    class Full {};
-
-    bool
-    is_access_label_prefix () const
+    void
+    indent () override
     {
-      static char const* const labels[] = {"public", "private", "protected"};
-      for (char const* label : labels)
-      {
-        std::size_t length (std::char_traits<char>::length (label));
-        if (this->access_label_.size () <= length &&
-            std::equal (this->access_label_.begin (), this->access_label_.end (), label))
-          return true;
-      }
-      return false;
-    }
-
-    bool
-    is_access_label () const
-    {
-      static char const* const labels[] = {"public", "private", "protected"};
-      for (char const* label : labels)
-      {
-        std::size_t length (std::char_traits<char>::length (label));
-        if (this->access_label_.size () == length &&
-            std::equal (this->access_label_.begin (), this->access_label_.end (), label))
-          return true;
-      }
-      return false;
+      this->indentation_.push (this->indentation_.top () + this->spaces_);
     }
 
     void
-    flush_access_label (int_type& result)
+    unindent () override
     {
-      this->output_indentation (this->indentation_.top ());
-      for (char_type character : this->access_label_)
-      {
-        result = this->write (character);
-        ++ this->position_;
-      }
-      if (!this->access_label_.empty ())
-        this->last_non_whitespace_ = this->access_label_.back ();
-      this->access_label_.clear ();
+      if (this->indentation_.size () > 1)
+        this->indentation_.pop ();
     }
+
+  private:
+    class Full {};
 
     /**
      * Helper method that makes sure a newline exists at the end
@@ -544,9 +479,6 @@ namespace Indentation
 
     /// Whether the current brace pair is an inline initializer.
     bool inline_initializer_;
-
-    /// Potential access label buffered until it can be distinguished from code.
-    std::basic_string<char_type> access_label_;
 
     /// Type definition of the holding queue.
     using Hold = std::deque<int_type>;
