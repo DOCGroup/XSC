@@ -739,8 +739,6 @@ namespace
            << "             ::XMLSchema::cdr_arg_traits < "
            << name << " >::in_type);"
            << std::endl;
-      else
-        os << std::endl;
     }
 
   private:
@@ -825,7 +823,7 @@ namespace
         name = id (e.name ());
 
       os << "class " << ex_sp_ << name << " : public ::XSCRT::Type"
-         << "{" << "public:";
+         << "{" << "public:" << std::endl;
 
       enter_scope (name);
 
