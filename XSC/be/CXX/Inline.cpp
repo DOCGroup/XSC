@@ -574,7 +574,7 @@ namespace
       bool const default_constructor (this->cppmode_ != CPPMODE::CPP03 &&
                                       !has_constructor_required_members (c));
 
-      if (!this->read_only_ && !default_constructor)
+      if (!default_constructor)
       {
         // c-tor
         //
@@ -605,7 +605,7 @@ namespace
       bool const default_copy (this->cppmode_ == CPPMODE::CPP17 &&
                                !has_copy_required_members (c));
 
-      if (!this->read_only_ && !default_copy)
+      if ((!this->read_only_ || has_read_only_copy (c)) && !default_copy)
       {
         // copy c-tor
         //
@@ -643,22 +643,25 @@ namespace
           selfcheck = L"if (&s != this)";
         }
 
-        // operator=
-        //
-        os << i
-           << scope << "& " << scope << "::operator= (" << type << " const& s)"
-           << "{"
-           << selfcheck
-           << "{";
+        if (!this->read_only_)
+        {
+          // operator=
+          //
+          os << i
+             << scope << "& " << scope << "::operator= (" << type << " const& s)"
+             << "{"
+             << selfcheck
+             << "{";
 
-        inherits (c, assign_base_);
-        names (c, assign_member_);
+          inherits (c, assign_base_);
+          names (c, assign_member_);
 
-        os << "}"
-           << "return *this;"
-           << "}";
+          os << "}"
+             << "return *this;"
+             << "}";
 
-        os << std::endl;
+          os << std::endl;
+        }
       }
     }
 
