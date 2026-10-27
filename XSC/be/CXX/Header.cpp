@@ -1154,7 +1154,6 @@ generate_header (Context& ctx,
            << "explicit OptionalArg (T const& value) noexcept : value_ (std::addressof (value))" << std::endl
            << "{"
            << "}"
-           << "OptionalArg (T&&) = delete;" << std::endl
            << "OptionalArg (T const&&) = delete;" << std::endl
            << "explicit operator bool () const noexcept" << std::endl
            << "{"

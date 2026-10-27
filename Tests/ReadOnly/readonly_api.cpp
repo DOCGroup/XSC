@@ -54,7 +54,10 @@ namespace
   using ReadOnly = ReadOnlyType;
   using Derived = DerivedWithoutMembers;
   using SimpleDerived = SimpleContentDerived;
+  using ConstOptionalArg = ::XSCRT::OptionalArg<int const>;
 
+  static_assert (std::is_constructible_v<ConstOptionalArg, int const&>);
+  static_assert (!std::is_constructible_v<ConstOptionalArg, int const&&>);
   static_assert (!std::is_default_constructible_v<ReadOnly>);
   static_assert (std::is_copy_constructible_v<ReadOnly>);
   static_assert (!std::is_move_constructible_v<ReadOnly>);
