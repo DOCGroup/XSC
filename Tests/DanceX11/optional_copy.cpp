@@ -1,4 +1,10 @@
 #include "Basic_Deployment_Data.hpp"
+#include <type_traits>
+
+static_assert (!std::is_convertible_v<::XMLSchema::IDREF<char>,
+                                      ::XSCRT::OptionalArg<::XMLSchema::IDREF<char>>>);
+static_assert (std::is_constructible_v<::XSCRT::OptionalArg<::XMLSchema::IDREF<char>>,
+                                       ::XMLSchema::IDREF<char> const&>);
 
 int
 main ()
@@ -17,7 +23,8 @@ main ()
   destination = source;
 
   XMLSchema::IDREF<char> idref ("urn:idref");
-  Deployment::IdRef constructed (std::nullopt, idref);
+  Deployment::IdRef constructed (
+    std::nullopt, ::XSCRT::OptionalArg<::XMLSchema::IDREF<char>> (idref));
   if (constructed.idref_if_set () == nullptr)
     return 1;
 
