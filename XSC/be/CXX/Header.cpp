@@ -100,6 +100,12 @@ namespace
       complex_.traverse (c);
     }
 
+    bool
+    has_arguments () const
+    {
+      return !first_;
+    }
+
   private:
     string
     comma ()
@@ -154,9 +160,9 @@ namespace
     }
 
     void
-    traverse_optional (SemanticGraph::Complex& c)
+    traverse_optional (SemanticGraph::Complex& c, bool has_prior_arguments)
     {
-      first_ = !has_constructor_required_members (c);
+      first_ = !has_prior_arguments;
       complex_.traverse (c);
     }
 
@@ -686,7 +692,7 @@ namespace
 
         ctor_args_.traverse (c);
         if (has_optional)
-          optional_ctor_args_.traverse_optional (c);
+          optional_ctor_args_.traverse_optional (c, ctor_args_.has_arguments ());
 
         bool const default_constructor (this->cppmode_ != CPPMODE::CPP03 &&
                                         !has_required && !has_optional);
