@@ -52,7 +52,6 @@ namespace
   };
 
   using ReadOnly = ReadOnlyType;
-  using KindWithOptionalAttribute = ReadOnlyKindWithOptionalAttribute;
 
   static_assert (!std::is_default_constructible_v<ReadOnly>);
   static_assert (std::is_copy_constructible_v<ReadOnly>);
@@ -71,7 +70,4 @@ namespace
                                 ::XMLSchema::string<char> const*>);
   static_assert (std::is_same_v<decltype (std::declval<ReadOnly&> ().item ()),
                                 ReadOnly::item_container_type const&>);
-  static_assert (std::is_constructible_v<KindWithOptionalAttribute,
-                                         ReadOnlyKind const&,
-                                         ::XSCRT::OptionalArg<::XMLSchema::string<char>>>);
 }

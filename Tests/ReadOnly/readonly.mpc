@@ -24,6 +24,29 @@ project (xsc_test_readonly_generated): xscrt {
   }
 }
 
+project (xsc_test_readonly_enum_constructor): xscdefaults {
+  requires += xsc
+  custom_only = 1
+  xscflags += --cxx-char-type char
+  xscflags += --cxx-cpp17
+  xscflags += --cxx-read-only
+
+  XSC_Files {
+    enum_constructor.xsd
+  }
+  Source_Files {
+  }
+}
+
+project (xsc_test_readonly_enum_constructor_generated): xscrt {
+  after += xsc_test_readonly_enum_constructor
+
+  Source_Files {
+    enum_constructor.cpp
+    enum_constructor_api.cpp
+  }
+}
+
 project (xsc_test_cpp03_compatibility): xscdefaults {
   requires += xsc
   custom_only = 1
