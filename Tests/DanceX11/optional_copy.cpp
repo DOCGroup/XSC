@@ -5,6 +5,10 @@ static_assert (!std::is_convertible_v<::XMLSchema::IDREF<char>,
                                       ::XSCRT::OptionalArg<::XMLSchema::IDREF<char>>>);
 static_assert (std::is_constructible_v<::XSCRT::OptionalArg<::XMLSchema::IDREF<char>>,
                                        ::XMLSchema::IDREF<char> const&>);
+static_assert (!std::is_constructible_v<::XSCRT::OptionalArg<::XMLSchema::IDREF<char>>,
+                                        ::XMLSchema::IDREF<char>&&>);
+static_assert (!std::is_constructible_v<::XSCRT::OptionalArg<::XMLSchema::IDREF<char>>,
+                                        ::XMLSchema::IDREF<char> const&&>);
 
 int
 main ()

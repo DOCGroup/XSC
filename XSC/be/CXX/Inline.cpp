@@ -806,8 +806,7 @@ namespace
         void
         traverse (SemanticGraph::Type&) override
         {
-          if (!optional_arguments_)
-            os << comma () << "b__";
+          // Fundamental simple bases do not declare a b__ constructor argument.
         }
 
         void

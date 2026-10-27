@@ -21,4 +21,20 @@
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
+
+  <xs:complexType name="SimpleContentBase">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="baseOptional" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+  <xs:complexType name="SimpleContentDerived">
+    <xs:complexContent>
+      <xs:extension base="SimpleContentBase">
+        <xs:attribute name="derivedOptional" type="xs:string"/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 </xs:schema>
