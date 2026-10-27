@@ -112,6 +112,21 @@ int main ()
     }
     assert (invalid_numeric_rejected);
 
+    XSCRT::XML::Element<char> negative_unsigned (document->createElement (
+      static_cast<XMLCh const*> (XML::XStr ("negative-unsigned"))));
+    negative_unsigned.dom_element ()->appendChild (
+      document->createTextNode (static_cast<XMLCh const*> (XML::XStr ("-1"))));
+    bool negative_unsigned_rejected (false);
+    try
+    {
+      XSCRT::FundamentalType<unsigned int> value (negative_unsigned);
+    }
+    catch (std::invalid_argument const&)
+    {
+      negative_unsigned_rejected = true;
+    }
+    assert (negative_unsigned_rejected);
+
     XSCRT::XML::Element<char> out_of_range (document->createElement (
       static_cast<XMLCh const*> (XML::XStr ("byte"))));
     out_of_range.dom_element ()->appendChild (
