@@ -605,7 +605,7 @@ namespace
       bool const default_copy (this->cppmode_ == CPPMODE::CPP17 &&
                                !has_copy_required_members (c));
 
-      if ((!this->read_only_ || has_read_only_copy (c)) && !default_copy)
+      if (!default_copy)
       {
         // copy c-tor
         //

@@ -388,12 +388,6 @@ protected:
   bool read_only_;
 };
 
-void
-analyze_read_only_copies (SemanticGraph::Schema& schema);
-
-bool
-has_read_only_copy (SemanticGraph::Type& type);
-
 struct Anonymous : Traversal::Element,
                    Traversal::Complex,
                    protected virtual Context

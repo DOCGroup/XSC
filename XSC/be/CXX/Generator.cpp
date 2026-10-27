@@ -69,9 +69,6 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
   if (options.count ("cxx-read-only") && cppmode_ != ::Context::CPPMODE::CPP17)
     throw std::invalid_argument ("--cxx-read-only requires C++17 mode");
 
-  if (options.count ("cxx-read-only"))
-    analyze_read_only_copies (schema);
-
   //Stores file suffixes (defaults are .hpp, ipp, and cpp)
   std::string hxx_suffix (options.value ("cxx-header-suffix"));
   std::string ixx_suffix (options.value ("cxx-inline-suffix"));

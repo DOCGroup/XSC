@@ -54,7 +54,7 @@ namespace
   using ReadOnly = ReadOnlyType;
 
   static_assert (!std::is_default_constructible_v<ReadOnly>);
-  static_assert (!std::is_copy_constructible_v<ReadOnly>);
+  static_assert (std::is_copy_constructible_v<ReadOnly>);
   static_assert (!std::is_move_constructible_v<ReadOnly>);
   static_assert (!std::is_copy_assignable_v<ReadOnly>);
   static_assert (!std::is_move_assignable_v<ReadOnly>);

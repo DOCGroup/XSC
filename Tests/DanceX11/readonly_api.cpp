@@ -22,7 +22,7 @@ namespace
   static_assert (!std::is_move_constructible_v<DataValue>);
   static_assert (std::is_copy_constructible_v<DataType>);
   static_assert (std::is_constructible_v<Any, DataType const&, DataValue const&>);
-  static_assert (!std::is_copy_constructible_v<Package>);
+  static_assert (std::is_copy_constructible_v<Package>);
   static_assert (!std::is_move_constructible_v<Package>);
   static_assert (std::is_same_v<decltype (*std::declval<Packages const&> ().begin ()),
                                 Package const&>);

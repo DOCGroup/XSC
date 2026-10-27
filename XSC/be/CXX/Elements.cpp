@@ -6,7 +6,6 @@
 #include "XSC/Traversal.hpp"
 
 #include <sstream>
-#include <set>
 #include <stdexcept>
 
 // Namespace
@@ -435,115 +434,6 @@ enumerator_name (SemanticGraph::Enumerator& e)
     name = L"_cxx_" + name;
 
   return name;
-}
-
-void
-analyze_read_only_copies (SemanticGraph::Schema& schema)
-{
-  std::set<SemanticGraph::Complex*> visited;
-  std::set<SemanticGraph::Type*> copy_types;
-
-  std::function<void (SemanticGraph::Type&)> visit_type;
-  std::function<void (SemanticGraph::Scope&)> visit_scope;
-
-  visit_scope = [&] (SemanticGraph::Scope& scope)
-  {
-    for (auto i (scope.names_begin ()), end (scope.names_end ()); i != end; ++i)
-    {
-      SemanticGraph::Names& edge (**i);
-      SemanticGraph::Nameable& named (edge.named ());
-
-      if (SemanticGraph::Namespace* ns =
-            dynamic_cast<SemanticGraph::Namespace*> (std::addressof (named)))
-        visit_scope (*ns);
-      else if (SemanticGraph::Type* type =
-                 dynamic_cast<SemanticGraph::Type*> (std::addressof (named)))
-        visit_type (*type);
-      else if (SemanticGraph::Instance* instance =
-                 dynamic_cast<SemanticGraph::Instance*> (std::addressof (named)))
-        visit_type (instance->type ());
-    }
-  };
-
-  visit_type = [&] (SemanticGraph::Type& type)
-  {
-    SemanticGraph::Complex* complex (
-      dynamic_cast<SemanticGraph::Complex*> (std::addressof (type)));
-    if (complex == nullptr || !visited.insert (complex).second)
-      return;
-
-    visit_scope (*complex);
-
-    for (auto i (complex->inherits_begin ()), end (complex->inherits_end ()); i != end; ++i)
-      visit_type ((**i).inheritee ());
-  };
-
-  visit_scope (schema);
-
-  std::function<void (SemanticGraph::Type&)> require_copy;
-  require_copy = [&] (SemanticGraph::Type& type)
-  {
-    if (!copy_types.insert (std::addressof (type)).second)
-      return;
-
-    SemanticGraph::Complex* complex (
-      dynamic_cast<SemanticGraph::Complex*> (std::addressof (type)));
-    if (complex == nullptr)
-      return;
-
-    for (auto i (complex->inherits_begin ()), end (complex->inherits_end ()); i != end; ++i)
-      require_copy ((**i).inheritee ());
-
-    for (auto i (complex->names_begin ()), end (complex->names_end ()); i != end; ++i)
-    {
-      SemanticGraph::Names& edge (**i);
-      SemanticGraph::Instance* instance (
-        dynamic_cast<SemanticGraph::Instance*> (std::addressof (edge.named ())));
-      if (instance != nullptr)
-        require_copy (instance->type ());
-    }
-  };
-
-  std::function<void (SemanticGraph::Complex&)> required_arguments;
-  required_arguments = [&] (SemanticGraph::Complex& complex)
-  {
-    for (auto i (complex.inherits_begin ()), end (complex.inherits_end ()); i != end; ++i)
-      if (SemanticGraph::Complex* base =
-            dynamic_cast<SemanticGraph::Complex*> (std::addressof ((**i).inheritee ())))
-        required_arguments (*base);
-
-    for (auto i (complex.names_begin ()), end (complex.names_end ()); i != end; ++i)
-    {
-      SemanticGraph::Names& edge (**i);
-      SemanticGraph::Nameable& named (edge.named ());
-
-      if (SemanticGraph::Element* element =
-            dynamic_cast<SemanticGraph::Element*> (std::addressof (named)))
-      {
-        if (element->min () >= 1)
-          require_copy (element->type ());
-      }
-      else if (SemanticGraph::Attribute* attribute =
-                 dynamic_cast<SemanticGraph::Attribute*> (std::addressof (named)))
-      {
-        if (!attribute->optional ())
-          require_copy (attribute->type ());
-      }
-    }
-  };
-
-  for (SemanticGraph::Complex* complex : visited)
-    if (has_constructor_required_members (*complex))
-      required_arguments (*complex);
-
-  for (SemanticGraph::Type* type : copy_types)
-    type->context ().set ("readonly_copy", true);
-}
-
-bool
-has_read_only_copy (SemanticGraph::Type& type)
-{
-  return type.context ().count ("readonly_copy") != 0;
 }
 
 string Context::

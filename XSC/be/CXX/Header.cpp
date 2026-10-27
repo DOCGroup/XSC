@@ -678,17 +678,12 @@ namespace
         if (this->cppmode_ == CPPMODE::CPP03)
           os << Indentation::unindent << "private:" << std::endl << Indentation::indent
              << name << " (" << name << " const&);";
-        else if (has_read_only_copy (c))
+        else
         {
           bool const default_copy (this->cppmode_ == CPPMODE::CPP17 &&
                                    !has_copy_required_members (c));
           os << name << " (" << name << " const& s)"
              << (default_copy ? " = default;" : ";");
-          os << name << " (" << name << "&&) = delete;";
-        }
-        else
-        {
-          os << name << " (" << name << " const&) = delete;";
           os << name << " (" << name << "&&) = delete;";
         }
 
@@ -880,16 +875,9 @@ namespace
           os << Indentation::unindent << "private:" << std::endl << Indentation::indent
              << name << " (" << name << " const&);"
              << name << "& operator= (" << name << " const&);";
-        else if (has_read_only_copy (e))
-        {
-          os << name << " (" << name << " const&) = default;";
-          os << name << " (" << name << "&&) = delete;";
-          os << name << "& operator= (" << name << " const&) = delete;";
-          os << name << "& operator= (" << name << "&&) = delete;";
-        }
         else
         {
-          os << name << " (" << name << " const&) = delete;";
+          os << name << " (" << name << " const&) = default;";
           os << name << " (" << name << "&&) = delete;";
           os << name << "& operator= (" << name << " const&) = delete;";
           os << name << "& operator= (" << name << "&&) = delete;";
