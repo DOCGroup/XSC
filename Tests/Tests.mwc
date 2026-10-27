@@ -16,4 +16,5 @@ workspace (Tests) {
   SequenceAccessorCollision
   UnqualifiedImport
   Validation
+  XMLUtils
 }

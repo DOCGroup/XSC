@@ -99,6 +99,10 @@ Release/
 /Tests/ReadOnly/readonly.cpp03.hpp
 /Tests/SequenceAccessorCollision/test.cpp
 /Tests/SequenceAccessorCollision/test.hpp
+/Tests/XMLUtils/GNUmakefile*
+/Tests/XMLUtils/generated_types.cpp
+/Tests/XMLUtils/generated_types.hpp
+/Tests/XMLUtils/runtime
 /abstract.cpp
 /abstract.hpp
 /dds_qos.cpp

@@ -127,6 +127,11 @@ jobs:
           Pop-Location
         }
       shell: pwsh
+    - name: Run ACE XML_Utils runtime regression
+      run: |
+        & "${env:XSC_ROOT}/Tests/XMLUtils/runtime"
+        if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      shell: pwsh
     - name: Run DanceX11 generated-code test
       run: |
         Push-Location ${env:XSC_ROOT}/Tests/DanceX11

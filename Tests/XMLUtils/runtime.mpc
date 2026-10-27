@@ -1,0 +1,27 @@
+project (xsc_test_xml_utils_runtime): xscdefaults {
+  requires += xsc
+  custom_only = 1
+
+  xscflags += --cxx-cpp17
+  xscflags += --cxx-char-type char
+  xscflags += --cxx-namespace-regex
+  xscflags += "/.*xml-utils-test.*/XMLUtils/"
+
+  XSC_Files {
+    generated_types.xsd
+  }
+
+  Source_Files {
+  }
+}
+
+project (xsc_test_xml_utils_runtime_generated): xscrt {
+  after += xsc_test_xml_utils_runtime
+  libpaths += $(ACE_ROOT)/lib
+  libs += ACE_XML_Utils
+
+  Source_Files {
+    runtime.cpp
+    generated_types.cpp
+  }
+}
