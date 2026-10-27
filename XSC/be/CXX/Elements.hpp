@@ -603,6 +603,48 @@ has_constructor_required_members (SemanticGraph::Complex& c)
   return t.required;
 }
 
+struct ConstructorOptionalMembers : Traversal::Element,
+                                   Traversal::Attribute
+{
+  void
+  traverse (SemanticGraph::Element& e) override
+  {
+    if (e.min () == 0)
+      optional = true;
+  }
+
+  void
+  traverse (SemanticGraph::Attribute& a) override
+  {
+    if (a.optional ())
+      optional = true;
+  }
+
+  bool optional {};
+};
+
+inline bool
+has_constructor_optional_members (SemanticGraph::Complex& c)
+{
+  ConstructorOptionalMembers t;
+
+  std::function<void (SemanticGraph::Complex&)> visit = [&] (SemanticGraph::Complex& current)
+  {
+    for (auto i (current.inherits_begin ()); i != current.inherits_end (); ++i)
+      if (auto base = dynamic_cast<SemanticGraph::Complex*> (std::addressof ((**i).inheritee ())))
+        visit (*base);
+
+    Traversal::Complex complex;
+    Traversal::Names names;
+    complex.edge_traverser (names);
+    names.node_traverser (t);
+    complex.traverse (current);
+  };
+
+  visit (c);
+  return t.optional;
+}
+
 // Fundamental type mapping helper.
 //
 struct Fundamental : Traversal::FundamentalType,

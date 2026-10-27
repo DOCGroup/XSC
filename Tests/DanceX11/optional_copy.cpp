@@ -16,5 +16,16 @@ main ()
   Deployment::IdRef source;
   destination = source;
 
+  XMLSchema::IDREF<char> idref ("urn:idref");
+  Deployment::IdRef constructed (std::nullopt, idref);
+  if (constructed.idref_if_set () == nullptr)
+    return 1;
+
+  Deployment::DataValue::short_container_type shorts;
+  shorts.emplace_back (1);
+  Deployment::DataValue sequence_constructed (shorts);
+  if (sequence_constructed._cxx_short ().size () != 1)
+    return 1;
+
   return destination.href_if_set () != nullptr;
 }

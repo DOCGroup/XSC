@@ -116,6 +116,63 @@ namespace
     Traversal::Names names_;
   };
 
+  struct OptionalCtorArgs : Traversal::Complex,
+                            protected Traversal::Element,
+                            protected Traversal::Attribute,
+                            protected virtual Context
+  {
+    explicit OptionalCtorArgs (Context& c)
+        : Context (c)
+    {
+      complex_.edge_traverser (inherits_);
+      complex_.edge_traverser (names_);
+      inherits_.node_traverser (*this);
+      names_.node_traverser (*this);
+    }
+
+    void
+    traverse (SemanticGraph::Element& e) override
+    {
+      if (e.min () == 0)
+      {
+        string name (e.name ());
+        string argument (id (e.name ()));
+        if (e.max () == 1)
+          os << comma () << "::XSCRT::OptionalArg<" << type_name (e) << "> " << argument
+             << "__ = std::nullopt";
+        else
+          os << comma () << name << "_container_type const& " << argument << "__ = {}";
+      }
+    }
+
+    void
+    traverse (SemanticGraph::Attribute& a) override
+    {
+      if (a.optional ())
+        os << comma () << "::XSCRT::OptionalArg<" << type_name (a) << "> "
+           << id (a.name ()) << "__ = std::nullopt";
+    }
+
+    void
+    traverse_optional (SemanticGraph::Complex& c)
+    {
+      first_ = !has_constructor_required_members (c);
+      complex_.traverse (c);
+    }
+
+  private:
+    string
+    comma ()
+    {
+      return first_ ? (first_ = false, L"") : L",\n";
+    }
+
+    bool first_ {};
+    Traversal::Complex complex_;
+    Traversal::Inherits inherits_;
+    Traversal::Names names_;
+  };
+
 
   struct Element : Traversal::Element, protected virtual Context
   {
@@ -477,7 +534,8 @@ namespace
           base_ (c),
           element_ (c),
           attribute_ (c),
-          ctor_args_ (c)
+          ctor_args_ (c),
+          optional_ctor_args_ (c)
     {
       edge_traverser (inherits_);
       edge_traverser (names_);
@@ -615,18 +673,23 @@ namespace
              << Indentation::unindent << "public:" << std::endl << Indentation::indent;
         else if (has_constructor_required_members (c))
           os << name << " () = delete;";
-        else
+        else if (this->cppmode_ != CPPMODE::CPP17 || !has_constructor_optional_members (c))
           os << name << " () = default;";
       }
 
-      if (!this->read_only_ || has_constructor_required_members (c))
+      bool const has_required (has_constructor_required_members (c));
+      bool const has_optional (this->cppmode_ == CPPMODE::CPP17 && has_constructor_optional_members (c));
+
+      if (!this->read_only_ || has_required || has_optional)
       {
         os << name << " (";
 
         ctor_args_.traverse (c);
+        if (has_optional)
+          optional_ctor_args_.traverse_optional (c);
 
         bool const default_constructor (this->cppmode_ != CPPMODE::CPP03 &&
-                                        !has_constructor_required_members (c));
+                                        !has_required && !has_optional);
         os << ")" << (default_constructor ? " = default;" : ";")
            << std::endl;
       }
@@ -759,6 +822,7 @@ namespace
     Attribute attribute_;
 
     CtorArgs ctor_args_;
+    OptionalCtorArgs optional_ctor_args_;
   };
 
   struct Enumerator : Traversal::Enumerator, protected virtual Context
@@ -1053,6 +1117,36 @@ generate_header (Context& ctx,
 {
   ctx.os << "#include <memory>" << std::endl;
   ctx.os << "#include <string>" << std::endl;
+  if (ctx.cppmode () == Context::CPPMODE::CPP17)
+  {
+    ctx.os << "#include <optional>" << std::endl
+           << "#ifndef XSCRT_OPTIONAL_ARG_HPP" << std::endl
+           << "#define XSCRT_OPTIONAL_ARG_HPP" << std::endl
+           << "namespace XSCRT" << std::endl
+           << "{"
+           << "template <typename T>" << std::endl
+           << "class OptionalArg" << std::endl
+           << "{" << Indentation::unindent << "public:" << std::endl << Indentation::indent
+           << "OptionalArg (std::nullopt_t) noexcept : value_ (nullptr)" << std::endl
+           << "{"
+           << "}"
+           << "OptionalArg (T const& value) noexcept : value_ (std::addressof (value))" << std::endl
+           << "{"
+           << "}"
+           << "explicit operator bool () const noexcept" << std::endl
+           << "{"
+           << "return value_ != nullptr;" << std::endl
+           << "}"
+           << "T const& operator* () const noexcept" << std::endl
+           << "{"
+           << "return *value_;" << std::endl
+           << "}"
+           << Indentation::unindent << "private:" << std::endl << Indentation::indent
+           << "T const* value_ {};" << std::endl
+           << "};"
+           << "}"
+           << "#endif // XSCRT_OPTIONAL_ARG_HPP" << std::endl;
+  }
 
   if (ctx.generate_ra_sequences ())
     ctx.os << "#include <vector>" << std::endl;

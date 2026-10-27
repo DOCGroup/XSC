@@ -458,7 +458,8 @@ namespace
     void
     traverse (SemanticGraph::Enumeration& e) override
     {
-      os << comma () << type_name (e) << " const& b__";
+      if (!optional_arguments_)
+        os << comma () << type_name (e) << " const& b__";
     }
 
     void
@@ -467,11 +468,18 @@ namespace
       string type (type_name (e));
       string name (e.name ());
 
-      if (e.min () == 1 && e.max () == 1)
+      if (optional_arguments_ && e.min () == 0)
+      {
+        if (e.max () == 1)
+          os << comma () << "::XSCRT::OptionalArg<" << type << "> " << id (name) << "__";
+        else
+          os << comma () << name << "_container_type const& " << id (name) << "__";
+      }
+      else if (!optional_arguments_ && e.min () == 1 && e.max () == 1)
       {
         os << comma () << type << " const& " << id (name) << "__";
       }
-      else if (e.min () >= 1)
+      else if (!optional_arguments_ && e.min () >= 1)
       {
         os << comma ()
            << name << "_container_type const& "
@@ -482,9 +490,13 @@ namespace
     void
     traverse (SemanticGraph::Attribute& a) override
     {
-      if (!a.optional ())
+      if ((!optional_arguments_ && !a.optional ()) || (optional_arguments_ && a.optional ()))
       {
-        os << comma () << type_name (a) << " const& " << id (a.name ()) << "__";
+        if (optional_arguments_)
+          os << comma () << "::XSCRT::OptionalArg<" << type_name (a) << "> " << id (a.name ())
+             << "__";
+        else
+          os << comma () << type_name (a) << " const& " << id (a.name ()) << "__";
       }
     }
 
@@ -492,7 +504,14 @@ namespace
     traverse (SemanticGraph::Complex& c) override
     {
       first_ = true;
+      optional_arguments_ = false;
       complex_.traverse (c);
+      if (this->cppmode_ == CPPMODE::CPP17 && has_constructor_optional_members (c))
+      {
+        optional_arguments_ = true;
+        complex_.traverse (c);
+      }
+      optional_arguments_ = false;
     }
 
   private:
@@ -503,6 +522,7 @@ namespace
     }
 
     bool first_;
+    bool optional_arguments_ {};
 
   private:
     Traversal::Complex complex_;
@@ -571,8 +591,10 @@ namespace
       string type (name);
 
       bool const has_base (c.inherits_begin () != c.inherits_end ());
+      bool const has_required (has_constructor_required_members (c));
+      bool const has_optional (this->cppmode_ == CPPMODE::CPP17 && has_constructor_optional_members (c));
       bool const default_constructor (this->cppmode_ != CPPMODE::CPP03 &&
-                                      !has_constructor_required_members (c));
+                                      !has_required && !has_optional);
 
       if (!default_constructor)
       {
@@ -775,23 +797,29 @@ namespace
         void
         traverse (SemanticGraph::Type&) override
         {
-          os << comma () << "b__";
+          if (!optional_arguments_)
+            os << comma () << "b__";
         }
 
         void
         traverse (SemanticGraph::Enumeration&) override
         {
-          os << comma () << "b__";
+          if (!optional_arguments_)
+            os << comma () << "b__";
         }
 
         void
         traverse (SemanticGraph::Element& e) override
         {
-          if (e.min () == 1 && e.max () == 1)
+          if (optional_arguments_ && e.min () == 0)
           {
             os << comma () << id (e.name ()) << "__";
           }
-          else if (e.min () >= 1)
+          else if (!optional_arguments_ && e.min () == 1 && e.max () == 1)
+          {
+            os << comma () << id (e.name ()) << "__";
+          }
+          else if (!optional_arguments_ && e.min () >= 1)
           {
             os << comma () << id (e.name ()) << "__";
           }
@@ -800,7 +828,7 @@ namespace
         void
         traverse (SemanticGraph::Attribute& a) override
         {
-          if (!a.optional ())
+          if ((!optional_arguments_ && !a.optional ()) || (optional_arguments_ && a.optional ()))
           {
             os << comma () << id (a.name ()) << "__";
           }
@@ -810,8 +838,14 @@ namespace
         traverse (SemanticGraph::Complex& c) override
         {
           first_ = true;
-
+          optional_arguments_ = false;
           complex_.traverse (c);
+          if (this->cppmode_ == CPPMODE::CPP17 && has_constructor_optional_members (c))
+          {
+            optional_arguments_ = true;
+            complex_.traverse (c);
+          }
+          optional_arguments_ = false;
         }
 
       private:
@@ -822,6 +856,7 @@ namespace
         }
 
         bool first_;
+        bool optional_arguments_ {};
 
       private:
         Traversal::Complex complex_;
@@ -847,7 +882,21 @@ namespace
       {
         ensure_base_class_initialization ();
 
-        if (e.min () == 1 && e.max () == 1)
+        if (this->cppmode_ == CPPMODE::CPP17 && e.min () == 0 && e.max () == 1)
+        {
+          ensure_base_class_initialization ();
+          string name (id (e.name ()));
+          string type (type_name (e));
+          os << ", " << name << "_ (" << name << "__ ? std::make_unique<" << type
+             << "> (*" << name << "__) : nullptr)" << std::endl;
+        }
+        else if (this->cppmode_ == CPPMODE::CPP17 && e.min () == 0)
+        {
+          ensure_base_class_initialization ();
+          string name (id (e.name ()));
+          os << ", " << name << "_ (" << name << "__)" << std::endl;
+        }
+        else if (e.min () == 1 && e.max () == 1)
         {
           // one
           //
@@ -881,7 +930,15 @@ namespace
       void
       traverse (SemanticGraph::Attribute& a) override
       {
-        if (!a.optional ())
+        if (this->cppmode_ == CPPMODE::CPP17 && a.optional ())
+        {
+          ensure_base_class_initialization ();
+          string name (id (a.name ()));
+          string type (type_name (a));
+          os << ", " << name << "_ (" << name << "__ ? std::make_unique<" << type
+             << "> (*" << name << "__) : nullptr)" << std::endl;
+        }
+        else if (!a.optional ())
         {
           ensure_base_class_initialization ();
 
