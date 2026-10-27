@@ -96,8 +96,16 @@ namespace
     void
     traverse (SemanticGraph::Complex& c) override
     {
+      if (traversing_)
+      {
+        complex_.traverse (c);
+        return;
+      }
+
       first_ = true;
+      traversing_ = true;
       complex_.traverse (c);
+      traversing_ = false;
     }
 
     bool
@@ -114,6 +122,7 @@ namespace
     }
 
     bool first_;
+    bool traversing_ {};
 
   private:
     Traversal::Complex complex_;
@@ -157,6 +166,12 @@ namespace
       if (a.optional ())
         os << comma () << "::XSCRT::OptionalArg<" << type_name (a) << "> "
            << id (a.name ()) << "__ = std::nullopt";
+    }
+
+    void
+    traverse (SemanticGraph::Complex& c) override
+    {
+      complex_.traverse (c);
     }
 
     void

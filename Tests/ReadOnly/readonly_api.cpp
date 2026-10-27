@@ -52,6 +52,7 @@ namespace
   };
 
   using ReadOnly = ReadOnlyType;
+  using Derived = DerivedWithoutMembers;
 
   static_assert (!std::is_default_constructible_v<ReadOnly>);
   static_assert (std::is_copy_constructible_v<ReadOnly>);
@@ -62,6 +63,10 @@ namespace
   static_assert (!has_optionalValue_presence_accessor<ReadOnly>::value);
   static_assert (!has_item_iterators<ReadOnly>::value);
   static_assert (!has_item_count<ReadOnly>::value);
+  static_assert (std::is_constructible_v<Derived>);
+  static_assert (std::is_constructible_v<
+                 Derived,
+                 ::XSCRT::OptionalArg<::XMLSchema::string<char>>>);
   static_assert (std::is_same_v<ReadOnly::item_container_type,
                                 std::list<::XMLSchema::string<char>>>);
   static_assert (std::is_same_v<decltype (std::declval<ReadOnly&> ().name ()),

@@ -9,4 +9,16 @@
     <xs:attribute name="requiredAttribute" type="xs:string" use="required"/>
     <xs:attribute name="optionalAttribute" type="xs:string"/>
   </xs:complexType>
+
+  <xs:complexType name="BaseWithOptionalAttribute">
+    <xs:attribute name="baseOptionalAttribute" type="xs:string"/>
+  </xs:complexType>
+
+  <xs:complexType name="DerivedWithoutMembers">
+    <xs:complexContent>
+      <xs:extension base="BaseWithOptionalAttribute">
+        <xs:sequence/>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
 </xs:schema>

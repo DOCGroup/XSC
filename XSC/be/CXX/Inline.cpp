@@ -503,6 +503,13 @@ namespace
     void
     traverse (SemanticGraph::Complex& c) override
     {
+      if (traversing_)
+      {
+        complex_.traverse (c);
+        return;
+      }
+
+      traversing_ = true;
       first_ = true;
       optional_arguments_ = false;
       complex_.traverse (c);
@@ -512,6 +519,7 @@ namespace
         complex_.traverse (c);
       }
       optional_arguments_ = false;
+      traversing_ = false;
     }
 
   private:
@@ -523,6 +531,7 @@ namespace
 
     bool first_;
     bool optional_arguments_ {};
+    bool traversing_ {};
 
   private:
     Traversal::Complex complex_;
@@ -837,6 +846,13 @@ namespace
         void
         traverse (SemanticGraph::Complex& c) override
         {
+          if (traversing_)
+          {
+            complex_.traverse (c);
+            return;
+          }
+
+          traversing_ = true;
           first_ = true;
           optional_arguments_ = false;
           complex_.traverse (c);
@@ -846,6 +862,7 @@ namespace
             complex_.traverse (c);
           }
           optional_arguments_ = false;
+          traversing_ = false;
         }
 
       private:
@@ -857,6 +874,7 @@ namespace
 
         bool first_;
         bool optional_arguments_ {};
+        bool traversing_ {};
 
       private:
         Traversal::Complex complex_;
