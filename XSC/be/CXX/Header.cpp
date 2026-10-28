@@ -1130,7 +1130,7 @@ generate_header (Context& ctx,
            << "OptionalArg (std::nullopt_t) noexcept : value_ (nullptr)" << std::endl
            << "{"
            << "}"
-           << "explicit OptionalArg (T const& value) noexcept : value_ (std::addressof (value))" << std::endl
+           << "OptionalArg (T const& value) noexcept : value_ (std::addressof (value))" << std::endl
            << "{"
            << "}"
            << "OptionalArg (T const&&) = delete;" << std::endl
