@@ -20,7 +20,6 @@ using string = std::wstring;
 
 using NamespaceMapping = std::vector<string>;
 
-//
 class Context
 {
 public:
@@ -152,23 +151,19 @@ protected:
 protected:
 
   // Escape C++ keywords.
-  //
   string
   id (string const& name);
 
   // Translate XML namespace name to C++ identifier.
-  //
   string
   ns_name (SemanticGraph::Namespace& ns);
 
   // Original schema namespace name.
-  //
   string
   xs_ns_name (SemanticGraph::Nameable& ns);
 
   // Mapping for fq-type-name. Takes into account current scope
   // for anonymous names.
-  //
   string
   type_name (SemanticGraph::Instance& i, string const& ns_suffix = L"");
 
@@ -472,7 +467,6 @@ private:
 
 
 // Usual namespace mapping.
-//
 struct Namespace : Traversal::Namespace, protected virtual Context
 {
   Namespace (Context& c)
@@ -506,7 +500,6 @@ private:
 };
 
 // Checks if scope `Y' names any of `X'
-//
 template <typename X, typename Y>
 bool
 has (Y& y)
@@ -646,7 +639,6 @@ has_constructor_optional_members (SemanticGraph::Complex& c)
 }
 
 // Fundamental type mapping helper.
-//
 struct Fundamental : Traversal::FundamentalType,
                      Traversal::String,
                      Traversal::NormalizedString,

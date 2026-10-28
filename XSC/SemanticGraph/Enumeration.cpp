@@ -11,8 +11,6 @@ namespace XSC
     using Introspection::Access;
 
     // Enum
-    //
-    //
     namespace
     {
       TypeInfo
@@ -31,8 +29,6 @@ namespace XSC
 
 
     // Enumerator
-    //
-    //
     namespace
     {
       TypeInfo

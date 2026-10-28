@@ -44,7 +44,6 @@ namespace
       string char_type (this->char_type);
 
       //@@ can I get rid of the temporary?
-      //
       string compare_name;
       if (char_type == L"wchar_t")
         {
@@ -60,7 +59,6 @@ namespace
         }
 
       //@@ need to use FQ-names.
-      //
       os << (first_ ? "if (n == " : "else if (n == ")
          << compare_name << ")"
          << "{";
@@ -69,7 +67,6 @@ namespace
       if (c.max () != 1)
       {
         // sequence
-        //
         if (this->cppmode_ != CPPMODE::CPP03)
         {
           os << id (name) << "_.emplace_back (e);";
@@ -87,7 +84,6 @@ namespace
       else if (c.min () == 0)
       {
         // optional
-        //
         if (this->read_only_)
         {
           if (this->cppmode_ != CPPMODE::CPP03)
@@ -104,7 +100,6 @@ namespace
       else
       {
         // one
-        //
         if (this->cppmode_ != CPPMODE::CPP03)
         {
           os << id (name) << "_ = std::make_unique<" << type << "> (e);";
@@ -242,7 +237,6 @@ namespace
       string type (type_name (a));
 
       //@@ need to use FQ-names.
-      //
       os << (first_ ? "if (n == " : "else if (n == ")
          << string_literal (name) << ")"
          << "{";
@@ -495,14 +489,12 @@ namespace
       else if (e.min () == 0)
       {
         // optional
-        //
         this->optional_element_list_.push_back (&e);
       }
       else
       {
         name = id (name);
 
-        //
         // one
         os << "// " << name << std::endl;
 
@@ -538,7 +530,6 @@ namespace
         name = id (name);
 
         // optional
-        //
         os << " // " << name << std::endl;
         if (!this->optional_via_if_set ())
         {
@@ -577,7 +568,6 @@ namespace
             }
             else
       {
-  //
   // one
 
   // check if the type is a boolean type
@@ -611,16 +601,16 @@ namespace
       // Write the sequence elements
       if (! this->complex_list_.empty ())
         {
-          for (size_t i =0; i < this->complex_list_.size (); i++)
-            this->write_sequence (*this->complex_list_[i]);
+          for (SemanticGraph::Element* element : this->complex_list_)
+            this->write_sequence (*element);
 
           // Write Optional elements AFTER sequence elements
           if (! this->optional_element_list_.empty ())
             {
-              for (size_t i=0; i < this->optional_element_list_.size (); i++)
+              for (SemanticGraph::Element* element : this->optional_element_list_)
                 {
-                  string name (this->optional_element_list_[i]->name ());
-                  string type (type_name (*this->optional_element_list_[i]));
+                  string name (element->name ());
+                  string type (type_name (*element));
 
                   os << "// " << name << std::endl;
 
@@ -892,14 +882,12 @@ namespace
       // Case 1: Type is a new type that is defined
       //         in the schema. Then all we need to
       //         is directly read in the value.
-      //
       // Case 2: Type is a simple type, i.e., it
       //         does not have >> and << generated.
       //  Case 2.1: Type inherits from a type that
       //            has to be read as a pointer
       //  Case 2.2: Type inherits from a type that
       //            has to be read as a value directly.
-      //
       string type (type_name (e));
       string name (e.name ());
 
@@ -1091,10 +1079,11 @@ namespace
       string type (type_name (c));
 
       os << "element = new " << type << " (";
-      for (size_t i =0; i < this->type_name_list_.size (); i++)
+      bool first (true);
+      for (string const& type_name : this->type_name_list_)
       {
-  os << (i? ", " : "")
-     << this->type_name_list_[i];
+  os << (first ? "" : ", ") << type_name;
+  first = false;
       }
 
       os << ");" << std::endl;
@@ -1146,7 +1135,7 @@ namespace
     }
 
     void
-    pretty_print_optional_attribute (string &name)
+    pretty_print_optional_attribute (string const& name)
     {
       // Check if the first character is a "*"
       // Indicates the type is a pointer type
@@ -1181,24 +1170,22 @@ namespace
       // Add optional attributes to the element
       if (! this->optional_attribute_list_.empty ())
       {
-  for (size_t j =0;
-       j < this->optional_attribute_list_.size ();
-       j++)
-    pretty_print_optional_attribute (this->optional_attribute_list_[j]);
+  for (string const& attribute : this->optional_attribute_list_)
+    pretty_print_optional_attribute (attribute);
   os << std::endl;
       }
 
       // Write the sequence elements
       if (! this->complex_list_.empty ())
-  for (size_t i =0; i < this->complex_list_.size (); i++)
-    this->read_sequence (*this->complex_list_[i]);
+      for (SemanticGraph::Element* element : this->complex_list_)
+    this->read_sequence (*element);
 
       // NOTE: The optional elements ALWAYS have to be read at
       // the END.
       if (! this->optional_element_list_.empty ())
-  for (size_t i = 0; i < this->optional_element_list_.size (); i++)
+  for (SemanticGraph::Element* element : this->optional_element_list_)
   {
-    string name (this->optional_element_list_[i]->name ());
+    string name (element->name ());
     // Read the optional part first
     os << "bool " << name << "_p;"
        << "stream.read_boolean (" << name << "_p);";
@@ -1207,7 +1194,7 @@ namespace
        << "{";
 
     // The element is optional
-    read_generic_type (*this->optional_element_list_[i], 1);
+    read_generic_type (*element, 1);
 
     // Add that type to the element
     os << "element->" << name << " (" << name << ");"
@@ -1256,7 +1243,6 @@ namespace
 
   //@@ I am using this traverser to handle anonymous types which is
   //   not very clean (and asymmetric).
-  //
   struct ComplexElement : Traversal::Complex, protected virtual Context
   {
     ComplexElement (Context& c,
@@ -1290,7 +1276,6 @@ namespace
         c.context ().set ("name", name);
 
         // Go after anonymous types first.
-        //
         names (c, names_anonymous_);
 
         Traversal::Complex::traverse (c);
@@ -1595,7 +1580,6 @@ namespace
       enter_scope (name);
 
       // c-tor (Element const&)
-      //
       os << scope << "::" << name << " (" << xml_element_type << " const& e)" << std::endl
          << ": ::XSCRT::Type (e)" << std::endl
          << "{"
@@ -1610,7 +1594,6 @@ namespace
       os << "}";
 
       // c-tor (Attribute const&)
-      //
       os << scope << "::" << name << " (" << xml_attribute_type << " const& a)" << std::endl
          << ": ::XSCRT::Type (a)" << std::endl
          << "{"

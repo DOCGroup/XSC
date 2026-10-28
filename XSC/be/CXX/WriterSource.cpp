@@ -30,7 +30,6 @@ namespace
     traverse (SemanticGraph::Element& e)
     {
       // Anonymous types cannot be traversed.
-      //
       //if (!e.type ().named ())
       //  return;
 
@@ -43,10 +42,8 @@ namespace
       if (e.max () != 1)
       {
         // sequence
-        //
 
         // pre
-        //
         os << "void " << scope << "::"
            << name << "_pre (Type const&)"
            << "{"
@@ -57,7 +54,6 @@ namespace
            << "}";
 
         // next
-        //
         os << "void " << scope << "::"
            << name << "_next (Type const& o)"
            << "{"
@@ -67,7 +63,6 @@ namespace
 
 
         // post
-        //
         os << "void " << scope << "::"
            << name << "_post (Type const&)"
            << "{"
@@ -77,7 +72,6 @@ namespace
       else
       {
         // optional & one
-        //
         os << "void " << scope << "::"
            << id (name) << " (Type const& o)"
            << "{"
@@ -95,7 +89,6 @@ namespace
     traverse (SemanticGraph::Attribute& a)
     {
       // Anonymous types cannot be traversed.
-      //
       //if (!a.type ().named ())
       //  return;
 
@@ -213,7 +206,6 @@ namespace
         c.context ().set ("name", name_);
 
         // Go after anonymous types first.
-        //
         names (c, names_anonymous_);
 
         Traversal::Complex::traverse (c);
@@ -230,7 +222,6 @@ namespace
       string name (id (name_));
 
       // c-tor (XML::Element&)
-      //
       os << scope << "::"
          << name << " (" << xml_element_type << "& e)" << std::endl
          << ": ::XSCRT::Writer<" << char_type << "> (e)" << std::endl
@@ -238,7 +229,6 @@ namespace
          << "}";
 
       // c-tor ()
-      //
       if (this->cppmode_ == CPPMODE::CPP03)
       {
         os << scope << "::"
@@ -248,7 +238,6 @@ namespace
       }
 
       // traverse
-      //
       os << "void " << scope << "::"
          << "traverse (Type const& o)"
          << "{";
@@ -309,7 +298,6 @@ namespace
       string name ((this->name_ != L"") ? id(name_) : id (c.name ()));
 
       // c-tor (XML::Element&)
-      //
       os << name << "::"
          << name << " (" << xml_element_type << "& e)" << std::endl
          << ": ::XSCRT::Writer<" << char_type << "> (e)" << std::endl
@@ -317,7 +305,6 @@ namespace
          << "}";
 
       // c-tor ()
-      //
       if (this->cppmode_ == CPPMODE::CPP03)
       {
         os << name << "::"
@@ -327,7 +314,6 @@ namespace
       }
 
       // traverse
-      //
       os << "void " << name << "::"
          << "traverse (Type const& o)"
          << "{"
@@ -384,9 +370,6 @@ namespace
     }
   };
 
-  //
-  //
-  //
   struct WriterBase : /*Traversal::Type, */
                       Fundamental,
                       Traversal::Complex,
@@ -531,7 +514,6 @@ namespace
       SemanticGraph::Type& t (c.type ());
 
       //@@ need to use FQ-names.
-      //
       os << "namespace writer"
          << "{"
          << "void" << std::endl

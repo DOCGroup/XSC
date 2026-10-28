@@ -36,7 +36,6 @@ namespace
     traverse (SemanticGraph::Element& e)
     {
       // Anonymous types cannot be traversed.
-      //
       //if (!e.type ().named ())
       //  return;
 
@@ -45,34 +44,28 @@ namespace
       if (e.max () != 1)
       {
         // sequence
-        //
 
         // name
-        //
         declaration (id (name), L"Type&");
         declaration (id (name), L"Type const&");
 
 
         // name_pre
-        //
         declaration (name + L"_pre", L"Type&");
         declaration (name + L"_pre", L"Type const&");
 
 
         // name_next
-        //
         declaration (name + L"_next", L"Type&");
         declaration (name + L"_next", L"Type const&");
 
 
         // name_post
-        //
         declaration (name + L"_post", L"Type&");
         declaration (name + L"_post", L"Type const&");
 
 
         // name_none
-        //
         if (e.min () == 0)
         {
           declaration (name + L"_none", L"Type&");
@@ -82,15 +75,12 @@ namespace
       else if (e.min () == 0)
       {
         // optional
-        //
 
         // name
-        //
         declaration (id (name), L"Type&");
         declaration (id (name), L"Type const&");
 
         // name_none
-        //
 
         declaration (name + L"_none", L"Type&");
         declaration (name + L"_none", L"Type const&");
@@ -98,10 +88,8 @@ namespace
       else
       {
         // one
-        //
 
         // name
-        //
         declaration (id (name), L"Type&");
         declaration (id (name), L"Type const&");
       }
@@ -112,7 +100,6 @@ namespace
     traverse (SemanticGraph::Attribute& a)
     {
       // Anonymous types cannot be traversed.
-      //
       if (!a.type ().named ()) return;
 
       string name (a.name ());
@@ -121,19 +108,16 @@ namespace
       if (a.optional ())
       {
         // name
-        //
         declaration (id (name), L"Type&");
         declaration (id (name), L"Type const&");
 
         // name_none
-        //
         declaration (name + L"_none", L"Type&");
         declaration (name + L"_none", L"Type const&");
       }
       else
       {
         // name
-        //
         declaration (id (name), L"Type&");
         declaration (id (name), L"Type const&");
       }
@@ -217,14 +201,12 @@ namespace
          << "{";
 
       // traverse ()
-      //
       os << virtual_string << "void traverse (Type&)" << override_string << ";"
          << std::endl;
       os << virtual_string << "void traverse (Type const&)" << override_string << ";"
          << std::endl;
 
       // pre ()
-      //
       os << "virtual void pre (Type&);" << std::endl;
       os << "virtual void pre (Type const&);" << std::endl;
     }
@@ -233,7 +215,6 @@ namespace
     post (Type& )
     {
       // post ()
-      //
       os << "virtual void post (Type&);" << std::endl;
       os << "virtual void post (Type const&);" << std::endl;
 

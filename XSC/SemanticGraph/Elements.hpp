@@ -19,16 +19,11 @@ namespace XSC
 {
   namespace SemanticGraph
   {
-    //
-    //
-    //
     class Node;
     class Edge;
 
 
     // Node & Edge
-    //
-    //
     class Edge : public virtual Introspection::Object
     {
     public:
@@ -103,7 +98,6 @@ namespace XSC
       // This is a bunch of experimental sink functions that allow
       // extensions in the form of one-way edges (see Executor stuff
       // in CIDL for example).
-      //
       //void
       //add_edge_left (Edge&)
       //{
@@ -124,14 +118,8 @@ namespace XSC
       return std::addressof (x) == std::addressof (y);
     }
 
-    //
-    //
-    //
     using Name_ = std::wstring;
 
-    //
-    //
-    //
     class Scope;
     class Nameable;
 
@@ -262,9 +250,6 @@ namespace XSC
     using Nameables = std::set<Nameable*>;
 
 
-    //
-    //
-    //
     class Scope : public virtual Nameable
     {
     protected:
@@ -272,8 +257,6 @@ namespace XSC
       using NamesMap_ = std::map<Name_, Names_>;
 
     public:
-      //
-      //
       using NamesIterator = Names_::const_iterator;
       using NamesIteratorPair = std::pair<NamesIterator, NamesIterator>;
 
@@ -332,9 +315,6 @@ namespace XSC
 
 
 
-    //
-    //
-    //
     class Belongs;
 
     class Type : public virtual Nameable
@@ -454,9 +434,6 @@ namespace XSC
     };
 
 
-    //
-    //
-    //
     class Inherits : public virtual Edge
     {
     public:
@@ -501,9 +478,6 @@ namespace XSC
     };
 
 
-    //
-    //
-    //
     class Container;
 
     class Contains : public virtual Edge

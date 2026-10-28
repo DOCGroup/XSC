@@ -170,7 +170,6 @@ namespace XSC
                 Scope& scope (resolve<Scope> (ns_name, uq_name, schema_));
 
                 // @@ same code as in Parser::group
-                //
                 for (Scope::NamesIterator i (scope.names_begin ());
                      i != scope.names_end (); ++i)
                   {
@@ -183,12 +182,9 @@ namespace XSC
                     schema_.new_edge<Names> (c, e, prot.name ());
 
                     // Now we set element's type.
-                    //
-                    //
                     if (prot.typed ())
                       {
                         // Easy case.
-                        //
                         schema_.new_edge<Belongs> (e, prot.type ());
                       }
                     else if (prot.context ().count ("type-ns-name"))
@@ -210,7 +206,6 @@ namespace XSC
                     else
                       {
                         // What the heck?
-                        //
                         if (trace_)
                           std::wcout << "element `" << ns_name << "#" << uq_name
                                 << "' is in unexpected condition" << std::endl;
@@ -237,7 +232,6 @@ namespace XSC
       }
 
       // We don't need to go inside enumerations.
-      //
       void
       traverse (SemanticGraph::Enumeration&) override
       {
@@ -261,7 +255,6 @@ namespace XSC
     std::unique_ptr<Schema> rs (std::make_unique<Schema> ());
 
     // Implied schema with fundamental types.
-    //
     {
       Schema& s (rs->new_node<Schema> ());
       rs->new_edge<Implies> (*rs, s, std::filesystem::path ("XMLSchema.xsd"));
@@ -320,7 +313,6 @@ namespace XSC
     }
 
     // Parse.
-    //
     if (DOMDocument* d  = dom (uri))
       {
         XML::Element root (d->getDocumentElement ());
@@ -330,7 +322,6 @@ namespace XSC
         if (trace_) std::wcout << "target namespace: " << ns << std::endl;
 
         // Enter the file into file_map_.
-        //
         file_map_[uri] = ns;
 
         root_schema_ = cur_schema_ = rs.get ();
@@ -347,10 +338,8 @@ namespace XSC
       }
 
     //@@ don't need this in case of an error
-    //
 
     // Second pass to resolve types and refs.
-    //
     {
       Traversal::Schema schema;
       Traversal::Contains contains;
@@ -538,7 +527,6 @@ namespace XSC
               {
 
                 // Chameleon.
-                //
                 // @@Will:  What is a chameleon schema?
                 ns = cur_ns;
                 root_schema_->new_edge<Sources> (*cur_schema_, s, path);
@@ -611,7 +599,6 @@ namespace XSC
         string ns_name (XML::ns_name (g, ref));
 
         //@@ min/max
-        //
         // min/max can come from element in the group!
 
         unsigned long min (g[L"minOccurs"] == L"0" ? 0 : this->min ()),
@@ -636,11 +623,9 @@ namespace XSC
                 root_schema_->new_edge<Names> (scope (), e, prot.name ());
 
                 // Now we set element's type.
-                //
                 if (prot.typed ())
                   {
                     // Easy case.
-                    //
                     root_schema_->new_edge<Belongs> (e, prot.type ());
                   }
                 else if (prot.context ().count ("type-ns-name"))
@@ -662,7 +647,6 @@ namespace XSC
                 else
                   {
                     // What the heck?
-                    //
                     if (trace_)
                       std::wcout << "element `" << ref << "' is in unexpected condition"
                             << std::endl;
@@ -683,7 +667,6 @@ namespace XSC
             // Cannot resolve group at this point. Will have to try later.
             // The tricky part is that we have to save position where we will
             // be inserting elements.
-            //
 
             scope ().context ().set ("group-ns-name", ns_name);
             scope ().context ().set ("group-uq-name", uq_name);
@@ -715,7 +698,6 @@ namespace XSC
   }
 
   //@@ need RAII for push/pop
-  //
 
   Type* Parser::
   simple_type (XML::Element const& t, const string& anon_name)
@@ -767,7 +749,6 @@ namespace XSC
         if (e.name () == L"enumeration")
           {
             // Enumeration
-            //
             enum_ = true;
 
             Enumeration& node (root_schema_->new_node<Enumeration> ());
@@ -798,7 +779,6 @@ namespace XSC
     if (!enum_)
       {
         //Complex& node (root_schema_->new_node<Complex> ());
-        //
         //set_type<Inherits> (r[L"base"], r, node);
 
         // base is likely a fundamental type?
@@ -836,7 +816,6 @@ namespace XSC
 //     if (more ())
 //       {
 //         XML::Element e (next ());
-//
 //         string base1 (fq_name (e, e[L"base"]));
 //           std::wcout << "restriction base: " << base1 << std::endl;
 //       }
@@ -933,7 +912,6 @@ namespace XSC
     //  can it contain any of those. The default cardinality
     //  values for `all' are min=1, max=1. Therefore we don't
     //  really need to push/pop cardinality.
-    //
     this->push (a);
 
     this->annotation ();
@@ -1015,7 +993,6 @@ namespace XSC
   sequence (XML::Element const& s)
   {
     // Establish cardinality.
-    //
     push_cardinality (s[L"minOccurs"] == L"0" ? 0 : min (),
                       s[L"maxOccurs"] && s[L"maxOccurs"] != L"1" ? 0 : max ());
 
@@ -1236,7 +1213,6 @@ namespace XSC
             else
               {
                 // anyType almighty.
-                //
                 string prefix (ns_prefix (e, xsd));
                 type =  prefix + (prefix.empty () ? L"" : L":") + L"anyType";
 
@@ -1275,11 +1251,9 @@ namespace XSC
                         << "deferring resolution until later" << std::endl;
               }
             // Global element cannot reference.
-            //
             else
               {
                 // What the heck?
-                //
                 if (trace_)
                   std::wcout << "element `" << ref << "' is in unexpected condition"
                         << std::endl;
@@ -1531,51 +1505,41 @@ namespace XSC
           }
 
         // Initialize Xerces runtime
-        //
         XMLPlatformUtils::Initialize();
         XercesDOMParser parser;
 
         // Discard comment nodes in the document.
-        //
         parser.setCreateCommentNodes (false);
 
         // Disable datatype normalization. The XML 1.0 attribute value
         // normalization always occurs though.
-        //
         //parser->setFeature (XMLUni::fgDOMDatatypeNormalization, true);
 
         // Do not create EntityReference nodes in the DOM tree. No
         // EntityReference nodes will be created, only the nodes
         // Corresponding to their fully expanded substitution text will be
         // created.
-        //
         parser.setCreateEntityReferenceNodes (false);
 
         // Perform Namespace processing.
-        //
         parser.setDoNamespaces (true);
 
         // Perform Validation
-        //
         //parser.setValidationScheme (true);
 
         // Do not include ignorable whitespace in the DOM tree.
-        //
         parser.setIncludeIgnorableWhitespace (false);
 
         // Enable the parser's schema support.
-        //
         parser.setDoSchema (true);
 
         // Enable full schema constraint checking, including checking which
         // may be time-consuming or memory intensive. Currently, particle
         // unique attribution constraint checking and particle derivation
         // restriction checking are controlled by this option.
-        //
         parser.setValidationSchemaFullChecking (true);
 
         // The parser will treat validation error as fatal and will exit.
-        //
         parser.setValidationConstraintFatal (true);
 
         // Setup the error handler.

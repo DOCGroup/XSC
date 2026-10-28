@@ -31,7 +31,6 @@ namespace
     traverse (SemanticGraph::Element& e)
     {
       // Anonymous types cannot be traversed.
-      //
       //if (!e.type ().named ())
       //  return;
 
@@ -51,7 +50,6 @@ namespace
         }
 
         // optional
-        //
         os << "virtual void" << std::endl
            << id (name) << " (Type const&);"
            << std::endl;
@@ -70,7 +68,6 @@ namespace
         }
 
         // one
-        //
         os << "virtual void" << std::endl
            << id (name) << " (Type const&);"
            << std::endl;
@@ -78,10 +75,8 @@ namespace
       else
       {
         // sequence
-        //
 
         // Pre
-        //
         if (this->cppmode_ == CPPMODE::CPP03)
         {
           os << "virtual void" << std::endl
@@ -93,13 +88,11 @@ namespace
         }
 
         // pre
-        //
         os << "virtual void" << std::endl
            << name << "_pre (Type const&);"
            << std::endl;
 
         // non-const next
-        //
         if (this->cppmode_ == CPPMODE::CPP03)
         {
           os << "virtual void" << std::endl
@@ -111,7 +104,6 @@ namespace
         }
 
         // next
-        //
         os << "virtual void" << std::endl
            << name << "_next (Type const&);"
            << std::endl;
@@ -128,7 +120,6 @@ namespace
         }
 
         // post
-        //
         os << "virtual void" << std::endl
            << name << "_post (Type const&);"
            << std::endl;
@@ -139,7 +130,6 @@ namespace
     traverse (SemanticGraph::Attribute& a)
     {
       // Anonymous types cannot be traversed.
-      //
       //if (!a.type ().named ())
       //return;
 
@@ -254,7 +244,6 @@ namespace
          << "{";
 
       //@@ Should probably be Type__
-      //
       if (this->cppmode_ != CPPMODE::CPP03)
       {
         os << "using Type =" << fq_name (c) << ";";
@@ -265,7 +254,6 @@ namespace
       }
 
       // c-tor
-      //
       os << "explicit " << name_ << " (" << xml_element_type << "&);"
          << std::endl;
 
@@ -284,7 +272,6 @@ namespace
       string override_string (this->cppmode_ != CPPMODE::CPP03 ? L" override" : L"");
 
       // traverse
-      //
       os << virtual_string << "void" << std::endl
          << "traverse (Type const&)" << override_string << ";"
          << std::endl;
@@ -335,7 +322,6 @@ namespace
          << "{";
 
       // c-tor
-      //
       os << "explicit " << name << " (" << xml_element_type << "&);"
          << std::endl;
 
@@ -351,7 +337,6 @@ namespace
       }
 
       // traverse
-      //
       os << virtual_string << "void" << std::endl
          << "traverse (Type const&)" << override_string << ";"
          << std::endl;

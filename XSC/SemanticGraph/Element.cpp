@@ -11,8 +11,6 @@ namespace XSC
     using Introspection::Access;
 
     // Element
-    //
-    //
     namespace
     {
       TypeInfo

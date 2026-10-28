@@ -8,8 +8,6 @@ namespace XSC
   namespace Traversal
   {
     // Attribute
-    //
-    //
     void Attribute::
     traverse (Type& a)
     {

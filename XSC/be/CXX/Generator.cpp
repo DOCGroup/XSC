@@ -148,7 +148,6 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
   write_version (cxx);
 
   // Banner.
-  //
   //Takes in the name of a "banner" file.  This banner, if it exists, will
   //be inserted at the head of the output files.
   {
@@ -171,7 +170,6 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
     }
 
     // header
-    //
     {
       std::string bn (options.value ("cxx-header-banner-file"));
 
@@ -198,7 +196,6 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
     }
 
     // inline
-    //
     if (inline_)
     {
       std::string bn (options.value ("cxx-inline-banner-file"));
@@ -226,7 +223,6 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
     }
 
     // source
-    //
     {
       std::string bn (options.value ("cxx-header-banner-file"));
 
@@ -253,8 +249,6 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
     }
   }
 
-  //
-  //
   string char_type;
 
   {
@@ -266,7 +260,6 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
 
 
   // Set auto-indentation.
-  //
   Indentation::Implanter<Indentation::Cxx, wchar_t> hxx_guard (hxx);
   Indentation::Implanter<Indentation::Cxx, wchar_t> ixx_guard (ixx);
   Indentation::Implanter<Indentation::Cxx, wchar_t> cxx_guard (cxx);
@@ -290,27 +283,23 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
   NamespaceMapping nsm;
 
   // Default mapping.
-  //
   nsm.push_back (L"#^.* (.*?/)??" L"(([a-zA-Z_]\\w*)(/[a-zA-Z_]\\w*)*)$#$2#");
 
   if (options.count ("cxx-namespace-regex"))
     {
       // Custom mappings.
-      //
       std::vector<std::string> const& custom_nsm
         {options.values ("cxx-namespace-regex")};
 
-      for (std::vector<std::string>::const_iterator i = custom_nsm.begin ();
-           i != custom_nsm.end (); ++i)
+      for (std::string const& mapping : custom_nsm)
         {
           std::wostringstream o;
-          o << i->c_str ();
+          o << mapping.c_str ();
           nsm.push_back (o.str ());
       }
     }
 
   // Export symbol
-  //
   string export_symbol;
   {
     std::wostringstream o;
@@ -319,7 +308,6 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
   }
 
   // HXX
-  //
   std::string guard (hxx_name);
   std::string guard_flag (options.value ("cxx-header-guard"));
   // When the userhas passed a special guard use that, else construct one
@@ -330,19 +318,15 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
   else
   {
     // Split words
-    //
     guard = regex::perl_s (guard, "/([a-z])([A-Z])/$1_$2/");
 
     // Upcase.
-    //
     std::transform (guard.begin (), guard.end(), guard.begin (), upcase);
 
     // Replace '.' with '_'.
-    //
     guard = regex::perl_s (guard, "/\\./_/");
 
     // Replace '-' with '_'.
-    //
     guard = regex::perl_s (guard, "/\\-/_/");
   }
 
@@ -406,7 +390,6 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
   hxx << "#endif // " << guard.c_str () << std::endl;
 
   // IXX
-  //
   if (inline_)
   {
     ::Context ctx (ixx, char_type, export_symbol, nsm);
@@ -427,7 +410,6 @@ generate (XSC::Options const& options, Schema& schema, std::filesystem::path con
 
 
   // CXX
-  //
   cxx << "#include \"" << hxx_name.c_str () << "\"" << std::endl
       << "#include <stdexcept>" << std::endl
       << std::endl;

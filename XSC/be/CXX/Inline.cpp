@@ -47,7 +47,6 @@ namespace
       if (e.min () == 0 && e.max () == 1)
       {
         // optional
-        //
         if (this->optional_via_if_set ())
         {
           string noexcept_suffix (this->cppmode_ == CPPMODE::CPP03 ? L"" : L" noexcept");
@@ -138,7 +137,6 @@ namespace
       else if (e.min () == 1 && e.max () == 1)
       {
         // one
-        //
         os << i
            << type << " const& " << scope << "::" << id (name) << " () const"
            << "{"
@@ -175,7 +173,6 @@ namespace
       else
       {
         // sequence
-        //
 
         string accessor_name (sequence_accessor_name (e));
 
@@ -195,7 +192,6 @@ namespace
           if (!this->read_only_)
           {
             // begin_typename
-            //
             os << i
               << scope << "::" << name << "_iterator " << scope << "::begin_" << name << " ()"
               << "{"
@@ -203,7 +199,6 @@ namespace
               << "}";
 
             // end_typename
-            //
             os << i
               << scope << "::" << name << "_iterator " << scope << "::end_" << name << " ()"
               << "{"
@@ -273,7 +268,6 @@ namespace
         if (this->cppmode_ != CPPMODE::CPP17)
         {
           // count_typename
-          //
           os << i
             << "size_t " << scope << "::count_" << name << "() const"
             << (this->cppmode_ == CPPMODE::CPP17 ? " noexcept" : "")
@@ -437,7 +431,6 @@ namespace
 
   // List of all non-optional members
   // @@ this code is the same as in Header.cpp
-  //
   struct CtorArgs : Traversal::Complex,
                     protected Traversal::Enumeration,
                     //protected Traversal::Type,
@@ -608,7 +601,6 @@ namespace
       if (!default_constructor)
       {
         // c-tor
-        //
         os << i
            << scope << "::" << name << " (";
 
@@ -639,7 +631,6 @@ namespace
       if (!default_copy)
       {
         // copy c-tor
-        //
         os << i
            << scope << "::"
            << name << " (" << type << " const& s)" << std::endl;
@@ -677,7 +668,6 @@ namespace
         if (!this->read_only_)
         {
           // operator=
-          //
           os << i
              << scope << "& " << scope << "::operator= (" << type << " const& s)"
              << "{"
@@ -916,7 +906,6 @@ namespace
         else if (e.min () == 1 && e.max () == 1)
         {
           // one
-          //
           string name (id (e.name ()));
           string type (type_name (e));
 
@@ -1002,7 +991,6 @@ namespace
         if (e.min () == 1 && e.max () == 1 && (this->cppmode_ == CPPMODE::CPP03))
         {
           // one
-          //
           os << id (e.name ()) << "_->container (this);";
         }
       }
@@ -1065,7 +1053,6 @@ namespace
         if (e.min () == 0 && e.max () == 1)
           {
             // optional
-            //
             if (this->cppmode_ != CPPMODE::CPP03)
             {
               os << ", " << name << "_ ("
@@ -1082,7 +1069,6 @@ namespace
         else if (e.min () == 1 && e.max () == 1)
           {
             // one
-            //
             if (this->cppmode_ != CPPMODE::CPP03)
             {
               os << ", " << name << "_ (std::make_unique<" << type << "> (*s." << name << "_))" << std::endl;
@@ -1095,7 +1081,6 @@ namespace
         else
           {
             // sequence
-            //
 
             os << ", " << name << "_ (s." << name << "_)" << std::endl;
           }
@@ -1172,7 +1157,6 @@ namespace
           name = id (name);
 
           // optional
-          //
           if (this->cppmode_ == CPPMODE::CPP03)
           {
             os << "if (" << name << "_.get ()) "
@@ -1193,7 +1177,6 @@ namespace
         if (a.optional ())
         {
           // optional
-          //
           if (this->cppmode_ == CPPMODE::CPP03)
           {
             os << "if (" << name << "_.get ()) "
@@ -1237,7 +1220,6 @@ namespace
           name = id (name);
 
           // optional
-          //
           if (this->cppmode_ != CPPMODE::CPP03)
           {
             os << "if (s." << name << "_)" << std::endl
@@ -1260,7 +1242,6 @@ namespace
           name = id (name);
 
           // one
-          //
 
           os << name << " (*s." << name << "_);"
              << std::endl;
@@ -1268,7 +1249,6 @@ namespace
         else
         {
           // sequence
-          //
           os << id(name) << "_ = s." << id(name) << "_;"
              << std::endl;
         }

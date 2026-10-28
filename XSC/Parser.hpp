@@ -186,7 +186,6 @@ namespace XSC
     }
 
     //@@ can get rid of use_default crap. See XSCRT.
-    //
     inline
     string
     ns_prefix (Element const& e,
@@ -410,14 +409,8 @@ namespace XSC
     SemanticGraph::Schema* cur_schema_ {}; // current schema file
 
 
-    //
-    //
-    //
     std::stack<SemanticGraph::Scope*> scope_stack_;
 
-    //
-    //
-    //
     struct Cardinality
     {
       Cardinality (unsigned long min, unsigned long max)
@@ -431,9 +424,6 @@ namespace XSC
     std::stack<Cardinality> cardinality_stack_;
 
 
-    //
-    //
-    //
     struct FilePathComparator
     {
       bool operator () (std::filesystem::path const& x, std::filesystem::path const& y) const

@@ -8,8 +8,6 @@ namespace XSC
   namespace Traversal
   {
     // Instance
-    //
-    //
     void Instance::
     traverse (Type& a)
     {

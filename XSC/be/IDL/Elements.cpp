@@ -11,8 +11,6 @@ namespace IDL
 {
 
   // Namespace
-  //
-  //
 
   string Context::
   ns_name (SemanticGraph::Namespace& ns)
@@ -53,7 +51,6 @@ namespace IDL
       r = regex::perl_s (r, L"#/#::#"); // replace `/' with `::'
 
       // Check the result.
-      //
       if (regex::perl_s (
             r, L"/^([a-zA-Z_]\\w*)(::[a-zA-Z_]\\w*)*$//").empty ()) break;
     }
@@ -110,7 +107,6 @@ namespace IDL
   namespace
   {
     //@@ recode using Fundamental
-    //
     struct TypeName : protected virtual Context,
                       Traversal::Type
                       /*
@@ -280,12 +276,10 @@ namespace IDL
 
   //@@ In what situations would I produce different name by
   //   these two functions?
-  //
   string Context::
   type_name (SemanticGraph::Type& t, string const& suffix)
   {
     // There cannot be a named type inside an anonymous one.
-    //
     if (t.named ())
     {
       string r;
@@ -452,8 +446,6 @@ namespace IDL
 
 
   // Namespace
-  //
-  //
   void Namespace::
   pre (Type& n)
   {

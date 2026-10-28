@@ -24,7 +24,6 @@ namespace IDL
   {
     // On some platforms std::toupper can be something other than a
     // function with C++ linkage.
-    //
     int
     upcase (int c)
     {
@@ -67,7 +66,6 @@ namespace IDL
     idl << std::endl;
 
     // Banner.
-    //
     {
       using namespace std;
 
@@ -89,8 +87,6 @@ namespace IDL
       }
     }
 
-    //
-    //
     string char_type;
 
     {
@@ -101,7 +97,6 @@ namespace IDL
     }
 
     // Set auto-indentation.
-    //
     Indentation::Implanter<Indentation::IDL, wchar_t> idl_guard (idl);
 
 
@@ -111,17 +106,15 @@ namespace IDL
     nsm.push_back (L"#^.* (.*?/)??" L"(([a-zA-Z_]\\w*)(/[a-zA-Z_]\\w*)*)$#$2#");
 
     // Custom mappings.
-    //
     if (options.count ("idl-namespace-regex"))
       {
         std::vector<std::string> const& custom_nsm
           {options.values ("idl-namespace-regex")};
 
-        for (std::vector<std::string>::const_iterator i = custom_nsm.begin ();
-            i != custom_nsm.end (); ++i)
+        for (std::string const& mapping : custom_nsm)
           {
             std::wostringstream o;
-            o << i->c_str ();
+            o << mapping.c_str ();
             nsm.push_back (o.str ());
           }
       }
@@ -129,15 +122,12 @@ namespace IDL
     std::string guard (out_name);
 
     // Split words
-    //
     guard = regex::perl_s (guard, "/([a-z])([A-Z])/$1_$2/");
 
     // Upcase.
-    //
     std::transform (guard.begin (), guard.end(), guard.begin (), upcase);
 
     // Replace '.' with '_'.
-    //
     guard = regex::perl_s (guard, "/\\./_/");
 
 

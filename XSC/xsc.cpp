@@ -211,9 +211,7 @@ namespace
 }
 
 
-//
 // main
-//
 int main (int argc, char* argv[])
 {
   try
@@ -339,7 +337,6 @@ int main (int argc, char* argv[])
     // This is a little hack to make XSC signal error conditions
     // by return value. Once I redesign diagnostic in CCF this should
     // be removed.
-    //
     ErrorDetector detector (std::wcerr);
 
     //"tu" is set to the schema path provided in the command line.
@@ -360,7 +357,6 @@ int main (int argc, char* argv[])
     {
       // Let C++ mapping evaluate the graph for possibility of generating
       // something useful.
-      //
       if (!CXX::validate (*s))
       {
         return 1;

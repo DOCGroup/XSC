@@ -73,7 +73,6 @@ namespace
         string name_seq (id (name + L"_seq"));
 
         // sequence
-        //
         os << "typedef sequence< " << type << " > " << name_seq << ";"
            << "public " << name_seq << " " << id (name) << ";";
 
@@ -81,14 +80,12 @@ namespace
       else if (c.min () == 0)
       {
         // optional
-        //
         os << "boolean " << name << "_p ();"
            << "public " << type << " " << id (name) << ";";
       }
       else
       {
         // one
-        //
         os << "public " << type << " " << id (name) << ";";
       }
 

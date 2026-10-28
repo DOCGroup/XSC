@@ -67,7 +67,6 @@ namespace
     pre (Type& c)
     {
       //@@ cache name as a member?
-      //
 
       os << "struct " << name_ << "TypeInfoInitializer"
          << "{"
@@ -94,7 +93,6 @@ namespace
          << "}";
 
       // Go after anonymous types.
-      //
       names (c, names_anonymous_);
 
       os << "};"

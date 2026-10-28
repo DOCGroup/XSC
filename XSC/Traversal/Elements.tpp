@@ -8,16 +8,12 @@ namespace XSC
   namespace Traversal
   {
     // Traverser
-    //
-    //
 
     template<typename T>
     Traverser<T>::
     ~Traverser () = default;
 
     // Dispatcher
-    //
-    //
 
     template <typename T>
     Dispatcher<T>::
@@ -35,37 +31,30 @@ namespace XSC
       {
         TypeInfoSet dispatched;
 
-        for (typename LevelMap::const_iterator
-               i (levels.begin ()), e (levels.end ());
-             i != e; ++i)
+        for (auto const& [type_info, level] : levels)
         {
-          if (i->second == l)
+          if (level == l)
           {
             typename TraversalMap::const_iterator v (
-              traversal_map_.find (i->first.type_id ()));
+              traversal_map_.find (type_info.type_id ()));
 
             if (v != traversal_map_.end ())
             {
               Traversers const& traversers (v->second);
-              for (typename Traversers::const_iterator
-                     ti (traversers.begin ()), te (traversers.end ());
-                   ti != te; ++ti)
+              for (Traverser<T>* traverser : traversers)
               {
-                (*ti)->trampoline (n);
+                traverser->trampoline (n);
               }
 
-              flatten_tree (i->first, dispatched);
+              flatten_tree (type_info, dispatched);
             }
           }
         }
 
         // Remove traversed types from level map.
-        //
-        for (typename TypeInfoSet::const_iterator i = dispatched.begin ();
-             i != dispatched.end ();
-             ++i)
+        for (Introspection::TypeInfo const& type_info : dispatched)
         {
-          levels.erase (*i);
+          levels.erase (type_info);
         }
       }
     }

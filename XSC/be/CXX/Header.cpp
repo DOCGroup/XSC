@@ -40,8 +40,6 @@ namespace
   };
 
   // List of all non-optional members
-  //
-  //
   struct CtorArgs : Traversal::Complex,
                     protected Traversal::Enumeration,
                     //protected Traversal::Type,
@@ -246,7 +244,6 @@ namespace
         string accessor_name (sequence_accessor_name (c));
 
         // sequence
-        //
         switch(this->cppmode_)
         {
           case CPPMODE::CPP03:
@@ -332,7 +329,6 @@ namespace
       else if (c.min () == 0)
       {
         // optional
-        //
         if (!this->optional_via_if_set ())
         {
           os << "bool " << name << "_p () const;";
@@ -382,7 +378,6 @@ namespace
       else
       {
         // one
-        //
         os << type << " const& " << id (name) << " () const;";
         // os << type << "& " << id (name) << " ();"; // Lets just have one mutator.
         if (this->read_only_)
@@ -685,7 +680,6 @@ namespace
       os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
 
       // c-tor (all-non-optional-members)
-      //
       if (this->read_only_)
       {
         if (this->cppmode_ == CPPMODE::CPP03)
@@ -716,11 +710,9 @@ namespace
       }
 
       // c-tor (Element const&)
-      //
       os << "explicit " << name << " (" << xml_element_type << " const&);";
 
       // c-tor (Attribute const&)
-      //
       bool r (true);
 
       struct Traverser : Traversal::Inherits,
@@ -756,7 +748,6 @@ namespace
       }
 
       // copy c-tor
-      //
       if (this->read_only_)
       {
         if (this->cppmode_ == CPPMODE::CPP03)
@@ -789,7 +780,6 @@ namespace
            << (default_copy ? " = default;" : ";");
 
         // operator=
-        //
         os << name << "& operator= (" << name << " const& s)"
            << (default_copy ? " = default;" : ";");
 
@@ -929,11 +919,9 @@ namespace
       }
 
       // c-tor (Element const&)
-      //
       os << "explicit " << name << " (" << xml_element_type << " const&);";
 
       // c-tor (Attribute const&)
-      //
       os << "explicit " << name << " (" << xml_attribute_type << " const&);";
 
       os << std::endl;

@@ -12,7 +12,6 @@
 namespace
 {
   //@! Inheriting from Context is just wrong!
-  //
   class ValidationContext : public Context
   {
   public:
@@ -103,7 +102,6 @@ namespace
       traverse (static_cast<SemanticGraph::Type&> (c));
 
       //@@ maybe use traverser?
-      //
       SemanticGraph::Complex::InheritsIterator it (c.inherits_begin ());
 
       if (it != c.inherits_end ())
