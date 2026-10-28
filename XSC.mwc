@@ -9,6 +9,7 @@ workspace (XSC) {
   }
 
   $(ACE_ROOT)/ace/ace.mpc
+  $(ACE_ROOT)/ace/XML_Utils/XML.mpc
   XSC/utils
   XSC/XSC.mpc
 

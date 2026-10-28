@@ -15,10 +15,8 @@ project (xsc_test_xml_utils_runtime): xscdefaults {
   }
 }
 
-project (xsc_test_xml_utils_runtime_generated): xscrt {
+project (xsc_test_xml_utils_runtime_generated): xscrt, ace_xml_utils {
   after += xsc_test_xml_utils_runtime
-  libpaths += $(ACE_ROOT)/lib
-  libs += ACE_XML_Utils
 
   Source_Files {
     runtime.cpp

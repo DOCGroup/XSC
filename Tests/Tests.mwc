@@ -1,6 +1,7 @@
 workspace (Tests) {
   cmdline += -include $XSC_ROOT/MPC/config
 
+  $(ACE_ROOT)/ace/XML_Utils/XML.mpc
   Abstract
   Anonymous
   Chameleon
