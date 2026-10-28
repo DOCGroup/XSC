@@ -11,10 +11,7 @@ namespace XSC
 //
 // XStr
 //
-XStr::XStr ()
-{
-
-}
+XStr::XStr () = default;
 
 //
 // XStr

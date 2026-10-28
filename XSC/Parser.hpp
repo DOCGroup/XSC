@@ -23,9 +23,7 @@ namespace XSC
   class string : public std::wstring
   {
   public:
-    string ()
-    {
-    }
+    string () = default;
 
     string (wchar_t const* s)
         : std::wstring (s)
