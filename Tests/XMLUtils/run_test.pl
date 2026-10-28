@@ -11,22 +11,24 @@ use PerlACE::TestTarget;
 my $target = PerlACE::TestTarget::create_target (1)
   || die "Create target 1 failed\n";
 
-my $test = "$ENV{XSC_ROOT}/Tests/XMLUtils/runtime";
-unless (-x $test) {
-  die "ERROR: Cannot find executable $test\n";
+for my $name (qw(runtime xscrt_registration)) {
+  my $test = "$ENV{XSC_ROOT}/Tests/XMLUtils/$name";
+  unless (-x $test) {
+    die "ERROR: Cannot find executable $test\n";
+  }
+
+  my $process = $target->CreateProcess ($test);
+  my $result = $process->SpawnWaitKill ($target->ProcessStartWaitInterval ());
+
+  if ($result == -1) {
+    print STDERR "ERROR: ACE XML_Utils $name regression timed out\n";
+    exit 1;
+  }
+  elsif ($result != 0) {
+    print STDERR "ERROR: ACE XML_Utils $name regression failed with status $result\n";
+    exit 1;
+  }
 }
 
-my $process = $target->CreateProcess ($test);
-my $result = $process->SpawnWaitKill ($target->ProcessStartWaitInterval ());
-
-if ($result == -1) {
-  print STDERR "ERROR: ACE XML_Utils runtime regression timed out\n";
-  exit 1;
-}
-elsif ($result != 0) {
-  print STDERR "ERROR: ACE XML_Utils runtime regression failed with status $result\n";
-  exit 1;
-}
-
-print "ACE XML_Utils runtime regression passed\n";
+print "ACE XML_Utils runtime regressions passed\n";
 exit 0;

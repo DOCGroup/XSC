@@ -366,4 +366,22 @@ int main ()
     first = std::string ("third");
     assert (first == "third");
   }
+
+  {
+    TestType root;
+    XMLSchema::ID<char> existing (std::string ("duplicate"));
+    XMLSchema::ID<char> rejected (std::string ("duplicate"));
+    existing.container (std::addressof (root));
+
+    bool duplicate_rejected (false);
+    try
+    {
+      rejected.container (std::addressof (root));
+    }
+    catch (std::logic_error const&)
+    {
+      duplicate_rejected = true;
+    }
+    assert (duplicate_rejected);
+  }
 }

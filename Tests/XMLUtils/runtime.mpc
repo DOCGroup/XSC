@@ -23,3 +23,9 @@ project (xsc_test_xml_utils_runtime_generated): xscrt, ace_xml_utils {
     generated_types.cpp
   }
 }
+
+project (xsc_test_xml_utils_xscrt_registration): ace_xml_utils {
+  Source_Files {
+    xscrt_registration.cpp
+  }
+}

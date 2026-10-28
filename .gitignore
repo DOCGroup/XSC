@@ -103,6 +103,7 @@ Release/
 /Tests/XMLUtils/generated_types.cpp
 /Tests/XMLUtils/generated_types.hpp
 /Tests/XMLUtils/runtime
+/Tests/XMLUtils/xscrt_registration
 /abstract.cpp
 /abstract.hpp
 /dds_qos.cpp
