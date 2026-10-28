@@ -106,3 +106,23 @@ project (xsc_test_dancex11_optional_copy): xscrt {
     optional_copy.cpp
   }
 }
+
+project (xsc_test_dancex11_required_members): xscrt {
+  after += xsc_test_dancex11_readonly
+  libs += ACE_XML_Utils
+
+  Source_Files {
+    Basic_Deployment_Data.readonly.cpp
+    Deployment.readonly.cpp
+    XMI.readonly.cpp
+    ccd.readonly.cpp
+    cdd.readonly.cpp
+    cdp.readonly.cpp
+    cid.readonly.cpp
+    cpd.readonly.cpp
+    iad.readonly.cpp
+    pcd.readonly.cpp
+    toplevel.readonly.cpp
+    required_members.cpp
+  }
+}

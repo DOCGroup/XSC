@@ -341,6 +341,45 @@ namespace
     bool first_;
   };
 
+  struct RequiredMemberCheck : Traversal::Element,
+                               Traversal::Attribute,
+                               protected virtual Context
+  {
+    explicit RequiredMemberCheck (Context& c)
+        : Context (c)
+    {
+    }
+
+    void
+    traverse (SemanticGraph::Element& e) override
+    {
+      if (e.min () == 0)
+        return;
+
+      string const name (e.name ());
+      if (e.max () != 1)
+        os << "if (" << id (name) << "_.size () < " << e.min () << ")"
+           << "throw std::invalid_argument (\"missing required XML element: "
+           << name << "\");";
+      else
+        os << "if (!" << id (name) << "_)"
+           << "throw std::invalid_argument (\"missing required XML element: "
+           << name << "\");";
+    }
+
+    void
+    traverse (SemanticGraph::Attribute& a) override
+    {
+      if (a.optional ())
+        return;
+
+      string const name (a.name ());
+      os << "if (!" << id (name) << "_)"
+         << "throw std::invalid_argument (\"missing required XML attribute: "
+         << name << "\");";
+    }
+  };
+
   // Traverser for CDR write operations
   struct CDR_WriterTraverser : Traversal::Complex,
              protected Traversal::Type,
@@ -1227,12 +1266,14 @@ namespace
           name (name_),
           element_ (c),
           attribute_ (c),
+          required_member_check_ (c),
           cdr_writer_ (c),
           cdr_reader_ (c)
     {
       names_elements_.node_traverser (element_);
       names_attributes_.node_traverser (attribute_);
       names_anonymous_.node_traverser (anonymous_type);
+      required_members_.node_traverser (required_member_check_);
     }
 
 
@@ -1309,6 +1350,9 @@ namespace
 
           os << "}";        // while loop
         }
+
+        if (this->read_only_)
+          names (c, required_members_);
       }
     }
 
@@ -1394,9 +1438,11 @@ namespace
 
     Traversal::Names names_elements_;
     Traversal::Names names_attributes_;
+    Traversal::Names required_members_;
 
     Element element_;
     Attribute attribute_;
+    RequiredMemberCheck required_member_check_;
 
     Traversal::Names names_anonymous_;
 
