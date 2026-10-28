@@ -679,14 +679,14 @@ namespace
              << Indentation::unindent << "public:" << std::endl << Indentation::indent;
         else if (has_constructor_required_members (c))
           os << name << " () = delete;";
-        else if (this->cppmode_ != CPPMODE::CPP17 || !has_constructor_optional_members (c))
+        else
           os << name << " () = default;";
       }
 
       bool const has_required (has_constructor_required_members (c));
       bool const has_optional (this->cppmode_ == CPPMODE::CPP17 && has_constructor_optional_members (c));
 
-      if (!this->read_only_ || has_required || has_optional)
+      if (!this->read_only_)
       {
         os << name << " (";
 
@@ -1117,7 +1117,7 @@ generate_header (Context& ctx,
 {
   ctx.os << "#include <memory>" << std::endl;
   ctx.os << "#include <string>" << std::endl;
-  if (ctx.cppmode () == Context::CPPMODE::CPP17)
+  if (ctx.cppmode () == Context::CPPMODE::CPP17 && !ctx.read_only ())
   {
     ctx.os << "#include <optional>" << std::endl
            << "#ifndef XSCRT_OPTIONAL_ARG_HPP" << std::endl

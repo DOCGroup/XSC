@@ -588,7 +588,7 @@ namespace
       bool const default_constructor (this->cppmode_ != CPPMODE::CPP03 &&
                                       !has_required && !has_optional);
 
-      if (!default_constructor)
+      if (!this->read_only_ && !default_constructor)
       {
         // c-tor
         os << i

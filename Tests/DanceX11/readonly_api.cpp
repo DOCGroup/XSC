@@ -10,7 +10,6 @@ namespace
   using TopLevel = Deployment::TopLevelPackageDescription;
   using DataValue = Deployment::DataValue;
   using DataType = Deployment::DataType;
-  using TCKind = Deployment::TCKind;
   using Any = Deployment::Any;
   using ExternalReferenceEndpoint = Deployment::ExternalReferenceEndpoint;
   using Package = Deployment::PackageConfiguration;
@@ -23,7 +22,6 @@ namespace
   static_assert (std::is_copy_constructible_v<DataValue>);
   static_assert (!std::is_move_constructible_v<DataValue>);
   static_assert (std::is_copy_constructible_v<DataType>);
-  static_assert (std::is_constructible_v<Any, DataType const&, DataValue const&>);
   static_assert (std::is_copy_constructible_v<Package>);
   static_assert (!std::is_move_constructible_v<Package>);
   static_assert (std::is_same_v<decltype (*std::declval<Packages const&> ().begin ()),
@@ -34,19 +32,8 @@ namespace
                                            LocalityKind::SameProcess),
                                 bool>);
 
-  [[maybe_unused]] Any make_char_any ()
-  {
-    TCKind const kind (TCKind::tk_char);
-    DataType const type (kind);
-    DataValue const value {};
-    return Any (type, value);
-  }
-
-  [[maybe_unused]] ExternalReferenceEndpoint make_external_reference_endpoint ()
-  {
-    ::XMLSchema::string<char> const location ("location");
-    bool const source_provider (true);
-    ::XMLSchema::boolean const provider (source_provider);
-    return ExternalReferenceEndpoint (location, provider);
-  }
+  static_assert (!std::is_constructible_v<Any, DataType const&, DataValue const&>);
+  static_assert (!std::is_constructible_v<ExternalReferenceEndpoint,
+                                          ::XMLSchema::string<char> const&,
+                                          ::XMLSchema::boolean const&>);
 }

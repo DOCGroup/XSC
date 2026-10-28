@@ -2,6 +2,4 @@
 
 #include <type_traits>
 
-static_assert (std::is_constructible_v<ReadOnlyKindWithOptionalAttribute,
-                                       ReadOnlyKind const&,
-                                       ::XSCRT::OptionalArg<::XMLSchema::string<char>>>);
+static_assert (!std::is_constructible_v<ReadOnlyKindWithOptionalAttribute, ReadOnlyKind const&>);
