@@ -11,15 +11,7 @@
 
 #include <ctype.h>
 #include <string>
-
-#if defined (_WINDOWS)
-# if defined (min)
-#   undef min
-# endif
-# if defined (max)
-#   undef max
-# endif
-#endif
+#include <string_view>
 
 namespace
 {
@@ -36,8 +28,8 @@ namespace
       first_ = true;
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       string name (c.name ());
       string type (type_name (c));
@@ -64,7 +56,7 @@ namespace
          << "{";
       first_ = false;
 
-      if (c.max () != 1)
+      if (c.maximum () != 1)
       {
         // sequence
         if (this->cppmode_ != CPPMODE::CPP03)
@@ -81,7 +73,7 @@ namespace
             os << "add_" << name << " (t);";
         }
       }
-      else if (c.min () == 0)
+      else if (c.minimum () == 0)
       {
         // optional
         if (this->read_only_)
@@ -112,23 +104,21 @@ namespace
       }
 
       //Check if idref or id is the type
-      std::wstring idref_str (L"::XMLSchema::IDREF<");
-      std::wstring id_str (L"::XMLSchema::ID<");
-      std::wstring wchar_t_compare (L"wchar_t");
-      std::wstring char_compare (L"char");
-      std::string::size_type idref_ptr = type.find(idref_str);
-      std::string::size_type id_ptr = type.find(id_str);
+      std::wstring_view const idref_str (L"::XMLSchema::IDREF<");
+      std::wstring_view const id_str (L"::XMLSchema::ID<");
+      std::wstring::size_type const idref_ptr (type.find (idref_str));
+      std::wstring::size_type const id_ptr (type.find (id_str));
 
-      if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
+      if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03))
       {
-        if (c.max() != 1)
+        if (c.maximum() != 1)
         {
-          if (this->char_type == char_compare)
+          if (this->char_type == L"char")
           {
             os << string_type << " temp (" << id(name);
             os << "_.back()->id());\n";
           }
-          else if (this->char_type == wchar_t_compare)
+          else if (this->char_type == L"wchar_t")
           {
             os << string_type << " temp (ACE_TEXT_WCHAR_TO_TCHAR (" << id(name);
             os << "_.back()->id().c_str()));\n";
@@ -146,12 +136,12 @@ namespace
         }
         else
         {
-          if (this->char_type == char_compare)
+          if (this->char_type == L"char")
           {
             os << string_type << " temp (" << id(name);
             os << "_->id());\n";
           }
-          else if (this->char_type == wchar_t_compare)
+          else if (this->char_type == L"wchar_t")
           {
             os << string_type << " temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name);
             os << "_).id().c_str()));\n";
@@ -167,15 +157,15 @@ namespace
              //<< id(name) << "_).id().c_str(), dynamic_cast<XSCRT::Type*> (this));\n";
         }
       }
-      else if ((id_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
+      else if ((id_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03))
       {
-        if (c.max() == 1)
+        if (c.maximum() == 1)
         {
-          if (this->char_type == char_compare)
+          if (this->char_type == L"char")
           {
             os << string_type << " temp ((*" << id(name) << "_));";
           }
-          else if (this->char_type == wchar_t_compare)
+          else if (this->char_type == L"wchar_t")
           {
             os << string_type << " temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name) << "_).c_str()));";
           }
@@ -188,12 +178,12 @@ namespace
         }
         else
         {
-          if (this->char_type == char_compare)
+          if (this->char_type == L"char")
           {
             os << string_type << " temp (" << id(name);
             os << "_.back()->c_str());\n";
           }
-          else if (this->char_type == wchar_t_compare)
+          else if (this->char_type == L"wchar_t")
           {
             os << string_type << " temp (ACE_TEXT_WCHAR_TO_TCHAR (" << id(name);
             os << "_.back()->c_str()));\n";
@@ -230,8 +220,8 @@ namespace
       first_ = true;
     }
 
-    virtual void
-    traverse (Type& a)
+    void
+    traverse (Type& a) override
     {
       string name (a.name ());
       string type (type_name (a));
@@ -271,23 +261,19 @@ namespace
       }
 
       //Check if idref or id is the type
-      std::string::size_type idref_ptr = 0;
-      std::string::size_type id_ptr = 0;
-      std::wstring idref_str (L"::XMLSchema::IDREF<");
-      std::wstring id_str (L"::XMLSchema::ID<");
-      std::wstring wchar_t_compare (L"wchar_t");
-      std::wstring char_compare (L"char");
-      idref_ptr = type.find(idref_str);
-      id_ptr = type.find(id_str);
+      std::wstring_view const idref_str (L"::XMLSchema::IDREF<");
+      std::wstring_view const id_str (L"::XMLSchema::ID<");
+      std::wstring::size_type const idref_ptr (type.find (idref_str));
+      std::wstring::size_type const id_ptr (type.find (id_str));
 
-      if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
+      if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03))
       {
-        if (this->char_type == char_compare)
+        if (this->char_type == L"char")
         {
           os << string_type << " temp (" << id(name);
           os << "_->id());\n";
         }
-        else if (this->char_type == wchar_t_compare)
+        else if (this->char_type == L"wchar_t")
         {
           os << string_type << " temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name);
           os << "_).id().c_str()));\n";
@@ -310,13 +296,13 @@ namespace
         //"_).id(), dynamic_cast<XSCRT::Type*> (this));\n";
       }
       */
-      else if ((id_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
+      else if ((id_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03))
       {
-        if (this->char_type == char_compare)
+        if (this->char_type == L"char")
         {
           os << string_type << " temp ((*" << id(name) << "_));";
         }
-        else if (this->char_type == wchar_t_compare)
+        else if (this->char_type == L"wchar_t")
         {
             os << string_type << " temp (ACE_TEXT_WCHAR_TO_TCHAR ((*" << id(name) << "_).c_str()));";
         }
@@ -347,12 +333,12 @@ namespace
     void
     traverse (SemanticGraph::Element& e) override
     {
-      if (e.min () == 0)
+      if (e.minimum () == 0)
         return;
 
       string const name (e.name ());
-      if (e.max () != 1)
-        os << "if (" << id (name) << "_.size () < " << e.min () << ")"
+      if (e.maximum () != 1)
+        os << "if (" << id (name) << "_.size () < " << e.minimum () << ")"
            << "throw std::invalid_argument (\"missing required XML element: "
            << name << "\");";
       else
@@ -401,8 +387,8 @@ namespace
       return (type.compare (bool_type) == 0);
     }
 
-    virtual void
-    traverse (SemanticGraph::Type& c)
+    void
+    traverse (SemanticGraph::Type& c) override
     {
       // Writing types that have extension base
       // from basic type
@@ -470,13 +456,13 @@ namespace
       }
     }
 
-    virtual void
-    traverse (SemanticGraph::Element& e)
+    void
+    traverse (SemanticGraph::Element& e) override
     {
       string name (e.name ());
       string type (type_name (e));
 
-      if (e.max () != 1)
+      if (e.maximum () != 1)
       {
         // Write sequence types after we write the attributes
         if (this->has_attributes_)
@@ -486,7 +472,7 @@ namespace
         else
           this->write_sequence (e);
       }
-      else if (e.min () == 0)
+      else if (e.minimum () == 0)
       {
         // optional
         this->optional_element_list_.push_back (&e);
@@ -519,8 +505,8 @@ namespace
       finally ();
     }
 
-    virtual void
-    traverse (SemanticGraph::Attribute& a)
+    void
+    traverse (SemanticGraph::Attribute& a) override
     {
       string name (id (a.name ()));
       string type (type_name (a));
@@ -590,7 +576,7 @@ namespace
     void
     reset_type_attribute_settings ()
     {
-      this->has_attributes_ = 0;
+      this->has_attributes_ = false;
       this->complex_list_.clear ();
       this->optional_element_list_.clear ();
     }
@@ -1037,13 +1023,13 @@ namespace
       this->type_name_list_.push_back (element_name_);
     }
 
-    virtual void
-    traverse (SemanticGraph::Element& e)
+    void
+    traverse (SemanticGraph::Element& e) override
     {
       string type (type_name (e));
       string name (e.name ());
 
-      if (e.max () != 1)
+      if (e.maximum () != 1)
       {
         // Sequence: Read sequences after creating
         // the element
@@ -1051,7 +1037,7 @@ namespace
         // released elsewhere. So this is safe
         this->complex_list_.push_back (&e);
       }
-      else if (e.min () == 0)
+      else if (e.minimum () == 0)
       {
         this->optional_element_list_.push_back (&e);
       }
@@ -1092,8 +1078,8 @@ namespace
       this->finally ();
     }
 
-    virtual void
-    traverse (SemanticGraph::Attribute& a)
+    void
+    traverse (SemanticGraph::Attribute& a) override
     {
       string type (type_name (a));
       string name (id (a.name ()));
@@ -1116,7 +1102,7 @@ namespace
     void
     reset_type_attribute_settings ()
     {
-      this->has_attributes_ = 0;
+      this->has_attributes_ = false;
       this->complex_list_.clear ();
       this->type_name_list_.clear ();
       this->optional_attribute_list_.clear ();
@@ -1124,7 +1110,7 @@ namespace
     }
 
     void
-    add_attribute (string &name)
+    add_attribute (string const& name)
     {
       // This attribute should be added only
       // if we read this. so check if we read this
@@ -1263,8 +1249,8 @@ namespace
     }
 
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       if (c.named ())
         name = id (c.name ());
@@ -1286,8 +1272,8 @@ namespace
       }
     }
 
-    virtual void
-    pre (Type& c)
+    void
+    pre (Type& c) override
     {
       string type (type_name (c));
 
@@ -1298,8 +1284,8 @@ namespace
 
     using Traversal::Complex::names;
 
-    virtual void
-    names (Type& c)
+    void
+    names (Type& c) override
     {
       bool he (has<Traversal::Element> (c));
       bool ha (has<Traversal::Attribute> (c));
@@ -1341,8 +1327,8 @@ namespace
       }
     }
 
-    virtual void
-    post (Type& )
+    void
+    post (Type& ) override
     {
       os << "}";
     }
@@ -1360,8 +1346,8 @@ namespace
       return ret_val;
     }
 
-    virtual void
-    insertion_extraction (Type &c)
+    void
+    insertion_extraction (Type &c) override
     {
       // Check if one needs to generate read/write operations
       // for this type
@@ -1442,8 +1428,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       bool r (true);
 
@@ -1457,8 +1443,8 @@ namespace
           node_traverser (*this);
         }
 
-        virtual void
-        traverse (SemanticGraph::Complex& c)
+        void
+        traverse (SemanticGraph::Complex& c) override
         {
           if (has<Traversal::Element> (c) ||
               has<Traversal::Attribute> (c)) v_ = false;
@@ -1491,8 +1477,8 @@ namespace
     }
 
 
-    virtual void
-    pre (Type& c)
+    void
+    pre (Type& c) override
     {
       os << scope << "::" << name << " (" << xml_attribute_type << " const& a)" << std::endl
          << ":" << std::endl
@@ -1500,8 +1486,8 @@ namespace
          << "{";
     }
 
-    virtual void
-    post (Type&)
+    void
+    post (Type&) override
     {
       os << "}";
     }
@@ -1517,8 +1503,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       if (this->cppmode_ != CPPMODE::CPP17)
         {
@@ -1545,8 +1531,8 @@ namespace
       first_ = true;
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       string name (e.name ());
 
@@ -1572,8 +1558,8 @@ namespace
       names_static_.node_traverser (static_enumerator_);
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       if (e.named ()) name = id (e.name ());
 
@@ -1678,8 +1664,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       SemanticGraph::Type& t (e.type ());
 

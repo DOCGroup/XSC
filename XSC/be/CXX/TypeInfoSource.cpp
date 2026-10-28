@@ -16,8 +16,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Type& c)
+    void
+    traverse (SemanticGraph::Type& c) override
     {
       string name (type_name (c));
 
@@ -43,8 +43,8 @@ namespace
       names_anonymous_.node_traverser (anonymous_type);
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       if (c.named ())
         name_ = id (c.name ());
@@ -63,8 +63,8 @@ namespace
       }
     }
 
-    virtual void
-    pre (Type& c)
+    void
+    pre (Type& c) override
     {
       //@@ cache name as a member?
 
@@ -77,16 +77,16 @@ namespace
          << std::endl;
     }
 
-    virtual void
-    inherits_none (Type& )
+    void
+    inherits_none (Type& ) override
     {
       os << "nf.add_base (::XSCRT::ExtendedTypeInfo::Access::public_, "
          << "false, typeid (::XSCRT::Type));";
     }
 
 
-    virtual void
-    post (Type& c)
+    void
+    post (Type& c) override
     {
       os << "::XSCRT::extended_type_info_map ().insert ("
          << "std::make_pair (id, nf));"
@@ -120,8 +120,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       string name ((this->name_ != L"") ? name_ : id (e.name ()));
 
@@ -154,8 +154,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       SemanticGraph::Type& t (e.type ());
 
@@ -191,8 +191,8 @@ namespace
     {
     }
 
-    virtual void
-    pre (Type& n)
+    void
+    pre (Type& n) override
     {
       Namespace::pre (n);
 
@@ -204,8 +204,8 @@ namespace
 
     }
 
-    virtual void
-    post (Type& n)
+    void
+    post (Type& n) override
     {
       os << "}";
 

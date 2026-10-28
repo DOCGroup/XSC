@@ -16,8 +16,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       string name (c.name ());
       string type (type_name (c));

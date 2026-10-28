@@ -17,14 +17,6 @@
 #include <sstream>
 #include <system_error>
 
-#if defined (min)
-#undef min
-#endif
-
-#if defined (max)
-#undef max
-#endif
-
 
 namespace XSC
 {
@@ -175,8 +167,8 @@ namespace XSC
                   {
                     Element& prot (dynamic_cast<Element&> ((*i)->named ()));
 
-                    Element& e (schema_.new_node<Element> (grp_min == 0 ? grp_min : prot.min (),
-                                                           grp_max == 0 ? grp_max : prot.max (),
+                    Element& e (schema_.new_node<Element> (grp_min == 0 ? grp_min : prot.minimum (),
+                                                           grp_max == 0 ? grp_max : prot.maximum (),
                                                            prot.qualified ()));
 
                     schema_.new_edge<Names> (c, e, prot.name ());
@@ -601,10 +593,10 @@ namespace XSC
         //@@ min/max
         // min/max can come from element in the group!
 
-        unsigned long min (g[L"minOccurs"] == L"0" ? 0 : this->min ()),
-          max (g[L"maxOccurs"] && g[L"maxOccurs"] != L"1" ? 0 : this->max ());
+        unsigned long minimum (g[L"minOccurs"] == L"0" ? 0 : this->minimum ()),
+          maximum (g[L"maxOccurs"] && g[L"maxOccurs"] != L"1" ? 0 : this->maximum ());
 
-        if (trace_) std::wcout << "group min " << min << " max " << max << std::endl;
+        if (trace_) std::wcout << "group min " << minimum << " max " << maximum << std::endl;
 
 
         try
@@ -616,8 +608,8 @@ namespace XSC
               {
                 Element& prot (dynamic_cast<Element&> ((*i)->named ()));
 
-                Element& e (root_schema_->new_node<Element> (min == 0 ? min : prot.min (),
-                                                             max == 0 ? max : prot.max (),
+                Element& e (root_schema_->new_node<Element> (minimum == 0 ? minimum : prot.minimum (),
+                                                             maximum == 0 ? maximum : prot.maximum (),
                                                              prot.qualified ()));
 
                 root_schema_->new_edge<Names> (scope (), e, prot.name ());
@@ -670,8 +662,8 @@ namespace XSC
 
             scope ().context ().set ("group-ns-name", ns_name);
             scope ().context ().set ("group-uq-name", uq_name);
-            scope ().context ().set ("group-min", min);
-            scope ().context ().set ("group-max", max);
+            scope ().context ().set ("group-min", minimum);
+            scope ().context ().set ("group-max", maximum);
 
             /*
               @@ This is too tricky for current stage of implementation.
@@ -740,7 +732,7 @@ namespace XSC
 
     annotation ();
 
-    bool enum_ (false);
+            bool enum_ {};
 
     if (more ())
       {
@@ -943,20 +935,20 @@ namespace XSC
       {
         if (c[L"maxOccurs"] == L"unbounded")
           {
-            push_cardinality (0, std::numeric_limits <unsigned long>::max ());
+            push_cardinality (0, (std::numeric_limits <unsigned long>::max) ());
           }
         else
           {
             string value (c[L"maxOccurs"]);
             std::wistringstream istr (value);
-            unsigned long max;
-            istr >> max;
-            push_cardinality (0, max);
+            unsigned long maximum;
+            istr >> maximum;
+            push_cardinality (0, maximum);
           }
       }
     else
       push_cardinality (0,
-        c[L"maxOccurs"] && c[L"maxOccurs"] != L"1" ? 0 : max ());
+        c[L"maxOccurs"] && c[L"maxOccurs"] != L"1" ? 0 : maximum ());
 
     if (c[L"maxOccurs"] && c[L"maxOccurs"] != L"1")
       {
@@ -993,8 +985,8 @@ namespace XSC
   sequence (XML::Element const& s)
   {
     // Establish cardinality.
-    push_cardinality (s[L"minOccurs"] == L"0" ? 0 : min (),
-                      s[L"maxOccurs"] && s[L"maxOccurs"] != L"1" ? 0 : max ());
+    push_cardinality (s[L"minOccurs"] == L"0" ? 0 : minimum (),
+                      s[L"maxOccurs"] && s[L"maxOccurs"] != L"1" ? 0 : maximum ());
 
     push (s);
 
@@ -1129,27 +1121,27 @@ namespace XSC
   void Parser::
   element (XML::Element const& e, bool global)
   {
-    unsigned long min (this->min ());
-    unsigned long max (this->max ());
+    unsigned long minimum (this->minimum ());
+    unsigned long maximum (this->maximum ());
 
     if (e[L"minOccurs"])
       {
 	string value = e[L"minOccurs"];
 	std::wistringstream istr (value);
 
-	istr >> min;
+	istr >> minimum;
       }
 
     if (e[L"maxOccurs"])
     {
       if (e[L"maxOccurs"] == L"unbounded")
-        max = std::numeric_limits <unsigned long>::max ();
+        maximum = (std::numeric_limits <unsigned long>::max) ();
       else
 	{
 	  string value (e[L"maxOccurs"]);
 	  std::wistringstream istr (value);
 
-	  istr >> max;
+	  istr >> maximum;
 	}
     }
 
@@ -1160,12 +1152,12 @@ namespace XSC
         qualified = form == L"qualified";
       }
 
-    if (trace_) std::wcout << "element min " << min << " max " << max
+    if (trace_) std::wcout << "element min " << minimum << " max " << maximum
                       << " qualified " << qualified << std::endl;
 
     if (string name = e[L"name"])
       {
-        Element& node (root_schema_->new_node<Element> (min, max, qualified));
+        Element& node (root_schema_->new_node<Element> (minimum, maximum, qualified));
         root_schema_->new_edge<Names> (scope (), node, name);
 
         if (string type = e[L"type"])
@@ -1227,7 +1219,7 @@ namespace XSC
         string uq_name (XML::uq_name (ref));
         string ns_name (XML::ns_name (e, ref));
 
-        Element& node (root_schema_->new_node<Element> (min, max, qualified));
+        Element& node (root_schema_->new_node<Element> (minimum, maximum, qualified));
         root_schema_->new_edge<Names> (scope (), node, uq_name);
 
         try

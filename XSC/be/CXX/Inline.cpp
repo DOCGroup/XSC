@@ -5,20 +5,12 @@
 #include "Elements.hpp"
 
 #include <string>
+#include <string_view>
 
 #include "XSC/SemanticGraph.hpp"
 #include "XSC/Traversal.hpp"
 
 #include "CCF/CodeGenerationKit/Regex.hpp"
-
-#if defined (_WINDOWS)
-# if defined (min)
-#   undef min
-# endif
-# if defined (max)
-#   undef max
-# endif
-#endif
 
 namespace
 {
@@ -40,11 +32,10 @@ namespace
       //bool ra_sequence (this->generate_ra_sequences_);
 
       //Check if the type is an IDREF
-      std::string::size_type idref_ptr = 0;
-      std::wstring idref_str (L"::XMLSchema::IDREF<");
-      idref_ptr = type.find(idref_str);
+      std::wstring_view const idref_str (L"::XMLSchema::IDREF<");
+      std::wstring::size_type const idref_ptr (type.find (idref_str));
 
-      if (e.min () == 0 && e.max () == 1)
+      if (e.minimum () == 0 && e.maximum () == 1)
       {
         // optional
         if (this->optional_via_if_set ())
@@ -71,7 +62,7 @@ namespace
         }
 
         // Return referenced item if an IDREF
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << i
@@ -134,7 +125,7 @@ namespace
            << "}";
         }
       }
-      else if (e.min () == 1 && e.max () == 1)
+      else if (e.minimum () == 1 && e.maximum () == 1)
       {
         // one
         os << i
@@ -142,7 +133,7 @@ namespace
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << i
@@ -230,7 +221,7 @@ namespace
         }
 
         // add IDREF access method
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << i
@@ -285,9 +276,8 @@ namespace
       string type (type_name (a));
 
       //Check if the type is an IDREF
-      std::string::size_type idref_ptr = 0;
-      std::wstring idref_str (L"::XMLSchema::IDREF<");
-      idref_ptr = type.find(idref_str);
+      std::wstring_view const idref_str (L"::XMLSchema::IDREF<");
+      std::wstring::size_type const idref_ptr (type.find (idref_str));
 
       if (a.optional ())
       {
@@ -324,7 +314,7 @@ namespace
         }
 
         // Return a pointer to the referenced item
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << i
@@ -395,7 +385,7 @@ namespace
              << "}";
 
         // Return a pointer to the referenced item
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << i
@@ -461,18 +451,18 @@ namespace
       string type (type_name (e));
       string name (e.name ());
 
-      if (optional_arguments_ && e.min () == 0)
+      if (optional_arguments_ && e.minimum () == 0)
       {
-        if (e.max () == 1)
+        if (e.maximum () == 1)
           os << comma () << "::XSCRT::OptionalArg<" << type << "> " << id (name) << "__";
         else
           os << comma () << name << "_container_type const& " << id (name) << "__";
       }
-      else if (!optional_arguments_ && e.min () == 1 && e.max () == 1)
+      else if (!optional_arguments_ && e.minimum () == 1 && e.maximum () == 1)
       {
         os << comma () << type << " const& " << id (name) << "__";
       }
-      else if (!optional_arguments_ && e.min () >= 1)
+      else if (!optional_arguments_ && e.minimum () >= 1)
       {
         os << comma ()
            << name << "_container_type const& "
@@ -809,15 +799,15 @@ namespace
         void
         traverse (SemanticGraph::Element& e) override
         {
-          if (optional_arguments_ && e.min () == 0)
+          if (optional_arguments_ && e.minimum () == 0)
           {
             os << comma () << id (e.name ()) << "__";
           }
-          else if (!optional_arguments_ && e.min () == 1 && e.max () == 1)
+          else if (!optional_arguments_ && e.minimum () == 1 && e.maximum () == 1)
           {
             os << comma () << id (e.name ()) << "__";
           }
-          else if (!optional_arguments_ && e.min () >= 1)
+          else if (!optional_arguments_ && e.minimum () >= 1)
           {
             os << comma () << id (e.name ()) << "__";
           }
@@ -889,7 +879,7 @@ namespace
       {
         ensure_base_class_initialization ();
 
-        if (this->cppmode_ == CPPMODE::CPP17 && e.min () == 0 && e.max () == 1)
+        if (this->cppmode_ == CPPMODE::CPP17 && e.minimum () == 0 && e.maximum () == 1)
         {
           ensure_base_class_initialization ();
           string name (id (e.name ()));
@@ -897,13 +887,13 @@ namespace
           os << ", " << name << "_ (" << name << "__ ? std::make_unique<" << type
              << "> (*" << name << "__) : nullptr)" << std::endl;
         }
-        else if (this->cppmode_ == CPPMODE::CPP17 && e.min () == 0)
+        else if (this->cppmode_ == CPPMODE::CPP17 && e.minimum () == 0)
         {
           ensure_base_class_initialization ();
           string name (id (e.name ()));
           os << ", " << name << "_ (" << name << "__)" << std::endl;
         }
-        else if (e.min () == 1 && e.max () == 1)
+        else if (e.minimum () == 1 && e.maximum () == 1)
         {
           // one
           string name (id (e.name ()));
@@ -918,7 +908,7 @@ namespace
             os << ", " << name << "_ (new " << type << " (" << name << "__))" << std::endl;
           }
         }
-        else if (e.min () >= 1)
+        else if (e.minimum () >= 1)
         {
           // more than one
           string name (id (e.name ()));
@@ -988,7 +978,7 @@ namespace
       void
       traverse (SemanticGraph::Element& e) override
       {
-        if (e.min () == 1 && e.max () == 1 && (this->cppmode_ == CPPMODE::CPP03))
+        if (e.minimum () == 1 && e.maximum () == 1 && (this->cppmode_ == CPPMODE::CPP03))
         {
           // one
           os << id (e.name ()) << "_->container (this);";
@@ -1050,7 +1040,7 @@ namespace
             base_class_initialized_ = true;
           }
 
-        if (e.min () == 0 && e.max () == 1)
+        if (e.minimum () == 0 && e.maximum () == 1)
           {
             // optional
             if (this->cppmode_ != CPPMODE::CPP03)
@@ -1066,7 +1056,7 @@ namespace
                 << "new " << type << " (*s." << name << "_) : " << nullptr_string << ")" << std::endl;
             }
           }
-        else if (e.min () == 1 && e.max () == 1)
+        else if (e.minimum () == 1 && e.maximum () == 1)
           {
             // one
             if (this->cppmode_ != CPPMODE::CPP03)
@@ -1152,7 +1142,7 @@ namespace
       {
         string name (e.name ());
 
-        if (e.min () == 0 && e.max () == 1)
+        if (e.minimum () == 0 && e.maximum () == 1)
         {
           name = id (name);
 
@@ -1163,7 +1153,7 @@ namespace
                << name << "_->container (this);";
           }
         }
-        else if (e.min () == 1 && e.max () == 1 && this->cppmode_ == CPPMODE::CPP03)
+        else if (e.minimum () == 1 && e.maximum () == 1 && this->cppmode_ == CPPMODE::CPP03)
         {
           os << id (name) << "_->container (this);";
         }
@@ -1215,7 +1205,7 @@ namespace
         string name (e.name ());
         string type (type_name (e));
 
-        if (e.min () == 0 && e.max () == 1)
+        if (e.minimum () == 0 && e.maximum () == 1)
         {
           name = id (name);
 
@@ -1237,7 +1227,7 @@ namespace
               << std::endl;
           }
         }
-        else if (e.min () == 1 && e.max () == 1)
+        else if (e.minimum () == 1 && e.maximum () == 1)
         {
           name = id (name);
 

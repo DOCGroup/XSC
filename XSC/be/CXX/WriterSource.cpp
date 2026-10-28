@@ -6,15 +6,6 @@
 #include "XSC/SemanticGraph.hpp"
 #include "XSC/Traversal.hpp"
 
-#if defined (_WINDOWS)
-# if defined (min)
-#   undef min
-# endif
-# if defined (max)
-#   undef max
-# endif
-#endif
-
 namespace
 {
   struct Member : Traversal::Element,
@@ -26,8 +17,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Element& e)
+    void
+    traverse (SemanticGraph::Element& e) override
     {
       // Anonymous types cannot be traversed.
       //if (!e.type ().named ())
@@ -39,7 +30,7 @@ namespace
 
       bool q (e.qualified ());
 
-      if (e.max () != 1)
+      if (e.maximum () != 1)
       {
         // sequence
 
@@ -85,8 +76,8 @@ namespace
       }
     }
 
-    virtual void
-    traverse (SemanticGraph::Attribute& a)
+    void
+    traverse (SemanticGraph::Attribute& a) override
     {
       // Anonymous types cannot be traversed.
       //if (!a.type ().named ())
@@ -140,23 +131,23 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Type& t)
+    void
+    traverse (SemanticGraph::Type& t) override
     {
       string type (type_name (t, L"Writer"));
 
       os << type << "::traverse (o);";
     }
 
-    virtual void
-    traverse (SemanticGraph::IdRef&)
+    void
+    traverse (SemanticGraph::IdRef&) override
     {
       os << "::XMLSchema::Writer::IDREF<" << char_type << ">" <<
         "::traverse (o);";
     }
 
-    virtual void
-    fundamental_type (SemanticGraph::FundamentalType& t)
+    void
+    fundamental_type (SemanticGraph::FundamentalType& t) override
     {
       string name (fundamental_type_name (t));
 
@@ -193,8 +184,8 @@ namespace
       names_anonymous_.node_traverser (anonymous_type);
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       if (c.named ())
         name_ = id (c.name ());
@@ -216,8 +207,8 @@ namespace
       }
     }
 
-    virtual void
-    pre (Type& c)
+    void
+    pre (Type& c) override
     {
       string name (id (name_));
 
@@ -267,8 +258,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       string name (e.name ());
       string type (type_name (e));
@@ -292,8 +283,8 @@ namespace
       names_.node_traverser (enumerator_);
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       string name ((this->name_ != L"") ? id(name_) : id (c.name ()));
 
@@ -350,8 +341,8 @@ namespace
     {
     }
 
-    virtual void
-    pre (Type& n)
+    void
+    pre (Type& n) override
     {
       Namespace::pre (n);
 
@@ -361,8 +352,8 @@ namespace
 
     }
 
-    virtual void
-    post (Type& n)
+    void
+    post (Type& n) override
     {
       os << "}";
 
@@ -387,8 +378,8 @@ namespace
       edge_traverser (belongs_);
     }
 
-    virtual void
-    traverse (SemanticGraph::Complex& c)
+    void
+    traverse (SemanticGraph::Complex& c) override
     {
       if (check (c))
       {
@@ -408,8 +399,8 @@ namespace
     //  }
     //}
 
-    virtual void
-    traverse (SemanticGraph::IdRef& r)
+    void
+    traverse (SemanticGraph::IdRef& r) override
     {
       if (check (r))
       {
@@ -418,8 +409,8 @@ namespace
       }
     }
 
-    virtual void
-    fundamental_type (SemanticGraph::FundamentalType& t)
+    void
+    fundamental_type (SemanticGraph::FundamentalType& t) override
     {
       if (check (t))
       {
@@ -473,8 +464,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       SemanticGraph::Type& t (e.type ());
 
@@ -504,8 +495,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       string name (c.name ());
       string type (type_name (c));

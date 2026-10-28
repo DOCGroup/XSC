@@ -252,8 +252,8 @@ namespace IDL
       {
       }
 
-      virtual void
-      traverse (typename X::Type&)
+      void
+      traverse (typename X::Type&) override
       {
         v_ = true;
       }

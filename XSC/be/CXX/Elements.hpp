@@ -522,7 +522,7 @@ struct CopyRequiredMembers : Traversal::Element, Traversal::Attribute
   void
   traverse (SemanticGraph::Element& e) override
   {
-    if (e.max () == 1)
+    if (e.maximum () == 1)
       required = true;
   }
 
@@ -560,7 +560,7 @@ struct ConstructorRequiredMembers : Traversal::Enumeration,
   void
   traverse (SemanticGraph::Element& e) override
   {
-    if (e.min () >= 1)
+    if (e.minimum () >= 1)
       required = true;
   }
 
@@ -602,7 +602,7 @@ struct ConstructorOptionalMembers : Traversal::Element,
   void
   traverse (SemanticGraph::Element& e) override
   {
-    if (e.min () == 0)
+    if (e.minimum () == 0)
       optional = true;
   }
 

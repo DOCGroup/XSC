@@ -6,15 +6,6 @@
 #include "XSC/SemanticGraph.hpp"
 #include "XSC/Traversal.hpp"
 
-#if defined (_WINDOWS)
-# if defined (min)
-#   undef min
-# endif
-# if defined (max)
-#   undef max
-# endif
-#endif
-
 namespace
 {
   struct Member : Traversal::Element,
@@ -32,8 +23,8 @@ namespace
       os << "virtual void " << name << " (" << type << ");" << std::endl;
     }
 
-    virtual void
-    traverse (SemanticGraph::Element& e)
+    void
+    traverse (SemanticGraph::Element& e) override
     {
       // Anonymous types cannot be traversed.
       //if (!e.type ().named ())
@@ -41,7 +32,7 @@ namespace
 
       string name (e.name ());
 
-      if (e.max () != 1)
+      if (e.maximum () != 1)
       {
         // sequence
 
@@ -66,13 +57,13 @@ namespace
 
 
         // name_none
-        if (e.min () == 0)
+        if (e.minimum () == 0)
         {
           declaration (name + L"_none", L"Type&");
           declaration (name + L"_none", L"Type const&");
         }
       }
-      else if (e.min () == 0)
+      else if (e.minimum () == 0)
       {
         // optional
 
@@ -96,8 +87,8 @@ namespace
     }
 
 
-    virtual void
-    traverse (SemanticGraph::Attribute& a)
+    void
+    traverse (SemanticGraph::Attribute& a) override
     {
       // Anonymous types cannot be traversed.
       if (!a.type ().named ()) return;
@@ -138,8 +129,8 @@ namespace
       names_.node_traverser (member_);
     }
 
-    virtual void
-    pre (Type& c)
+    void
+    pre (Type& c) override
     {
       os << "// From " << type_name (c) << std::endl;
     }
@@ -171,8 +162,8 @@ namespace
       names_.node_traverser (member_);
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       // We need to get the name of the element. The name would
       // be already set if it was an anonymous type.
@@ -190,8 +181,8 @@ namespace
       }
     }
 
-    virtual void
-    pre (Type& c)
+    void
+    pre (Type& c) override
     {
       string virtual_string (this->cppmode_ == CPPMODE::CPP03 ? L"virtual " : L"");
       string override_string (this->cppmode_ != CPPMODE::CPP03 ? L" override" : L"");
@@ -211,8 +202,8 @@ namespace
       os << "virtual void pre (Type const&);" << std::endl;
     }
 
-    virtual void
-    post (Type& )
+    void
+    post (Type& ) override
     {
       // post ()
       os << "virtual void post (Type&);" << std::endl;
@@ -241,8 +232,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       string name ((this->name_ != L"") ? name_: id (e.name ()));
       string type (type_name (e));
@@ -269,8 +260,8 @@ namespace
     {
     }
 
-    virtual void
-    pre (Type& n)
+    void
+    pre (Type& n) override
     {
       Namespace::pre (n);
 
@@ -278,8 +269,8 @@ namespace
          << "{";
     }
 
-    virtual void
-    post (Type& n)
+    void
+    post (Type& n) override
     {
       os << "}";
 
@@ -294,8 +285,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       SemanticGraph::Type& t (e.type ());
 

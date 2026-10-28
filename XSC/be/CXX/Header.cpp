@@ -4,21 +4,14 @@
 #include "Header.hpp"
 #include "Elements.hpp"
 
+#include <cstddef>
 #include <string>
+#include <string_view>
 
 #include "XSC/SemanticGraph.hpp"
 #include "XSC/Traversal.hpp"
 
 #include "CCF/CodeGenerationKit/Regex.hpp"
-
-#if defined (_WINDOWS)
-# if defined (min)
-#   undef min
-# endif
-# if defined (max)
-#   undef max
-# endif
-#endif
 
 namespace
 {
@@ -70,11 +63,11 @@ namespace
       string type (type_name (e));
       string name (e.name ());
 
-      if (e.min () == 1 && e.max () == 1)
+      if (e.minimum () == 1 && e.maximum () == 1)
       {
         os << comma () << type << " const& " << id (name) << "__";
       }
-      else if (e.min () >= 1)
+      else if (e.minimum () >= 1)
       {
         os << comma ()
            << name << "_container_type const& "
@@ -146,11 +139,11 @@ namespace
     void
     traverse (SemanticGraph::Element& e) override
     {
-      if (e.min () == 0)
+      if (e.minimum () == 0)
       {
         string name (e.name ());
         string argument (id (e.name ()));
-        if (e.max () == 1)
+        if (e.maximum () == 1)
           os << comma () << "::XSCRT::OptionalArg<" << type_name (e) << "> " << argument
              << "__ = std::nullopt";
         else
@@ -224,9 +217,8 @@ namespace
       string char_type (this->char_type);
 
       //Check if the type is an IDREF
-      size_t idref_ptr = 0;
-      std::wstring idref_str (L"::XMLSchema::IDREF<");
-      idref_ptr = type.find(idref_str);
+      std::wstring_view const idref_str (L"::XMLSchema::IDREF<");
+      std::wstring_view::size_type const idref_ptr (type.find (idref_str));
 
 
       string container;
@@ -239,7 +231,7 @@ namespace
       os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
 
 
-      if (c.max () != 1)
+      if (c.maximum () != 1)
       {
         string accessor_name (sequence_accessor_name (c));
 
@@ -309,7 +301,7 @@ namespace
             break;
         }
         //Return referenced item if an IDREF
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
           os << "XSCRT::Type* get_" << name << "_ptr (const " << string_type <<"& idref);";
@@ -326,7 +318,7 @@ namespace
         os << name << "_container_type " << id(name) << "_"
            << (this->read_only_ && this->cppmode_ != CPPMODE::CPP03 ? L" {};" : L";");
       }
-      else if (c.min () == 0)
+      else if (c.minimum () == 0)
       {
         // optional
         if (!this->optional_via_if_set ())
@@ -350,7 +342,7 @@ namespace
           os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03))
         {
           if (!this->read_only_)
           {
@@ -386,7 +378,7 @@ namespace
           os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ( void );\n";
@@ -444,9 +436,8 @@ namespace
       string type (type_name (a));
 
       //Check if the type is an IDREF
-      size_t idref_ptr = 0;
-      std::wstring idref_str (L"::XMLSchema::IDREF<");
-      idref_ptr = type.find(idref_str);
+      std::wstring_view const idref_str (L"::XMLSchema::IDREF<");
+      std::wstring_view::size_type const idref_ptr (type.find (idref_str));
 
       os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
 
@@ -474,7 +465,7 @@ namespace
           os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ();\n";
@@ -509,7 +500,7 @@ namespace
           os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ( void );\n";
@@ -640,13 +631,13 @@ namespace
         return;
 
       // CDR Insertion/Extraction Operators
-      bool reader = 0;
+      bool reader {};
 
       if (this->cdr_reader_generation_)
       {
         os << "// read" << std::endl;
 
-        reader = 1;
+        reader = true;
 
         os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
         os << "static bool" << std::endl
@@ -654,7 +645,7 @@ namespace
            << " (::XMLSchema::CDR_InputStream &,"
            << std::endl;
 
-        for (size_t j =0; j < name.length () + 5; j++)
+        for (std::size_t j {}; j < name.length () + 5; ++j)
           os << " ";
 
         os << " ::XMLSchema::cdr_arg_traits < " << name << " >::inout_type);" << std::endl;
@@ -972,11 +963,11 @@ namespace
       os << "Value v_" << (this->cppmode_ == CPPMODE::CPP03 ? L";" : L" {};");
 
       // CDR Insertion/Extraction Operators
-      bool reader = 0;
+      bool reader {};
       if (this->cdr_reader_generation_)
       {
         os << "// read" << std::endl;
-        reader = 1;
+        reader = true;
 
         os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
         os << "static bool" << std::endl
@@ -984,7 +975,7 @@ namespace
            << " (::XMLSchema::CDR_InputStream &,"
            << std::endl;
 
-        for (size_t j =0; j < name.length () + 5; j++)
+        for (std::size_t j {}; j < name.length () + 5; ++j)
           os << " ";
 
         os << " ::XMLSchema::cdr_arg_traits < " << name
@@ -1105,7 +1096,7 @@ namespace
       traverse (i.file ());
     }
 
-    virtual void
+    void
     traverse (std::filesystem::path const& f)
     {
       std::string name (regex::perl_s (f.string (), hxx_expr.c_str ()));

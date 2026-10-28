@@ -11,14 +11,6 @@
 
 using namespace IDL;
 
-#if defined (min)
-#undef min
-#endif
-
-#if defined (max)
-#undef max
-#endif
-
 namespace
 {
   struct Base : Traversal::Type,
@@ -68,7 +60,7 @@ namespace
 
       os << "// " << name << std::endl;
 
-      if (c.max () != 1)
+      if (c.maximum () != 1)
       {
         string name_seq (id (name + L"_seq"));
 
@@ -77,7 +69,7 @@ namespace
            << "public " << name_seq << " " << id (name) << ";";
 
       }
-      else if (c.min () == 0)
+      else if (c.minimum () == 0)
       {
         // optional
         os << "boolean " << name << "_p ();"
@@ -199,7 +191,7 @@ namespace
       traverse (i.file ());
     }
 
-    virtual void
+    void
     traverse (std::filesystem::path const& f)
     {
       std::string name (regex::perl_s (f.string (), expr_));
