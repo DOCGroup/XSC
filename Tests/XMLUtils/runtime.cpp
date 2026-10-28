@@ -9,7 +9,9 @@
 #include "generated_types.hpp"
 
 #include <cassert>
+#include <cmath>
 #include <cstdio>
+#include <locale>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -21,6 +23,11 @@ static_assert (std::is_copy_assignable_v<XSCRT::XML::string>);
 
 namespace
 {
+  struct CommaDecimalPoint : std::numpunct<char>
+  {
+    char do_decimal_point () const override { return ','; }
+  };
+
   struct TypeTraverser : XSCRT::Traversal::Traverser<XSCRT::Type, XSCRT::Type>
   {
     void traverse (XSCRT::Type&) override { ++visits; }
@@ -79,6 +86,25 @@ int main ()
       XSCRT::XML::string moved (std::move (assigned));
       assert (XSCRT::XML::transcode<char> (moved.c_str (), static_cast<char*> (nullptr)) ==
               "copyable XML string");
+
+      XMLCh const surrogate_pair[] = {
+        static_cast<XMLCh> (0xD83D), static_cast<XMLCh> (0xDE00), static_cast<XMLCh> (0)
+      };
+      std::wstring const decoded (XSCRT::XML::transcode<wchar_t> (surrogate_pair, nullptr));
+      if (sizeof (wchar_t) == 2)
+      {
+        assert (decoded.size () == 2);
+        assert (decoded[0] == static_cast<wchar_t> (0xD83D));
+        assert (decoded[1] == static_cast<wchar_t> (0xDE00));
+      }
+      else
+      {
+        assert (decoded.size () == 1);
+        assert (decoded[0] == static_cast<wchar_t> (0x1F600));
+      }
+
+      std::unique_ptr<XMLCh[]> encoded (XSCRT::XML::transcode (decoded));
+      assert (xercesc::XMLString::equals (encoded.get (), surrogate_pair));
     }
 
     XERCES_CPP_NAMESPACE::DOMDocument* const document =
@@ -207,6 +233,27 @@ int main ()
       invalid_numeric_rejected = true;
     }
     assert (invalid_numeric_rejected);
+
+    assert (std::isinf (XSCRT::Details::parse_numeric<char, double> ("INF")));
+    assert (std::isinf (XSCRT::Details::parse_numeric<char, float> ("-INF")));
+    assert (std::signbit (XSCRT::Details::parse_numeric<char, double> ("-INF")));
+    assert (std::isnan (XSCRT::Details::parse_numeric<char, double> ("NaN")));
+
+    std::locale const previous_locale {};
+    std::locale::global (std::locale (previous_locale, new CommaDecimalPoint));
+    assert ((XSCRT::Details::parse_numeric<char, double> ("1.25") == 1.25));
+    std::locale::global (previous_locale);
+
+    bool invalid_special_numeric_rejected (false);
+    try
+    {
+      XSCRT::Details::parse_numeric<char, double> ("INFjunk");
+    }
+    catch (std::invalid_argument const&)
+    {
+      invalid_special_numeric_rejected = true;
+    }
+    assert (invalid_special_numeric_rejected);
 
     XSCRT::XML::Element<char> negative_unsigned (document->createElement (
       static_cast<XMLCh const*> (XML::XStr ("negative-unsigned"))));
@@ -383,5 +430,61 @@ int main ()
       duplicate_rejected = true;
     }
     assert (duplicate_rejected);
+  }
+
+  {
+    TestType old_root;
+    TestType new_root;
+    XMLSchema::ID<char> moved ("moved");
+    moved.container (std::addressof (old_root));
+    moved.container (std::addressof (new_root));
+
+    XMLSchema::ID<char> old_name_reused ("moved");
+    old_name_reused.container (std::addressof (old_root));
+
+    XMLSchema::ID<char> new_name_conflict ("moved");
+    bool duplicate_rejected (false);
+    try
+    {
+      new_name_conflict.container (std::addressof (new_root));
+    }
+    catch (std::logic_error const&)
+    {
+      duplicate_rejected = true;
+    }
+    assert (duplicate_rejected);
+  }
+
+  {
+    TestType old_root;
+    TestType new_root;
+    XMLSchema::ID<char> moving ("move");
+    XMLSchema::ID<char> destination_id ("move");
+    moving.container (std::addressof (old_root));
+    destination_id.container (std::addressof (new_root));
+
+    bool duplicate_rejected (false);
+    try
+    {
+      moving.container (std::addressof (new_root));
+    }
+    catch (std::logic_error const&)
+    {
+      duplicate_rejected = true;
+    }
+    assert (duplicate_rejected);
+    assert (moving.container () == std::addressof (old_root));
+
+    XMLSchema::ID<char> old_root_conflict ("move");
+    bool old_registration_restored (false);
+    try
+    {
+      old_root_conflict.container (std::addressof (old_root));
+    }
+    catch (std::logic_error const&)
+    {
+      old_registration_restored = true;
+    }
+    assert (old_registration_restored);
   }
 }
