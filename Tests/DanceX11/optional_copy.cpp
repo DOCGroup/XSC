@@ -29,6 +29,11 @@ main ()
   destination = source;
 
   XMLSchema::IDREF<char> idref ("urn:idref");
+  XMLSchema::IDREF<char> same_idref ("urn:idref");
+  XMLSchema::IDREF<char> different_idref ("urn:other");
+  if (idref != same_idref || idref == different_idref)
+    return 1;
+
   Deployment::IdRef constructed (
     std::nullopt, ::XSCRT::OptionalArg<::XMLSchema::IDREF<char>> (idref));
   if (constructed.idref_if_set () == nullptr)
