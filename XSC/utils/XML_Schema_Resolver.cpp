@@ -1,7 +1,7 @@
 #ifndef XML_SCHEMA_RESOLVER_TPP
 #define XML_SCHEMA_RESOLVER_TPP
 
-#include "XercesString.h"
+#include "ace/XML_Utils/XercesString.h"
 #include "xercesc/util/PlatformUtils.hpp"
 #include "xercesc/util/XercesDefs.hpp"
 #include "xercesc/framework/LocalFileInputSource.hpp"
@@ -21,7 +21,7 @@ namespace XSC
     /// This function is called by the Xerces infrastructure to
     /// actually resolve the location of a schema.
     template<typename Resolver>
-    InputSource *
+    xercesc::InputSource *
     XML_Schema_Resolver<Resolver>::resolveEntity (const XMLCh *const publicId,
                                                   const XMLCh *const systemId)
     {
@@ -47,11 +47,11 @@ namespace XSC
     }
 
     template <typename CHAR>
-    InputSource *
+    xercesc::InputSource *
     Basic_Resolver <CHAR>::operator() (const XMLCh *const publicId,
                                        const XMLCh *const systemId) const
     {
-      XStr path (path_);
+      ::XML::XStr path (path_);
       path.append (systemId);
 
       return new xercesc::LocalFileInputSource (path);
@@ -74,14 +74,14 @@ namespace XSC
         if (item.empty ())
           return false;
 
-        XStr path (item.c_str ());
+        ::XML::XStr path (item.c_str ());
         path.append (this->systemId_);
 
-        FileHandle file (XMLPlatformUtils::openFile (path));
+        xercesc::FileHandle file (xercesc::XMLPlatformUtils::openFile (path));
         bool retval = file != nullptr;
 
         if (retval)
-          XMLPlatformUtils::closeFile (file);
+          xercesc::XMLPlatformUtils::closeFile (file);
 
         return retval;
       }
@@ -107,7 +107,7 @@ namespace XSC
     }
 
     template <typename CHAR>
-    InputSource *
+    xercesc::InputSource *
     Path_Resolver <CHAR>::operator() (const XMLCh *const,
                                       const XMLCh *const systemId) const
     {
@@ -118,7 +118,7 @@ namespace XSC
 
       if (iter != this->paths_.end ())
       {
-        XStr path (iter->c_str ());
+        ::XML::XStr path (iter->c_str ());
         path.append (systemId);
         return new xercesc::LocalFileInputSource (path);
       }
@@ -159,7 +159,7 @@ namespace XSC
     }
 
     template <typename CHAR>
-    InputSource * URL_Resolver <CHAR>::
+    xercesc::InputSource * URL_Resolver <CHAR>::
     operator() (const XMLCh *const publicId, const XMLCh *const systemId) const
     {
       xercesc::XMLURL url (this->url_, systemId);

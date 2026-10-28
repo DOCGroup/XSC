@@ -13,8 +13,6 @@
 #include "XSC_Utils_export.h"
 #include "xercesc/sax/ErrorHandler.hpp"
 
-using xercesc::SAXParseException;
-
 namespace XSC
 {
   namespace XML
@@ -34,9 +32,9 @@ namespace XSC
 
       ~XML_Error_Handler () override;
 
-      void warning(const SAXParseException& toCatch) override;
-      void error(const SAXParseException& toCatch) override;
-      void fatalError(const SAXParseException& toCatch) override;
+      void warning(const xercesc::SAXParseException& toCatch) override;
+      void error(const xercesc::SAXParseException& toCatch) override;
+      void fatalError(const xercesc::SAXParseException& toCatch) override;
       void resetErrors() override;
       bool getErrors () const noexcept;
     private :
