@@ -341,4 +341,29 @@ int main ()
     }
     assert (missing_rejected);
   }
+
+  {
+    TestType root;
+    XMLSchema::ID<char> first (std::string ("first"));
+    XMLSchema::ID<char> second (std::string ("second"));
+    first.container (std::addressof (root));
+    second.container (std::addressof (root));
+
+    bool duplicate_rejected (false);
+    try
+    {
+      first = second;
+    }
+    catch (std::logic_error const&)
+    {
+      duplicate_rejected = true;
+    }
+
+    assert (duplicate_rejected);
+    assert (first == "first");
+    assert (second == "second");
+
+    first = std::string ("third");
+    assert (first == "third");
+  }
 }
