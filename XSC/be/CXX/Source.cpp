@@ -338,11 +338,11 @@ namespace
 
       string const name (e.name ());
       if (e.maximum () != 1)
-        os << "if (" << id (name) << "_.size () < " << e.minimum () << ")"
+        os << "if (" << id (name) << "_.size () < " << e.minimum () << ") "
            << "throw std::invalid_argument (\"missing required XML element: "
            << name << "\");";
       else
-        os << "if (!" << id (name) << "_)"
+        os << "if (!" << id (name) << "_) "
            << "throw std::invalid_argument (\"missing required XML element: "
            << name << "\");";
     }
@@ -354,7 +354,7 @@ namespace
         return;
 
       string const name (a.name ());
-      os << "if (!" << id (name) << "_)"
+      os << "if (!" << id (name) << "_) "
          << "throw std::invalid_argument (\"missing required XML attribute: "
          << name << "\");";
     }
