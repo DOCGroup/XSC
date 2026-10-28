@@ -127,6 +127,24 @@ int main ()
     }
     assert (negative_unsigned_rejected);
 
+    XSCRT::XML::Element<char> negative_zero (document->createElement (
+      static_cast<XMLCh const*> (XML::XStr ("negative-zero"))));
+    negative_zero.dom_element ()->appendChild (
+      document->createTextNode (static_cast<XMLCh const*> (XML::XStr ("-0"))));
+    XSCRT::FundamentalType<unsigned int> zero (negative_zero);
+    assert (static_cast<unsigned int> (zero) == 0);
+
+    XERCES_CPP_NAMESPACE::DOMElement* const unsigned_attribute_element =
+      document->createElement (static_cast<XMLCh const*> (XML::XStr ("unsigned-attribute")));
+    unsigned_attribute_element->setAttribute (
+      static_cast<XMLCh const*> (XML::XStr ("value")),
+      static_cast<XMLCh const*> (XML::XStr ("-0")));
+    XSCRT::XML::Attribute<char> negative_zero_attribute (
+      unsigned_attribute_element->getAttributeNode (
+        static_cast<XMLCh const*> (XML::XStr ("value"))));
+    XSCRT::FundamentalType<unsigned int> attribute_zero (negative_zero_attribute);
+    assert (static_cast<unsigned int> (attribute_zero) == 0);
+
     XSCRT::XML::Element<char> out_of_range (document->createElement (
       static_cast<XMLCh const*> (XML::XStr ("byte"))));
     out_of_range.dom_element ()->appendChild (
