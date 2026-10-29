@@ -16,9 +16,6 @@ namespace XSC
     class Schema;
 
 
-    //
-    //
-    //
     class Implies : public virtual Contains
     {
     public:
@@ -44,9 +41,6 @@ namespace XSC
       std::filesystem::path file_;
     };
 
-    //
-    //
-    //
     class Sources : public virtual Contains
     {
     public:
@@ -73,9 +67,6 @@ namespace XSC
     };
 
 
-    //
-    //
-    //
     class Includes : public virtual Contains
     {
     public:
@@ -102,9 +93,6 @@ namespace XSC
     };
 
 
-    //
-    //
-    //
     class Imports : public virtual Contains
     {
     public:
@@ -178,8 +166,8 @@ namespace XSC
       }
 
     private:
-      Schema (Schema const&);
-      void operator= (Schema const&);
+      Schema (Schema const&) = delete;
+      Schema& operator= (Schema const&) = delete;
 
     private:
       Contains* contained_ {};

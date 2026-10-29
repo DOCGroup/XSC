@@ -11,9 +11,6 @@ namespace XSC
 {
   namespace Traversal
   {
-    //
-    //
-    //
     struct Implies : Edge<SemanticGraph::Implies>
     {
       void
@@ -23,9 +20,6 @@ namespace XSC
       }
     };
 
-    //
-    //
-    //
     struct Sources : Edge<SemanticGraph::Sources>
     {
       void
@@ -36,9 +30,6 @@ namespace XSC
     };
 
 
-    //
-    //
-    //
     struct Includes : Edge<SemanticGraph::Includes>
     {
       void
@@ -49,9 +40,6 @@ namespace XSC
     };
 
 
-    //
-    //
-    //
     struct Imports : Edge<SemanticGraph::Imports>
     {
       void
@@ -62,9 +50,6 @@ namespace XSC
     };
 
 
-    //
-    //
-    //
     struct Schema : ScopeTemplate<SemanticGraph::Schema>
     {
       void

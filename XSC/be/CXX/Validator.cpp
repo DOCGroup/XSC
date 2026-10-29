@@ -12,7 +12,6 @@
 namespace
 {
   //@! Inheriting from Context is just wrong!
-  //
   class ValidationContext : public Context
   {
   public:
@@ -44,8 +43,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       SemanticGraph::Type& t (e.type ());
 
@@ -68,8 +67,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& a)
+    void
+    traverse (Type& a) override
     {
       SemanticGraph::Type& t (a.type ());
 
@@ -97,13 +96,12 @@ namespace
       names_.node_traverser (attribute_);
     }
 
-    virtual void
-    traverse (SemanticGraph::Complex& c)
+    void
+    traverse (SemanticGraph::Complex& c) override
     {
       traverse (static_cast<SemanticGraph::Type&> (c));
 
       //@@ maybe use traverser?
-      //
       SemanticGraph::Complex::InheritsIterator it (c.inherits_begin ());
 
       if (it != c.inherits_end ())
@@ -127,8 +125,8 @@ namespace
       Traversal::Complex::traverse (c);
     }
 
-    virtual void
-    traverse (SemanticGraph::Type& t)
+    void
+    traverse (SemanticGraph::Type& t) override
     {
       if (t.named ())
       {

@@ -17,9 +17,7 @@ namespace XSC
       using Map = std::map<std::string, std::any>;
 
     public:
-      Context ()
-      {
-      }
+      Context () = default;
 
     public:
       class NotFound {};

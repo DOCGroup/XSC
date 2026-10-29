@@ -12,8 +12,6 @@ namespace XSC
 
 
     // Implies
-    //
-    //
     namespace
     {
       TypeInfo
@@ -32,8 +30,6 @@ namespace XSC
 
 
     // Sources
-    //
-    //
     namespace
     {
       TypeInfo
@@ -52,8 +48,6 @@ namespace XSC
 
 
     // Includes
-    //
-    //
     namespace
     {
       TypeInfo
@@ -72,8 +66,6 @@ namespace XSC
 
 
     // Imports
-    //
-    //
     namespace
     {
       TypeInfo
@@ -92,8 +84,6 @@ namespace XSC
 
 
     // Schema
-    //
-    //
     namespace
     {
       TypeInfo
@@ -120,7 +110,6 @@ namespace XSC
       names_.clear ();
 
       // Check our own namespace first so it will end up first in the list.
-      //
       NamesIteratorPair pair (Scope::find (name));
       names_.insert (names_.end (), pair.first, pair.second);
 

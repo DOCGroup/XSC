@@ -11,8 +11,6 @@ namespace XSC
     using Introspection::Access;
 
     // Edge
-    //
-    //
     namespace
     {
       TypeInfo
@@ -32,8 +30,6 @@ namespace XSC
 
 
     // Node
-    //
-    //
     namespace
     {
       TypeInfo
@@ -53,8 +49,6 @@ namespace XSC
 
 
     // Names
-    //
-    //
     namespace
     {
       TypeInfo
@@ -72,8 +66,6 @@ namespace XSC
     static_type_info () { return names_; }
 
     // Nameable
-    //
-    //
     namespace
     {
       TypeInfo
@@ -93,8 +85,6 @@ namespace XSC
 
 
     // Scope
-    //
-    //
     namespace
     {
       TypeInfo
@@ -113,8 +103,6 @@ namespace XSC
 
 
     // Type
-    //
-    //
     namespace
     {
       TypeInfo
@@ -133,8 +121,6 @@ namespace XSC
 
 
     // Instance
-    //
-    //
 
     Type& Instance::
     type () const
@@ -160,8 +146,6 @@ namespace XSC
 
 
     // Belongs
-    //
-    //
     namespace
     {
       TypeInfo
@@ -180,8 +164,6 @@ namespace XSC
 
 
     // Inherits
-    //
-    //
     namespace
     {
       TypeInfo
@@ -200,8 +182,6 @@ namespace XSC
 
 
     // Contains
-    //
-    //
     namespace
     {
       TypeInfo
@@ -220,8 +200,6 @@ namespace XSC
 
 
     // Container
-    //
-    //
     namespace
     {
       TypeInfo

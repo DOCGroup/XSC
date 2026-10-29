@@ -1,0 +1,6 @@
+# Runtime test drivers for the XSC test suite.
+# Compile-only generated-code and API checks run from Tests.mwc.
+Tests/Validation/run_test.pl
+Tests/ReadOnly/run_test.pl
+Tests/DanceX11/run_test.pl
+Tests/XMLUtils/run_test.pl

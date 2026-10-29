@@ -6,15 +6,6 @@
 #include "XSC/SemanticGraph.hpp"
 #include "XSC/Traversal.hpp"
 
-#if defined (_WINDOWS)
-# if defined (min)
-#   undef min
-# endif
-# if defined (max)
-#   undef max
-# endif
-#endif
-
 namespace
 {
   struct Member : Traversal::Element,
@@ -58,11 +49,10 @@ namespace
       os << "}";
     }
 
-    virtual void
-    traverse (SemanticGraph::Element& e)
+    void
+    traverse (SemanticGraph::Element& e) override
     {
       // Anonymous types cannot be traversed.
-      //
       //if (!e.type ().named ())
         //return;
 
@@ -70,17 +60,14 @@ namespace
       string name (e.name ());
       string type (type_name (e));
 
-      if (e.min () == 0 && e.max () == 1)
+      if (e.minimum () == 0 && e.maximum () == 1)
       {
         // optional
-        //
 
         // name
-        //
         optional_member (name, type);
 
         // name_none
-        //
         os << "void " << scope << "::"
            << name << "_none (Type&)"
            << "{"
@@ -91,13 +78,11 @@ namespace
            << "{"
            << "}";
       }
-      else if (e.min () == 1 && e.max () == 1)
+      else if (e.minimum () == 1 && e.maximum () == 1)
       {
         // one
-        //
 
         // name
-        //
         os << "void " << scope << "::"
            << id (name) << " (Type& o)"
            << "{dispatch (o." << id (name) << " ());}";
@@ -109,12 +94,10 @@ namespace
       else
       {
         // sequence
-        //
 
         string accessor_name (sequence_accessor_name (e));
 
         // name
-        //
         string iterator_type (fq_name (e, L"", false));
         iterator_type += this->read_only_ ? L"_const_iterator" : L"_iterator";
 
@@ -144,7 +127,7 @@ namespace
            << name << "_post (o);"
            << "}";
 
-        if (e.min () == 0)
+        if (e.minimum () == 0)
           os << "else " << name << "_none (o);";
 
         os << "}";
@@ -178,14 +161,13 @@ namespace
            << name << "_post (o);"
            << "}";
 
-        if (e.min () == 0)
+        if (e.minimum () == 0)
           os << "else " << name << "_none (o);";
 
         os << "}";
 
 
         // name_pre
-        //
         os << "void " << scope << "::"
            << name << "_pre (Type&)"
            << "{"
@@ -198,7 +180,6 @@ namespace
 
 
         // name_next
-        //
         os << "void " << scope << "::"
            << name << "_next (Type&)"
            << "{"
@@ -211,7 +192,6 @@ namespace
 
 
         // name_post
-        //
         os << "void " << scope << "::"
            << name << "_post (Type&)"
            << "{"
@@ -223,8 +203,7 @@ namespace
            << "}";
 
         // name_none
-        //
-        if (e.min () == 0)
+        if (e.minimum () == 0)
         {
           os << "void " << scope << "::"
              << name << "_none (Type&)"
@@ -240,11 +219,10 @@ namespace
     }
 
 
-    virtual void
-    traverse (SemanticGraph::Attribute& a)
+    void
+    traverse (SemanticGraph::Attribute& a) override
     {
       // Anonymous types cannot be traversed.
-      //
       //if (!a.type ().named ())
       //  return;
 
@@ -254,11 +232,9 @@ namespace
       if (a.optional ())
       {
         // name
-        //
         optional_member (name, type_name (a));
 
         // name_none
-        //
         os << "void " << scope << "::"
            << name << "_none (Type&)"
            << "{"
@@ -272,7 +248,6 @@ namespace
       else
       {
         // name
-        //
         os << "void " << scope << "::"
            << id (name) << " (Type& o)"
            << "{"
@@ -320,19 +295,17 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Element& e)
+    void
+    traverse (SemanticGraph::Element& e) override
     {
       // Anonymous types cannot be traversed.
-      //
       //if (!e.type ().named ()) return;
 
       string name (e.name ());
 
-      if (e.min () == 0 && e.max () == 1)
+      if (e.minimum () == 0 && e.maximum () == 1)
       {
         // optional
-        //
         if (!this->optional_via_if_set ())
           os << "if (o." << name << "_p ()) " << id (name) << " (o);"
              << "else " << name << "_none (o);";
@@ -342,25 +315,22 @@ namespace
              << id (name) << " (o);"
              << "else " << name << "_none (o);";
       }
-      else if (e.min () == 1 && e.max () == 1)
+      else if (e.minimum () == 1 && e.maximum () == 1)
       {
         // one
-        //
         os << id (name) << " (o);";
       }
       else
       {
         // sequence
-        //
         os << id (name) << " (o);";
       }
     }
 
-    virtual void
-    traverse (SemanticGraph::Attribute& a)
+    void
+    traverse (SemanticGraph::Attribute& a) override
     {
       // Anonymous types cannot be traversed.
-      //
       //if (!a.type ().named ()) return;
 
       string name (a.name ());
@@ -368,7 +338,6 @@ namespace
       if (a.optional ())
       {
         // optional
-        //
         if (!this->optional_via_if_set ())
           os << "if (o." << name << "_p ()) " << id (name) << " (o);"
              << "else " << name << "_none (o);";
@@ -381,7 +350,6 @@ namespace
       else
       {
         // one
-        //
         os << id (name) << " (o);";
       }
     }
@@ -431,8 +399,8 @@ namespace
       call_names_.node_traverser (call_member_);
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       if (c.named ())
         name_ = id (c.name ());
@@ -444,7 +412,6 @@ namespace
         c.context ().set ("name", name_);
 
         // Go after anonymous types first.
-        //
         names (c, names_anonymous_);
 
         Traversal::Complex::traverse (c);
@@ -455,15 +422,14 @@ namespace
       }
     }
 
-   virtual void
-    pre (Type& c)
+   void
+    pre (Type& c) override
     {
       //string name (id (name_));
 
       //enter_scope (name);
 
       // traverse (Type&)
-      //
       os << "void " << scope << "::"
          << "traverse (Type& o)"
          << "{"
@@ -476,7 +442,6 @@ namespace
          << "}";
 
       // traverse (Type const&)
-      //
       os << "void " << scope << "::"
          << "traverse (Type const& o)"
          << "{"
@@ -490,7 +455,6 @@ namespace
 
 
       // pre ()
-      //
       os << "void " << scope << "::"
          << "pre (Type&)"
          << "{"
@@ -502,13 +466,12 @@ namespace
          << "}";
     }
 
-    virtual void
-    post (Type&)
+    void
+    post (Type&) override
     {
       // string name (id (name_));
 
       // post ()
-      //
       os << "void " << scope << "::"
          << "post (Type&)"
          << "{"
@@ -547,8 +510,8 @@ namespace
     {
     }
 
-    virtual void
-    pre (Type& n)
+    void
+    pre (Type& n) override
     {
       Namespace::pre (n);
 
@@ -557,8 +520,8 @@ namespace
 
     }
 
-    virtual void
-    post (Type& n)
+    void
+    post (Type& n) override
     {
       os << "}";
 
@@ -573,8 +536,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       SemanticGraph::Type& t (e.type ());
 

@@ -11,9 +11,6 @@ namespace XSC
 {
   namespace Traversal
   {
-    //
-    //
-    //
     struct Attribute : Node<SemanticGraph::Attribute>
     {
       void

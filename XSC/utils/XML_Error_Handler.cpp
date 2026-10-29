@@ -2,10 +2,7 @@
 #include "xercesc/util/XMLString.hpp"
 #include "xercesc/dom/DOMLocator.hpp"
 #include "xercesc/sax/SAXParseException.hpp"
-#include "XercesString.h"
 #include <iostream>
-
-using xercesc::SAXParseException;
 
 namespace XSC
 {
@@ -15,7 +12,7 @@ namespace XSC
 
     XML_Error_Handler::~XML_Error_Handler() = default;
 
-    void XML_Error_Handler::warning(const SAXParseException& toCatch)
+    void XML_Error_Handler::warning(const xercesc::SAXParseException& toCatch)
     {
       char * file = xercesc::XMLString::transcode (toCatch.getSystemId ());
       char * msg = xercesc::XMLString::transcode (toCatch.getMessage ());
@@ -28,7 +25,7 @@ namespace XSC
       xercesc::XMLString::release (&msg);
     }
 
-    void XML_Error_Handler::error(const SAXParseException& toCatch)
+    void XML_Error_Handler::error(const xercesc::SAXParseException& toCatch)
     {
       char * file = xercesc::XMLString::transcode (toCatch.getSystemId ());
       char * msg = xercesc::XMLString::transcode (toCatch.getMessage ());
@@ -43,7 +40,7 @@ namespace XSC
       xercesc::XMLString::release (&msg);
     }
 
-    void XML_Error_Handler::fatalError(const SAXParseException& toCatch)
+    void XML_Error_Handler::fatalError(const xercesc::SAXParseException& toCatch)
     {
       char * file = xercesc::XMLString::transcode (toCatch.getSystemId ());
       char * msg = xercesc::XMLString::transcode (toCatch.getMessage ());

@@ -94,28 +94,6 @@ jobs:
           Pop-Location
         }
       shell: pwsh
-    - name: Run XSC validation rejection test
-      run: |
-        Push-Location ${env:XSC_ROOT}/Tests/Validation
-        try {
-          perl run_test.pl
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-        }
-        finally {
-          Pop-Location
-        }
-      shell: pwsh
-    - name: Run read-only mode compatibility tests
-      run: |
-        Push-Location ${env:XSC_ROOT}/Tests/ReadOnly
-        try {
-          perl run_test.pl
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-        }
-        finally {
-          Pop-Location
-        }
-      shell: pwsh
     - name: Build XSC generated schema tests
       run: |
         Push-Location ${env:XSC_ROOT}/Tests
@@ -127,14 +105,7 @@ jobs:
           Pop-Location
         }
       shell: pwsh
-    - name: Run DanceX11 generated-code test
+    - name: Run XSC tests
       run: |
-        Push-Location ${env:XSC_ROOT}/Tests/DanceX11
-        try {
-          perl run_test.pl
-          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-        }
-        finally {
-          Pop-Location
-        }
+        perl ${env:ACE_ROOT}/bin/auto_run_tests.pl -r ${env:XSC_ROOT} -l Tests/run_test.lst
       shell: pwsh

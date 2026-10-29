@@ -7,15 +7,6 @@
 #include "XSC/SemanticGraph.hpp"
 #include "XSC/Traversal.hpp"
 
-#if defined (_WINDOWS)
-# if defined (min)
-#   undef min
-# endif
-# if defined (max)
-#   undef max
-# endif
-#endif
-
 namespace
 {
   struct Member : Traversal::Element,
@@ -27,17 +18,16 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Element& e)
+    void
+    traverse (SemanticGraph::Element& e) override
     {
       // Anonymous types cannot be traversed.
-      //
       //if (!e.type ().named ())
       //  return;
 
       string name (e.name ());
 
-      if (e.min () == 0 && e.max () == 1)
+      if (e.minimum () == 0 && e.maximum () == 1)
       {
         if (this->cppmode_ == CPPMODE::CPP03)
         {
@@ -51,12 +41,11 @@ namespace
         }
 
         // optional
-        //
         os << "virtual void" << std::endl
            << id (name) << " (Type const&);"
            << std::endl;
       }
-      else if (e.min () == 1 && e.max () == 1)
+      else if (e.minimum () == 1 && e.maximum () == 1)
       {
         if (this->cppmode_ == CPPMODE::CPP03)
         {
@@ -70,7 +59,6 @@ namespace
         }
 
         // one
-        //
         os << "virtual void" << std::endl
            << id (name) << " (Type const&);"
            << std::endl;
@@ -78,10 +66,8 @@ namespace
       else
       {
         // sequence
-        //
 
         // Pre
-        //
         if (this->cppmode_ == CPPMODE::CPP03)
         {
           os << "virtual void" << std::endl
@@ -93,13 +79,11 @@ namespace
         }
 
         // pre
-        //
         os << "virtual void" << std::endl
            << name << "_pre (Type const&);"
            << std::endl;
 
         // non-const next
-        //
         if (this->cppmode_ == CPPMODE::CPP03)
         {
           os << "virtual void" << std::endl
@@ -111,7 +95,6 @@ namespace
         }
 
         // next
-        //
         os << "virtual void" << std::endl
            << name << "_next (Type const&);"
            << std::endl;
@@ -128,18 +111,16 @@ namespace
         }
 
         // post
-        //
         os << "virtual void" << std::endl
            << name << "_post (Type const&);"
            << std::endl;
       }
     }
 
-    virtual void
-    traverse (SemanticGraph::Attribute& a)
+    void
+    traverse (SemanticGraph::Attribute& a) override
     {
       // Anonymous types cannot be traversed.
-      //
       //if (!a.type ().named ())
       //return;
 
@@ -179,15 +160,15 @@ namespace
     //  os << "virtual " << type << "," << std::endl;
     //}
 
-    virtual void
-    traverse (SemanticGraph::IdRef&)
+    void
+    traverse (SemanticGraph::IdRef&) override
     {
       os << "virtual ::XMLSchema::Writer::IDREF<" << char_type << ">, " <<
         std::endl;
     }
 
-    virtual void
-    fundamental_type (SemanticGraph::FundamentalType & t)
+    void
+    fundamental_type (SemanticGraph::FundamentalType & t) override
     {
       string name (fundamental_type_name (t));
 
@@ -224,8 +205,8 @@ namespace
       inherits_.node_traverser (base_);
     }
 
-    virtual void
-    traverse (Type & c)
+    void
+    traverse (Type & c) override
     {
       // We need to get the name of the element. The name would
       // be already set if it was an anonymous type.
@@ -243,8 +224,8 @@ namespace
       }
     }
 
-    virtual void
-    pre (Type& c)
+    void
+    pre (Type& c) override
     {
       os << "struct " << name_ << " : Traversal::" << scope << "," << std::endl;
 
@@ -254,7 +235,6 @@ namespace
          << "{";
 
       //@@ Should probably be Type__
-      //
       if (this->cppmode_ != CPPMODE::CPP03)
       {
         os << "using Type =" << fq_name (c) << ";";
@@ -265,7 +245,6 @@ namespace
       }
 
       // c-tor
-      //
       os << "explicit " << name_ << " (" << xml_element_type << "&);"
          << std::endl;
 
@@ -284,14 +263,13 @@ namespace
       string override_string (this->cppmode_ != CPPMODE::CPP03 ? L" override" : L"");
 
       // traverse
-      //
       os << virtual_string << "void" << std::endl
          << "traverse (Type const&)" << override_string << ";"
          << std::endl;
     }
 
-    virtual void
-    post (Type& )
+    void
+    post (Type& ) override
     {
       string default_string (this->cppmode_ != CPPMODE::CPP03 ? L" = default" : L"");
       os << Indentation::unindent << "protected:" << std::endl << Indentation::indent
@@ -319,8 +297,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       string name ((this->name_ != L"") ? name_ : id (e.name ()));
       string type (type_name (e));
@@ -335,7 +313,6 @@ namespace
          << "{";
 
       // c-tor
-      //
       os << "explicit " << name << " (" << xml_element_type << "&);"
          << std::endl;
 
@@ -351,7 +328,6 @@ namespace
       }
 
       // traverse
-      //
       os << virtual_string << "void" << std::endl
          << "traverse (Type const&)" << override_string << ";"
          << std::endl;
@@ -375,8 +351,8 @@ namespace
     {
     }
 
-    virtual void
-    pre (Type& n)
+    void
+    pre (Type& n) override
     {
       Namespace::pre (n);
 
@@ -384,8 +360,8 @@ namespace
          << "{";
     }
 
-    virtual void
-    post (Type& n)
+    void
+    post (Type& n) override
     {
       os << "}";
 
@@ -401,8 +377,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       string name (c.name ());
       string type (fq_name (c.type ()));
@@ -427,8 +403,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       SemanticGraph::Type& t (e.type ());
 

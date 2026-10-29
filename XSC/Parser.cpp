@@ -17,14 +17,6 @@
 #include <sstream>
 #include <system_error>
 
-#if defined (min)
-#undef min
-#endif
-
-#if defined (max)
-#undef max
-#endif
-
 
 namespace XSC
 {
@@ -170,25 +162,21 @@ namespace XSC
                 Scope& scope (resolve<Scope> (ns_name, uq_name, schema_));
 
                 // @@ same code as in Parser::group
-                //
                 for (Scope::NamesIterator i (scope.names_begin ());
                      i != scope.names_end (); ++i)
                   {
                     Element& prot (dynamic_cast<Element&> ((*i)->named ()));
 
-                    Element& e (schema_.new_node<Element> (grp_min == 0 ? grp_min : prot.min (),
-                                                           grp_max == 0 ? grp_max : prot.max (),
+                    Element& e (schema_.new_node<Element> (grp_min == 0 ? grp_min : prot.minimum (),
+                                                           grp_max == 0 ? grp_max : prot.maximum (),
                                                            prot.qualified ()));
 
                     schema_.new_edge<Names> (c, e, prot.name ());
 
                     // Now we set element's type.
-                    //
-                    //
                     if (prot.typed ())
                       {
                         // Easy case.
-                        //
                         schema_.new_edge<Belongs> (e, prot.type ());
                       }
                     else if (prot.context ().count ("type-ns-name"))
@@ -210,7 +198,6 @@ namespace XSC
                     else
                       {
                         // What the heck?
-                        //
                         if (trace_)
                           std::wcout << "element `" << ns_name << "#" << uq_name
                                 << "' is in unexpected condition" << std::endl;
@@ -237,7 +224,6 @@ namespace XSC
       }
 
       // We don't need to go inside enumerations.
-      //
       void
       traverse (SemanticGraph::Enumeration&) override
       {
@@ -261,7 +247,6 @@ namespace XSC
     std::unique_ptr<Schema> rs (std::make_unique<Schema> ());
 
     // Implied schema with fundamental types.
-    //
     {
       Schema& s (rs->new_node<Schema> ());
       rs->new_edge<Implies> (*rs, s, std::filesystem::path ("XMLSchema.xsd"));
@@ -320,7 +305,6 @@ namespace XSC
     }
 
     // Parse.
-    //
     if (DOMDocument* d  = dom (uri))
       {
         XML::Element root (d->getDocumentElement ());
@@ -330,7 +314,6 @@ namespace XSC
         if (trace_) std::wcout << "target namespace: " << ns << std::endl;
 
         // Enter the file into file_map_.
-        //
         file_map_[uri] = ns;
 
         root_schema_ = cur_schema_ = rs.get ();
@@ -347,10 +330,8 @@ namespace XSC
       }
 
     //@@ don't need this in case of an error
-    //
 
     // Second pass to resolve types and refs.
-    //
     {
       Traversal::Schema schema;
       Traversal::Contains contains;
@@ -538,7 +519,6 @@ namespace XSC
               {
 
                 // Chameleon.
-                //
                 // @@Will:  What is a chameleon schema?
                 ns = cur_ns;
                 root_schema_->new_edge<Sources> (*cur_schema_, s, path);
@@ -611,13 +591,12 @@ namespace XSC
         string ns_name (XML::ns_name (g, ref));
 
         //@@ min/max
-        //
         // min/max can come from element in the group!
 
-        unsigned long min (g[L"minOccurs"] == L"0" ? 0 : this->min ()),
-          max (g[L"maxOccurs"] && g[L"maxOccurs"] != L"1" ? 0 : this->max ());
+        unsigned long minimum (g[L"minOccurs"] == L"0" ? 0 : this->minimum ()),
+          maximum (g[L"maxOccurs"] && g[L"maxOccurs"] != L"1" ? 0 : this->maximum ());
 
-        if (trace_) std::wcout << "group min " << min << " max " << max << std::endl;
+        if (trace_) std::wcout << "group min " << minimum << " max " << maximum << std::endl;
 
 
         try
@@ -629,18 +608,16 @@ namespace XSC
               {
                 Element& prot (dynamic_cast<Element&> ((*i)->named ()));
 
-                Element& e (root_schema_->new_node<Element> (min == 0 ? min : prot.min (),
-                                                             max == 0 ? max : prot.max (),
+                Element& e (root_schema_->new_node<Element> (minimum == 0 ? minimum : prot.minimum (),
+                                                             maximum == 0 ? maximum : prot.maximum (),
                                                              prot.qualified ()));
 
                 root_schema_->new_edge<Names> (scope (), e, prot.name ());
 
                 // Now we set element's type.
-                //
                 if (prot.typed ())
                   {
                     // Easy case.
-                    //
                     root_schema_->new_edge<Belongs> (e, prot.type ());
                   }
                 else if (prot.context ().count ("type-ns-name"))
@@ -662,7 +639,6 @@ namespace XSC
                 else
                   {
                     // What the heck?
-                    //
                     if (trace_)
                       std::wcout << "element `" << ref << "' is in unexpected condition"
                             << std::endl;
@@ -683,12 +659,11 @@ namespace XSC
             // Cannot resolve group at this point. Will have to try later.
             // The tricky part is that we have to save position where we will
             // be inserting elements.
-            //
 
             scope ().context ().set ("group-ns-name", ns_name);
             scope ().context ().set ("group-uq-name", uq_name);
-            scope ().context ().set ("group-min", min);
-            scope ().context ().set ("group-max", max);
+            scope ().context ().set ("group-min", minimum);
+            scope ().context ().set ("group-max", maximum);
 
             /*
               @@ This is too tricky for current stage of implementation.
@@ -715,7 +690,6 @@ namespace XSC
   }
 
   //@@ need RAII for push/pop
-  //
 
   Type* Parser::
   simple_type (XML::Element const& t, const string& anon_name)
@@ -758,7 +732,7 @@ namespace XSC
 
     annotation ();
 
-    bool enum_ (false);
+            bool enum_ {};
 
     if (more ())
       {
@@ -767,7 +741,6 @@ namespace XSC
         if (e.name () == L"enumeration")
           {
             // Enumeration
-            //
             enum_ = true;
 
             Enumeration& node (root_schema_->new_node<Enumeration> ());
@@ -798,7 +771,6 @@ namespace XSC
     if (!enum_)
       {
         //Complex& node (root_schema_->new_node<Complex> ());
-        //
         //set_type<Inherits> (r[L"base"], r, node);
 
         // base is likely a fundamental type?
@@ -836,7 +808,6 @@ namespace XSC
 //     if (more ())
 //       {
 //         XML::Element e (next ());
-//
 //         string base1 (fq_name (e, e[L"base"]));
 //           std::wcout << "restriction base: " << base1 << std::endl;
 //       }
@@ -933,7 +904,6 @@ namespace XSC
     //  can it contain any of those. The default cardinality
     //  values for `all' are min=1, max=1. Therefore we don't
     //  really need to push/pop cardinality.
-    //
     this->push (a);
 
     this->annotation ();
@@ -965,20 +935,20 @@ namespace XSC
       {
         if (c[L"maxOccurs"] == L"unbounded")
           {
-            push_cardinality (0, std::numeric_limits <unsigned long>::max ());
+            push_cardinality (0, (std::numeric_limits <unsigned long>::max) ());
           }
         else
           {
             string value (c[L"maxOccurs"]);
             std::wistringstream istr (value);
-            unsigned long max;
-            istr >> max;
-            push_cardinality (0, max);
+            unsigned long maximum;
+            istr >> maximum;
+            push_cardinality (0, maximum);
           }
       }
     else
       push_cardinality (0,
-        c[L"maxOccurs"] && c[L"maxOccurs"] != L"1" ? 0 : max ());
+        c[L"maxOccurs"] && c[L"maxOccurs"] != L"1" ? 0 : maximum ());
 
     if (c[L"maxOccurs"] && c[L"maxOccurs"] != L"1")
       {
@@ -1015,9 +985,8 @@ namespace XSC
   sequence (XML::Element const& s)
   {
     // Establish cardinality.
-    //
-    push_cardinality (s[L"minOccurs"] == L"0" ? 0 : min (),
-                      s[L"maxOccurs"] && s[L"maxOccurs"] != L"1" ? 0 : max ());
+    push_cardinality (s[L"minOccurs"] == L"0" ? 0 : minimum (),
+                      s[L"maxOccurs"] && s[L"maxOccurs"] != L"1" ? 0 : maximum ());
 
     push (s);
 
@@ -1152,27 +1121,27 @@ namespace XSC
   void Parser::
   element (XML::Element const& e, bool global)
   {
-    unsigned long min (this->min ());
-    unsigned long max (this->max ());
+    unsigned long minimum (this->minimum ());
+    unsigned long maximum (this->maximum ());
 
     if (e[L"minOccurs"])
       {
 	string value = e[L"minOccurs"];
 	std::wistringstream istr (value);
 
-	istr >> min;
+	istr >> minimum;
       }
 
     if (e[L"maxOccurs"])
     {
       if (e[L"maxOccurs"] == L"unbounded")
-        max = std::numeric_limits <unsigned long>::max ();
+        maximum = (std::numeric_limits <unsigned long>::max) ();
       else
 	{
 	  string value (e[L"maxOccurs"]);
 	  std::wistringstream istr (value);
 
-	  istr >> max;
+	  istr >> maximum;
 	}
     }
 
@@ -1183,12 +1152,12 @@ namespace XSC
         qualified = form == L"qualified";
       }
 
-    if (trace_) std::wcout << "element min " << min << " max " << max
+    if (trace_) std::wcout << "element min " << minimum << " max " << maximum
                       << " qualified " << qualified << std::endl;
 
     if (string name = e[L"name"])
       {
-        Element& node (root_schema_->new_node<Element> (min, max, qualified));
+        Element& node (root_schema_->new_node<Element> (minimum, maximum, qualified));
         root_schema_->new_edge<Names> (scope (), node, name);
 
         if (string type = e[L"type"])
@@ -1236,7 +1205,6 @@ namespace XSC
             else
               {
                 // anyType almighty.
-                //
                 string prefix (ns_prefix (e, xsd));
                 type =  prefix + (prefix.empty () ? L"" : L":") + L"anyType";
 
@@ -1251,7 +1219,7 @@ namespace XSC
         string uq_name (XML::uq_name (ref));
         string ns_name (XML::ns_name (e, ref));
 
-        Element& node (root_schema_->new_node<Element> (min, max, qualified));
+        Element& node (root_schema_->new_node<Element> (minimum, maximum, qualified));
         root_schema_->new_edge<Names> (scope (), node, uq_name);
 
         try
@@ -1275,11 +1243,9 @@ namespace XSC
                         << "deferring resolution until later" << std::endl;
               }
             // Global element cannot reference.
-            //
             else
               {
                 // What the heck?
-                //
                 if (trace_)
                   std::wcout << "element `" << ref << "' is in unexpected condition"
                         << std::endl;
@@ -1531,51 +1497,41 @@ namespace XSC
           }
 
         // Initialize Xerces runtime
-        //
         XMLPlatformUtils::Initialize();
         XercesDOMParser parser;
 
         // Discard comment nodes in the document.
-        //
         parser.setCreateCommentNodes (false);
 
         // Disable datatype normalization. The XML 1.0 attribute value
         // normalization always occurs though.
-        //
         //parser->setFeature (XMLUni::fgDOMDatatypeNormalization, true);
 
         // Do not create EntityReference nodes in the DOM tree. No
         // EntityReference nodes will be created, only the nodes
         // Corresponding to their fully expanded substitution text will be
         // created.
-        //
         parser.setCreateEntityReferenceNodes (false);
 
         // Perform Namespace processing.
-        //
         parser.setDoNamespaces (true);
 
         // Perform Validation
-        //
         //parser.setValidationScheme (true);
 
         // Do not include ignorable whitespace in the DOM tree.
-        //
         parser.setIncludeIgnorableWhitespace (false);
 
         // Enable the parser's schema support.
-        //
         parser.setDoSchema (true);
 
         // Enable full schema constraint checking, including checking which
         // may be time-consuming or memory intensive. Currently, particle
         // unique attribution constraint checking and particle derivation
         // restriction checking are controlled by this option.
-        //
         parser.setValidationSchemaFullChecking (true);
 
         // The parser will treat validation error as fatal and will exit.
-        //
         parser.setValidationConstraintFatal (true);
 
         // Setup the error handler.

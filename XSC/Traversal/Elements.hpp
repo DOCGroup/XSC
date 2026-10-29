@@ -18,9 +18,6 @@ namespace XSC
 {
   namespace Traversal
   {
-    //
-    //
-    //
     template<typename T>
     class Traverser
     {
@@ -36,9 +33,6 @@ namespace XSC
     };
 
 
-    //
-    //
-    //
     template <typename T>
     class Dispatcher
     {
@@ -102,16 +96,10 @@ namespace XSC
     };
 
 
-    //
-    //
-    //
     using NodeDispatcherBase = Dispatcher<SemanticGraph::Node>;
     using EdgeDispatcherBase = Dispatcher<SemanticGraph::Edge>;
 
 
-    //
-    //
-    //
     class NodeDispatcher : public virtual NodeDispatcherBase
     {
     public:
@@ -119,15 +107,11 @@ namespace XSC
       edge_traverser (EdgeDispatcherBase& d)
       {
         //@@ this should be done in Dispatcher in merge() function?
-        //
-        for (EdgeDispatcherBase::Iterator i (d.begin ()), end (d.end ());
-             i != end; ++i)
+        for (auto const& [type_id, traversers] : d)
         {
-          for (EdgeDispatcherBase::Traversers::const_iterator
-                 t (i->second.begin ()), end (i->second.end ());
-               t != end; ++t)
+          for (Traverser<SemanticGraph::Edge>* traverser : traversers)
           {
-            dispatcher_.map (i->first, **t);
+            dispatcher_.map (type_id, *traverser);
           }
         }
       }
@@ -175,18 +159,14 @@ namespace XSC
     {
     public:
       //@@ this should be done in Dispatcher in merge() function?
-      //
       void
       node_traverser (NodeDispatcherBase& d)
       {
-        for (NodeDispatcherBase::Iterator i (d.begin ()), end (d.end ());
-             i != end; ++i)
+        for (auto const& [type_id, traversers] : d)
         {
-          for (NodeDispatcherBase::Traversers::const_iterator
-                 t (i->second.begin ()), end (i->second.end ());
-               t != end; ++t)
+          for (Traverser<SemanticGraph::Node>* traverser : traversers)
           {
-            dispatcher_.map (i->first, **t);
+            dispatcher_.map (type_id, *traverser);
           }
         }
       }
@@ -203,9 +183,6 @@ namespace XSC
     };
 
 
-    //
-    //
-    //
     template <typename T>
     struct Node : Traverser<SemanticGraph::Node>, virtual NodeDispatcher
     {
@@ -252,8 +229,6 @@ namespace XSC
     };
 
     // Edges
-    //
-    //
     struct Names : Edge<SemanticGraph::Names>
     {
       void
@@ -275,8 +250,6 @@ namespace XSC
 
 
     // Nodes
-    //
-    //
     struct Nameable : Node<SemanticGraph::Nameable>
     {
     };
@@ -332,15 +305,9 @@ namespace XSC
     };
 
 
-    //
-    //
-    //
     using Scope = ScopeTemplate<SemanticGraph::Scope>;
 
 
-    //
-    //
-    //
     struct Type : Node<SemanticGraph::Type>
     {
       void
@@ -348,9 +315,6 @@ namespace XSC
     };
 
 
-    //
-    //
-    //
     struct Instance : Node<SemanticGraph::Instance>
     {
       void
@@ -369,9 +333,6 @@ namespace XSC
       post (Type&);
     };
 
-    //
-    //
-    //
     struct Inherits : Edge<SemanticGraph::Inherits>
     {
       void
@@ -381,9 +342,6 @@ namespace XSC
       }
     };
 
-    //
-    //
-    //
     struct Contains : Edge<SemanticGraph::Contains>
     {
       void

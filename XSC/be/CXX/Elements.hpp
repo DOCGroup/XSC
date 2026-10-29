@@ -20,7 +20,6 @@ using string = std::wstring;
 
 using NamespaceMapping = std::vector<string>;
 
-//
 class Context
 {
 public:
@@ -152,23 +151,19 @@ protected:
 protected:
 
   // Escape C++ keywords.
-  //
   string
   id (string const& name);
 
   // Translate XML namespace name to C++ identifier.
-  //
   string
   ns_name (SemanticGraph::Namespace& ns);
 
   // Original schema namespace name.
-  //
   string
   xs_ns_name (SemanticGraph::Nameable& ns);
 
   // Mapping for fq-type-name. Takes into account current scope
   // for anonymous names.
-  //
   string
   type_name (SemanticGraph::Instance& i, string const& ns_suffix = L"");
 
@@ -472,7 +467,6 @@ private:
 
 
 // Usual namespace mapping.
-//
 struct Namespace : Traversal::Namespace, protected virtual Context
 {
   Namespace (Context& c)
@@ -506,7 +500,6 @@ private:
 };
 
 // Checks if scope `Y' names any of `X'
-//
 template <typename X, typename Y>
 bool
 has (Y& y)
@@ -529,7 +522,7 @@ struct CopyRequiredMembers : Traversal::Element, Traversal::Attribute
   void
   traverse (SemanticGraph::Element& e) override
   {
-    if (e.max () == 1)
+    if (e.maximum () == 1)
       required = true;
   }
 
@@ -567,7 +560,7 @@ struct ConstructorRequiredMembers : Traversal::Enumeration,
   void
   traverse (SemanticGraph::Element& e) override
   {
-    if (e.min () >= 1)
+    if (e.minimum () >= 1)
       required = true;
   }
 
@@ -603,8 +596,49 @@ has_constructor_required_members (SemanticGraph::Complex& c)
   return t.required;
 }
 
+struct ConstructorOptionalMembers : Traversal::Element,
+                                   Traversal::Attribute
+{
+  void
+  traverse (SemanticGraph::Element& e) override
+  {
+    if (e.minimum () == 0)
+      optional = true;
+  }
+
+  void
+  traverse (SemanticGraph::Attribute& a) override
+  {
+    if (a.optional ())
+      optional = true;
+  }
+
+  bool optional {};
+};
+
+inline bool
+has_constructor_optional_members (SemanticGraph::Complex& c)
+{
+  ConstructorOptionalMembers t;
+
+  std::function<void (SemanticGraph::Complex&)> visit = [&] (SemanticGraph::Complex& current)
+  {
+    for (auto i (current.inherits_begin ()); i != current.inherits_end (); ++i)
+      if (auto base = dynamic_cast<SemanticGraph::Complex*> (std::addressof ((**i).inheritee ())))
+        visit (*base);
+
+    Traversal::Complex complex;
+    Traversal::Names names;
+    complex.edge_traverser (names);
+    names.node_traverser (t);
+    complex.traverse (current);
+  };
+
+  visit (c);
+  return t.optional;
+}
+
 // Fundamental type mapping helper.
-//
 struct Fundamental : Traversal::FundamentalType,
                      Traversal::String,
                      Traversal::NormalizedString,

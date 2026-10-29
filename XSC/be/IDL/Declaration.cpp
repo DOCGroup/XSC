@@ -54,7 +54,7 @@ namespace
          << "{";
     }
 
-    virtual void
+    void
     names_next (Type&)
     {
       os << "," << std::endl;

@@ -4,21 +4,14 @@
 #include "Header.hpp"
 #include "Elements.hpp"
 
+#include <cstddef>
 #include <string>
+#include <string_view>
 
 #include "XSC/SemanticGraph.hpp"
 #include "XSC/Traversal.hpp"
 
 #include "CCF/CodeGenerationKit/Regex.hpp"
-
-#if defined (_WINDOWS)
-# if defined (min)
-#   undef min
-# endif
-# if defined (max)
-#   undef max
-# endif
-#endif
 
 namespace
 {
@@ -40,8 +33,6 @@ namespace
   };
 
   // List of all non-optional members
-  //
-  //
   struct CtorArgs : Traversal::Complex,
                     protected Traversal::Enumeration,
                     //protected Traversal::Type,
@@ -72,11 +63,11 @@ namespace
       string type (type_name (e));
       string name (e.name ());
 
-      if (e.min () == 1 && e.max () == 1)
+      if (e.minimum () == 1 && e.maximum () == 1)
       {
         os << comma () << type << " const& " << id (name) << "__";
       }
-      else if (e.min () >= 1)
+      else if (e.minimum () >= 1)
       {
         os << comma ()
            << name << "_container_type const& "
@@ -96,8 +87,22 @@ namespace
     void
     traverse (SemanticGraph::Complex& c) override
     {
+      if (traversing_)
+      {
+        complex_.traverse (c);
+        return;
+      }
+
       first_ = true;
+      traversing_ = true;
       complex_.traverse (c);
+      traversing_ = false;
+    }
+
+    bool
+    has_arguments () const
+    {
+      return !first_;
     }
 
   private:
@@ -108,10 +113,74 @@ namespace
     }
 
     bool first_;
+    bool traversing_ {};
 
   private:
     Traversal::Complex complex_;
 
+    Traversal::Inherits inherits_;
+    Traversal::Names names_;
+  };
+
+  struct OptionalCtorArgs : Traversal::Complex,
+                            protected Traversal::Element,
+                            protected Traversal::Attribute,
+                            protected virtual Context
+  {
+    explicit OptionalCtorArgs (Context& c)
+        : Context (c)
+    {
+      complex_.edge_traverser (inherits_);
+      complex_.edge_traverser (names_);
+      inherits_.node_traverser (*this);
+      names_.node_traverser (*this);
+    }
+
+    void
+    traverse (SemanticGraph::Element& e) override
+    {
+      if (e.minimum () == 0)
+      {
+        string name (e.name ());
+        string argument (id (e.name ()));
+        if (e.maximum () == 1)
+          os << comma () << "::XSCRT::OptionalArg<" << type_name (e) << "> " << argument
+             << "__ = std::nullopt";
+        else
+          os << comma () << name << "_container_type const& " << argument << "__ = {}";
+      }
+    }
+
+    void
+    traverse (SemanticGraph::Attribute& a) override
+    {
+      if (a.optional ())
+        os << comma () << "::XSCRT::OptionalArg<" << type_name (a) << "> "
+           << id (a.name ()) << "__ = std::nullopt";
+    }
+
+    void
+    traverse (SemanticGraph::Complex& c) override
+    {
+      complex_.traverse (c);
+    }
+
+    void
+    traverse_optional (SemanticGraph::Complex& c, bool has_prior_arguments)
+    {
+      first_ = !has_prior_arguments;
+      complex_.traverse (c);
+    }
+
+  private:
+    string
+    comma ()
+    {
+      return first_ ? (first_ = false, L"") : L",\n";
+    }
+
+    bool first_ {};
+    Traversal::Complex complex_;
     Traversal::Inherits inherits_;
     Traversal::Names names_;
   };
@@ -148,9 +217,8 @@ namespace
       string char_type (this->char_type);
 
       //Check if the type is an IDREF
-      size_t idref_ptr = 0;
-      std::wstring idref_str (L"::XMLSchema::IDREF<");
-      idref_ptr = type.find(idref_str);
+      std::wstring_view const idref_str (L"::XMLSchema::IDREF<");
+      std::wstring_view::size_type const idref_ptr (type.find (idref_str));
 
 
       string container;
@@ -163,12 +231,11 @@ namespace
       os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
 
 
-      if (c.max () != 1)
+      if (c.maximum () != 1)
       {
         string accessor_name (sequence_accessor_name (c));
 
         // sequence
-        //
         switch(this->cppmode_)
         {
           case CPPMODE::CPP03:
@@ -234,7 +301,7 @@ namespace
             break;
         }
         //Return referenced item if an IDREF
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
           os << "XSCRT::Type* get_" << name << "_ptr (const " << string_type <<"& idref);";
@@ -251,10 +318,9 @@ namespace
         os << name << "_container_type " << id(name) << "_"
            << (this->read_only_ && this->cppmode_ != CPPMODE::CPP03 ? L" {};" : L";");
       }
-      else if (c.min () == 0)
+      else if (c.minimum () == 0)
       {
         // optional
-        //
         if (!this->optional_via_if_set ())
         {
           os << "bool " << name << "_p () const;";
@@ -276,7 +342,7 @@ namespace
           os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03))
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03))
         {
           if (!this->read_only_)
           {
@@ -304,7 +370,6 @@ namespace
       else
       {
         // one
-        //
         os << type << " const& " << id (name) << " () const;";
         // os << type << "& " << id (name) << " ();"; // Lets just have one mutator.
         if (this->read_only_)
@@ -313,7 +378,7 @@ namespace
           os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ( void );\n";
@@ -371,9 +436,8 @@ namespace
       string type (type_name (a));
 
       //Check if the type is an IDREF
-      size_t idref_ptr = 0;
-      std::wstring idref_str (L"::XMLSchema::IDREF<");
-      idref_ptr = type.find(idref_str);
+      std::wstring_view const idref_str (L"::XMLSchema::IDREF<");
+      std::wstring_view::size_type const idref_ptr (type.find (idref_str));
 
       os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
 
@@ -401,7 +465,7 @@ namespace
           os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ();\n";
@@ -436,7 +500,7 @@ namespace
           os << "void " << id (name) << " (" << type << " const&);";
 
         //Added for IDREF case
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << "::XSCRT::Type* get_" << id (name) << "_ptr ( void );\n";
@@ -477,7 +541,8 @@ namespace
           base_ (c),
           element_ (c),
           attribute_ (c),
-          ctor_args_ (c)
+          ctor_args_ (c),
+          optional_ctor_args_ (c)
     {
       edge_traverser (inherits_);
       edge_traverser (names_);
@@ -566,13 +631,13 @@ namespace
         return;
 
       // CDR Insertion/Extraction Operators
-      bool reader = 0;
+      bool reader {};
 
       if (this->cdr_reader_generation_)
       {
         os << "// read" << std::endl;
 
-        reader = 1;
+        reader = true;
 
         os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
         os << "static bool" << std::endl
@@ -580,7 +645,7 @@ namespace
            << " (::XMLSchema::CDR_InputStream &,"
            << std::endl;
 
-        for (size_t j =0; j < name.length () + 5; j++)
+        for (std::size_t j {}; j < name.length () + 5; ++j)
           os << " ";
 
         os << " ::XMLSchema::cdr_arg_traits < " << name << " >::inout_type);" << std::endl;
@@ -606,35 +671,39 @@ namespace
       os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
 
       // c-tor (all-non-optional-members)
-      //
       if (this->read_only_)
       {
         if (this->cppmode_ == CPPMODE::CPP03)
           os << Indentation::unindent << "private:" << std::endl << Indentation::indent
              << name << " ();"
              << Indentation::unindent << "public:" << std::endl << Indentation::indent;
-        else
+        else if (has_constructor_required_members (c))
           os << name << " () = delete;";
+        else
+          os << name << " () = default;";
       }
+
+      bool const has_required (has_constructor_required_members (c));
+      bool const has_optional (this->cppmode_ == CPPMODE::CPP17 && has_constructor_optional_members (c));
 
       if (!this->read_only_)
       {
         os << name << " (";
 
         ctor_args_.traverse (c);
+        if (has_optional)
+          optional_ctor_args_.traverse_optional (c, ctor_args_.has_arguments ());
 
         bool const default_constructor (this->cppmode_ != CPPMODE::CPP03 &&
-                                        !has_constructor_required_members (c));
+                                        !has_required && !has_optional);
         os << ")" << (default_constructor ? " = default;" : ";")
            << std::endl;
       }
 
       // c-tor (Element const&)
-      //
       os << "explicit " << name << " (" << xml_element_type << " const&);";
 
       // c-tor (Attribute const&)
-      //
       bool r (true);
 
       struct Traverser : Traversal::Inherits,
@@ -670,7 +739,6 @@ namespace
       }
 
       // copy c-tor
-      //
       if (this->read_only_)
       {
         if (this->cppmode_ == CPPMODE::CPP03)
@@ -678,7 +746,10 @@ namespace
              << name << " (" << name << " const&);";
         else
         {
-          os << name << " (" << name << " const&) = delete;";
+          bool const default_copy (this->cppmode_ == CPPMODE::CPP17 &&
+                                   !has_copy_required_members (c));
+          os << name << " (" << name << " const& s)"
+             << (default_copy ? " = default;" : ";");
           os << name << " (" << name << "&&) = delete;";
         }
 
@@ -700,7 +771,6 @@ namespace
            << (default_copy ? " = default;" : ";");
 
         // operator=
-        //
         os << name << "& operator= (" << name << " const& s)"
            << (default_copy ? " = default;" : ";");
 
@@ -754,6 +824,7 @@ namespace
     Attribute attribute_;
 
     CtorArgs ctor_args_;
+    OptionalCtorArgs optional_ctor_args_;
   };
 
   struct Enumerator : Traversal::Enumerator, protected virtual Context
@@ -839,11 +910,9 @@ namespace
       }
 
       // c-tor (Element const&)
-      //
       os << "explicit " << name << " (" << xml_element_type << " const&);";
 
       // c-tor (Attribute const&)
-      //
       os << "explicit " << name << " (" << xml_attribute_type << " const&);";
 
       os << std::endl;
@@ -872,7 +941,7 @@ namespace
              << name << "& operator= (" << name << " const&);";
         else
         {
-          os << name << " (" << name << " const&) = delete;";
+          os << name << " (" << name << " const&) = default;";
           os << name << " (" << name << "&&) = delete;";
           os << name << "& operator= (" << name << " const&) = delete;";
           os << name << "& operator= (" << name << "&&) = delete;";
@@ -894,11 +963,11 @@ namespace
       os << "Value v_" << (this->cppmode_ == CPPMODE::CPP03 ? L";" : L" {};");
 
       // CDR Insertion/Extraction Operators
-      bool reader = 0;
+      bool reader {};
       if (this->cdr_reader_generation_)
       {
         os << "// read" << std::endl;
-        reader = 1;
+        reader = true;
 
         os << Indentation::unindent << "public:" << std::endl << Indentation::indent;
         os << "static bool" << std::endl
@@ -906,7 +975,7 @@ namespace
            << " (::XMLSchema::CDR_InputStream &,"
            << std::endl;
 
-        for (size_t j =0; j < name.length () + 5; j++)
+        for (std::size_t j {}; j < name.length () + 5; ++j)
           os << " ";
 
         os << " ::XMLSchema::cdr_arg_traits < " << name
@@ -1027,7 +1096,7 @@ namespace
       traverse (i.file ());
     }
 
-    virtual void
+    void
     traverse (std::filesystem::path const& f)
     {
       std::string name (regex::perl_s (f.string (), hxx_expr.c_str ()));
@@ -1048,6 +1117,37 @@ generate_header (Context& ctx,
 {
   ctx.os << "#include <memory>" << std::endl;
   ctx.os << "#include <string>" << std::endl;
+  if (ctx.cppmode () == Context::CPPMODE::CPP17 && !ctx.read_only ())
+  {
+    ctx.os << "#include <optional>" << std::endl
+           << "#ifndef XSCRT_OPTIONAL_ARG_HPP" << std::endl
+           << "#define XSCRT_OPTIONAL_ARG_HPP" << std::endl
+           << "namespace XSCRT" << std::endl
+           << "{"
+           << "template <typename T>" << std::endl
+           << "class OptionalArg" << std::endl
+           << "{" << Indentation::unindent << "public:" << std::endl << Indentation::indent
+           << "OptionalArg (std::nullopt_t) noexcept : value_ (nullptr)" << std::endl
+           << "{"
+           << "}"
+           << "OptionalArg (T const& value) noexcept : value_ (std::addressof (value))" << std::endl
+           << "{"
+           << "}"
+           << "OptionalArg (T const&&) = delete;" << std::endl
+           << "explicit operator bool () const noexcept" << std::endl
+           << "{"
+           << "return value_ != nullptr;" << std::endl
+           << "}"
+           << "T const& operator* () const noexcept" << std::endl
+           << "{"
+           << "return *value_;" << std::endl
+           << "}"
+           << Indentation::unindent << "private:" << std::endl << Indentation::indent
+           << "T const* value_ {};" << std::endl
+           << "};"
+           << "}"
+           << "#endif // XSCRT_OPTIONAL_ARG_HPP" << std::endl;
+  }
 
   if (ctx.generate_ra_sequences ())
     ctx.os << "#include <vector>" << std::endl;

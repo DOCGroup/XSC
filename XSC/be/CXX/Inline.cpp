@@ -5,20 +5,12 @@
 #include "Elements.hpp"
 
 #include <string>
+#include <string_view>
 
 #include "XSC/SemanticGraph.hpp"
 #include "XSC/Traversal.hpp"
 
 #include "CCF/CodeGenerationKit/Regex.hpp"
-
-#if defined (_WINDOWS)
-# if defined (min)
-#   undef min
-# endif
-# if defined (max)
-#   undef max
-# endif
-#endif
 
 namespace
 {
@@ -40,14 +32,12 @@ namespace
       //bool ra_sequence (this->generate_ra_sequences_);
 
       //Check if the type is an IDREF
-      std::string::size_type idref_ptr = 0;
-      std::wstring idref_str (L"::XMLSchema::IDREF<");
-      idref_ptr = type.find(idref_str);
+      std::wstring_view const idref_str (L"::XMLSchema::IDREF<");
+      std::wstring::size_type const idref_ptr (type.find (idref_str));
 
-      if (e.min () == 0 && e.max () == 1)
+      if (e.minimum () == 0 && e.maximum () == 1)
       {
         // optional
-        //
         if (this->optional_via_if_set ())
         {
           string noexcept_suffix (this->cppmode_ == CPPMODE::CPP03 ? L"" : L" noexcept");
@@ -72,7 +62,7 @@ namespace
         }
 
         // Return referenced item if an IDREF
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << i
@@ -135,16 +125,15 @@ namespace
            << "}";
         }
       }
-      else if (e.min () == 1 && e.max () == 1)
+      else if (e.minimum () == 1 && e.maximum () == 1)
       {
         // one
-        //
         os << i
            << type << " const& " << scope << "::" << id (name) << " () const"
            << "{"
            << "return *" << id (name) << "_;"
            << "}";
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << i
@@ -175,7 +164,6 @@ namespace
       else
       {
         // sequence
-        //
 
         string accessor_name (sequence_accessor_name (e));
 
@@ -195,7 +183,6 @@ namespace
           if (!this->read_only_)
           {
             // begin_typename
-            //
             os << i
               << scope << "::" << name << "_iterator " << scope << "::begin_" << name << " ()"
               << "{"
@@ -203,7 +190,6 @@ namespace
               << "}";
 
             // end_typename
-            //
             os << i
               << scope << "::" << name << "_iterator " << scope << "::end_" << name << " ()"
               << "{"
@@ -235,7 +221,7 @@ namespace
         }
 
         // add IDREF access method
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << i
@@ -273,7 +259,6 @@ namespace
         if (this->cppmode_ != CPPMODE::CPP17)
         {
           // count_typename
-          //
           os << i
             << "size_t " << scope << "::count_" << name << "() const"
             << (this->cppmode_ == CPPMODE::CPP17 ? " noexcept" : "")
@@ -291,9 +276,8 @@ namespace
       string type (type_name (a));
 
       //Check if the type is an IDREF
-      std::string::size_type idref_ptr = 0;
-      std::wstring idref_str (L"::XMLSchema::IDREF<");
-      idref_ptr = type.find(idref_str);
+      std::wstring_view const idref_str (L"::XMLSchema::IDREF<");
+      std::wstring::size_type const idref_ptr (type.find (idref_str));
 
       if (a.optional ())
       {
@@ -330,7 +314,7 @@ namespace
         }
 
         // Return a pointer to the referenced item
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << i
@@ -401,7 +385,7 @@ namespace
              << "}";
 
         // Return a pointer to the referenced item
-        if ((idref_ptr != std::string::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
+        if ((idref_ptr != std::wstring::npos) && (this->cppmode_ == CPPMODE::CPP03) &&
             !this->read_only_)
         {
            os << i
@@ -437,7 +421,6 @@ namespace
 
   // List of all non-optional members
   // @@ this code is the same as in Header.cpp
-  //
   struct CtorArgs : Traversal::Complex,
                     protected Traversal::Enumeration,
                     //protected Traversal::Type,
@@ -458,7 +441,8 @@ namespace
     void
     traverse (SemanticGraph::Enumeration& e) override
     {
-      os << comma () << type_name (e) << " const& b__";
+      if (!optional_arguments_)
+        os << comma () << type_name (e) << " const& b__";
     }
 
     void
@@ -467,11 +451,18 @@ namespace
       string type (type_name (e));
       string name (e.name ());
 
-      if (e.min () == 1 && e.max () == 1)
+      if (optional_arguments_ && e.minimum () == 0)
+      {
+        if (e.maximum () == 1)
+          os << comma () << "::XSCRT::OptionalArg<" << type << "> " << id (name) << "__";
+        else
+          os << comma () << name << "_container_type const& " << id (name) << "__";
+      }
+      else if (!optional_arguments_ && e.minimum () == 1 && e.maximum () == 1)
       {
         os << comma () << type << " const& " << id (name) << "__";
       }
-      else if (e.min () >= 1)
+      else if (!optional_arguments_ && e.minimum () >= 1)
       {
         os << comma ()
            << name << "_container_type const& "
@@ -482,17 +473,36 @@ namespace
     void
     traverse (SemanticGraph::Attribute& a) override
     {
-      if (!a.optional ())
+      if ((!optional_arguments_ && !a.optional ()) || (optional_arguments_ && a.optional ()))
       {
-        os << comma () << type_name (a) << " const& " << id (a.name ()) << "__";
+        if (optional_arguments_)
+          os << comma () << "::XSCRT::OptionalArg<" << type_name (a) << "> " << id (a.name ())
+             << "__";
+        else
+          os << comma () << type_name (a) << " const& " << id (a.name ()) << "__";
       }
     }
 
     void
     traverse (SemanticGraph::Complex& c) override
     {
+      if (traversing_)
+      {
+        complex_.traverse (c);
+        return;
+      }
+
+      traversing_ = true;
       first_ = true;
+      optional_arguments_ = false;
       complex_.traverse (c);
+      if (this->cppmode_ == CPPMODE::CPP17 && has_constructor_optional_members (c))
+      {
+        optional_arguments_ = true;
+        complex_.traverse (c);
+      }
+      optional_arguments_ = false;
+      traversing_ = false;
     }
 
   private:
@@ -503,6 +513,8 @@ namespace
     }
 
     bool first_;
+    bool optional_arguments_ {};
+    bool traversing_ {};
 
   private:
     Traversal::Complex complex_;
@@ -571,13 +583,14 @@ namespace
       string type (name);
 
       bool const has_base (c.inherits_begin () != c.inherits_end ());
+      bool const has_required (has_constructor_required_members (c));
+      bool const has_optional (this->cppmode_ == CPPMODE::CPP17 && has_constructor_optional_members (c));
       bool const default_constructor (this->cppmode_ != CPPMODE::CPP03 &&
-                                      !has_constructor_required_members (c));
+                                      !has_required && !has_optional);
 
       if (!this->read_only_ && !default_constructor)
       {
         // c-tor
-        //
         os << i
            << scope << "::" << name << " (";
 
@@ -605,10 +618,9 @@ namespace
       bool const default_copy (this->cppmode_ == CPPMODE::CPP17 &&
                                !has_copy_required_members (c));
 
-      if (!this->read_only_ && !default_copy)
+      if (!default_copy)
       {
         // copy c-tor
-        //
         os << i
            << scope << "::"
            << name << " (" << type << " const& s)" << std::endl;
@@ -643,22 +655,24 @@ namespace
           selfcheck = L"if (&s != this)";
         }
 
-        // operator=
-        //
-        os << i
-           << scope << "& " << scope << "::operator= (" << type << " const& s)"
-           << "{"
-           << selfcheck
-           << "{";
+        if (!this->read_only_)
+        {
+          // operator=
+          os << i
+             << scope << "& " << scope << "::operator= (" << type << " const& s)"
+             << "{"
+             << selfcheck
+             << "{";
 
-        inherits (c, assign_base_);
-        names (c, assign_member_);
+          inherits (c, assign_base_);
+          names (c, assign_member_);
 
-        os << "}"
-           << "return *this;"
-           << "}";
+          os << "}"
+             << "return *this;"
+             << "}";
 
-        os << std::endl;
+          os << std::endl;
+        }
       }
     }
 
@@ -772,23 +786,28 @@ namespace
         void
         traverse (SemanticGraph::Type&) override
         {
-          os << comma () << "b__";
+          // Fundamental simple bases do not declare a b__ constructor argument.
         }
 
         void
         traverse (SemanticGraph::Enumeration&) override
         {
-          os << comma () << "b__";
+          if (!optional_arguments_)
+            os << comma () << "b__";
         }
 
         void
         traverse (SemanticGraph::Element& e) override
         {
-          if (e.min () == 1 && e.max () == 1)
+          if (optional_arguments_ && e.minimum () == 0)
           {
             os << comma () << id (e.name ()) << "__";
           }
-          else if (e.min () >= 1)
+          else if (!optional_arguments_ && e.minimum () == 1 && e.maximum () == 1)
+          {
+            os << comma () << id (e.name ()) << "__";
+          }
+          else if (!optional_arguments_ && e.minimum () >= 1)
           {
             os << comma () << id (e.name ()) << "__";
           }
@@ -797,7 +816,7 @@ namespace
         void
         traverse (SemanticGraph::Attribute& a) override
         {
-          if (!a.optional ())
+          if ((!optional_arguments_ && !a.optional ()) || (optional_arguments_ && a.optional ()))
           {
             os << comma () << id (a.name ()) << "__";
           }
@@ -806,9 +825,23 @@ namespace
         void
         traverse (SemanticGraph::Complex& c) override
         {
-          first_ = true;
+          if (traversing_)
+          {
+            complex_.traverse (c);
+            return;
+          }
 
+          traversing_ = true;
+          first_ = true;
+          optional_arguments_ = false;
           complex_.traverse (c);
+          if (this->cppmode_ == CPPMODE::CPP17 && has_constructor_optional_members (c))
+          {
+            optional_arguments_ = true;
+            complex_.traverse (c);
+          }
+          optional_arguments_ = false;
+          traversing_ = false;
         }
 
       private:
@@ -819,6 +852,8 @@ namespace
         }
 
         bool first_;
+        bool optional_arguments_ {};
+        bool traversing_ {};
 
       private:
         Traversal::Complex complex_;
@@ -844,10 +879,23 @@ namespace
       {
         ensure_base_class_initialization ();
 
-        if (e.min () == 1 && e.max () == 1)
+        if (this->cppmode_ == CPPMODE::CPP17 && e.minimum () == 0 && e.maximum () == 1)
+        {
+          ensure_base_class_initialization ();
+          string name (id (e.name ()));
+          string type (type_name (e));
+          os << ", " << name << "_ (" << name << "__ ? std::make_unique<" << type
+             << "> (*" << name << "__) : nullptr)" << std::endl;
+        }
+        else if (this->cppmode_ == CPPMODE::CPP17 && e.minimum () == 0)
+        {
+          ensure_base_class_initialization ();
+          string name (id (e.name ()));
+          os << ", " << name << "_ (" << name << "__)" << std::endl;
+        }
+        else if (e.minimum () == 1 && e.maximum () == 1)
         {
           // one
-          //
           string name (id (e.name ()));
           string type (type_name (e));
 
@@ -860,7 +908,7 @@ namespace
             os << ", " << name << "_ (new " << type << " (" << name << "__))" << std::endl;
           }
         }
-        else if (e.min () >= 1)
+        else if (e.minimum () >= 1)
         {
           // more than one
           string name (id (e.name ()));
@@ -878,7 +926,15 @@ namespace
       void
       traverse (SemanticGraph::Attribute& a) override
       {
-        if (!a.optional ())
+        if (this->cppmode_ == CPPMODE::CPP17 && a.optional ())
+        {
+          ensure_base_class_initialization ();
+          string name (id (a.name ()));
+          string type (type_name (a));
+          os << ", " << name << "_ (" << name << "__ ? std::make_unique<" << type
+             << "> (*" << name << "__) : nullptr)" << std::endl;
+        }
+        else if (!a.optional ())
         {
           ensure_base_class_initialization ();
 
@@ -922,10 +978,9 @@ namespace
       void
       traverse (SemanticGraph::Element& e) override
       {
-        if (e.min () == 1 && e.max () == 1 && (this->cppmode_ == CPPMODE::CPP03))
+        if (e.minimum () == 1 && e.maximum () == 1 && (this->cppmode_ == CPPMODE::CPP03))
         {
           // one
-          //
           os << id (e.name ()) << "_->container (this);";
         }
       }
@@ -985,10 +1040,9 @@ namespace
             base_class_initialized_ = true;
           }
 
-        if (e.min () == 0 && e.max () == 1)
+        if (e.minimum () == 0 && e.maximum () == 1)
           {
             // optional
-            //
             if (this->cppmode_ != CPPMODE::CPP03)
             {
               os << ", " << name << "_ ("
@@ -1002,10 +1056,9 @@ namespace
                 << "new " << type << " (*s." << name << "_) : " << nullptr_string << ")" << std::endl;
             }
           }
-        else if (e.min () == 1 && e.max () == 1)
+        else if (e.minimum () == 1 && e.maximum () == 1)
           {
             // one
-            //
             if (this->cppmode_ != CPPMODE::CPP03)
             {
               os << ", " << name << "_ (std::make_unique<" << type << "> (*s." << name << "_))" << std::endl;
@@ -1018,7 +1071,6 @@ namespace
         else
           {
             // sequence
-            //
 
             os << ", " << name << "_ (s." << name << "_)" << std::endl;
           }
@@ -1090,19 +1142,18 @@ namespace
       {
         string name (e.name ());
 
-        if (e.min () == 0 && e.max () == 1)
+        if (e.minimum () == 0 && e.maximum () == 1)
         {
           name = id (name);
 
           // optional
-          //
           if (this->cppmode_ == CPPMODE::CPP03)
           {
             os << "if (" << name << "_.get ()) "
                << name << "_->container (this);";
           }
         }
-        else if (e.min () == 1 && e.max () == 1 && this->cppmode_ == CPPMODE::CPP03)
+        else if (e.minimum () == 1 && e.maximum () == 1 && this->cppmode_ == CPPMODE::CPP03)
         {
           os << id (name) << "_->container (this);";
         }
@@ -1116,7 +1167,6 @@ namespace
         if (a.optional ())
         {
           // optional
-          //
           if (this->cppmode_ == CPPMODE::CPP03)
           {
             os << "if (" << name << "_.get ()) "
@@ -1155,12 +1205,11 @@ namespace
         string name (e.name ());
         string type (type_name (e));
 
-        if (e.min () == 0 && e.max () == 1)
+        if (e.minimum () == 0 && e.maximum () == 1)
         {
           name = id (name);
 
           // optional
-          //
           if (this->cppmode_ != CPPMODE::CPP03)
           {
             os << "if (s." << name << "_)" << std::endl
@@ -1178,12 +1227,11 @@ namespace
               << std::endl;
           }
         }
-        else if (e.min () == 1 && e.max () == 1)
+        else if (e.minimum () == 1 && e.maximum () == 1)
         {
           name = id (name);
 
           // one
-          //
 
           os << name << " (*s." << name << "_);"
              << std::endl;
@@ -1191,7 +1239,6 @@ namespace
         else
         {
           // sequence
-          //
           os << id(name) << "_ = s." << id(name) << "_;"
              << std::endl;
         }

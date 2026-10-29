@@ -9,7 +9,6 @@
 #include <stdexcept>
 
 // Namespace
-//
 
 string Context::
 ns_name (SemanticGraph::Namespace& ns)
@@ -55,7 +54,6 @@ ns_name (SemanticGraph::Namespace& ns)
     r = regex::perl_s (r, L"#/#::#"); // replace `/' with `::'
 
     // Check the result.
-    //
     if (regex::perl_s (
           r, L"/^([a-zA-Z_]\\w*)(::[a-zA-Z_]\\w*)*$//").empty ()) break;
   }
@@ -134,7 +132,6 @@ fq_name (SemanticGraph::Nameable& n, string const& nss, bool mangle)
 namespace
 {
   //@@ recode using Fundamental
-  //
   struct TypeName : protected virtual Context,
                     Traversal::Type,
                     /*
@@ -326,12 +323,10 @@ namespace
 
 //@@ In what situations would I produce different name by
 //   these two functions?
-//
 string Context::
 type_name (SemanticGraph::Type& t, string const& nss)
 {
   // There cannot be a named type inside an anonymous one.
-  //
   if (t.named ())
   {
     string r;
@@ -553,7 +548,6 @@ id (string const& name)
 
 
 // Namespace
-//
 void Namespace::
 pre (Type& n)
 {

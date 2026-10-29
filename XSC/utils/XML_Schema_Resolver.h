@@ -9,13 +9,11 @@
 #define CIAO_XML_SCHEMA_RESOLVER_H
 
 #include "XSC_Utils_export.h"
-#include "XercesString.h"
+#include "ace/XML_Utils/XercesString.h"
 #include "xercesc/sax/EntityResolver.hpp"
 #include "ace/ace_wchar.h"
 #include <vector>
 #include <string>
-
-using namespace xercesc;
 
 namespace XSC
 {
@@ -33,15 +31,15 @@ namespace XSC
      */
     template <typename Resolver = NoOp_Resolver>
     class XML_Schema_Resolver
-      : public virtual EntityResolver
+      : public virtual xercesc::EntityResolver
     {
     public:
       XML_Schema_Resolver (Resolver &resolver);
 
       /// This function is called by the Xerces infrastructure to
       /// actually resolve the location of a schema.
-      InputSource * resolveEntity (const XMLCh *const publicId,
-                                   const XMLCh *const systemId) override;
+      xercesc::InputSource * resolveEntity (const XMLCh *const publicId,
+                                            const XMLCh *const systemId) override;
 
     private:
       XML_Schema_Resolver () = delete;
@@ -59,8 +57,8 @@ namespace XSC
      */
     struct NoOp_Resolver
     {
-      InputSource * operator() (const XMLCh *const,
-                                const XMLCh *const) const
+      xercesc::InputSource * operator() (const XMLCh *const,
+                                         const XMLCh *const) const
       { return nullptr; };
     };
 
@@ -90,8 +88,8 @@ namespace XSC
        * @param[in]       publicId      Public Id of the definition
        * @param[in]       systemId      System Id of the definition
        */
-      InputSource * operator () (const XMLCh *const publicId,
-                                 const XMLCh *const systemId) const;
+      xercesc::InputSource * operator () (const XMLCh *const publicId,
+                                          const XMLCh *const systemId) const;
 
       /**
        * Update the path of the definitions
@@ -102,7 +100,7 @@ namespace XSC
 
     private:
       /// Path for resolving schema definitions
-      XStr path_;
+      ::XML::XStr path_;
     };
 
     /**
@@ -113,10 +111,10 @@ namespace XSC
     {
       URL_Resolver (const CHAR *url);
 
-      InputSource * operator() (const XMLCh *const publicId,
-                                const XMLCh *const systemId) const;
+      xercesc::InputSource * operator() (const XMLCh *const publicId,
+                                         const XMLCh *const systemId) const;
     private:
-      XStr url_;
+      ::XML::XStr url_;
     };
 
     /**
@@ -134,8 +132,8 @@ namespace XSC
 
       void insert (const CHAR *path);
 
-      InputSource * operator() (const XMLCh *const publicId,
-                                const XMLCh *const systemId) const;
+      xercesc::InputSource * operator() (const XMLCh *const publicId,
+                                         const XMLCh *const systemId) const;
 
     private:
       /// Paths to search for schema definitions.

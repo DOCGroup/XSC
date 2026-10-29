@@ -18,13 +18,13 @@ namespace XSC
       static_type_info ();
 
       unsigned long
-      min () const
+      minimum () const
       {
         return this->min_;
       }
 
       unsigned long
-      max () const
+      maximum () const
       {
         return this->max_;
       }

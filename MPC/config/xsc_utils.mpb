@@ -1,4 +1,4 @@
-project : xsc_common {
+project : xsc_common, ace_xml_utils {
   after += XSC_Utils
   libs  += XSC_Utils
 }

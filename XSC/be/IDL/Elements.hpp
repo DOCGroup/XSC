@@ -18,8 +18,6 @@ namespace IDL
 
   using string = std::wstring;
 
-  //
-  //
   class Context
   {
   public:
@@ -111,23 +109,19 @@ namespace IDL
   protected:
 
     // Escape C++ keywords.
-    //
     string
     id (string const& name);
 
     // Translate XML namespace name to C++ identifier.
-    //
     string
     ns_name (SemanticGraph::Namespace& ns);
 
     // Original schema namespace name.
-    //
     string
     xs_ns_name (SemanticGraph::Nameable& ns);
 
     // Mapping for fq-type-name. Takes into account current scope
     // for anonymous names.
-    //
     string
     type_name (SemanticGraph::Instance& i, string const& suffix = L"");
 
@@ -229,7 +223,6 @@ namespace IDL
 
 
   // Usual namespace mapping.
-  //
   struct Namespace : Traversal::Namespace, protected virtual Context
   {
     Namespace (Context& c)
@@ -246,7 +239,6 @@ namespace IDL
 
 
   // Checks if scope `Y' names any of `X'
-  //
   template <typename X, typename Y>
   bool
   has (Y& y)
@@ -260,8 +252,8 @@ namespace IDL
       {
       }
 
-      virtual void
-      traverse (typename X::Type&)
+      void
+      traverse (typename X::Type&) override
       {
         v_ = true;
       }
@@ -281,7 +273,6 @@ namespace IDL
   }
 
   // Fundamental type mapping helper.
-  //
   struct Fundamental : Traversal::FundamentalType,
                        Traversal::String,
                        Traversal::NormalizedString,

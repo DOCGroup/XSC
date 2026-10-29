@@ -70,7 +70,7 @@ namespace Utility
     inline void TypeInfo::
     add_base (Access::Value access, bool virtual_base, TypeInfo const& ti)
     {
-      base_.push_back (BaseInfo (access, virtual_base, ti));
+      base_.emplace_back (access, virtual_base, ti);
     }
   }
 }

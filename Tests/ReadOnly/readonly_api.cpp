@@ -52,16 +52,21 @@ namespace
   };
 
   using ReadOnly = ReadOnlyType;
-
+  using Derived = DerivedWithoutMembers;
+  using SimpleDerived = SimpleContentDerived;
   static_assert (!std::is_default_constructible_v<ReadOnly>);
-  static_assert (!std::is_copy_constructible_v<ReadOnly>);
+  static_assert (std::is_copy_constructible_v<ReadOnly>);
   static_assert (!std::is_move_constructible_v<ReadOnly>);
   static_assert (!std::is_copy_assignable_v<ReadOnly>);
   static_assert (!std::is_move_assignable_v<ReadOnly>);
   static_assert (!has_name_setter<ReadOnly>::value);
   static_assert (!has_optionalValue_presence_accessor<ReadOnly>::value);
+  static_assert (std::is_copy_constructible_v<SimpleDerived>);
+  static_assert (!std::is_constructible_v<SimpleDerived, ::XMLSchema::string<char> const&>);
   static_assert (!has_item_iterators<ReadOnly>::value);
   static_assert (!has_item_count<ReadOnly>::value);
+  static_assert (std::is_constructible_v<Derived>);
+  static_assert (!std::is_constructible_v<Derived, ::XMLSchema::string<char> const&>);
   static_assert (std::is_same_v<ReadOnly::item_container_type,
                                 std::list<::XMLSchema::string<char>>>);
   static_assert (std::is_same_v<decltype (std::declval<ReadOnly&> ().name ()),

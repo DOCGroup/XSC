@@ -6,15 +6,6 @@
 #include "XSC/SemanticGraph.hpp"
 #include "XSC/Traversal.hpp"
 
-#if defined (_WINDOWS)
-# if defined (min)
-#   undef min
-# endif
-# if defined (max)
-#   undef max
-# endif
-#endif
-
 namespace
 {
   struct Member : Traversal::Element,
@@ -26,11 +17,10 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Element& e)
+    void
+    traverse (SemanticGraph::Element& e) override
     {
       // Anonymous types cannot be traversed.
-      //
       //if (!e.type ().named ())
       //  return;
 
@@ -40,13 +30,11 @@ namespace
 
       bool q (e.qualified ());
 
-      if (e.max () != 1)
+      if (e.maximum () != 1)
       {
         // sequence
-        //
 
         // pre
-        //
         os << "void " << scope << "::"
            << name << "_pre (Type const&)"
            << "{"
@@ -57,7 +45,6 @@ namespace
            << "}";
 
         // next
-        //
         os << "void " << scope << "::"
            << name << "_next (Type const& o)"
            << "{"
@@ -67,7 +54,6 @@ namespace
 
 
         // post
-        //
         os << "void " << scope << "::"
            << name << "_post (Type const&)"
            << "{"
@@ -77,7 +63,6 @@ namespace
       else
       {
         // optional & one
-        //
         os << "void " << scope << "::"
            << id (name) << " (Type const& o)"
            << "{"
@@ -91,11 +76,10 @@ namespace
       }
     }
 
-    virtual void
-    traverse (SemanticGraph::Attribute& a)
+    void
+    traverse (SemanticGraph::Attribute& a) override
     {
       // Anonymous types cannot be traversed.
-      //
       //if (!a.type ().named ())
       //  return;
 
@@ -147,23 +131,23 @@ namespace
     {
     }
 
-    virtual void
-    traverse (SemanticGraph::Type& t)
+    void
+    traverse (SemanticGraph::Type& t) override
     {
       string type (type_name (t, L"Writer"));
 
       os << type << "::traverse (o);";
     }
 
-    virtual void
-    traverse (SemanticGraph::IdRef&)
+    void
+    traverse (SemanticGraph::IdRef&) override
     {
       os << "::XMLSchema::Writer::IDREF<" << char_type << ">" <<
         "::traverse (o);";
     }
 
-    virtual void
-    fundamental_type (SemanticGraph::FundamentalType& t)
+    void
+    fundamental_type (SemanticGraph::FundamentalType& t) override
     {
       string name (fundamental_type_name (t));
 
@@ -200,8 +184,8 @@ namespace
       names_anonymous_.node_traverser (anonymous_type);
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       if (c.named ())
         name_ = id (c.name ());
@@ -213,7 +197,6 @@ namespace
         c.context ().set ("name", name_);
 
         // Go after anonymous types first.
-        //
         names (c, names_anonymous_);
 
         Traversal::Complex::traverse (c);
@@ -224,13 +207,12 @@ namespace
       }
     }
 
-    virtual void
-    pre (Type& c)
+    void
+    pre (Type& c) override
     {
       string name (id (name_));
 
       // c-tor (XML::Element&)
-      //
       os << scope << "::"
          << name << " (" << xml_element_type << "& e)" << std::endl
          << ": ::XSCRT::Writer<" << char_type << "> (e)" << std::endl
@@ -238,7 +220,6 @@ namespace
          << "}";
 
       // c-tor ()
-      //
       if (this->cppmode_ == CPPMODE::CPP03)
       {
         os << scope << "::"
@@ -248,7 +229,6 @@ namespace
       }
 
       // traverse
-      //
       os << "void " << scope << "::"
          << "traverse (Type const& o)"
          << "{";
@@ -278,8 +258,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       string name (e.name ());
       string type (type_name (e));
@@ -303,13 +283,12 @@ namespace
       names_.node_traverser (enumerator_);
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       string name ((this->name_ != L"") ? id(name_) : id (c.name ()));
 
       // c-tor (XML::Element&)
-      //
       os << name << "::"
          << name << " (" << xml_element_type << "& e)" << std::endl
          << ": ::XSCRT::Writer<" << char_type << "> (e)" << std::endl
@@ -317,7 +296,6 @@ namespace
          << "}";
 
       // c-tor ()
-      //
       if (this->cppmode_ == CPPMODE::CPP03)
       {
         os << name << "::"
@@ -327,7 +305,6 @@ namespace
       }
 
       // traverse
-      //
       os << "void " << name << "::"
          << "traverse (Type const& o)"
          << "{"
@@ -364,8 +341,8 @@ namespace
     {
     }
 
-    virtual void
-    pre (Type& n)
+    void
+    pre (Type& n) override
     {
       Namespace::pre (n);
 
@@ -375,8 +352,8 @@ namespace
 
     }
 
-    virtual void
-    post (Type& n)
+    void
+    post (Type& n) override
     {
       os << "}";
 
@@ -384,9 +361,6 @@ namespace
     }
   };
 
-  //
-  //
-  //
   struct WriterBase : /*Traversal::Type, */
                       Fundamental,
                       Traversal::Complex,
@@ -404,8 +378,8 @@ namespace
       edge_traverser (belongs_);
     }
 
-    virtual void
-    traverse (SemanticGraph::Complex& c)
+    void
+    traverse (SemanticGraph::Complex& c) override
     {
       if (check (c))
       {
@@ -425,8 +399,8 @@ namespace
     //  }
     //}
 
-    virtual void
-    traverse (SemanticGraph::IdRef& r)
+    void
+    traverse (SemanticGraph::IdRef& r) override
     {
       if (check (r))
       {
@@ -435,8 +409,8 @@ namespace
       }
     }
 
-    virtual void
-    fundamental_type (SemanticGraph::FundamentalType& t)
+    void
+    fundamental_type (SemanticGraph::FundamentalType& t) override
     {
       if (check (t))
       {
@@ -490,8 +464,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& e)
+    void
+    traverse (Type& e) override
     {
       SemanticGraph::Type& t (e.type ());
 
@@ -521,8 +495,8 @@ namespace
     {
     }
 
-    virtual void
-    traverse (Type& c)
+    void
+    traverse (Type& c) override
     {
       string name (c.name ());
       string type (type_name (c));
@@ -531,7 +505,6 @@ namespace
       SemanticGraph::Type& t (c.type ());
 
       //@@ need to use FQ-names.
-      //
       os << "namespace writer"
          << "{"
          << "void" << std::endl

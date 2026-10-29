@@ -7,8 +7,6 @@ namespace XSC
   namespace SemanticGraph
   {
     // Graph
-    //
-    //
 
     template <typename N, typename E>
     template <typename T>
@@ -63,12 +61,10 @@ namespace XSC
       {
         // One endpoint of the edge has removed this edge from
         // its edge set. Now handle the other endpoint.
-        //
         if (e->left_ () == n) e->right_ ()->remove_edge_ (e);
         else e->left_ ()->remove_edge_ (e);
 
         // Delete the edge.
-        //
         edges_.erase (e);
 
         delete e; //@@ auto

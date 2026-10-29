@@ -8,8 +8,6 @@ namespace XSC
   namespace Traversal
   {
     // Enumeration
-    //
-    //
     void Enumeration::
     traverse (Type& s)
     {
@@ -36,8 +34,6 @@ namespace XSC
 
 
     // Enumerator
-    //
-    //
     void Enumerator::
     traverse (Type& a)
     {

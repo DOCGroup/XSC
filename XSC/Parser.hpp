@@ -23,9 +23,7 @@ namespace XSC
   class string : public std::wstring
   {
   public:
-    string ()
-    {
-    }
+    string () = default;
 
     string (wchar_t const* s)
         : std::wstring (s)
@@ -42,7 +40,7 @@ namespace XSC
     {
     }
 
-    string (string s, size_type pos, size_type n)
+    string (string const& s, size_type pos, size_type n)
         : std::wstring (s, pos, n)
     {
     }
@@ -63,7 +61,7 @@ namespace XSC
     {
       string r (Xerces::XMLString::stringLen (s), L'0');
 
-      for (std::size_t i (0); *s != XMLCh (0); ++s, ++i)
+      for (std::size_t i {}; *s != XMLCh (0); ++s, ++i)
       {
         r[i] = *s;
       }
@@ -76,12 +74,12 @@ namespace XSC
     std::unique_ptr<XMLCh[]>
     transcode (string const& s)
     {
-      std::size_t l (s.length ());
+      std::size_t const l (s.length ());
 
       auto r = std::make_unique<XMLCh[]> (l + 1);
       XMLCh* ir (r.get ());
 
-      for (std::size_t i (0); i < l; ++ir, ++i)
+      for (std::size_t i {}; i < l; ++ir, ++i)
       {
         *ir = static_cast<XMLCh>(s[i]);
         //std::wcerr << s[i] << "->" << *ir << std::endl;
@@ -97,7 +95,7 @@ namespace XSC
     class Element
     {
     public:
-      Element (Xerces::DOMElement* e)
+      explicit Element (Xerces::DOMElement* e)
           : e_ (e),
             name_ (transcode (e->getLocalName ())),
             namespace__ (transcode (e->getNamespaceURI ()))
@@ -120,7 +118,7 @@ namespace XSC
       Element
       parent () const
       {
-        return dynamic_cast<Xerces::DOMElement*>(e_->getParentNode ());
+        return Element (dynamic_cast<Xerces::DOMElement*> (e_->getParentNode ()));
       }
 
     public:
@@ -153,7 +151,7 @@ namespace XSC
     string
     prefix (string const& n)
     {
-      std::size_t i (0);
+      std::size_t i {};
       while (i < n.length () && n[i] != L':') ++i;
 
       //std::wcerr << "prefix " << n << " "
@@ -166,7 +164,7 @@ namespace XSC
     string
     uq_name (string const& n)
     {
-      std::size_t i (0);
+      std::size_t i {};
       while (i < n.length () && n[i] != L':') ++i;
 
       return string (n.c_str () + (i == n.length () ? 0 : i + 1));
@@ -188,7 +186,6 @@ namespace XSC
     }
 
     //@@ can get rid of use_default crap. See XSCRT.
-    //
     inline
     string
     ns_prefix (Element const& e,
@@ -363,14 +360,14 @@ namespace XSC
     }
 
     unsigned long
-    min () const
+    minimum () const
     {
       if (cardinality_stack_.empty ()) return 1;
       else return cardinality_stack_.top ().min_;
     }
 
     unsigned long
-    max () const
+    maximum () const
     {
       if (cardinality_stack_.empty ()) return 1;
       else return cardinality_stack_.top ().max_;
@@ -399,7 +396,7 @@ namespace XSC
     struct Iterator
     {
       Iterator (Xerces::DOMElement* e)
-          : l_ (e->getChildNodes ()), i_ (0)
+          : l_ (e->getChildNodes ()), i_ {}
       {
       }
 
@@ -412,14 +409,8 @@ namespace XSC
     SemanticGraph::Schema* cur_schema_ {}; // current schema file
 
 
-    //
-    //
-    //
     std::stack<SemanticGraph::Scope*> scope_stack_;
 
-    //
-    //
-    //
     struct Cardinality
     {
       Cardinality (unsigned long min, unsigned long max)
@@ -433,9 +424,6 @@ namespace XSC
     std::stack<Cardinality> cardinality_stack_;
 
 
-    //
-    //
-    //
     struct FilePathComparator
     {
       bool operator () (std::filesystem::path const& x, std::filesystem::path const& y) const

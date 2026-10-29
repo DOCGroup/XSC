@@ -33,7 +33,6 @@
 #include <filesystem>
 
 //@@ SemanticGraphFwd could be useful here.
-//
 #include "XSC/SemanticGraph.hpp"
 #include "XSC/Options.hpp"
 

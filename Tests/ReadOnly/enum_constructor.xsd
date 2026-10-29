@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="ReadOnlyKind">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="first"/>
+      <xs:enumeration value="second"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:complexType name="ReadOnlyKindWithOptionalAttribute">
+    <xs:simpleContent>
+      <xs:extension base="ReadOnlyKind">
+        <xs:attribute name="label" type="xs:string"/>
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+</xs:schema>
