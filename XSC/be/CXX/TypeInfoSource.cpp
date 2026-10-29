@@ -88,9 +88,13 @@ namespace
     void
     post (Type& c) override
     {
-      os << "::XSCRT::extended_type_info_map ().insert ("
-         << "std::make_pair (id, nf));"
-         << "}";
+      if (this->cppmode_ == CPPMODE::CPP17)
+        os << "::XSCRT::extended_type_info_map ().try_emplace (id, nf);";
+      else
+        os << "::XSCRT::extended_type_info_map ().insert ("
+           << "std::make_pair (id, nf));";
+
+      os << "}";
 
       // Go after anonymous types.
       names (c, names_anonymous_);
@@ -134,10 +138,15 @@ namespace
          << std::endl
          << "nf.add_base (::XSCRT::ExtendedTypeInfo::Access::public_, "
          << "false, typeid (::XSCRT::Type));"
-         << std::endl
-         << "::XSCRT::extended_type_info_map ().insert ("
-         << "std::make_pair (id, nf));"
-         << "}"
+         << std::endl;
+
+      if (this->cppmode_ == CPPMODE::CPP17)
+        os << "::XSCRT::extended_type_info_map ().try_emplace (id, nf);";
+      else
+        os << "::XSCRT::extended_type_info_map ().insert ("
+           << "std::make_pair (id, nf));";
+
+      os << "}"
          << "};"
          << name << "TypeInfoInitializer " << name << "TypeInfoInitializer_;"
          << std::endl;
