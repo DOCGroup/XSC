@@ -107,9 +107,8 @@ project (xsc_test_dancex11_optional_copy): xscrt {
   }
 }
 
-project (xsc_test_dancex11_required_members): xscrt {
+project (xsc_test_dancex11_required_members): xscrt, ace_xml_utils {
   after += xsc_test_dancex11_readonly
-  libs += ACE_XML_Utils
 
   Source_Files {
     Basic_Deployment_Data.readonly.cpp
